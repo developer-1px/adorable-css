@@ -1,0 +1,8 @@
+/node_modules/
+/public/build/
+.DS_Store
+.firebase
+*.log
+.idea
+coverage
+dist
