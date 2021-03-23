@@ -20,7 +20,7 @@
   "author": "teo.yu",
   "license": "MIT",
   "scripts": {
-    "start": "snowpack dev",
+    "dev": "node dist/index.js & snowpack dev",
     "test": "web-test-runner \"src/**/*.test.ts\"",
     "publish": "npm publish dist"
   },
@@ -28,7 +28,6 @@
     "css.escape": "^1.5.1"
   },
   "devDependencies": {
-    "svelte": "^3.24.0",
     "@snowpack/plugin-dotenv": "^2.0.5",
     "@snowpack/plugin-svelte": "^3.5.0",
     "@snowpack/plugin-typescript": "^1.2.0",
@@ -38,8 +37,11 @@
     "@types/mocha": "^8.2.0",
     "@types/snowpack-env": "^2.3.2",
     "@web/test-runner": "^0.12.0",
+    "adorable-css": "^0.0.5",
     "chai": "^4.2.0",
+    "commander": "^7.1.0",
     "snowpack": "^3.0.1",
+    "svelte": "^3.24.0",
     "svelte-preprocess": "^4.0.8",
     "typescript": "^4.0.0"
   }

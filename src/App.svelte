@@ -1,70 +1,75 @@
-<script lang='typescript'>
-	import {onMount} from 'svelte';
-	let count: number = 0;
-	onMount(() => {
-	  const interval = setInterval(() => count++, 1000);
-	  return () => {
-		clearInterval(interval);
-	  };
-	});
-  </script>
-  
-  <style>
-	:global(body) {
-	  margin: 0;
-	  font-family: Arial, Helvetica, sans-serif;
-	}
-	.App {
-	  text-align: center;
-	}
-	.App code {
-	  background: #0002;
-	  padding: 4px 8px;
-	  border-radius: 4px;
-	}
-	.App p {
-	  margin: 0.4rem;
-	}
-  
-	.App-header {
-	  background-color: #f9f6f6;
-	  color: #333;
-	  min-height: 100vh;
-	  display: flex;
-	  flex-direction: column;
-	  align-items: center;
-	  justify-content: center;
-	  font-size: calc(10px + 2vmin);
-	}
-	.App-link {
-	  color: #ff3e00;
-	}
-	.App-logo {
-	  height: 36vmin;
-	  pointer-events: none;
-	  margin-bottom: 3rem;
-	  animation: App-logo-spin infinite 1.6s ease-in-out alternate;
-	}
-	@keyframes App-logo-spin {
-	  from {
-		transform: scale(1);
-	  }
-	  to {
-		transform: scale(1.06);
-	  }
-	}
-  </style>
-  
-  <div class="App">
-	<header class="App-header">
-	  <img src="/logo.svg" class="App-logo" alt="logo" />
-	  <p>Edit <code>src/App.svelte</code> and save to reload.</p>
-	  <p>Page has been open for <code>{count}</code> seconds.</p>
-	  <p>
-		<a class="App-link" href="https://svelte.dev" target="_blank" rel="noopener noreferrer">
-		  Learn Svelte
-		</a>
-	  </p>
-	</header>
+<div class="w(360) r(20) bg(#fff) vbox(top) clip shadow-mid b(#ccc)">
+  <div class="w(fill) h(16) bg(#fff)">
   </div>
-  
+  <div class="w(fill) h(68) bg(#fff) hbox p(0/32)">
+    <div class="flex font(20/28) semibold c(#222)">반복 일정 삭제</div>
+  </div>
+  <div class="w(fill) h(8) bg(#fff)">
+  </div>
+  <div class="w(fill) vbox p(0/32) vgap(16)">
+
+    <!-- <Check_label/> -->
+    <div class="w(296) hbox p(0/6/0/0) hgap(8)">
+
+      <!-- <Radio_h20/> -->
+      <div class="w(20) h(20) r(100) bg(#feec00)">
+
+      </div>
+      <!-- </Radio_h20> -->
+
+      <div class="font(13) medium c(#222)">이 일정만</div>
+    </div>
+    <!-- </Check_label> -->
+
+
+    <!-- <Check_label/> -->
+    <div class="w(296) hbox p(0/6/0/0) hgap(8)">
+
+      <!-- <Radio_h20/> -->
+      <div class="w(20) h(20) r(100) b(#000.12)">
+      </div>
+      <!-- </Radio_h20> -->
+
+      <div class="font(13) medium c(#222)">이 일정과 향후 일정</div>
+    </div>
+    <!-- </Check_label> -->
+
+
+    <!-- <Check_label/> -->
+    <div class="w(296) hbox p(0/6/0/0) hgap(8)">
+
+      <!-- <Radio_h20/> -->
+      <div class="w(20) h(20) r(100) b(#000.12)">
+      </div>
+      <!-- </Radio_h20> -->
+
+      <div class="font(13) medium c(#222)">모든 일정</div>
+    </div>
+    <!-- </Check_label> -->
+
+  </div>
+  <div class="w(fill) h(8) bg(#fff)">
+  </div>
+  <div class="w(fill) h(68) bg(#fff) hbox(/right) p(0/32) hgap(10)">
+
+    <!-- <Btn_h40_text/> -->
+    <div class="w(70) h(44) r(8) bg(#fff) hbox pack p(12/0)">
+      <div class="r(16) hbox pack">
+        <div class="font(14/20/-.5%) bold c(#000.7)">취소</div>
+      </div>
+    </div>
+    <!-- </Btn_h40_text> -->
+
+
+    <!-- <Btn_h40/> -->
+    <div class="w(70) h(44) r(8) bg(#feec00) b(#fd0) hbox pack p(12/0)">
+      <div class="r(16) hbox pack">
+        <div class="font(14/20/-.5%) bold c(#222)">확인</div>
+      </div>
+    </div>
+    <!-- </Btn_h40> -->
+
+  </div>
+  <div class="w(fill) h(16) bg(#fff)">
+  </div>
+</div>

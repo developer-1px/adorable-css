@@ -1,19 +1,21 @@
 {
   "name": "adorable-css",
   "description": "Auto atomic css generator snowpack plugin",
-  "version": "0.0.2",
+  "version": "0.0.5",
+  "bin": {
+    "adorable-css": "./index.js"
+  },
   "main": "/index.js",
-  "types": "/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/developer-1px/adorable-css.git"
   },
   "keywords": [
-    "reactive",
-    "state",
-    "management",
-    "svelte",
-    "rxjs"
+    "atomic",
+    "css",
+    "dynamic",
+    "generator",
+    "handskate"
   ],
   "author": "teo.yu",
   "license": "MIT",
