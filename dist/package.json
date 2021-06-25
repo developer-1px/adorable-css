@@ -1,7 +1,7 @@
 {
   "name": "adorable-css",
   "description": "Auto atomic css generator snowpack plugin",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "bin": {
     "adorable-css": "./index.js"
   },

@@ -1,48 +1,24 @@
 {
-  "name": "adorable-css",
-  "description": "Auto atomic css generator snowpack plugin",
+  "name": "svelte-vite-adorable",
   "version": "0.0.0",
-  "main": "/dist/index.js",
-  "types": "/dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/developer-1px/adorable-css.git"
-  },
-  "keywords": [
-    "atomic",
-    "css",
-    "snoowpack",
-    "plugin"
-  ],
-  "author": "teo.yu",
-  "license": "MIT",
   "scripts": {
-    "dev": "node dist/index.js & snowpack dev",
-    "test": "web-test-runner \"src/**/*.test.ts\"",
-    "publish": "npm publish dist"
-  },
-  "dependencies": {
-    "css.escape": "^1.5.1"
+    "dev": "vite --open",
+    "dev:figma": "nodemon --watch src --exec vite build",
+    "build": "vite build",
+    "serve": "vite preview",
+    "validate": "svelte-check"
   },
   "devDependencies": {
-    "@snowpack/plugin-dotenv": "^2.0.5",
-    "@snowpack/plugin-svelte": "^3.5.0",
-    "@snowpack/plugin-typescript": "^1.2.0",
-    "@snowpack/web-test-runner-plugin": "^0.2.0",
-    "@testing-library/svelte": "^3.0.0",
-    "@types/chai": "^4.2.13",
-    "@types/mocha": "^8.2.0",
-    "@types/snowpack-env": "^2.3.2",
-    "@web/test-runner": "^0.12.0",
-    "adorable-css": "^0.0.5",
-    "chai": "^4.2.0",
-    "commander": "^7.1.0",
-    "snowpack": "^3.0.1",
-    "svelte": "^3.24.0",
-    "svelte-preprocess": "^4.0.8",
-    "typescript": "^4.0.0"
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.10",
+    "@tsconfig/svelte": "^2.0.1",
+    "codejar": "^3.4.0",
+    "svelte": "^3.38.2",
+    "svelte-check": "^2.1.0",
+    "svelte-hmr": "^0.14.4",
+    "svelte-preprocess": "^4.7.3",
+    "tslib": "^2.2.0",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.6",
+    "vite-plugin-singlefile": "^0.5.1"
   }
 }
