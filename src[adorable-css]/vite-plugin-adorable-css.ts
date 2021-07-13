@@ -15,7 +15,7 @@ const CONFIG = {
 
 export const adorableCSS = (config = CONFIG):Plugin => {
 
-  let timer:number
+  let timer:NodeJS.Timeout
   let resolver:Function
   let isHMR = false
 
@@ -31,7 +31,7 @@ export const adorableCSS = (config = CONFIG):Plugin => {
     }
 
     // @TODO: hmr일 경우에는 다르게 동작하도록
-    const allAtoms = Object.values(entry).map(id => parseAtoms(fs.readFileSync(id as string, "utf8"))).flat()
+    const allAtoms = Object.values(entry).map(id => parseAtoms(fs.readFileSync(id as string, "utf8"))).reduce((a, b) => [...a, ...b], [])
     const styles = generateCss([...new Set(allAtoms)])
     const a = [reset, ...styles].join("\n")
     resolver(a)
