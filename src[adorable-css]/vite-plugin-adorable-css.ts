@@ -1,3 +1,5 @@
+import type {Plugin} from "vite"
+
 import {parseAtoms} from "./src/parser"
 import {generateCss, reset} from "./src/atomizer"
 
@@ -11,17 +13,15 @@ const CONFIG = {
   ext: ["svelte", "vue", "tsx", "jsx"]
 }
 
-export default function adorableCSS(config = CONFIG) {
+export const adorableCSS = (config = CONFIG):Plugin => {
 
-  const plugins = []
-
-  let timer
-  let resolver
+  let timer:number
+  let resolver:Function
   let isHMR = false
 
-  const entry = {}
+  const entry:Record<string, string> = Object.create(null)
 
-  const checkTargetFile = (id) => config.ext.includes(id.split(".").pop())
+  const checkTargetFile = (id:string) => config.ext.includes(id.split(".").pop() || "")
 
   const debouncing = async () => {
     if (!resolver) {
@@ -31,19 +31,17 @@ export default function adorableCSS(config = CONFIG) {
     }
 
     // @TODO: hmr일 경우에는 다르게 동작하도록
-    // @ts-ignore
     const allAtoms = Object.values(entry).map(id => parseAtoms(fs.readFileSync(id as string, "utf8"))).flat()
-    // @ts-ignore
     const styles = generateCss([...new Set(allAtoms)])
     const a = [reset, ...styles].join("\n")
     resolver(a)
   }
 
-  plugins.push({
+  return {
     name: `${NAME}:entry`,
     enforce: "pre",
 
-    resolveId(id) {
+    resolveId(id:string) {
       clearTimeout(timer)
       if (id === NAME || id === VIRTUAL_FILE_ID) {
         return VIRTUAL_FILE_ID
@@ -51,7 +49,7 @@ export default function adorableCSS(config = CONFIG) {
       timer = setTimeout(debouncing, isHMR ? 0 : 500)
     },
 
-    async load(id) {
+    async load(id:string) {
       if (id === VIRTUAL_FILE_ID) {
         return new Promise(resolve => {
           resolver = resolve
@@ -63,18 +61,12 @@ export default function adorableCSS(config = CONFIG) {
       entry[id] = id
     },
 
-    async handleHotUpdate({server, file, read, modules}) {
+    // @ts-ignore
+    async handleHotUpdate({server, file, modules}) {
       if (!checkTargetFile(file)) return
-
       isHMR = true
       const module = server.moduleGraph.getModuleById(VIRTUAL_FILE_ID)
-      if (module) {
-        server.moduleGraph.invalidateModule(module)
-      }
-
       return [...modules, module].filter(Boolean)
     },
-  })
-
-  return plugins
+  }
 }

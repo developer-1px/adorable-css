@@ -1,0 +1,16 @@
+{
+  "name": "handshake",
+  "version": "1.0.6",
+  "description": "Handshake - HandOff for designer and developer",
+  "main": "dist/code.js",
+  "scripts": {
+    "dev": "tsup src/code.ts --watch"
+  },
+  "author": "",
+  "license": "",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.22.0",
+    "tsup": "^4.9.1",
+    "typescript-bundle": "^1.0.17"
+  }
+}

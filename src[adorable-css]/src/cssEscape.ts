@@ -1,3 +1,5 @@
+// https://github.com/mathiasbynens/CSS.escape
+
 // https://drafts.csswg.org/cssom/#serialize-an-identifier
 export const cssEscape = (string:string):string => {
   const length = string.length
