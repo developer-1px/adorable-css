@@ -1,4 +1,4 @@
-const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0"
+export const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0"
 
 export const cssvar = (value:string) => String(value).startsWith("--") ? `var(${value})` : value
 
@@ -22,19 +22,11 @@ export const makeFont = (value:string) => (value || "").split("/").map((value, i
   // @TODO: line-height값이 3이하면 1.5 로 표기
 
   switch (index) {
-    case 0: {return `font-size: ${px(value)}`}
-    case 1: {return `line-height: ${+value < 4 ? makeNumber(+value) : px(value)}`}
-    case 2: {return `letter-spacing: ${px(percentToEm(value))}`}
+    case 0: {return `font-size:${px(value)}`}
+    case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
+    case 2: {return `letter-spacing:${px(percentToEm(value))}`}
   }
 }).filter(Boolean).join(";")
-
-
-// @TODO:
-export const makeBorder = (value:string) => {
-  if (value === "none") return "none"
-  if (value === "0") return "none"
-  return `1px solid ${makeColor(value)}`
-}
 
 
 export const makeHEX = (value:string) => {
@@ -54,9 +46,10 @@ export const makeRGB = (value:string) => {
   return "rgb" + (a ? "a" : "") + "(" + [r, g, b, a].filter(Boolean).map(cssvar).join() + ")"
 }
 
-export const makeColor = (value = "transparent") => {
+export const makeColor = (value:string = "transparent") => {
   if (value === "-") return "transparent"
   if (value === "transparent") return "transparent"
+  if (value.startsWith("--")) return `var(${value})`
 
   // HEX #ff0, #ff0f00, HEXa #ff0.4, #ff00aa.4
   if (value.charAt(0) === "#") return makeHEX(value)
@@ -67,10 +60,15 @@ export const makeColor = (value = "transparent") => {
   // RGB, RGBA
   if (value.includes(",")) return makeRGB(value)
 
-  if (String(value).startsWith("--")) return `var(${value})`
   return value
 }
 
+// @TODO:
+export const makeBorder = (value:string) => {
+  if (value === "none") return "none"
+  if (value === "0") return "none"
+  return `1px solid ${makeColor(value)}`
+}
 
 export const makeValues = (value:string, project = (a:string):string|number => a) => {
   if (String(value).startsWith("--")) return `var(${value})`
@@ -96,9 +94,12 @@ export const makeHBox = (value = "") => {
     switch (v) {
       case "top": {return "align-items: flex-start;"}
       case "bottom": {return "align-items: flex-end;"}
-      case "full": {return "align-items: stretch;"}
+      case "fill": {return "align-items: stretch;"}
+      case "stretch": {return "align-items: stretch;"}
       case "center": {return "justify-content: center;"}
-      case "right": {return "justify-content: flex-end;"}
+      case "left": {return values.includes("reverse") ? "justify-content: flex-end;" : ""}
+      case "right": {return !values.includes("reverse") ? "justify-content: flex-end;" : ""}
+      case "reverse": {return "flex-direction: row-reverse;"}
     }
   })
 
@@ -118,7 +119,9 @@ export const makeVBox = (value = "") => {
       case "left": {return "align-items: flex-start;"}
       case "center": {return "align-items: center;"}
       case "right": {return "align-items: flex-end;"}
-      case "bottom": {return "justify-content: flex-end;"}
+      case "top": {return values.includes("reverse") ? "justify-content: flex-end;" : ""}
+      case "bottom": {return !values.includes("reverse") ? "justify-content: flex-end;" : ""}
+      case "reverse": {return "flex-direction: column-reverse;"}
     }
   })
 

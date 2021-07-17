@@ -97,13 +97,6 @@ var makeFont = (value) => (value || "").split("/").map((value2, index) => {
     }
   }
 }).filter(Boolean).join(";");
-var makeBorder = (value) => {
-  if (value === "none")
-    return "none";
-  if (value === "0")
-    return "none";
-  return `1px solid ${makeColor(value)}`;
-};
 var makeHEX = (value) => {
   const [rgb, a] = value.split(".");
   if (a && rgb.length === 4)
@@ -125,15 +118,22 @@ var makeColor = (value = "transparent") => {
     return "transparent";
   if (value === "transparent")
     return "transparent";
+  if (value.startsWith("--"))
+    return `var(${value})`;
   if (value.charAt(0) === "#")
     return makeHEX(value);
   if (value.includes(",") && value.includes("%"))
     return makeHLS(value);
   if (value.includes(","))
     return makeRGB(value);
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
   return value;
+};
+var makeBorder = (value) => {
+  if (value === "none")
+    return "none";
+  if (value === "0")
+    return "none";
+  return `1px solid ${makeColor(value)}`;
 };
 var makeValues = (value, project = (a) => a) => {
   if (String(value).startsWith("--"))
@@ -160,14 +160,23 @@ var makeHBox = (value = "") => {
       case "bottom": {
         return "align-items: flex-end;";
       }
-      case "full": {
+      case "fill": {
+        return "align-items: stretch;";
+      }
+      case "stretch": {
         return "align-items: stretch;";
       }
       case "center": {
         return "justify-content: center;";
       }
+      case "left": {
+        return values.includes("reverse") ? "justify-content: flex-end;" : "";
+      }
       case "right": {
-        return "justify-content: flex-end;";
+        return !values.includes("reverse") ? "justify-content: flex-end;" : "";
+      }
+      case "reverse": {
+        return "flex-direction: row-reverse;";
       }
     }
   });
@@ -189,8 +198,14 @@ var makeVBox = (value = "") => {
       case "right": {
         return "align-items: flex-end;";
       }
+      case "top": {
+        return values.includes("reverse") ? "justify-content: flex-end;" : "";
+      }
       case "bottom": {
-        return "justify-content: flex-end;";
+        return !values.includes("reverse") ? "justify-content: flex-end;" : "";
+      }
+      case "reverse": {
+        return "flex-direction: column-reverse;";
       }
     }
   });
@@ -275,7 +290,7 @@ var RULES = {
       max && result.push(`max-width:${px(max)};`);
       return result.join("");
     }
-    return value === "fill" ? `align-self:stretch` : `width:${px(value)};`;
+    return value === "stretch" || value === "fill" ? `align-self:stretch` : `width:${px(value)};`;
   },
   h: (value) => {
     if (value.includes("~")) {
@@ -285,7 +300,7 @@ var RULES = {
       max && result.push(`max-height:${px(max)};`);
       return result.join("");
     }
-    return value === "fill" ? `align-self:stretch` : `height:${px(value)};`;
+    return value === "stretch" || value === "fill" ? `align-self:stretch` : `height:${px(value)};`;
   },
   m: (value) => `margin:${makeSide(value)};`,
   mt: (value) => `margin-top:${px(value)};`,
@@ -378,14 +393,15 @@ var RULES = {
   hbox: (value) => `display:flex;flex-flow:row;${makeHBox(value)}`,
   vbox: (value) => `display:flex;flex-flow:column;${makeVBox(value)}`,
   gap: (value) => `gap:${makeSide(value)};`,
-  hgap: (value) => `&>*+* { margin-left:${px(value)};}`,
-  vgap: (value) => `&>*+* { margin-top:${px(value)};}`,
-  space: (value) => `padding:${px(+value / 2)};`,
+  hgap: (value) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
+  vgap: (value) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value) => `&>*+* {margin-bottom:${px(value)};}`,
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
   flex: (value = "1") => `flex:${makeValues(value)};`,
-  ">flex": (value = "1") => `&>*{flex:${makeValues(value)};}`,
+  space: (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
   "flex-initial": () => `flex:initial;`,
   "flex-auto": () => `flex:auto;`,
   "flex-none": () => `flex:none;`,
@@ -475,67 +491,102 @@ var RULES = {
   "clear-left": () => `clear:left`,
   "clear-right": () => `clear:right`,
   "clear-both": () => `clear:both`,
-  "clear-none": () => `clear:none`
+  "clear-none": () => `clear:none`,
+  "blur": (value) => `filter:blur(${px(value)})`,
+  "brightness": (value) => `filter:brightness(${cssvar(value)})`,
+  "contrast": (value) => `filter:contrast(${cssvar(value)})`,
+  "drop-shadow": (value) => `filter:drop-shadow(${cssvar(value)})`,
+  "grayscale": (value) => `filter:grayscale(${cssvar(value)})`,
+  "hue-rotate": (value) => `filter:hue-rotate(${cssvar(value)})`,
+  "invert": (value) => `filter:invert(${cssvar(value)})`,
+  "sepia": (value) => `filter:sepia(${cssvar(value)})`,
+  "saturate": (value) => `filter:saturate(${cssvar(value)})`,
+  "backdrop-blur": (value) => `backdrop-filter:blur(${px(value)})`,
+  "backdrop-brightness": (value) => `backdrop-filter:brightness(${cssvar(value)})`,
+  "backdrop-contrast": (value) => `backdrop-filter:contrast(${cssvar(value)})`,
+  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${cssvar(value)})`,
+  "backdrop-grayscale": (value) => `backdrop-filter:grayscale(${cssvar(value)})`,
+  "backdrop-hue-rotate": (value) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
+  "backdrop-invert": (value) => `backdrop-filter:invert(${cssvar(value)})`,
+  "backdrop-sepia": (value) => `backdrop-filter:sepia(${cssvar(value)})`,
+  "backdrop-saturate": (value) => `backdrop-filter:saturate(${cssvar(value)})`,
+  elevation: (value) => {
+    const dp = +value;
+    if (!dp) {
+      return `box-shadow: none`;
+    }
+    const blur = dp == 1 ? 3 : dp * 2;
+    const amba = (dp + 10 + dp / 9.38) / 100;
+    const diry = dp < 10 ? dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2 : dp - 4;
+    const dira = (24 - Math.round(dp / 10)) / 100;
+    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`;
+  }
 };
 var MEDIA_QUERY_RULES = {
-  "sm:": (value) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "~sm:": (value) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "sm~:": (value) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "!sm:": (value) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "mobile:": (value) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "!mobile:": (value) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "mobile-device:": (value) => `@media only screen and (max-device-width:767px) { html & { ${value} }}`,
-  "!mobile-device:": (value) => `@media only screen and (min-device-width:767px) { html & { ${value} }}`,
-  "touch:": (value) => `@media only screen and (hover:none){ html & { ${value} }}`,
-  "portrait:": (value) => `@media (orientation:portrait){ html & { ${value} }}`,
-  "landscape:": (value) => `@media (orientation:landscape){ html & { ${value} }}`,
-  "dark:": (value) => `html.dark { ${value} }`
+  "sm:": { media: `(max-width:767px)`, selector: `html &` },
+  "~sm:": { media: `(mix-width:767px)`, selector: `html &` },
+  "sm~:": { media: `(min-width:767px)`, selector: `html &` },
+  "!sm:": { media: `(max-width:767px)`, selector: `html &` },
+  "mobile:": { media: `(max-width:767px)`, selector: `html &` },
+  "!mobile:": { media: `(min-width:767px)`, selector: `html &` },
+  "mobile-device:": { media: `(max-device-width:767px)`, selector: `html &` },
+  "!mobile-device:": { media: `(min-device-width:767px)`, selector: `html &` },
+  "touch:": { media: `(hover:none)`, selector: `html &` },
+  "portrait:": { media: `(orientation:portrait)`, selector: `html &` },
+  "landscape:": { media: `(orientation:landscape)`, selector: `html &` },
+  "dark:": { selector: `html.dark &` }
 };
-var SELECTOR_RULES = {
-  ".class:": (value, cls) => `${cls}&,${cls} & { ${value} }`
-};
-var PREFIX_RULES = __spreadProps(__spreadValues(__spreadValues({}, MEDIA_QUERY_RULES), SELECTOR_RULES), {
-  "link:": (value) => `&:link { ${value} }`,
-  "visited:": (value) => `&:visited { ${value} }`,
-  "placeholder:": (value) => `&::placeholder { ${value} }`,
-  "hover:": (value) => `@media only screen and (hover:hover){ &:hover{ ${value} }} @media only screen and (hover:none){ &:active { ${value} }}`,
-  "active:": (value) => `&:active { ${value} }`,
-  "focus:": (value) => `&:focus { ${value} }`,
-  "focus-within:": (value) => `&:focus-within { ${value} }`,
-  "disabled:": (value) => `html &:disabled { ${value} } html &[disabled] { ${value} }`,
-  "group-hover:": (value) => `.group:hover &, .group.\\:hover & { ${value} }`,
-  "group-active:": (value) => `.group:active &, .group.\\:active & { ${value} }`,
-  "group-focus:": (value) => `.group:focus &, .group.\\:focus & { ${value} }`,
-  "group-disabled:": (value) => `html .group:disabled &, html .group[disabled] &, html .group.disabled & { ${value} }`,
-  "first:": (value) => `&:first-child { ${value} }`,
-  "nth-child(?):": (value) => `&:nth-child(?) { ${value} }`,
-  "before:": (value) => `&:before { ${value} }`,
-  "after:": (value) => `&:after { ${value} }`
+var PREFIX_RULES = __spreadProps(__spreadValues({}, MEDIA_QUERY_RULES), {
+  "hover:": { media: `(hover:hover)`, selector: `&:hover, &.\\:hover` },
+  "active:": { selector: `html &:active, html &.\\:active` },
+  "focus:": { selector: `html &:focus, html &.\\:focus` },
+  "focus-within:": { selector: `html &:focus-within, html &.\\:focus-within` },
+  "disabled:": { selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]` },
+  "group-hover:": { selector: `.group:hover &, html .group.\\:hover &` },
+  "group-active:": { selector: `html .group:active &, html .group.\\:active &` },
+  "group-focus:": { selector: `html .group:focus &, html .group.\\:focus &` },
+  "group-focus-within:": { selector: `html .group:focus-within &, html .group\\:focus-within` },
+  "group-disabled:": { selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &` },
+  "placeholder:": { selector: `&::placeholder` },
+  "link:": { selector: `&:link` },
+  "visited:": { selector: `&:visited` },
+  "first:": { selector: `&:first-child` },
+  "nth-child(?):": { selector: `&:nth-child(?)` },
+  "before:": { selector: `&:before` },
+  "after:": { selector: `&:after` }
 });
 var rules = (r) => RULES[r] || (() => "");
-var prefix_rules = (r) => PREFIX_RULES[r] || ((r2) => r2);
-var regEx = /^([^:]+:)*([^(!]+)(?:\((.*?)\))?[!]?$/g;
+var re_syntax = /^((?:[^:]+:)*)([^(!]+)(?:\((.*?)\))?([!]?)$/g;
 var generateAtomicCss = (atom) => {
   try {
-    if (!regEx.test(atom))
+    if (!re_syntax.test(atom))
       return;
-    const isImportant = atom.slice(-1) === "!";
-    const important = isImportant ? "!important;" : ";";
-    const result = atom.replace(regEx, (a, prefix, b, value) => {
-      let option;
-      if (prefix && prefix.startsWith(".") && prefix.endsWith(":")) {
-        option = prefix.slice(0, -1);
-        prefix = ".class:";
-      }
-      const rule = rules(b)(value);
-      return prefix_rules(prefix)(rule, option);
+    let $selector = [`.${cssEscape(atom)}`];
+    let $mediaQuery = [];
+    const result = atom.replace(re_syntax, (a, prefix, property, value, isImportant) => {
+      if (!RULES[property])
+        throw "";
+      const important = isImportant ? "!important;" : ";";
+      prefix.split(":").forEach((prefix2) => {
+        const r = prefix2.startsWith(".") ? { selector: `&${prefix2}, ${prefix2} &` } : prefix2.startsWith(">>") ? { selector: `& ${prefix2.slice(2, 0)}` } : prefix2.startsWith(">") ? { selector: `&${prefix2}` } : PREFIX_RULES[prefix2 + ":"];
+        if (!r)
+          return;
+        $selector = $selector.map((s) => ((r == null ? void 0 : r.selector.split(",")) || []).map((selector) => {
+          return selector.replace(/&/g, s).trim();
+        })).flat();
+        if (r.media) {
+          $mediaQuery = [...$mediaQuery, r.media];
+        }
+      });
+      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : "";
+      const selectors = $selector.join(",");
+      const declaration = rules(property)(value).replace(/;/g, important);
+      const rule = declaration.includes("&") ? declaration.replace(/&/g, selectors) : selectors + "{" + declaration + "}";
+      return media ? media + "{" + rule + "}" : rule;
     });
     if (!result)
       return;
-    const escapedClass = `.${cssEscape(atom)}`;
-    const declaration = result.replace(/;/g, important);
-    const styleText = declaration.includes("&") ? declaration.replace(/&/g, escapedClass) : `${escapedClass}{${declaration}}`;
-    return styleText;
+    return result;
   } catch (e) {
     return;
   }
@@ -598,7 +649,7 @@ var adorableCSS = (config = CONFIG) => {
       timer = setTimeout(debouncing, 50);
       return;
     }
-    const allAtoms = Object.values(entry).map((id) => parseAtoms(_fs.readFileSync.call(void 0, id, "utf8"))).reduce((a2, b) => [...a2, ...b], []);
+    const allAtoms = Object.values(entry).map((id) => parseAtoms(_fs.readFileSync.call(void 0, id, "utf8"))).flat();
     const styles = generateCss([...new Set(allAtoms)]);
     const a = [reset, ...styles].join("\n");
     resolver(a);

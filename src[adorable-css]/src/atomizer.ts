@@ -3,24 +3,24 @@ import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, make
 
 export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
-const RULES:Record<string, Function> = {
+export const RULES:Record<string, Function> = {
 
   // Colors
   c: (value:string) => `color:${makeColor(value)};`,
+
+  // Background
   bg: (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
 
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
-  "bg-attachment-fixed": () => `background-attachment:fixed;`,
-  "bg-attachment-scroll": () => `background-attachment:scroll;`,
+  "bg-fixed": () => `background-attachment:fixed;`,
+  "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value:string) => `background-position:${value};`,
 
-  //
   contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
   cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
-
 
   // Typography
   font: (value:string) => makeFont(value),
@@ -28,7 +28,7 @@ const RULES:Record<string, Function> = {
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
-  // Font Weight @TODO:prefix:@TODO:IE 검토 필
+  // Font Weight
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
   "300": () => `font-weight:300;`,
@@ -43,13 +43,12 @@ const RULES:Record<string, Function> = {
   lighter: () => `font-weight:100;`,
   thin: () => `font-weight:200;`,
   light: () => `font-weight:300;`,
-  regular:() => `font-weight:400;`,
+  regular: () => `font-weight:400;`,
   medium: () => `font-weight:500;`,
   semibold: () => `font-weight:600;`,
   bold: () => `font-weight:700;`,
   heavy: () => `font-weight:800;`,
   bolder: () => `font-weight:900;`,
-
 
   // Font Weight Utility
   thicker: (value = 1) => `text-shadow:0 0 ${px(value)} currentColor;`,
@@ -65,8 +64,8 @@ const RULES:Record<string, Function> = {
 
 
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L)
-  serif: () => `font-family:serif;`,
   "sans-serif": () => `font-family:sans-serif;`,
+  serif: () => `font-family:serif;`,
   monospace: () => `font-family:menlo,monospace;`,
   cursive: () => `font-family:cursive;`,
   fantasy: () => `font-family:fantasy;`,
@@ -79,10 +78,10 @@ const RULES:Record<string, Function> = {
 
 
   // Text
-  "text-left": () => `text-align:left;`,
+  "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
-  "text-justify": () => `text-align:justify;`,
+  "text-left": () => `text-align:left;`,
 
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `word-break:break-word;overflow-wrap:break-word;`,
@@ -107,7 +106,7 @@ const RULES:Record<string, Function> = {
       max && result.push(`max-width:${px(max)};`)
       return result.join("")
     }
-    return value === "fill" ? `align-self:stretch` : `width:${px(value)};`
+    return (value === "stretch" || value === "fill") ? `align-self:stretch` : `width:${px(value)};`
   },
 
   h: (value:string) => {
@@ -118,7 +117,7 @@ const RULES:Record<string, Function> = {
       max && result.push(`max-height:${px(max)};`)
       return result.join("")
     }
-    return value === "fill" ? `align-self:stretch` : `height:${px(value)};`
+    return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 
   m: (value:string) => `margin:${makeSide(value)};`,
@@ -160,15 +159,15 @@ const RULES:Record<string, Function> = {
   // @TODO:교육이 필요하다.
   r: (value:string) => `border-radius:${makeSide(value)};`,
 
-  rtl: (value:string) => `border-top-left-radius:${px(value)};`,
-  rtr: (value:string) => `border-top-right-radius:${px(value)};`,
-  rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
-  rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
-
   rt: (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
   rr: (value:string) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
   rb: (value:string) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
   rl: (value:string) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
+
+  rtl: (value:string) => `border-top-left-radius:${px(value)};`,
+  rtr: (value:string) => `border-top-right-radius:${px(value)};`,
+  rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
+  rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
 
   ring: (value:string) => {
     const [color, size = 1] = value.split("/")
@@ -203,8 +202,8 @@ const RULES:Record<string, Function> = {
   "no-bouncing": () => "",
   "no-overscroll": () => "",
 
+  "vertical-align": (value:string) => `vertical-align:${value}`,
   "vertical-top": () => `vertical-align:top`,
-
 
   // OverFlow + Text
   "pre": () => `white-space:pre-wrap;`,
@@ -215,10 +214,10 @@ const RULES:Record<string, Function> = {
 
   // line-clamp vs max-lines
   // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
+  // @NOTE:그냥 둘다 제공한다.
   "line-clamp": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
-  // "max-lines":(value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
+  "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value:string) => `text-indent:${px(value)};`,
-
 
 
   // Scroll Snap -- TBD @TODO:
@@ -245,28 +244,26 @@ const RULES:Record<string, Function> = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
 
-
   // Flexbox
   pack: () => `display:flex;align-items:center;justify-content:center;`,
   hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
   vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
 
   gap: (value:string) => `gap:${makeSide(value)};`,
-  hgap: (value:string) => `&>*+* { margin-left:${px(value)};}`,
-  vgap: (value:string) => `&>*+* { margin-top:${px(value)};}`,
-  space: (value:string) => `padding:${px(+value / 2)};`,
+
+  // @NOTE: IE, safari<=13
+  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
+  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
 
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
 
-  // flex (L)
+  // flex
   flex: (value = "1") => `flex:${makeValues(value)};`,
-  ">flex": (value = "1") => `&>*{flex:${makeValues(value)};}`,
-
-  "flex-initial": () => `flex:initial;`,
-  "flex-auto": () => `flex:auto;`,
-  "flex-none": () => `flex:none;`,
+  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
 
   "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
@@ -306,13 +303,13 @@ const RULES:Record<string, Function> = {
 
   "absolute": () => `position:absolute;`,
   "relative": () => `position:relative;`,
-  "static": () => `position:static;`,
-  "fixed": () => `position:fixed;`,
   "sticky": () => `position:sticky;`,
   "sticky-top": (value = 0) => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = 0) => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = 0) => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = 0) => `position:sticky;left:${px(value)};`,
+  "fixed": () => `position:fixed;`,
+  "static": () => `position:static;`,
 
 
   // Position
@@ -334,10 +331,10 @@ const RULES:Record<string, Function> = {
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
 
-  cursor: (value:string) => `cursor:${value};`,
   pointer: () => `cursor:pointer;`,
-  grab: () => `&{cursor:grab;} &:active {cursor:grabbing;}`,
+  grab: () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
   grabbing: () => `cursor:grabbing;`,
+  cursor: (value:string) => `cursor:${value};`,
 
   // 에니메이션:transition(transform=100s/opacity=2s)
   transition: (value:string) => `transition:${makeTransition(value)};`,
@@ -377,144 +374,151 @@ const RULES:Record<string, Function> = {
 
   "table-layout-fixed": () => `table-layout:fixed;`,
 
-
   // Float & Clear
-  "float-left": () => `float:left`,
-  "float-right": () => `float:right`,
-  "float-none": () => `float:none`,
+  "float": (value:string) => `float:${cssvar(value)}`,
+  "clear": (value:string) => `clear:${cssvar(value)}`,
 
-  "clear-left": () => `clear:left`,
-  "clear-right": () => `clear:right`,
-  "clear-both": () => `clear:both`,
-  "clear-none": () => `clear:none`,
+  // Filter
+  "blur": (value:string) => `filter:blur(${px(value)})`,
+  "brightness": (value:string) => `filter:brightness(${cssvar(value)})`,
+  "contrast": (value:string) => `filter:contrast(${cssvar(value)})`,
+  "drop-shadow": (value:string) => `filter:drop-shadow(${cssvar(value)})`,
+  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)})`,
+  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)})`,
+  "invert": (value:string) => `filter:invert(${cssvar(value)})`,
+  "sepia": (value:string) => `filter:sepia(${cssvar(value)})`,
+  "saturate": (value:string) => `filter:saturate(${cssvar(value)})`,
+
+  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)})`,
+  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)})`,
+  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)})`,
+  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${cssvar(value)})`,
+  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)})`,
+  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
+  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)})`,
+  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
+  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
+
+
+  // elevation
+  elevation: (value:string) => {
+    const dp = +value
+    if (!dp) {
+      return `box-shadow: none`
+    }
+
+    const blur = (dp == 1 ? 3 : dp * 2)
+    const amba = (dp + 10 + (dp / 9.38)) / 100
+    const diry = (dp < 10 ? (dp % 2 == 0 ? dp - ((dp / 2) - 1) : (dp - ((dp - 1) / 2))) : dp - 4)
+    const dira = (24 - (Math.round(dp / 10))) / 100
+
+    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
+  }
 }
 
 const MEDIA_QUERY_RULES = {
-  "sm:": (value:string) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "~sm:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "sm~:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "!sm:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
+  "sm:": {media: `(max-width:767px)`, selector: `html &`},
+  "~sm:": {media: `(mix-width:767px)`, selector: `html &`},
+  "sm~:": {media: `(min-width:767px)`, selector: `html &`},
+  "!sm:": {media: `(max-width:767px)`, selector: `html &`},
 
-  "mobile:": (value:string) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "!mobile:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
+  "mobile:": {media: `(max-width:767px)`, selector: `html &`},
+  "!mobile:": {media: `(min-width:767px)`, selector: `html &`},
 
-  "mobile-device:": (value:string) => `@media only screen and (max-device-width:767px) { html & { ${value} }}`,
-  "!mobile-device:": (value:string) => `@media only screen and (min-device-width:767px) { html & { ${value} }}`,
+  "mobile-device:": {media: `(max-device-width:767px)`, selector: `html &`},
+  "!mobile-device:": {media: `(min-device-width:767px)`, selector: `html &`},
 
-  "touch:": (value:string) => `@media only screen and (hover:none){ html & { ${value} }}`,
-  "portrait:": (value:string) => `@media (orientation:portrait){ html & { ${value} }}`,
-  "landscape:": (value:string) => `@media (orientation:landscape){ html & { ${value} }}`,
+  "touch:": {media: `(hover:none)`, selector: `html &`},
+  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
 
   // dark:@TBD
-  "dark:": (value:string) => `html.dark { ${value} }`,
+  "dark:": {selector: `html.dark &`}
 }
 
-const SELECTOR_RULES:Record<string, Function> = {
-  // ">":"", // @TODO:자식 선택자 모든 속성에~~
-  // "+":"", // @TODO:자식 선택자 모든 속성에~~
-  // "~":"", // @TODO:자식 선택자 모든 속성에~~
-  ".class:": (value:string, cls:string) => `${cls}&,${cls} & { ${value} }`,
-}
-
-const PREFIX_RULES:Record<string, Function> = {
+const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
   ...MEDIA_QUERY_RULES,
-  ...SELECTOR_RULES,
 
-  "link:": (value:string) => `&:link { ${value} }`,
-  "visited:": (value:string) => `&:visited { ${value} }`,
+  "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
+  "active:": {selector: `html &:active, html &.\\:active`},
+  "focus:": {selector: `html &:focus, html &.\\:focus`},
+  "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
+  "disabled:": {selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]`},
 
-  "placeholder:": (value:string) => `&::placeholder { ${value} }`,
+  "group-hover:": {selector: `.group:hover &, html .group.\\:hover &`},
+  "group-active:": {selector: `html .group:active &, html .group.\\:active &`},
+  "group-focus:": {selector: `html .group:focus &, html .group.\\:focus &`},
+  "group-focus-within:": {selector: `html .group:focus-within &, html .group\\:focus-within`},
+  "group-disabled:": {selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &`},
 
-  "hover:": (value:string) => `@media only screen and (hover:hover){ &:hover{ ${value} }} @media only screen and (hover:none){ &:active { ${value} }}`,
-  "active:": (value:string) => `&:active { ${value} }`,
-  "focus:": (value:string) => `&:focus { ${value} }`,
-  "focus-within:": (value:string) => `&:focus-within { ${value} }`,
-  "disabled:": (value:string) => `html &:disabled { ${value} } html &[disabled] { ${value} }`,
+  "placeholder:": {selector: `&::placeholder`},
 
-  "group-hover:": (value:string) => `.group:hover &, .group.\\:hover & { ${value} }`,
-  "group-active:": (value:string) => `.group:active &, .group.\\:active & { ${value} }`,
-  "group-focus:": (value:string) => `.group:focus &, .group.\\:focus & { ${value} }`,
-  "group-disabled:": (value:string) => `html .group:disabled &, html .group[disabled] &, html .group.disabled & { ${value} }`,
+  "link:": {selector: `&:link`},
+  "visited:": {selector: `&:visited`},
 
   // @TBD:!!
-  "first:": (value:string) => `&:first-child { ${value} }`,
-  "nth-child(?):": (value:string) => `&:nth-child(?) { ${value} }`,
-  "before:": (value:string) => `&:before { ${value} }`,
-  "after:": (value:string) => `&:after { ${value} }`,
+  "first:": {selector: `&:first-child`},
+  "nth-child(?):": {selector: `&:nth-child(?)`},
+  "before:": {selector: `&:before`},
+  "after:": {selector: `&:after`},
 }
 
 const rules = (r:string) => RULES[r] || (() => "")
-const prefix_rules = (r:string) => PREFIX_RULES[r] || ((r:string) => r)
-
-const regEx = /^([^:]+:)*([^(!]+)(?:\((.*?)\))?[!]?$/g
+const re_syntax = /^((?:[^:]+:)*)([^(!]+)(?:\((.*?)\))?([!]?)$/g
 
 export const generateAtomicCss = (atom:string) => {
   try {
-    if (!regEx.test(atom)) return
+    if (!re_syntax.test(atom)) return
 
-    const isImportant = atom.slice(-1) === "!"
-    const important = isImportant ? "!important;" : ";"
+    let $selector = [`.${cssEscape(atom)}`]
+    let $mediaQuery:string[] = []
 
-    const result = atom.replace(regEx, (a, prefix, b, value) => {
+    const result = atom.replace(re_syntax, (a, prefix, property, value, isImportant) => {
+      if (!RULES[property]) throw ""
 
-      let option
-      if (prefix && prefix.startsWith(".") && prefix.endsWith(":")) {
-        option = prefix.slice(0, -1)
-        prefix = ".class:"
-      }
+      const important = isImportant ? "!important;" : ";"
 
-      const rule = rules(b)(value)
-      return prefix_rules(prefix)(rule, option)
+      prefix.split(":").forEach((prefix:string) => {
+        const r = prefix.startsWith(".") ? {selector: `&${prefix}, ${prefix} &`}
+          : prefix.startsWith(">>") ? {selector: `& ${prefix.slice(2, 0)}`}
+            : prefix.startsWith(">") ? {selector: `&${prefix}`}
+              : PREFIX_RULES[prefix + ":"]
+        if (!r) return
+
+        // selector
+        $selector = $selector.map(s => (r?.selector.split(",") || []).map((selector:string) => {
+          return selector.replace(/&/g, s).trim()
+        })).flat()
+
+        // media query
+        if (r.media) {
+          $mediaQuery = [...$mediaQuery, r.media]
+        }
+      })
+
+      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
+      const selectors = $selector.join(",")
+      const declaration = rules(property)(value).replace(/;/g, important)
+      const rule = declaration.includes("&") ? declaration.replace(/&/g, selectors) : selectors + "{" + declaration + "}"
+      return media ? media + "{" + rule + "}" : rule
     })
     if (!result) return
-
-    const escapedClass = `.${cssEscape(atom)}`
-    const declaration = result.replace(/;/g, important)
-    const styleText = declaration.includes("&") ? declaration.replace(/&/g, escapedClass) : `${escapedClass}{${declaration}}`
-    return styleText
+    return result
   }
   catch (e) {
     return
   }
 }
 
-const priority = [
-  "block",
-  "contents",
-  "flow-root",
-  "grid",
-  "inline",
-  "inline-block",
-  "inline-flex",
-  "inline-grid",
-  "inline-table",
-  "list-item",
-  "revert",
-  "table",
-  "table-caption",
-  "table-cell",
-  "table-column",
-  "table-column-group",
-  "hbox",
-  "vbox",
-  "pack",
-  "hbox(",
-  "vbox(",
-  "none",
-  "layer",
-  "absolute",
-  "fixed",
-  "relative",
-  "sticky",
-  "static",
-  "flex",
-  "flex-shrink",
-].reverse()
 
-const getPriority = (a:string) => priority.findIndex((value:string) => a.startsWith(value.split(":").pop() || ""))
+const priority = Object.keys(RULES)
+const getPriority = (a:string) => {
+  a = a.split(":").pop()
+  return priority.findIndex(value => a.startsWith(value))
+}
 
 const strcmp = (a:string, b:string) => a > b ? 1 : a < b ? -1 : 0
 
-const sortByRule = (a:string, b:string) => getPriority(b) - getPriority(a) || strcmp(a, b)
+const sortByRule = (a:string, b:string) => getPriority(a) - getPriority(b) || strcmp(a, b)
 
-export const generateCss = (classList:string[]) => classList.map(a => String(a)).sort(sortByRule).map(generateAtomicCss).filter(Boolean)
+export const generateCss = (classList:string[]) => classList.sort(sortByRule).map(generateAtomicCss).filter(Boolean)

@@ -1,9 +1,9 @@
-# 🐶 Adorable CSS 🐱
+# 🐹 AdorableCSS
 
-> ✨ Rapid On Demand Atomic CSS Framework.
+> ✨ Rapid On-Demand Atomic CSS framework
 
 
-## Usage
+## Getting Started
 
 ```
 npm i -D adorable-css
@@ -15,7 +15,7 @@ npm i -D adorable-css
 import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
-import "@adorable.css"
+import "@adorable.css" // <-
 import {App} from "./App"
 
 ReactDOM.render(
@@ -35,40 +35,55 @@ import {adorableCSS} from "./src[adorable-css]/vite-plugin-adorable-css"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [..., adorableCSS()]
+  plugins: [..., adorableCSS()] // <-
 })
 ```
 
 
-## Example
+## Usage
 
+```tsx
+// Button.tsx
+
+export const Button = () =>
+  <button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
+  hover:bg(#555)
+  active:bg(#000)! active:b(#000.2)">
+    <div>👍</div>
+    <div>Like</div>
+  </button>
 ```
-import "@adorable.css"
 
-<button class="b(#000) r(10) p(10/20) font(14) bold pointer hover:bg(#000.08) active:bg(#000)! active:c(#fff)">Click Me</button>
-```
 
+#### auto generated css code from AdotableCSS 😎
 
 ```css
-@adorable.css
-  
-/* auto generated */
-* {margin:0; padding:0; box-sizing: border-box; font: inherit; color: inherit; flex-shrink: 0;}
-.active\:bg\(\#000\)\!:active { background-color: #000!important; }
-.active\:c\(\#fff\):active { color: #fff; }
-.b\(\#000\){border: 1px solid #000;}
-.bold{font-weight: 700;}
-.font\(14\){font-size: 14px}
-@media only screen and (hover:hover){ .hover\:bg\(\#000\.08\):hover{ background-color: rgba(0,0,0,.08); }} @media only screen and (hover:none){ .hover\:bg\(\#000\.08\):active { background-color: rgba(0,0,0,.08); }}
-.p\(10\/20\){padding: 10px 20px;}
-.pointer{cursor: pointer;}
-.r\(10\){border-radius: 10px;}
+/* @adorable.css */
+
+* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
+.c\(\#fff\){color:#fff;}
+html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
+.bg\(\#333\){background-color:#333;}
+@media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
+.font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
+.bold{font-weight:700;}
+.hbox{display:flex;flex-flow:row;align-items: center;}
+.p\(8\/12\){padding:8px 12px;}
+.pack{display:flex;align-items:center;justify-content:center;}
+.pointer{cursor:pointer;}
+html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1px solid rgba(0,0,0,.2);}
+.b\(\#000\.2\){border:1px solid rgba(0,0,0,.2);}
+.r\(6\){border-radius:6px;}
+.gap\(6\){gap:6px;}
+.layer{position:absolute;top:0;right:0;bottom:0;left:0}
+.transition\(\.2s\){transition:all .2s;}
+
 ```
 
 
-## What is Adorable CSS?
+## What is AdorableCSS?
 
-- "Utility First CSS" 패러다임
+- Rapid On-Demand Atomic CSS framework
 - tailwind css를 영감을 받아 만들게 되었습니다.
 - tailwind css의 컨셉은 매력적이었나 다음과 같은 이유로 현업에서는 사용하기 힘들었습니다.
 
@@ -79,22 +94,21 @@ import "@adorable.css"
 
 
 ## How?
-- class에 정의할때마다 필요한 css를 자동으로 생성하는 방식으로 동작합니다. (acss.io에 영감을 받았습니다.)
+- class에 속성을 정의할때마다 필요한 css를 자동으로 생성하는 방식으로 동작합니다. (acss.io에서 영감을 받았습니다.)
 - 모든 수치와 색상을 지원하며 필요한 경우 필요한 만큼의 CSS만 만들어 냅니다.
 
 
-## If?
+## Why?
 - **Easy**: 디자인을 위해 이름을 짓는 수고가 사라지며, 한번 외운 이름은 계속 사용할 수 있습니다. 
 - **Fast Writing**: html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
 - **Portable**: css 없이 HTML만으로 UI를 만들 수 있어 이동과 리팩토링에서 자유롭습니다.
 - **Compact**: 기존 css 방식보다 훨씬 더 적은 라인의 css를 생산합니다.
-- **Easy for Auto HandOff**: figma등의 HandOff에서 최적화된 형태입니다.
+- **Great for Auto Design HandOff**: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
 
 
 ## Syntax
 
 ```
- 
 property(value) 
   - 가장 기본적인 형태로 프로퍼티(값)의 형태를 가집니다.
   ex) class="w(240) h(100) c(#fff.3)"
@@ -117,29 +131,30 @@ prefix:property(value)! or property(value)! or property!
 
 ```
 
-## Rule
+
+## Reference
 
 ```typescript
 export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
-const RULES:Record<string, Function> = {
+export const RULES:Record<string, Function> = {
 
   // Colors
   c: (value:string) => `color:${makeColor(value)};`,
+
+  // Background
   bg: (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
 
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
-  "bg-attachment-fixed": () => `background-attachment:fixed;`,
-  "bg-attachment-scroll": () => `background-attachment:scroll;`,
+  "bg-fixed": () => `background-attachment:fixed;`,
+  "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value:string) => `background-position:${value};`,
 
-  //
   contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
   cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
-
 
   // Typography
   font: (value:string) => makeFont(value),
@@ -147,7 +162,7 @@ const RULES:Record<string, Function> = {
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
-  // Font Weight @TODO:prefix:@TODO:IE 검토 필
+  // Font Weight
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
   "300": () => `font-weight:300;`,
@@ -162,13 +177,12 @@ const RULES:Record<string, Function> = {
   lighter: () => `font-weight:100;`,
   thin: () => `font-weight:200;`,
   light: () => `font-weight:300;`,
-  regular:() => `font-weight:400;`,
+  regular: () => `font-weight:400;`,
   medium: () => `font-weight:500;`,
   semibold: () => `font-weight:600;`,
   bold: () => `font-weight:700;`,
   heavy: () => `font-weight:800;`,
   bolder: () => `font-weight:900;`,
-
 
   // Font Weight Utility
   thicker: (value = 1) => `text-shadow:0 0 ${px(value)} currentColor;`,
@@ -184,8 +198,8 @@ const RULES:Record<string, Function> = {
 
 
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L)
-  serif: () => `font-family:serif;`,
   "sans-serif": () => `font-family:sans-serif;`,
+  serif: () => `font-family:serif;`,
   monospace: () => `font-family:menlo,monospace;`,
   cursive: () => `font-family:cursive;`,
   fantasy: () => `font-family:fantasy;`,
@@ -198,10 +212,10 @@ const RULES:Record<string, Function> = {
 
 
   // Text
-  "text-left": () => `text-align:left;`,
+  "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
-  "text-justify": () => `text-align:justify;`,
+  "text-left": () => `text-align:left;`,
 
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `word-break:break-word;overflow-wrap:break-word;`,
@@ -226,7 +240,7 @@ const RULES:Record<string, Function> = {
       max && result.push(`max-width:${px(max)};`)
       return result.join("")
     }
-    return value === "fill" ? `align-self:stretch` : `width:${px(value)};`
+    return (value === "stretch" || value === "fill") ? `align-self:stretch` : `width:${px(value)};`
   },
 
   h: (value:string) => {
@@ -237,7 +251,7 @@ const RULES:Record<string, Function> = {
       max && result.push(`max-height:${px(max)};`)
       return result.join("")
     }
-    return value === "fill" ? `align-self:stretch` : `height:${px(value)};`
+    return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 
   m: (value:string) => `margin:${makeSide(value)};`,
@@ -279,15 +293,15 @@ const RULES:Record<string, Function> = {
   // @TODO:교육이 필요하다.
   r: (value:string) => `border-radius:${makeSide(value)};`,
 
-  rtl: (value:string) => `border-top-left-radius:${px(value)};`,
-  rtr: (value:string) => `border-top-right-radius:${px(value)};`,
-  rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
-  rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
-
   rt: (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
   rr: (value:string) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
   rb: (value:string) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
   rl: (value:string) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
+
+  rtl: (value:string) => `border-top-left-radius:${px(value)};`,
+  rtr: (value:string) => `border-top-right-radius:${px(value)};`,
+  rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
+  rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
 
   ring: (value:string) => {
     const [color, size = 1] = value.split("/")
@@ -322,8 +336,8 @@ const RULES:Record<string, Function> = {
   "no-bouncing": () => "",
   "no-overscroll": () => "",
 
+  "vertical-align": (value:string) => `vertical-align:${value}`,
   "vertical-top": () => `vertical-align:top`,
-
 
   // OverFlow + Text
   "pre": () => `white-space:pre-wrap;`,
@@ -334,10 +348,10 @@ const RULES:Record<string, Function> = {
 
   // line-clamp vs max-lines
   // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
+  // @NOTE:그냥 둘다 제공한다.
   "line-clamp": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
-  // "max-lines":(value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
+  "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value:string) => `text-indent:${px(value)};`,
-
 
 
   // Scroll Snap -- TBD @TODO:
@@ -364,28 +378,26 @@ const RULES:Record<string, Function> = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
 
-
   // Flexbox
   pack: () => `display:flex;align-items:center;justify-content:center;`,
   hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
   vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
 
   gap: (value:string) => `gap:${makeSide(value)};`,
-  hgap: (value:string) => `&>*+* { margin-left:${px(value)};}`,
-  vgap: (value:string) => `&>*+* { margin-top:${px(value)};}`,
-  space: (value:string) => `padding:${px(+value / 2)};`,
+
+  // @NOTE: IE, safari<=13
+  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
+  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
 
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
 
-  // flex (L)
+  // flex
   flex: (value = "1") => `flex:${makeValues(value)};`,
-  ">flex": (value = "1") => `&>*{flex:${makeValues(value)};}`,
-
-  "flex-initial": () => `flex:initial;`,
-  "flex-auto": () => `flex:auto;`,
-  "flex-none": () => `flex:none;`,
+  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
 
   "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
@@ -425,13 +437,13 @@ const RULES:Record<string, Function> = {
 
   "absolute": () => `position:absolute;`,
   "relative": () => `position:relative;`,
-  "static": () => `position:static;`,
-  "fixed": () => `position:fixed;`,
   "sticky": () => `position:sticky;`,
   "sticky-top": (value = 0) => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = 0) => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = 0) => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = 0) => `position:sticky;left:${px(value)};`,
+  "fixed": () => `position:fixed;`,
+  "static": () => `position:static;`,
 
 
   // Position
@@ -453,10 +465,10 @@ const RULES:Record<string, Function> = {
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
 
-  cursor: (value:string) => `cursor:${value};`,
   pointer: () => `cursor:pointer;`,
-  grab: () => `&{cursor:grab;} &:active {cursor:grabbing;}`,
+  grab: () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
   grabbing: () => `cursor:grabbing;`,
+  cursor: (value:string) => `cursor:${value};`,
 
   // 에니메이션:transition(transform=100s/opacity=2s)
   transition: (value:string) => `transition:${makeTransition(value)};`,
@@ -496,70 +508,93 @@ const RULES:Record<string, Function> = {
 
   "table-layout-fixed": () => `table-layout:fixed;`,
 
-
   // Float & Clear
-  "float-left": () => `float:left`,
-  "float-right": () => `float:right`,
-  "float-none": () => `float:none`,
+  "float": (value:string) => `float:${cssvar(value)}`,
+  "clear": (value:string) => `clear:${cssvar(value)}`,
 
-  "clear-left": () => `clear:left`,
-  "clear-right": () => `clear:right`,
-  "clear-both": () => `clear:both`,
-  "clear-none": () => `clear:none`,
+  // Filter
+  "blur": (value:string) => `filter:blur(${px(value)})`,
+  "brightness": (value:string) => `filter:brightness(${cssvar(value)})`,
+  "contrast": (value:string) => `filter:contrast(${cssvar(value)})`,
+  "drop-shadow": (value:string) => `filter:drop-shadow(${cssvar(value)})`,
+  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)})`,
+  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)})`,
+  "invert": (value:string) => `filter:invert(${cssvar(value)})`,
+  "sepia": (value:string) => `filter:sepia(${cssvar(value)})`,
+  "saturate": (value:string) => `filter:saturate(${cssvar(value)})`,
+
+  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)})`,
+  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)})`,
+  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)})`,
+  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${cssvar(value)})`,
+  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)})`,
+  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
+  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)})`,
+  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
+  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
+
+
+  // elevation
+  elevation: (value:string) => {
+    const dp = +value
+    if (!dp) {
+      return `box-shadow: none`
+    }
+
+    const blur = (dp == 1 ? 3 : dp * 2)
+    const amba = (dp + 10 + (dp / 9.38)) / 100
+    const diry = (dp < 10 ? (dp % 2 == 0 ? dp - ((dp / 2) - 1) : (dp - ((dp - 1) / 2))) : dp - 4)
+    const dira = (24 - (Math.round(dp / 10))) / 100
+
+    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
+  }
 }
 
 const MEDIA_QUERY_RULES = {
-  "sm:": (value:string) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "~sm:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "sm~:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
-  "!sm:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
+  "sm:": {media: `(max-width:767px)`, selector: `html &`},
+  "~sm:": {media: `(mix-width:767px)`, selector: `html &`},
+  "sm~:": {media: `(min-width:767px)`, selector: `html &`},
+  "!sm:": {media: `(max-width:767px)`, selector: `html &`},
 
-  "mobile:": (value:string) => `@media only screen and (max-width:767px) { html & { ${value} }}`,
-  "!mobile:": (value:string) => `@media only screen and (min-width:767px) { html & { ${value} }}`,
+  "mobile:": {media: `(max-width:767px)`, selector: `html &`},
+  "!mobile:": {media: `(min-width:767px)`, selector: `html &`},
 
-  "mobile-device:": (value:string) => `@media only screen and (max-device-width:767px) { html & { ${value} }}`,
-  "!mobile-device:": (value:string) => `@media only screen and (min-device-width:767px) { html & { ${value} }}`,
+  "mobile-device:": {media: `(max-device-width:767px)`, selector: `html &`},
+  "!mobile-device:": {media: `(min-device-width:767px)`, selector: `html &`},
 
-  "touch:": (value:string) => `@media only screen and (hover:none){ html & { ${value} }}`,
-  "portrait:": (value:string) => `@media (orientation:portrait){ html & { ${value} }}`,
-  "landscape:": (value:string) => `@media (orientation:landscape){ html & { ${value} }}`,
+  "touch:": {media: `(hover:none)`, selector: `html &`},
+  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
 
   // dark:@TBD
-  "dark:": (value:string) => `html.dark { ${value} }`,
+  "dark:": {selector: `html.dark &`}
 }
 
-const SELECTOR_RULES:Record<string, Function> = {
-  // ">":"", // @TODO:자식 선택자 모든 속성에~~
-  // "+":"", // @TODO:자식 선택자 모든 속성에~~
-  // "~":"", // @TODO:자식 선택자 모든 속성에~~
-  ".class:": (value:string, cls:string) => `${cls}&,${cls} & { ${value} }`,
-}
-
-const PREFIX_RULES:Record<string, Function> = {
+const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
   ...MEDIA_QUERY_RULES,
-  ...SELECTOR_RULES,
 
-  "link:": (value:string) => `&:link { ${value} }`,
-  "visited:": (value:string) => `&:visited { ${value} }`,
+  "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
+  "active:": {selector: `html &:active, html &.\\:active`},
+  "focus:": {selector: `html &:focus, html &.\\:focus`},
+  "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
+  "disabled:": {selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]`},
 
-  "placeholder:": (value:string) => `&::placeholder { ${value} }`,
+  "group-hover:": {selector: `.group:hover &, html .group.\\:hover &`},
+  "group-active:": {selector: `html .group:active &, html .group.\\:active &`},
+  "group-focus:": {selector: `html .group:focus &, html .group.\\:focus &`},
+  "group-focus-within:": {selector: `html .group:focus-within &, html .group\\:focus-within`},
+  "group-disabled:": {selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &`},
 
-  "hover:": (value:string) => `@media only screen and (hover:hover){ &:hover{ ${value} }} @media only screen and (hover:none){ &:active { ${value} }}`,
-  "active:": (value:string) => `&:active { ${value} }`,
-  "focus:": (value:string) => `&:focus { ${value} }`,
-  "focus-within:": (value:string) => `&:focus-within { ${value} }`,
-  "disabled:": (value:string) => `html &:disabled { ${value} } html &[disabled] { ${value} }`,
+  "placeholder:": {selector: `&::placeholder`},
 
-  "group-hover:": (value:string) => `.group:hover &, .group.\\:hover & { ${value} }`,
-  "group-active:": (value:string) => `.group:active &, .group.\\:active & { ${value} }`,
-  "group-focus:": (value:string) => `.group:focus &, .group.\\:focus & { ${value} }`,
-  "group-disabled:": (value:string) => `html .group:disabled &, html .group[disabled] &, html .group.disabled & { ${value} }`,
+  "link:": {selector: `&:link`},
+  "visited:": {selector: `&:visited`},
 
   // @TBD:!!
-  "first:": (value:string) => `&:first-child { ${value} }`,
-  "nth-child(?):": (value:string) => `&:nth-child(?) { ${value} }`,
-  "before:": (value:string) => `&:before { ${value} }`,
-  "after:": (value:string) => `&:after { ${value} }`,
+  "first:": {selector: `&:first-child`},
+  "nth-child(?):": {selector: `&:nth-child(?)`},
+  "before:": {selector: `&:before`},
+  "after:": {selector: `&:after`},
 }
 ```
 
@@ -568,5 +603,5 @@ const PREFIX_RULES:Record<string, Function> = {
 
 - 가능한 css의 property를 그대로 쓴다.
 - c, bg, mt, p, 등 색상 및 box-model은 빈도를 고려해 축약해서 쓴다.
-- 가급적 bootstrap이나 tailwind 등에서 이미 쓰고 있는 이름을 가급적 사용한다.
-- *figma의 속성과 1:1이 될 수 있도록 한다.
+- 가급적 bootstrap이나 tailwind 등에서 이미 쓰고 있는 이름을 가급적 사용한다. eg) text-center
+- *figma의 속성과 1:1이 될 수 있도록 한다. eg) hbox(top+right) gap(10)
