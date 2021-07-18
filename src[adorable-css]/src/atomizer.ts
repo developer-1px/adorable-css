@@ -367,7 +367,7 @@ export const RULES:Record<string, Function> = {
 
 
   // Util
-  ratio: (value:string) => `& {position:relative;} &:before{content:"";width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  ratio: (value:string) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
   gpu: () => `transform:translateZ(0.1px);`,
 
   // @TODO:triangle
