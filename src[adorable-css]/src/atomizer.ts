@@ -1,28 +1,19 @@
 import {cssEscape} from "./cssEscape"
 import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
 
+const strcmp = (a:string, b:string) => a > b ? 1 : a < b ? -1 : 0
+
 export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
 export const RULES:Record<string, Function> = {
 
-  // Colors
+  // -- Color
   c: (value:string) => `color:${makeColor(value)};`,
 
-  // Background
+  // -- Background Color
   bg: (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
 
-  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
-  "bg-repeat-x": () => `background-repeat:repeat-x;`,
-  "bg-repeat-y": () => `background-repeat:repeat-y;`,
-  "bg-no-repeat": () => `background-repeat:no-repeat;`,
-  "bg-fixed": () => `background-attachment:fixed;`,
-  "bg-scroll": () => `background-attachment:scroll;`,
-  "bg-position": (value:string) => `background-position:${value};`,
-
-  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
-  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
-
-  // Typography
+  // -- Typography
   font: (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
@@ -91,13 +82,13 @@ export const RULES:Record<string, Function> = {
   // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
 
 
-  /// Box-Model
-
-  // Box-Sizing
+  // -- Box-Sizing
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
 
-  // Box @TODO:1/6, calc()
+  // -- Box-Model
+
+  // @TODO:1/6, calc()
   w: (value:string) => {
     if (value.includes("~")) {
       const result = []
@@ -177,6 +168,73 @@ export const RULES:Record<string, Function> = {
   outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
+  // -- Background Image
+
+  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
+  "bg-repeat-x": () => `background-repeat:repeat-x;`,
+  "bg-repeat-y": () => `background-repeat:repeat-y;`,
+  "bg-no-repeat": () => `background-repeat:no-repeat;`,
+  "bg-fixed": () => `background-attachment:fixed;`,
+  "bg-scroll": () => `background-attachment:scroll;`,
+  "bg-position": (value:string) => `background-position:${value};`,
+
+  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
+  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
+
+
+  // -- Display
+  "block": () => "display:block;",
+  "inline-block": () => "display:inline-block;",
+  "inline": () => "display:inline;",
+  "inline-flex": () => "display:inline-flex;",
+  "table": () => "display:table;",
+  "inline-table": () => "display:inline-table;",
+  "table-caption": () => "display:table-caption;",
+  "table-cell": () => "display:table-cell;",
+  "table-column": () => "display:table-column;",
+  "table-column-group": () => "display:table-column-group;",
+  "table-footer-group": () => "display:table-footer-group;",
+  "table-header-group": () => "display:table-header-group;",
+  "table-row-group": () => "display:table-row-group;",
+  "table-row": () => "display:table-row;",
+  "flow-root": () => "display:flow-root;",
+  "grid": () => "display:grid;",
+  "inline-grid": () => "display:inline-grid;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
+
+  // -- Flexbox
+  hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
+  vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  pack: () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox(": () => ``,
+  "vbox(": () => ``,
+
+  gap: (value:string) => `gap:${makeSide(value)};`,
+
+  // @NOTE: IE, safari<=13
+  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
+  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
+
+  "space-between": () => `justify-content:space-between;`,
+  "space-around": () => `justify-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;`,
+
+  // flex
+  flex: (value = "1") => `flex:${makeValues(value)};`,
+  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+
+  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
+  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
+
+  "flex-wrap": () => "flex-wrap:wrap;",
+  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
+  "flex-nowrap": () => "flex-wrap:nowrap;",
+  "order": (value:string) => `order:${cssvar(value)};`,
+
 
   /// -- Overflow
 
@@ -221,58 +279,6 @@ export const RULES:Record<string, Function> = {
 
 
   // Scroll Snap -- TBD @TODO:
-
-
-  // Display
-  "block": () => "display:block;",
-  "inline-block": () => "display:inline-block;",
-  "inline": () => "display:inline;",
-  "inline-flex": () => "display:inline-flex;",
-  "table": () => "display:table;",
-  "inline-table": () => "display:inline-table;",
-  "table-caption": () => "display:table-caption;",
-  "table-cell": () => "display:table-cell;",
-  "table-column": () => "display:table-column;",
-  "table-column-group": () => "display:table-column-group;",
-  "table-footer-group": () => "display:table-footer-group;",
-  "table-header-group": () => "display:table-header-group;",
-  "table-row-group": () => "display:table-row-group;",
-  "table-row": () => "display:table-row;",
-  "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
-  "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
-
-  // Flexbox
-  pack: () => `display:flex;align-items:center;justify-content:center;`,
-  hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
-
-  gap: (value:string) => `gap:${makeSide(value)};`,
-
-  // @NOTE: IE, safari<=13
-  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
-  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
-  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
-  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
-
-  "space-between": () => `justify-content:space-between;`,
-  "space-around": () => `justify-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;`,
-
-  // flex
-  flex: (value = "1") => `flex:${makeValues(value)};`,
-  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
-
-  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
-  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
-
-  "flex-wrap": () => "flex-wrap:wrap;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
-  "flex-nowrap": () => "flex-wrap:nowrap;",
-  "order": (value:string) => `order:${cssvar(value)};`,
 
 
   // Visibility
@@ -416,39 +422,27 @@ export const RULES:Record<string, Function> = {
   }
 }
 
-const MEDIA_QUERY_RULES = {
-  "sm:": {media: `(max-width:767px)`, selector: `html &`},
-  "~sm:": {media: `(mix-width:767px)`, selector: `html &`},
-  "sm~:": {media: `(min-width:767px)`, selector: `html &`},
-  "!sm:": {media: `(max-width:767px)`, selector: `html &`},
+/// Prefix
+type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
+type PrefixRules = Record<string, PrefixProps>
 
-  "mobile:": {media: `(max-width:767px)`, selector: `html &`},
-  "!mobile:": {media: `(min-width:767px)`, selector: `html &`},
-
-  "mobile-device:": {media: `(max-device-width:767px)`, selector: `html &`},
-  "!mobile-device:": {media: `(min-device-width:767px)`, selector: `html &`},
-
-  "touch:": {media: `(hover:none)`, selector: `html &`},
-  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
-  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
-
-  // dark:@TBD
-  "dark:": {selector: `html.dark &`}
-}
-
-const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
-  ...MEDIA_QUERY_RULES,
-
+const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
   "active:": {selector: `html &:active, html &.\\:active`},
   "focus:": {selector: `html &:focus, html &.\\:focus`},
   "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
+  "checked:": {selector: `html &:checked, html &.\\:checked`},
+  "read-only:": {selector: `html &:read-only, html &.\\:read-only`},
+  "enabled:": {selector: `html &:enabled, html &.\\:enabled`},
   "disabled:": {selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]`},
 
   "group-hover:": {selector: `.group:hover &, html .group.\\:hover &`},
   "group-active:": {selector: `html .group:active &, html .group.\\:active &`},
   "group-focus:": {selector: `html .group:focus &, html .group.\\:focus &`},
   "group-focus-within:": {selector: `html .group:focus-within &, html .group\\:focus-within`},
+  "group-checked:": {selector: `html .group:checked &, html .group.\\:checked &`},
+  "group-read-only:": {selector: `html .group:read-only &, html .group.\\:read-only &`},
+  "group-enabled:": {selector: `html .group:enabled &, html .group.\\:enabled &`},
   "group-disabled:": {selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &`},
 
   "placeholder:": {selector: `&::placeholder`},
@@ -456,69 +450,166 @@ const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
   "link:": {selector: `&:link`},
   "visited:": {selector: `&:visited`},
 
-  // @TBD:!!
   "first:": {selector: `&:first-child`},
-  "nth-child(?):": {selector: `&:nth-child(?)`},
-  "before:": {selector: `&:before`},
-  "after:": {selector: `&:after`},
+  "first-child:": {selector: `&:first-child`},
+  "last:": {selector: `&:last-child`},
+  "last-child:": {selector: `&:last-child`},
+  "odd:": {selector: `&:nth-child(2n+1)`},
+  "even:": {selector: `&:nth-child(2n)`},
+
+  // @TBD:!!
+  // "before:": {selector: `&:before`},
+  // "after:": {selector: `&:after`},
+  // "nth-child(?):": {selector: `&:nth-child(?)`},
 }
 
-const rules = (r:string) => RULES[r] || (() => "")
-const re_syntax = /^((?:[^:]+:)*)([^(!]+)(?:\((.*?)\))?([!]?)$/g
+const PREFIX_MEDIA_QUERY:PrefixRules = {
+  "sm:": {media: `(min-width:480px)`, selector: `html &`},
+  "md:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl:": {media: `(min-width:1280px)`, selector: `html &`},
 
-export const generateAtomicCss = (atom:string) => {
+  "sm~:": {media: `(min-width:480px)`, selector: `html &`},
+  "md~:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg~:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl~:": {media: `(min-width:1280px)`, selector: `html &`},
+
+  "~sm:": {media: `(max-width:479.98px)`, selector: `html &`},
+  "~md:": {media: `(max-width:767.98px)`, selector: `html &`},
+  "~lg:": {media: `(max-width:1023.98px)`, selector: `html &`},
+  "~xl:": {media: `(max-width:1279.98px)`, selector: `html &`},
+
+  "mobile:": {media: `(max-device-width:767.98px)`, selector: `html &`},
+  "tablet:": {media: `(min-device-width:768px) and (max-width:1023.98px)`, selector: `html &`},
+  "desktop:": {media: `(min-device-width:1024px)`, selector: `html &`},
+  "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
+  "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
+
+  "touch:": {media: `(hover:none)`, selector: `html &`},
+  "!touch:": {media: `(hover:hover)`, selector: `html &`},
+
+  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
+
+  "print:": {media: `print`, selector: `html &`},
+  "screen:": {media: `screen`, selector: `html &`},
+  "speech:": {media: `speech`, selector: `html &`},
+
+
+  // dark:@TBD
+  "dark:": {selector: `html.dark &`},
+
+  // device:@TBD
+  "device": {
+    postCSS: ({media, ...props}) => {
+      media = media.replace(/(max|min)-width/g, (a, b) => {
+        return b + "-device-width"
+      })
+      return {media, ...props}
+    }
+  },
+}
+
+const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
+  ">>": (selector:string) => `& ${selector.slice(2, 0)}`,
+  ">": (selector:string) => `&${selector}`,
+  ".": (selector:string) => `&${selector}, ${selector} &`,
+}
+
+const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => strcmp(a, b) || b.length - a.length)
+
+const PREFIX_RULES:PrefixRules = {
+  ...PREFIX_PSEUDO_CLASS,
+  ...PREFIX_MEDIA_QUERY,
+}
+
+const makeSelector = (prefix:string):PrefixProps|undefined => {
+  const key = SELECTOR_PREFIX_KEYS.find(s => prefix.startsWith(s)) || ""
+  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix.slice(0, -1))
+  if (selector) return {selector}
+}
+
+const makeRule = (r:string) => RULES[r] || (() => "")
+
+const priorityTable = Object.fromEntries(Object.entries(RULES).map(([key, value], index) => [key, index]))
+
+
+// Parse & Generate
+const property = /([^:(]+)/.source
+const value = /(?:\((.*?)\))?/.source
+const delimiter = /(:|$)/.source
+
+const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
+const re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`)
+
+const generateAtomicCss = (atom:string):[string, number]|undefined => {
   try {
-    if (!re_syntax.test(atom)) return
+    // ...! -> !important
+    const isImportant = atom.endsWith("!")
+    const important = isImportant ? "!important;" : ";"
+    atom = isImportant ? atom.slice(0, -1) : atom
 
-    let $selector = [`.${cssEscape(atom)}`]
+    // syntax validate
+    if (!re_syntax_validator.test(atom)) return
+
+    // prepare result
+    let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`]
     let $mediaQuery:string[] = []
+    let $postCSS:Function[] = []
+    let $declaration = ""
+    let $priority = 0
 
-    const result = atom.replace(re_syntax, (a, prefix, property, value, isImportant) => {
-      if (!RULES[property]) throw ""
+    // parse chunk
+    re_syntax.lastIndex = 0
+    for (; ;) {
+      const chunk = re_syntax.exec(atom)
+      if (!chunk) break
 
-      const important = isImportant ? "!important;" : ";"
+      const [input, name, value, type] = chunk
 
-      prefix.split(":").forEach((prefix:string) => {
-        const r = prefix.startsWith(".") ? {selector: `&${prefix}, ${prefix} &`}
-          : prefix.startsWith(">>") ? {selector: `& ${prefix.slice(2, 0)}`}
-            : prefix.startsWith(">") ? {selector: `&${prefix}`}
-              : PREFIX_RULES[prefix + ":"]
-        if (!r) return
+      // Make Prefix
+      if (type === ":") {
+        const prefixRule = makeSelector(input) || PREFIX_RULES[name + ":"]
+        if (!prefixRule) return
 
         // selector
-        $selector = $selector.map(s => (r?.selector.split(",") || []).map((selector:string) => {
+        $selector = $selector.map(s => (prefixRule?.selector.split(",") || []).map((selector:string) => {
           return selector.replace(/&/g, s).trim()
         })).flat()
 
         // media query
-        if (r.media) {
-          $mediaQuery = [...$mediaQuery, r.media]
+        if (prefixRule.media) {
+          $mediaQuery = [...$mediaQuery, prefixRule.media]
         }
-      })
 
-      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
-      const selectors = $selector.join(",")
-      const declaration = rules(property)(value).replace(/;/g, important)
-      const rule = declaration.includes("&") ? declaration.replace(/&/g, selectors) : selectors + "{" + declaration + "}"
-      return media ? media + "{" + rule + "}" : rule
-    })
-    if (!result) return
-    return result
+        if (prefixRule.postCSS) {
+          $postCSS = [...$postCSS, prefixRule.postCSS]
+        }
+      }
+
+      // Make declaration
+      else {
+
+        if (!RULES[name]) return
+
+
+        $declaration = makeRule(name)(value).replace(/;/g, important).trim()
+        $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0
+        if (!$declaration) return
+      }
+    }
+
+    const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
+    const selectors = $selector.join(",")
+    const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
+
+    return [media ? media + "{" + rule + "}" : rule, $priority]
   }
   catch (e) {
     return
   }
 }
 
+const sortByRule = (a:[string, number], b:[string, number]) => a[1] - b[1]
 
-const priority = Object.keys(RULES)
-const getPriority = (a:string) => {
-  a = a.split(":").pop()
-  return priority.findIndex(value => a.startsWith(value))
-}
-
-const strcmp = (a:string, b:string) => a > b ? 1 : a < b ? -1 : 0
-
-const sortByRule = (a:string, b:string) => getPriority(a) - getPriority(b) || strcmp(a, b)
-
-export const generateCss = (classList:string[]) => classList.sort(sortByRule).map(generateAtomicCss).filter(Boolean)
+export const generateCss = (classList:string[]) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map(a => a[0]).filter(Boolean)

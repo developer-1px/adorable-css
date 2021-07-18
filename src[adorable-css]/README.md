@@ -1,46 +1,11 @@
-# 🐹 AdorableCSS
+# 🍄 AdorableCSS
 
 > ✨ Rapid On-Demand Atomic CSS framework
 
 
-## Getting Started
-
-```
-npm i -D adorable-css
-```
-
-```
-#main.tsx
-
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import "@adorable.css" // <-
-import {App} from "./App"
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById("root")
-)
-```
-
-
-```
-#vite.config.js
-
-...
-import {adorableCSS} from "./src[adorable-css]/vite-plugin-adorable-css"
-
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [..., adorableCSS()] // <-
-})
-```
-
-
 ## Usage
+
+#### don't write your own css. just write down in html.
 
 ```tsx
 // Button.tsx
@@ -55,7 +20,7 @@ export const Button = () =>
 ```
 
 
-#### auto generated css code from AdotableCSS 😎
+#### ... and auto generated css code on realtime! 😎
 
 ```css
 /* @adorable.css */
@@ -81,28 +46,62 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 ```
 
 
+## Getting Started
+
+```
+npm i -D adorable-css
+```
+
+```
+#vite.config.js
+
+...
+import {adorableCSS} from "./src[adorable-css]/vite-plugin-adorable-css"
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [..., adorableCSS()] // <-
+})
+```
+
+```
+#main.tsx
+
+import React from "react"
+import ReactDOM from "react-dom"
+import "./index.css"
+import "@adorable.css" // <-
+import {App} from "./App"
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App/>
+  </React.StrictMode>,
+  document.getElementById("root")
+)
+```
+
+#### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다. 
+
+
 ## What is AdorableCSS?
 
 - Rapid On-Demand Atomic CSS framework
-- tailwind css를 영감을 받아 만들게 되었습니다.
-- tailwind css의 컨셉은 매력적이었나 다음과 같은 이유로 현업에서는 사용하기 힘들었습니다.
-
-1) 사용할 혹은 사용하지 않을 class들이 설정을 해야 합니다.
-2) 특히 tailwind에서 정의되지 않은 수치나 색상등을 다 사전에 설정을 해야 합니다.
-3) 이때 디자이너와 협업을 하기위해서는 색상 및 수치등을 서로 협의를 해야 하는데 수정이 빈번한 디자인 과정에서 이를 결정하고 개발을 하는 것은 쉬운일이 아닙니다.
-4) 무엇보다 figma등의 handoff 과정에서 불편합니다.
+- class="w(100) h(100) c(red)" 등 미리 정의된 간단한 class를 조립하여 원하는 디자인을 만들 수 있습니다!
+- 더 이상 새로운 css를 작성하는 데 힘빼지 마세요. 거의 모든 class는 만들어져있습니다. 쓰기만 하세요.
 
 
 ## How?
-- class에 속성을 정의할때마다 필요한 css를 자동으로 생성하는 방식으로 동작합니다. (acss.io에서 영감을 받았습니다.)
+- class에 속성을 정의할때마다 필요한 css를 자동으로 생성하는 방식으로 동작합니다.
 - 모든 수치와 색상을 지원하며 필요한 경우 필요한 만큼의 CSS만 만들어 냅니다.
 
 
 ## Why?
 - **Easy**: 디자인을 위해 이름을 짓는 수고가 사라지며, 한번 외운 이름은 계속 사용할 수 있습니다. 
-- **Fast Writing**: html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
+- **Write less do more**: 기존 css문법보다 훨씬 더 간결하면서도 더 많은 작업을 할 수 있습니다.
+- **Fast Writing and No switching**: html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
 - **Portable**: css 없이 HTML만으로 UI를 만들 수 있어 이동과 리팩토링에서 자유롭습니다.
-- **Compact**: 기존 css 방식보다 훨씬 더 적은 라인의 css를 생산합니다.
+- **Compact**: 기존 css 방식보다 훨씬 더 적은 라인의 최적화된 css를 생산합니다.
 - **Great for Auto Design HandOff**: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
 
 
@@ -139,24 +138,13 @@ export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;c
 
 export const RULES:Record<string, Function> = {
 
-  // Colors
+  // -- Color
   c: (value:string) => `color:${makeColor(value)};`,
 
-  // Background
+  // -- Background Color
   bg: (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
 
-  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
-  "bg-repeat-x": () => `background-repeat:repeat-x;`,
-  "bg-repeat-y": () => `background-repeat:repeat-y;`,
-  "bg-no-repeat": () => `background-repeat:no-repeat;`,
-  "bg-fixed": () => `background-attachment:fixed;`,
-  "bg-scroll": () => `background-attachment:scroll;`,
-  "bg-position": (value:string) => `background-position:${value};`,
-
-  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
-  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
-
-  // Typography
+  // -- Typography
   font: (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
@@ -225,13 +213,13 @@ export const RULES:Record<string, Function> = {
   // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
 
 
-  /// Box-Model
-
-  // Box-Sizing
+  // -- Box-Sizing
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
 
-  // Box @TODO:1/6, calc()
+  // -- Box-Model
+
+  // @TODO:1/6, calc()
   w: (value:string) => {
     if (value.includes("~")) {
       const result = []
@@ -311,6 +299,73 @@ export const RULES:Record<string, Function> = {
   outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
+  // -- Background Image
+
+  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
+  "bg-repeat-x": () => `background-repeat:repeat-x;`,
+  "bg-repeat-y": () => `background-repeat:repeat-y;`,
+  "bg-no-repeat": () => `background-repeat:no-repeat;`,
+  "bg-fixed": () => `background-attachment:fixed;`,
+  "bg-scroll": () => `background-attachment:scroll;`,
+  "bg-position": (value:string) => `background-position:${value};`,
+
+  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
+  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
+
+
+  // -- Display
+  "block": () => "display:block;",
+  "inline-block": () => "display:inline-block;",
+  "inline": () => "display:inline;",
+  "inline-flex": () => "display:inline-flex;",
+  "table": () => "display:table;",
+  "inline-table": () => "display:inline-table;",
+  "table-caption": () => "display:table-caption;",
+  "table-cell": () => "display:table-cell;",
+  "table-column": () => "display:table-column;",
+  "table-column-group": () => "display:table-column-group;",
+  "table-footer-group": () => "display:table-footer-group;",
+  "table-header-group": () => "display:table-header-group;",
+  "table-row-group": () => "display:table-row-group;",
+  "table-row": () => "display:table-row;",
+  "flow-root": () => "display:flow-root;",
+  "grid": () => "display:grid;",
+  "inline-grid": () => "display:inline-grid;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
+
+  // -- Flexbox
+  hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
+  vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  pack: () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox(": () => ``,
+  "vbox(": () => ``,
+
+  gap: (value:string) => `gap:${makeSide(value)};`,
+
+  // @NOTE: IE, safari<=13
+  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
+  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
+
+  "space-between": () => `justify-content:space-between;`,
+  "space-around": () => `justify-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;`,
+
+  // flex
+  flex: (value = "1") => `flex:${makeValues(value)};`,
+  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+
+  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
+  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
+
+  "flex-wrap": () => "flex-wrap:wrap;",
+  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
+  "flex-nowrap": () => "flex-wrap:nowrap;",
+  "order": (value:string) => `order:${cssvar(value)};`,
+
 
   /// -- Overflow
 
@@ -355,58 +410,6 @@ export const RULES:Record<string, Function> = {
 
 
   // Scroll Snap -- TBD @TODO:
-
-
-  // Display
-  "block": () => "display:block;",
-  "inline-block": () => "display:inline-block;",
-  "inline": () => "display:inline;",
-  "inline-flex": () => "display:inline-flex;",
-  "table": () => "display:table;",
-  "inline-table": () => "display:inline-table;",
-  "table-caption": () => "display:table-caption;",
-  "table-cell": () => "display:table-cell;",
-  "table-column": () => "display:table-column;",
-  "table-column-group": () => "display:table-column-group;",
-  "table-footer-group": () => "display:table-footer-group;",
-  "table-header-group": () => "display:table-header-group;",
-  "table-row-group": () => "display:table-row-group;",
-  "table-row": () => "display:table-row;",
-  "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
-  "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
-
-  // Flexbox
-  pack: () => `display:flex;align-items:center;justify-content:center;`,
-  hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
-
-  gap: (value:string) => `gap:${makeSide(value)};`,
-
-  // @NOTE: IE, safari<=13
-  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
-  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
-  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
-  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
-
-  "space-between": () => `justify-content:space-between;`,
-  "space-around": () => `justify-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;`,
-
-  // flex
-  flex: (value = "1") => `flex:${makeValues(value)};`,
-  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
-
-  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
-  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
-
-  "flex-wrap": () => "flex-wrap:wrap;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
-  "flex-nowrap": () => "flex-wrap:nowrap;",
-  "order": (value:string) => `order:${cssvar(value)};`,
 
 
   // Visibility
@@ -550,39 +553,27 @@ export const RULES:Record<string, Function> = {
   }
 }
 
-const MEDIA_QUERY_RULES = {
-  "sm:": {media: `(max-width:767px)`, selector: `html &`},
-  "~sm:": {media: `(mix-width:767px)`, selector: `html &`},
-  "sm~:": {media: `(min-width:767px)`, selector: `html &`},
-  "!sm:": {media: `(max-width:767px)`, selector: `html &`},
+/// Prefix
+type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
+type PrefixRules = Record<string, PrefixProps>
 
-  "mobile:": {media: `(max-width:767px)`, selector: `html &`},
-  "!mobile:": {media: `(min-width:767px)`, selector: `html &`},
-
-  "mobile-device:": {media: `(max-device-width:767px)`, selector: `html &`},
-  "!mobile-device:": {media: `(min-device-width:767px)`, selector: `html &`},
-
-  "touch:": {media: `(hover:none)`, selector: `html &`},
-  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
-  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
-
-  // dark:@TBD
-  "dark:": {selector: `html.dark &`}
-}
-
-const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
-  ...MEDIA_QUERY_RULES,
-
+const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
   "active:": {selector: `html &:active, html &.\\:active`},
   "focus:": {selector: `html &:focus, html &.\\:focus`},
   "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
+  "checked:": {selector: `html &:checked, html &.\\:checked`},
+  "read-only:": {selector: `html &:read-only, html &.\\:read-only`},
+  "enabled:": {selector: `html &:enabled, html &.\\:enabled`},
   "disabled:": {selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]`},
 
   "group-hover:": {selector: `.group:hover &, html .group.\\:hover &`},
   "group-active:": {selector: `html .group:active &, html .group.\\:active &`},
   "group-focus:": {selector: `html .group:focus &, html .group.\\:focus &`},
   "group-focus-within:": {selector: `html .group:focus-within &, html .group\\:focus-within`},
+  "group-checked:": {selector: `html .group:checked &, html .group.\\:checked &`},
+  "group-read-only:": {selector: `html .group:read-only &, html .group.\\:read-only &`},
+  "group-enabled:": {selector: `html .group:enabled &, html .group.\\:enabled &`},
   "group-disabled:": {selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &`},
 
   "placeholder:": {selector: `&::placeholder`},
@@ -590,11 +581,64 @@ const PREFIX_RULES:Record<string, { media?:string, selector?:string }> = {
   "link:": {selector: `&:link`},
   "visited:": {selector: `&:visited`},
 
-  // @TBD:!!
   "first:": {selector: `&:first-child`},
-  "nth-child(?):": {selector: `&:nth-child(?)`},
-  "before:": {selector: `&:before`},
-  "after:": {selector: `&:after`},
+  "first-child:": {selector: `&:first-child`},
+  "last:": {selector: `&:last-child`},
+  "last-child:": {selector: `&:last-child`},
+  "odd:": {selector: `&:nth-child(2n+1)`},
+  "even:": {selector: `&:nth-child(2n)`},
+
+  // @TBD:!!
+  // "before:": {selector: `&:before`},
+  // "after:": {selector: `&:after`},
+  // "nth-child(?):": {selector: `&:nth-child(?)`},
+}
+
+const PREFIX_MEDIA_QUERY:PrefixRules = {
+  "sm:": {media: `(min-width:480px)`, selector: `html &`},
+  "md:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl:": {media: `(min-width:1280px)`, selector: `html &`},
+
+  "sm~:": {media: `(min-width:480px)`, selector: `html &`},
+  "md~:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg~:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl~:": {media: `(min-width:1280px)`, selector: `html &`},
+
+  "~sm:": {media: `(max-width:479.98px)`, selector: `html &`},
+  "~md:": {media: `(max-width:767.98px)`, selector: `html &`},
+  "~lg:": {media: `(max-width:1023.98px)`, selector: `html &`},
+  "~xl:": {media: `(max-width:1279.98px)`, selector: `html &`},
+
+  "mobile:": {media: `(max-device-width:767.98px)`, selector: `html &`},
+  "tablet:": {media: `(min-device-width:768px) and (max-width:1023.98px)`, selector: `html &`},
+  "desktop:": {media: `(min-device-width:1024px)`, selector: `html &`},
+  "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
+  "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
+
+  "touch:": {media: `(hover:none)`, selector: `html &`},
+  "!touch:": {media: `(hover:hover)`, selector: `html &`},
+
+  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
+
+  "print:": {media: `print`, selector: `html &`},
+  "screen:": {media: `screen`, selector: `html &`},
+  "speech:": {media: `speech`, selector: `html &`},
+
+
+  // dark:@TBD
+  "dark:": {selector: `html.dark &`},
+
+  // device:@TBD
+  "device": {
+    postCSS: ({media, ...props}) => {
+      media = media.replace(/(max|min)-width/g, (a, b) => {
+        return b + "-device-width"
+      })
+      return {media, ...props}
+    }
+  },
 }
 ```
 

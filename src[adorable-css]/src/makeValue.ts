@@ -15,20 +15,6 @@ export const percentToEm = (value:string) => {
   return value
 }
 
-export const makeFont = (value:string) => (value || "").split("/").map((value, index) => {
-  if (value === "-") return
-  if (String(value).startsWith("--")) return `var(${value})`
-
-  // @TODO: line-height값이 3이하면 1.5 로 표기
-
-  switch (index) {
-    case 0: {return `font-size:${px(value)}`}
-    case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
-    case 2: {return `letter-spacing:${px(percentToEm(value))}`}
-  }
-}).filter(Boolean).join(";")
-
-
 export const makeHEX = (value:string) => {
   const [rgb, a] = value.split(".")
   if (a && rgb.length === 4) return "rgba(" + [...rgb.slice(1)].map(value => parseInt(value + value, 16)).join(",") + ",." + a + ")"
@@ -63,6 +49,19 @@ export const makeColor = (value:string = "transparent") => {
   return value
 }
 
+export const makeFont = (value:string) => (value || "").split("/").map((value, index) => {
+  if (value === "-") return
+  if (String(value).startsWith("--")) return `var(${value})`
+
+  // @TODO: line-height값이 3이하면 1.5 로 표기
+
+  switch (index) {
+    case 0: {return `font-size:${px(value)}`}
+    case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
+    case 2: {return `letter-spacing:${px(percentToEm(value))}`}
+  }
+}).filter(Boolean).join(";")
+
 // @TODO:
 export const makeBorder = (value:string) => {
   if (value === "none") return "none"
@@ -84,7 +83,7 @@ export const makeSide = (value:string) => makeValues(value, px)
 
 export const makeRatio = (value:string) => {
   const [w, h] = value.split(":")
-  return (+w / +h * 100).toFixed(2) + "%"
+  return (+h / +w * 100).toFixed(2) + "%"
 }
 
 export const makeHBox = (value = "") => {
