@@ -1,6 +1,6 @@
-# 🍄 AdorableCSS
+# 🐳 AdorableCSS
 
-> ✨ Rapid On-Demand Atomic CSS framework
+> Rapid On-Demand Atomic CSS framework
 
 
 ## Usage
