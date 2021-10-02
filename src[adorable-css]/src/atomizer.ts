@@ -370,7 +370,6 @@ export const RULES:Record<string, Function> = {
   ratio: (value:string) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
   gpu: () => `transform:translateZ(0.1px);`,
 
-  // @TODO:triangle
 
   // etc
   "no-border": () => `border:none;outline:none;`,
@@ -405,6 +404,21 @@ export const RULES:Record<string, Function> = {
   "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
   "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
 
+
+  // triangle
+  triangle: (value:string) => {
+    const [direction, size, angle = 0] = value.split("/")
+    const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
+    const bdr = bd.slice(bd.indexOf(direction))
+    const height = 0.5
+
+    let css = `width:0;height:0;border:0 solid transparent;`
+    css += "border-" + bdr[1] + "-width:" + Math.round(size * (-angle + 1) / 2) + "px;"
+    css += "border-" + bdr[3] + "-width:" + Math.round(size * (angle + 1) / 2) + "px;"
+    css += "border-" + bdr[2] + ":" + Math.round(size * height) + "px solid black;"
+
+    return css
+  },
 
   // elevation
   elevation: (value:string) => {
