@@ -2,6 +2,14 @@
 
 > Rapid On-Demand Atomic CSS framework
 
+## New features 0.2.8
+- calc() 지원 ex) w(100%-10px)
+
+## 지금 준비하고 있는 기능들
+- transform 결합: ex) translateX(10)+scale(.5)
+- more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
+- sample or tutorial page
+
 
 ## Introduce
 
@@ -13,7 +21,7 @@
 // Button.tsx
 
 export const Button = () =>
-  <button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
+  <button class="hbox pack bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
   hover:bg(#555)
   active:bg(#000)! active:b(#000.2)">click me</button>
 ```
@@ -37,10 +45,7 @@ html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{backgrou
 html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1px solid rgba(0,0,0,.2);}
 .b\(\#000\.2\){border:1px solid rgba(0,0,0,.2);}
 .r\(6\){border-radius:6px;}
-.gap\(6\){gap:6px;}
-.layer{position:absolute;top:0;right:0;bottom:0;left:0}
 .transition\(\.2s\){transition:all .2s;}
-
 ```
 
 

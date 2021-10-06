@@ -87,8 +87,6 @@ export const RULES:Record<string, Function> = {
   "content-box": () => `box-sizing:content-box`,
 
   // -- Box-Model
-
-  // @TODO:1/6, calc()
   w: (value:string) => {
     if (value.includes("~")) {
       const result = []
@@ -499,8 +497,11 @@ const PREFIX_MEDIA_QUERY:PrefixRules = {
   "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
   "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
 
-  "touch:": {media: `(hover:none)`, selector: `html &`},
-  "!touch:": {media: `(hover:hover)`, selector: `html &`},
+  // "touch:": {media: `(hover:none)`, selector: `html &`},
+  // "!touch:": {media: `(hover:hover)`, selector: `html &`},
+
+  "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
+  "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},
 
   "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
   "landscape:": {media: `(orientation:landscape)`, selector: `html &`},

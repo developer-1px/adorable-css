@@ -2,11 +2,23 @@ export const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/
 
 export const cssvar = (value:string) => String(value).startsWith("--") ? `var(${value})` : value
 
+// <length> default: px
 export const px = (value:string|number) => {
   if (value === 0 || value === "0") return 0
+
+  // --css-var
   if (String(value).startsWith("--")) return cssvar("" + value)
+
+  // 1/6
   const [n, m] = String(value).split("/")
   if (+n > 0 && +m > 0) return makeNumber(+n / +m * 100) + "%"
+
+  // calc
+  if (/[-+*\/]/.test(String(value))) {
+    return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")"
+  }
+
+  // number
   return +value === +value ? value + "px" : value
 }
 
@@ -52,8 +64,6 @@ export const makeColor = (value:string = "transparent") => {
 export const makeFont = (value:string) => (value || "").split("/").map((value, index) => {
   if (value === "-") return
   if (String(value).startsWith("--")) return `var(${value})`
-
-  // @TODO: line-height값이 3이하면 1.5 로 표기
 
   switch (index) {
     case 0: {return `font-size:${px(value)}`}
