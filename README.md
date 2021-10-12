@@ -50,6 +50,8 @@ For full documentation, visit [here](https://github.com/developer-1px/adorable-c
 
 ## Getting Started
 
+https://www.youtube.com/watch?v=55W1rlJ4ukc
+
 ```
 npm i -D adorable-css
 ```
