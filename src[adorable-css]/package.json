@@ -7,13 +7,14 @@
     "url": "https://github.com/developer-1px/adorable-css"
   },
   "keywords": [
-    "css framework",
+    "css",
     "functional css",
     "atomic css",
     "utility first",
     "ondemand",
-    "hand-off",
-    "handshake"
+    "handoff",
+    "handshake",
+    "vite"
   ],
   "author": "teo.yu",
   "license": "MIT"

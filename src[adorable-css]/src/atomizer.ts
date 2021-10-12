@@ -528,6 +528,7 @@ const PREFIX_MEDIA_QUERY:PrefixRules = {
 const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
   ">>": (selector:string) => `& ${selector.slice(2, 0)}`,
   ">": (selector:string) => `&${selector}`,
+  "+": (selector:string) => `&${selector}`,
   ".": (selector:string) => `&${selector}, ${selector} &`,
 }
 

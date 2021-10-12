@@ -1,1 +1,4 @@
-<div class="w(100%-100px) guide">w(100%-100px) width: calc(100% - 100px)</div>
+<div class="+&:c(red)">+ test</div>
+<div class="+&:c(red)">+ test</div>
+<div class="+&:c(red)">+ test</div>
+<div class="+&:c(red)">+ test</div>
