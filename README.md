@@ -44,10 +44,6 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
 ---
 
-## Documentation
-For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
-
-
 ## Getting Started
 
 https://www.youtube.com/watch?v=55W1rlJ4ukc
@@ -82,8 +78,11 @@ ReactDOM.render(
   document.getElementById("root")
 )
 ```
+> @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
 
-#### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
+
+## Documentation
+For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
 
 
 ## Why?
@@ -92,4 +91,4 @@ ReactDOM.render(
 - **Fast Writing and No switching**: html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
 - **Portable**: css 없이 HTML만으로 UI를 만들 수 있어 이동과 리팩토링에서 자유롭습니다.
 - **Compact**: 기존 css 방식보다 훨씬 더 적은 라인의 최적화된 css를 생산합니다.
-- **Great for Auto Design HandOff**: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
+- **Great for Auto Design HandOff**: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다. [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)
