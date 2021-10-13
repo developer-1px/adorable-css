@@ -1,7 +1,7 @@
 {
   "name": "adorable-css",
   "description": "Rapid On-Demand Atomic CSS generator",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/developer-1px/adorable-css"

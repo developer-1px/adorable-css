@@ -3,6 +3,7 @@
 > Rapid On-Demand Atomic CSS framework
 
 ## New features
+- 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
 - 0.2.9 - +selector 지원 ex) +&:bl(#ccc)
 - 0.2.8 - calc() 지원 ex) w(100%-10px)
 
