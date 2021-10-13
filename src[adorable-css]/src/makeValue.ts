@@ -14,7 +14,7 @@ export const px = (value:string|number) => {
   if (+n > 0 && +m > 0) return makeNumber(+n / +m * 100) + "%"
 
   // calc
-  if (/[-+*\/]/.test(String(value))) {
+  if (/.[-+*\/]/.test(String(value))) {
     return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")"
   }
 
