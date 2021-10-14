@@ -11,7 +11,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.26",
     "@tsconfig/svelte": "^2.0.1",
-    "codejar": "^3.5.0",
+    "monaco-editor": "^0.29.1",
     "svelte": "^3.43.1",
     "svelte-check": "^2.2.6",
     "svelte-hmr": "^0.14.7",

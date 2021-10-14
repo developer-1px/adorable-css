@@ -6,6 +6,6 @@ import {defineConfig} from "vite"
 // @ts-ignore
 module.exports = defineConfig(({build, mode}) => {
   return {
-    plugins: [svelte(), adorableCSS()],
+    plugins: [adorableCSS(), svelte()],
   }
 })
