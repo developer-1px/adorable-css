@@ -2,17 +2,8 @@
 
 > Rapid On-Demand Atomic CSS framework
 
-## New features
-- 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
-- 0.2.9 - +selector 지원 ex) +&:bl(#ccc)
-- 0.2.8 - calc() 지원 ex) w(100%-10px)
-
-## 지금 준비하고 있는 기능들
-- transform 결합: ex) translateX(10)+scale(.5)
-- more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
-- sample or tutorial page
-
-## Introduce
+## Try It Online
+- try it online [here](https://developer-1px.github.io/adorable-css/).
 
 ![AdorableCSS](https://j.gifs.com/WP87WJ.gif)
 
@@ -91,11 +82,38 @@ ReactDOM.render(
 #### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
 
 
+## New features
+- 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
+- 0.2.9 - +selector 지원 ex) +&:bl(#ccc)
+- 0.2.8 - calc() 지원 ex) w(100%-10px)
+
+## 지금 준비하고 있는 기능들
+- transform 결합: ex) translateX(10)+scale(.5)
+- more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
+- sample or tutorial page
+
+
+## 프롤로그
+> 패러다임의 전환
+
+지난 20년간 jQuery시대에서 React등의 시대로 넘어 오면서 웹 개발의 패러다임이 변했습니다.
+
+jQuery 시절 우리는 html에 직접 이벤트를 연동하지 않고 DOM을 이용해서 js와 html의 관점을 최대한 분리하여 작업할 수 있는 것들이 미덕인 시절이 있었습니다.
+
+하지만 현재는 관점의 분리보다 목적의 결합인 컴포넌트 방식이 훨씬 더 좋은 방식이며 HTML에 직접 이벤트 핸들러를 연동하고 DOM의 사용을 줄이는 방향으로 진화했습니다.
+
+css는 어떨까요? css 역시 html과 css의 관점의 분리 그리고 시멘틱한 개발 방식이 미덕인 시절이 있었고 이 관점은 아직까지 유효합니다.
+
+하지만 현재의 컴포넌트 기반의 프레임워크기반 개발이 당연시 되는 현 시점에서 css는 그 한계점이 도출이 되고 있는 상황이며 새로운 해결책이 필요하다고 생각합니다. (global scope, dead code 문제 등..)   
+
+jQuery가 웹 프레임워크로 전환되었던것 처럼 기존의 시멘틱과 관점의 분리라는 패러다임이 아니라 html에 직접 binding을 하면서 DOM를 쓰지 않듯이 CSS를 쓰지 않는 형태의 functional CSS Framework 패러다임을 제안합니다. 
+
+
 ## 소개
 
 CSS는 배우기 쉽고 작성하기 쉬운데 잘 만들고 잘 관리하기란 참 어려운 분야입니다.
 
-그래서 일까요? OOCSS ->  SMACSS -> ITCSS -> BEM에 이르기까지
+그래서 일까요? OOCSS -> SMACSS -> ITCSS -> BEM에 이르기까지
 
 지난 수년간 CSS를 어떻게 작성할것이냐 대해 매번 때마다 새로운 방법들이 제시되곤 했습니다.
 
@@ -142,11 +160,6 @@ css에 디자인을 맞출 수는 없으니 (이걸 디자인 시스템이라고
 
 그래서 훨씬 더 다양한 스타일을 제공하면서도 최소한의 css만을 생성하는 멋진 프레임워크가 되었습니다.
 
-
-
-> Notice!
-현재 tailwindCSS에서도 just in time mode라고 해서 실시간으로 필요한 내용만 반영하는 기능이 최근 업데이트 되었습니다. 이제 Functional CSS는 이런 방식으로 진화를 하고 있습니다.
-https://tailwindcss.com/docs/just-in-time-mode
 
 ## Adorable CSS는 어떤점이 좋은가요?
 
