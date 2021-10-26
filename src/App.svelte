@@ -67,4 +67,4 @@ const vbox = () => {}
   </div>
 </div>
 
-<UIVersion version="0.0.1"/>
+<UIVersion version="0.0.2"/>
