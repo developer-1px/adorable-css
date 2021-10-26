@@ -5,7 +5,7 @@ import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
 
 export let value = ""
 
-let divEl:HTMLDivElement = null
+let element:HTMLDivElement = null
 let editor:monaco.editor.IStandaloneCodeEditor
 let Monaco
 
@@ -18,16 +18,18 @@ onMount(async () => {
   }
 
   Monaco = await import("monaco-editor")
-  editor = Monaco.editor.create(divEl, {
+  editor = Monaco.editor.create(element, {
     value,
     language: "html",
+    automaticLayout: true,
     scrollBeyondLastLine: false,
     readOnly: false,
     theme: "vs-dark",
     tabSize: 2,
+    minimap: {
+      enabled: false,
+    },
   })
-
-  console.log(editor)
 
   editor.onDidChangeModelContent(event => {
     value = editor.getValue()
@@ -39,4 +41,4 @@ onMount(async () => {
 })
 </script>
 
-<div bind:this={divEl} class="h-screen" style="height:100%"/>
+<div bind:this={element} class="h(100%)"/>
