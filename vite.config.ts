@@ -14,6 +14,7 @@ export default defineConfig(({command, mode}) => {
       adorableCSS(),
       svelte(),
     ],
+    base: "/adorable-css/",
     build: {
       outDir: "docs",
       rollupOptions: {
