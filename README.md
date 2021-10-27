@@ -2,6 +2,9 @@
 
 > Rapid On-Demand Atomic CSS framework
 
+## Try It Online
+- try it online [here](https://developer-1px.github.io/adorable-css/).
+
 ![AdorableCSS](https://j.gifs.com/WP87WJ.gif)
 
 #### Don't write your own css. Just write down in HTML.
