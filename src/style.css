@@ -1,5 +1,16 @@
 html, body {height: 100%;}
 
+body {
+  font-family: -apple-system, "Noto Sans CJK KR", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  line-height: 1.5
+}
+
+button {
+  border: none;
+  background: inherit;
+  cursor: pointer
+}
+
 .check-board {
   background-image: linear-gradient(45deg, #e8e8e8 25%, transparent 25%), linear-gradient(-45deg, #e8e8e8 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e8e8e8 75%), linear-gradient(-45deg, transparent 75%, #e8e8e8 75%);
   background-size: 20px 20px;

@@ -35,6 +35,10 @@ $: if (element && css && value) {
 
 const hbox = () => {}
 const vbox = () => {}
+
+let type = "Result"
+const Result = () => type = "Result"
+const CSS_output = () => type = "CSS_output"
 </script>
 
 <div class="layer vbox overscroll(none)">
@@ -50,20 +54,30 @@ const vbox = () => {}
   </div>
 
   <div class="flex hbox(fill) clip">
-    <div class="flex(4) vbox(fill)">
-      <MonacoEditor bind:value/>
+
+
+    <div class="flex(4) vbox br(#ccc)">
+      <div class="flex p(10)">
+        Tutorial
+      </div>
+
+      <div class="flex(4)">
+        <MonacoEditor bind:value/>
+      </div>
     </div>
 
-    <div class="flex(3) relative pack br(#ccc) check-board">
-      <iframe bind:this={element} class="layer w(100%) h(100%) bg(transparent)" frameborder="0"/>
+    <div class="flex(3) relative vbox br(#ccc)">
+      <div class="hbox bg(#fff) bb(#ccc) font(12) c(#999)">
+        <button class="p(8/12) pt(12) bb(-) bbw(4) .selected:bbc(orange) .selected:c(#000)" class:selected={type === "Result"} on:click={Result}>Result</button>
+        <button class="p(8/12) pt(12) bb(-) bbw(4) .selected:bbc(orange) .selected:c(#000)" class:selected={type === "CSS_output"} on:click={CSS_output}>CSS output</button>
+      </div>
+      <div class="flex relative">
+        <div class="layer pack br(#ccc) check-board none" class:none={type !== "Result"}>
+          <iframe bind:this={element} class="layer w(100%) h(100%) bg(transparent)" frameborder="0"/>
+        </div>
+        <div class="layer pre monospace font(12) p(10) none" class:none={type !== "CSS_output"}>{css}</div>
+      </div>
     </div>
-
-    <!--    <Design/>-->
-
-    <div class="flex(2) relative br(#ccc) p(10)">
-      <div class="pre monospace font(12)">{css}</div>
-    </div>
-
   </div>
 </div>
 
