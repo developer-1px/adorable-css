@@ -1,5 +1,5 @@
 import {cssEscape} from "./cssEscape"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
 
 const strcmp = (a:string, b:string) => a > b ? 1 : a < b ? -1 : 0
 
@@ -16,6 +16,7 @@ export const RULES:Record<string, Function> = {
   // -- Typography
   font: (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
+  "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
@@ -30,16 +31,15 @@ export const RULES:Record<string, Function> = {
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
 
-  ultralight: () => `font-weight:100;`,
-  lighter: () => `font-weight:100;`,
-  thin: () => `font-weight:200;`,
+  thin: () => `font-weight:100;`,
+  "extra-light": () => `font-weight:200;`,
   light: () => `font-weight:300;`,
   regular: () => `font-weight:400;`,
   medium: () => `font-weight:500;`,
   semibold: () => `font-weight:600;`,
   bold: () => `font-weight:700;`,
-  heavy: () => `font-weight:800;`,
-  bolder: () => `font-weight:900;`,
+  "extra-bold": () => `font-weight:800;`,
+  heavy: () => `font-weight:900;`,
 
   // Font Weight Utility
   thicker: (value = 1) => `text-shadow:0 0 ${px(value)} currentColor;`,
@@ -162,6 +162,8 @@ export const RULES:Record<string, Function> = {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
+
+  "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
 
   outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,

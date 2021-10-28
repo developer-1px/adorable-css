@@ -9,6 +9,8 @@ let element:HTMLDivElement = null
 let editor:monaco.editor.IStandaloneCodeEditor
 let Monaco
 
+export const setValue = (value:string) => editor.setValue(value)
+
 onMount(async () => {
   // @ts-ignore
   self.MonacoEnvironment = {

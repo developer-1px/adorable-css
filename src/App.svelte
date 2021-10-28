@@ -2,36 +2,26 @@
 import {generateCss} from "../src[adorable-css]/src/atomizer"
 import {parseAtoms} from "../src[adorable-css]/src/parser"
 import Design from "./Design.svelte"
-import MonacoEditor from "./MonacoEditor.svelte"
+import MonacoEditor, {setValue} from "./MonacoEditor.svelte"
+import {TURORIAL_0_Hello} from "./tutorials/0. Hello Adorable"
+import {TURORIAL_1_COLORS} from "./tutorials/1. Colors"
+import {TURORIAL_2_TYPOGRAPHY} from "./tutorials/2. Typography"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
-let value = `<div class="layer pack">
-  <div class="vbox bg(#fff) w(300) r(12) p(32) elevation(6)">
+let value = TURORIAL_2_TYPOGRAPHY
 
-    <div class="vbox gap(10)">
-      <div class="font(30/-/-1%) bold">🐳 Hello Adorable!</div>
-      <div class="font(16/-/-1%) c(#999)">| Atomic Dynamic Ondand Rapidly</div>
-    </div>
+const tutorials = [
+  ["0. Hello AdorableCSS!", TURORIAL_0_Hello],
+  ["1. Colors", TURORIAL_1_COLORS],
+  ["2. Typography", TURORIAL_2_TYPOGRAPHY],
+  ["계속 작업 중입니다...", ""]
+]
 
-    <div class="space(40)"></div>
-
-    <div class="hbox(right) gap(10)">
-      <button class="pack bg(#fff) b(none) c(#000) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
-  hover:bg(#eee)">Cancel</button>
-
-      <button class="pack bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
-  hover:bg(#555)
-  active:bg(#000) active:b(#000.2)">OK</button>
-    </div>
-  </div>
-</div>`
+let currentTutorialIndex = 0
 
 $: css = generateCss(parseAtoms(value)).join("\n")
-
-$: if (element && css && value) {
-  element.contentWindow.document.body.innerHTML = value + `<style>${css}</style>`
-}
+$: element && (element.contentWindow.document.body.innerHTML = value + `<style>${css}</style>`)
 
 const hbox = () => {}
 const vbox = () => {}
@@ -39,10 +29,18 @@ const vbox = () => {}
 let type = "Result"
 const Result = () => type = "Result"
 const CSS_output = () => type = "CSS_output"
+
+const 튜토리얼_선택 = (title, code, index) => {
+  value = code
+  currentTutorialIndex = index
+  editor.setValue(code)
+}
+
+let editor
 </script>
 
 <div class="layer vbox overscroll(none)">
-  <div class="hbox gap(10) h(64) bb(#ccc) p(10/20)">
+  <div class="hbox gap(10) h(64) bb(#fff.05) p(10/20) bg(#000) c(#fff) elevation(2) relative z(1)">
     <div class="hbox gap(4)">
       <div class="w(32) h(32) font(24) mt(-2) pack">🐳</div>
       <div class="font(20)"><span class="100">Adorable</span><span class="500">CSS</span></div>
@@ -54,19 +52,19 @@ const CSS_output = () => type = "CSS_output"
   </div>
 
   <div class="flex hbox(fill) clip">
-
-
-    <div class="flex(4) vbox br(#ccc)">
-      <div class="flex p(10)">
-        Tutorial
-      </div>
-
-      <div class="flex(4)">
-        <MonacoEditor bind:value/>
-      </div>
+    <div class="flex vbox p(10/20) br(#fff.05)">
+      <div class="bold font(24)">Turotial</div>
+      <div class="space(20)"/>
+      {#each tutorials as [title, code], index}
+        <div class="block .selected:c(#fff) c(#888) pointer" class:selected={currentTutorialIndex === index} on:click={() => 튜토리얼_선택(title, code, index)}>{title}</div>
+      {/each}
     </div>
 
-    <div class="flex(3) relative vbox br(#ccc)">
+    <div class="flex(4) vbox br(#ccc)">
+      <MonacoEditor bind:value bind:this={editor}/>
+    </div>
+
+    <div class="flex(3) relative vbox bg(#fff) c(#000)">
       <div class="hbox bg(#fff) bb(#ccc) font(12) c(#999)">
         <button class="p(8/12) pt(12) bb(-) bbw(4) .selected:bbc(orange) .selected:c(#000)" class:selected={type === "Result"} on:click={Result}>Result</button>
         <button class="p(8/12) pt(12) bb(-) bbw(4) .selected:bbc(orange) .selected:c(#000)" class:selected={type === "CSS_output"} on:click={CSS_output}>CSS output</button>
@@ -81,4 +79,4 @@ const CSS_output = () => type = "CSS_output"
   </div>
 </div>
 
-<UIVersion version="0.0.2"/>
+<UIVersion version="0.0.3"/>
