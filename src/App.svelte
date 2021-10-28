@@ -9,7 +9,7 @@ import {TURORIAL_2_TYPOGRAPHY} from "./tutorials/2. Typography"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
-let value = TURORIAL_2_TYPOGRAPHY
+let value = TURORIAL_0_Hello
 
 const tutorials = [
   ["0. Hello AdorableCSS!", TURORIAL_0_Hello],
