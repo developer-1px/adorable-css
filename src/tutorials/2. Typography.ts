@@ -106,7 +106,7 @@ capitalize {text-transform:capitalize}
   <div class="800">800</div>
   <div class="900">900</div>
 
-  <h1>text-align</h1>
+  <h1>font-style</h1>
 
   <div class="italic">italic</div>
   <div class="overline">overline</div>
@@ -130,6 +130,16 @@ capitalize {text-transform:capitalize}
   <div class="lowercase">lowercase</div>
   <div class="uppercase">uppercase</div>
   <div class="capitalize">capitalize</div>
+
+
+  <h1>text-align</h1>
+
+  <div class="small-caps">text-left</div>
+  <div class="lowercase">lowercase</div>
+  <div class="uppercase">uppercase</div>
+  <div class="capitalize">capitalize</div>
+
+
 </div>
 
 `.trim()
