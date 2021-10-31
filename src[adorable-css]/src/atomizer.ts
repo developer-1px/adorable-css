@@ -145,7 +145,6 @@ export const RULES:Record<string, Function> = {
   bbc: (value:string) => `border-bottom-color:${makeColor(value)};`,
   blc: (value:string) => `border-left-color:${makeColor(value)};`,
 
-  // @TODO:교육이 필요하다.
   r: (value:string) => `border-radius:${makeSide(value)};`,
 
   rt: (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
@@ -158,6 +157,7 @@ export const RULES:Record<string, Function> = {
   rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
   rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
 
+  // @TODO: TBD
   ring: (value:string) => {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
@@ -165,7 +165,7 @@ export const RULES:Record<string, Function> = {
 
   "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
 
-  outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
+  outline: (value:string) => `outline:${makeBorder(value)};`,
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
   // -- Background Image

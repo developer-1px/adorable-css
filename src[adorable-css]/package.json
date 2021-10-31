@@ -1,7 +1,7 @@
 {
   "name": "adorable-css",
   "description": "Rapid On-Demand Atomic CSS generator",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/developer-1px/adorable-css"
@@ -13,8 +13,8 @@
     "atomic css",
     "utility first",
     "ondemand",
+    "figma",
     "handoff",
-    "handshake",
     "vite"
   ],
   "author": "teo.yu",

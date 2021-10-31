@@ -2,10 +2,12 @@
 
 > Rapid On-Demand Atomic CSS framework
 
+> 왜 AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
+
 ## Try It Online
 - try it online [here](https://developer-1px.github.io/adorable-css/).
 
-![AdorableCSS](https://j.gifs.com/WP87WJ.gif)
+![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
 
 #### Don't write your own css. Just write down in HTML.
 
@@ -83,6 +85,7 @@ ReactDOM.render(
 
 
 ## New features
+- 0.3.1 - border 지원 업데이트
 - 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
 - 0.2.9 - +selector 지원 ex) +&:bl(#ccc)
 - 0.2.8 - calc() 지원 ex) w(100%-10px)
@@ -90,7 +93,6 @@ ReactDOM.render(
 ## 지금 준비하고 있는 기능들
 - transform 결합: ex) translateX(10)+scale(.5)
 - more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
-- sample or tutorial page
 
 
 ## 프롤로그
@@ -220,6 +222,8 @@ prefix:property(value)! or property(value)! or property!
 ```
 
 ## Basic
+https://www.youtube.com/watch?v=O-eonCeumw8&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=2
+
 
 ### 색상
 

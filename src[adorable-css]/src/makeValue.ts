@@ -74,9 +74,28 @@ export const makeFont = (value:string) => (value || "").split("/").map((value, i
 
 // @TODO:
 export const makeBorder = (value:string) => {
-  if (value === "none") return "none"
-  if (value === "0") return "none"
-  return `1px solid ${makeColor(value)}`
+  if (!value || value === "none" || value === "0" || value === "-") return "none"
+
+  const borderStyles = ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"]
+
+  let hasWidth = false
+  let hasStyle = false
+
+  const values = value.split("/").map(value => {
+    if (parseInt(value) > 0) {
+      hasWidth = true
+      return value.includes(",") ? makeColor(value) : px(value)
+    }
+    if (borderStyles.includes(value)) {
+      hasStyle = true
+      return value
+    }
+    return makeColor(value)
+  })
+
+  if (!hasWidth) values.unshift("1px")
+  if (!hasStyle) values.unshift("solid")
+  return values.join(" ")
 }
 
 export const makeValues = (value:string, project = (a:string):string|number => a) => {
