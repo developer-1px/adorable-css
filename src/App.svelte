@@ -12,7 +12,7 @@ import {TURORIAL_5_LAYOUT_FLEXBOX} from "./tutorials/5. Layout - Flexbox"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
-let value = TURORIAL_4_OVERFLOW
+let value = TURORIAL_0_Hello
 
 const tutorials = [
   ["0. Hello AdorableCSS!", TURORIAL_0_Hello],
@@ -104,4 +104,4 @@ let editor
   </div>
 </div>
 
-<UIVersion version="0.0.4"/>
+<UIVersion version="0.0.5"/>
