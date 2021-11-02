@@ -2,7 +2,7 @@
 
 > Rapid On-Demand Atomic CSS framework
 
-> 왜 AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
+> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
 
 ## Try It Online
 - try it online [here](https://developer-1px.github.io/adorable-css/).

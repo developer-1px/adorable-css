@@ -9,6 +9,7 @@ import {TURORIAL_2_TYPOGRAPHY} from "./tutorials/2. Typography"
 import {TURORIAL_3_BOX_MODEL} from "./tutorials/3. Box Model"
 import {TURORIAL_4_OVERFLOW} from "./tutorials/4. Overflow"
 import {TURORIAL_5_LAYOUT_FLEXBOX} from "./tutorials/5. Layout - Flexbox"
+import {TURORIAL_6_LAYOUT_POSITION} from "./tutorials/6. Layout - Position"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
@@ -21,6 +22,7 @@ const tutorials = [
   ["3. Box Model", TURORIAL_3_BOX_MODEL],
   ["4. Overflow", TURORIAL_4_OVERFLOW],
   ["5. Layout - Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
+  ["6. Layout - Position", TURORIAL_6_LAYOUT_POSITION],
   ["계속 작업 중입니다...", ""]
 ]
 
@@ -104,4 +106,4 @@ let editor
   </div>
 </div>
 
-<UIVersion version="0.0.5"/>
+<UIVersion version="0.0.6"/>
