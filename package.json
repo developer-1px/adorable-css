@@ -11,6 +11,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
     "@tsconfig/svelte": "^2.0.1",
+    "gh-pages": "^3.2.3",
     "monaco-editor": "^0.29.1",
     "svelte": "^3.44.0",
     "svelte-check": "^2.2.7",
