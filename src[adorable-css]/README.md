@@ -85,6 +85,7 @@ ReactDOM.render(
 
 
 ## New features
+- 0.3.3 - 성능 속도 개선, 간할적으로 최초 로딩시 일부 css만 만들어지는 현상 수정
 - 0.3.1 - border 지원 업데이트
 - 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
 - 0.2.9 - +selector 지원 ex) +&:bl(#ccc)

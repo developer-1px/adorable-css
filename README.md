@@ -109,20 +109,20 @@ class="font(20) c(red)"와 같이 함수형으로 정의된 형식으로 입력�
 
 ## Why Use AdorableCSS?
 
-###Easy!
+**Easy!**
 : 디자인 개발을 위해 이름을 짓는 수고가 사라지며, 한번 외운 이름은 계속 사용할 수 있습니다.
 
-###Write less do more!
+**Write less do more!**
 : 기존 css문법보다 훨씬 더 적은 코드로 더 많은 작업을 할 수 있습니다.
 
-###Fast Writing and No switching!
+**Fast Writing and No switching!**
 : html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
 
-###Portable!
+**Portable!**
 : css 없이 HTML만으로 UI를 만들 수 있어 이동과 리팩토링에서 자유롭습니다.
 
-###Compact!
+**Compact!**
 : 기존 css 방식보다 훨씬 더 적은 라인의 최적화된 css를 생산합니다.
 
-###Great for Auto Design HandOff!
+**Great for Auto Design HandOff!**
 : 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다. [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)

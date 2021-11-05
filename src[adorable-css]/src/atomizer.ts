@@ -145,6 +145,7 @@ export const RULES:Record<string, Function> = {
   bbc: (value:string) => `border-bottom-color:${makeColor(value)};`,
   blc: (value:string) => `border-left-color:${makeColor(value)};`,
 
+  // @TODO:교육이 필요하다.
   r: (value:string) => `border-radius:${makeSide(value)};`,
 
   rt: (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
@@ -157,7 +158,6 @@ export const RULES:Record<string, Function> = {
   rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
   rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
 
-  // @TODO: TBD
   ring: (value:string) => {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
@@ -165,7 +165,7 @@ export const RULES:Record<string, Function> = {
 
   "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
 
-  outline: (value:string) => `outline:${makeBorder(value)};`,
+  outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
   // -- Background Image
@@ -413,9 +413,9 @@ export const RULES:Record<string, Function> = {
     const height = 0.5
 
     let css = `width:0;height:0;border:0 solid transparent;`
-    css += "border-" + bdr[1] + "-width:" + Math.round(size * (-angle + 1) / 2) + "px;"
-    css += "border-" + bdr[3] + "-width:" + Math.round(size * (angle + 1) / 2) + "px;"
-    css += "border-" + bdr[2] + ":" + Math.round(size * height) + "px solid black;"
+    css += "border-" + bdr[1] + "-width:" + Math.round(+size * (-angle + 1) / 2) + "px;"
+    css += "border-" + bdr[3] + "-width:" + Math.round(+size * (+angle + 1) / 2) + "px;"
+    css += "border-" + bdr[2] + ":" + Math.round(+size * height) + "px solid black;"
 
     return css
   },
@@ -518,12 +518,12 @@ const PREFIX_MEDIA_QUERY:PrefixRules = {
 
   // device:@TBD
   "device": {
-    postCSS: ({media, ...props}) => {
-      media = media.replace(/(max|min)-width/g, (a, b) => {
-        return b + "-device-width"
-      })
-      return {media, ...props}
-    }
+    // postCSS: ({media, ...props}) => {
+    //   media = media.replace(/(max|min)-width/g, (a, b) => {
+    //     return b + "-device-width"
+    //   })
+    //   return {media, ...props}
+    // }
   },
 }
 
@@ -591,7 +591,7 @@ const generateAtomicCss = (atom:string):[string, number]|undefined => {
         if (!prefixRule) return
 
         // selector
-        $selector = $selector.map(s => (prefixRule?.selector.split(",") || []).map((selector:string) => {
+        $selector = $selector.map(s => (prefixRule?.selector?.split(",") || []).map((selector:string) => {
           return selector.replace(/&/g, s).trim()
         })).flat()
 
@@ -607,13 +607,16 @@ const generateAtomicCss = (atom:string):[string, number]|undefined => {
 
       // Make declaration
       else {
-
         if (!RULES[name]) return
 
+        const makeRuleFunction = makeRule(name)
+        if (makeRuleFunction.length > 0 && !value) return
 
-        $declaration = makeRule(name)(value).replace(/;/g, important).trim()
-        $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0
+        $declaration = makeRuleFunction(value).replace(/;/g, important).trim()
         if (!$declaration) return
+        if ($declaration.includes("undefined")) return
+
+        $priority = priorityTable[name + (input.includes('(') ? '(' : '')] || priorityTable[name] || 0
       }
     }
 
@@ -628,6 +631,6 @@ const generateAtomicCss = (atom:string):[string, number]|undefined => {
   }
 }
 
-const sortByRule = (a:[string, number], b:[string, number]) => a[1] - b[1]
+const sortByRule = (a?:[string, number], b?:[string, number]) => a![1] - b![1]
 
-export const generateCss = (classList:string[]) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map(a => a[0]).filter(Boolean)
+export const generateCss = (classList:string[]) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map(a => a![0]).filter(Boolean)
