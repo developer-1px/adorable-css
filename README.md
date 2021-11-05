@@ -63,7 +63,7 @@ npm i -D adorable-css
 import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // <-
 
 export default defineConfig({
-  plugins: [..., adorableCSS()] // <-
+  plugins: [adorableCSS(), ...] // <-
 })
 ```
 
@@ -72,8 +72,8 @@ export default defineConfig({
 
 import React from "react"
 import ReactDOM from "react-dom"
-import "./index.css"
 import "@adorable.css" // <-
+import "./index.css"
 import {App} from "./App"
 
 ReactDOM.render(
@@ -85,12 +85,7 @@ ReactDOM.render(
 ```
 > @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
 
-
-## Documentation
-For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
-
 ---
-
 
 ## What is AdorableCSS?
 > Rapid On-Demand Atomic CSS framework
@@ -125,4 +120,14 @@ class="font(20) c(red)"와 같이 함수형으로 정의된 형식으로 입력�
 : 기존 css 방식보다 훨씬 더 적은 라인의 최적화된 css를 생산합니다.
 
 **Great for Auto Design HandOff!**
-: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다. [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)
+: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
+
+
+## Documentation
+For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
+
+## Handshake
+> figma AdorableCSS plugin [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)
+
+![](https://images.velog.io/images/teo/post/579cdb7b-8819-4902-8f97-06c3400b2021/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202021-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.17.17.mov.gif)
+

@@ -1,5 +1,6 @@
 # Handoff figma plug-in for Designer & Markup
 
+![](https://images.velog.io/images/teo/post/579cdb7b-8819-4902-8f97-06c3400b2021/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202021-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.17.17.mov.gif)
 
 ## 1. 배경
 Design -> Code로 만드는 과정을 자동으로 할 경우 개발친화적인 코드가 나오지 않는 이유는 여러가지가 있지만. 그중 하나가 Layout으로,
