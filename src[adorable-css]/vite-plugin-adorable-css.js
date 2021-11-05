@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});var __defProp = Object.defineProperty;
+var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -14,26 +14,27 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
+var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+var __export = (target, all) => {
+  __markAsModule(target);
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
+
+// vite-plugin-adorable-css.ts
+__export(exports, {
+  adorableCSS: () => adorableCSS
+});
 
 // src/parser.ts
 var REGEXP_STRING1 = /(?:"(?:[^"]|\\"])*")/gm;
 var REGEXP_STRING2 = /(?:'(?:[^']|\\'])*')/gm;
 var REGEXP_STRING3 = /(?:`(?:[^`]|\\`])*`)/gm;
+var REGEXP_SVG = /<svg((\s|.)*?)<\/svg/g;
 var trim = (a) => a.trim();
 var findAll = (str, regex, callback) => String(str).replace(regex, (...args) => (callback(...args), args[0]));
 var parseAtoms = (code) => {
+  code = code.replace(REGEXP_SVG, "");
   const atoms = Object.create(null);
   findAll(code, REGEXP_STRING1, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
   findAll(code, REGEXP_STRING2, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
@@ -82,6 +83,9 @@ var px = (value2) => {
   const [n, m] = String(value2).split("/");
   if (+n > 0 && +m > 0)
     return makeNumber(+n / +m * 100) + "%";
+  if (/.[-+*\/]/.test(String(value2))) {
+    return "calc(" + String(value2).replace(/[-+]/g, (a) => ` ${a} `) + ")";
+  }
   return +value2 === +value2 ? value2 + "px" : value2;
 };
 var percentToEm = (value2) => {
@@ -138,11 +142,27 @@ var makeFont = (value2) => (value2 || "").split("/").map((value3, index) => {
   }
 }).filter(Boolean).join(";");
 var makeBorder = (value2) => {
-  if (value2 === "none")
+  if (!value2 || value2 === "none" || value2 === "0" || value2 === "-")
     return "none";
-  if (value2 === "0")
-    return "none";
-  return `1px solid ${makeColor(value2)}`;
+  const borderStyles = ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"];
+  let hasWidth = false;
+  let hasStyle = false;
+  const values = value2.split("/").map((value3) => {
+    if (parseInt(value3) > 0) {
+      hasWidth = true;
+      return value3.includes(",") ? makeColor(value3) : px(value3);
+    }
+    if (borderStyles.includes(value3)) {
+      hasStyle = true;
+      return value3;
+    }
+    return makeColor(value3);
+  });
+  if (!hasWidth)
+    values.unshift("1px");
+  if (!hasStyle)
+    values.unshift("solid");
+  return values.join(" ");
 };
 var makeValues = (value2, project = (a) => a) => {
   if (String(value2).startsWith("--"))
@@ -237,6 +257,7 @@ var RULES = {
   bg: (value2) => `background-color:${makeColor(value2)};`,
   font: (value2) => makeFont(value2),
   "font-size": (value2) => `font-size:${px(value2)};`,
+  "line-height": (value2) => `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`,
   "letter-spacing": (value2) => `letter-spacing:${px(value2)};`,
   "word-spacing": (value2) => `word-spacing:${px(value2)};`,
   "100": () => `font-weight:100;`,
@@ -248,16 +269,15 @@ var RULES = {
   "700": () => `font-weight:700;`,
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
-  ultralight: () => `font-weight:100;`,
-  lighter: () => `font-weight:100;`,
-  thin: () => `font-weight:200;`,
+  thin: () => `font-weight:100;`,
+  "extra-light": () => `font-weight:200;`,
   light: () => `font-weight:300;`,
   regular: () => `font-weight:400;`,
   medium: () => `font-weight:500;`,
   semibold: () => `font-weight:600;`,
   bold: () => `font-weight:700;`,
-  heavy: () => `font-weight:800;`,
-  bolder: () => `font-weight:900;`,
+  "extra-bold": () => `font-weight:800;`,
+  heavy: () => `font-weight:900;`,
   thicker: (value2 = 1) => `text-shadow:0 0 ${px(value2)} currentColor;`,
   italic: () => `font-style:italic;`,
   overline: () => `text-decoration:overline;`,
@@ -347,6 +367,7 @@ var RULES = {
     const [color, size = 1] = value2.split("/");
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
+  "box-shadow": (value2) => `box-shadow:${makeValues(value2)}`,
   outline: (value2) => `outline:1px solid ${makeColor(value2)};`,
   "guide": (value2 = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value2)};}`,
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
@@ -516,6 +537,17 @@ var RULES = {
   "backdrop-invert": (value2) => `backdrop-filter:invert(${cssvar(value2)})`,
   "backdrop-sepia": (value2) => `backdrop-filter:sepia(${cssvar(value2)})`,
   "backdrop-saturate": (value2) => `backdrop-filter:saturate(${cssvar(value2)})`,
+  triangle: (value2) => {
+    const [direction, size, angle = 0] = value2.split("/");
+    const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"];
+    const bdr = bd.slice(bd.indexOf(direction));
+    const height = 0.5;
+    let css = `width:0;height:0;border:0 solid transparent;`;
+    css += "border-" + bdr[1] + "-width:" + Math.round(+size * (-angle + 1) / 2) + "px;";
+    css += "border-" + bdr[3] + "-width:" + Math.round(+size * (+angle + 1) / 2) + "px;";
+    css += "border-" + bdr[2] + ":" + Math.round(+size * height) + "px solid black;";
+    return css;
+  },
   elevation: (value2) => {
     const dp = +value2;
     if (!dp) {
@@ -573,27 +605,20 @@ var PREFIX_MEDIA_QUERY = {
   "desktop:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "!mobile:": { media: `(min-device-width:768px)`, selector: `html &` },
   "!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
-  "touch:": { media: `(hover:none)`, selector: `html &` },
-  "!touch:": { media: `(hover:hover)`, selector: `html &` },
+  "touch:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
+  "!touch:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "portrait:": { media: `(orientation:portrait)`, selector: `html &` },
   "landscape:": { media: `(orientation:landscape)`, selector: `html &` },
   "print:": { media: `print`, selector: `html &` },
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
   "dark:": { selector: `html.dark &` },
-  "device": {
-    postCSS: (_a) => {
-      var _b = _a, { media } = _b, props = __objRest(_b, ["media"]);
-      media = media.replace(/(max|min)-width/g, (a, b) => {
-        return b + "-device-width";
-      });
-      return __spreadValues({ media }, props);
-    }
-  }
+  "device": {}
 };
 var SELECTOR_PREFIX = {
   ">>": (selector) => `& ${selector.slice(2, 0)}`,
   ">": (selector) => `&${selector}`,
+  "+": (selector) => `&${selector}`,
   ".": (selector) => `&${selector}, ${selector} &`
 };
 var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => strcmp(a, b) || b.length - a.length);
@@ -633,9 +658,12 @@ var generateAtomicCss = (atom) => {
         const prefixRule = makeSelector(input) || PREFIX_RULES[name + ":"];
         if (!prefixRule)
           return;
-        $selector = $selector.map((s) => ((prefixRule == null ? void 0 : prefixRule.selector.split(",")) || []).map((selector) => {
-          return selector.replace(/&/g, s).trim();
-        })).flat();
+        $selector = $selector.map((s) => {
+          var _a;
+          return (((_a = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a.split(",")) || []).map((selector) => {
+            return selector.replace(/&/g, s).trim();
+          });
+        }).flat();
         if (prefixRule.media) {
           $mediaQuery = [...$mediaQuery, prefixRule.media];
         }
@@ -645,10 +673,15 @@ var generateAtomicCss = (atom) => {
       } else {
         if (!RULES[name])
           return;
-        $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
-        $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0;
+        const makeRuleFunction = makeRule(name);
+        if (makeRuleFunction.length > 0 && !value2)
+          return;
+        $declaration = makeRuleFunction(value2).replace(/;/g, important).trim();
         if (!$declaration)
           return;
+        if ($declaration.includes("undefined"))
+          return;
+        $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0;
       }
     }
     const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : "";
@@ -663,62 +696,102 @@ var sortByRule = (a, b) => a[1] - b[1];
 var generateCss = (classList) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map((a) => a[0]).filter(Boolean);
 
 // vite-plugin-adorable-css.ts
-
-
-var _fs = require('fs');
-var NAME = "@adorable.css";
-var VIRTUAL_FILE_ID = "/@adorable.css";
+var ADORABLE_CSS = "@adorable.css";
+var VIRTUAL_PATH = "/" + ADORABLE_CSS;
+var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
+var DEBOUNCE_TIMEOUT = 200;
+var READY_TIMEOUT = 1e3;
 var CONFIG = {
   ext: ["svelte", "vue", "tsx", "jsx"]
 };
 var adorableCSS = (config = CONFIG) => {
-  let timer;
-  let resolver;
   let isHMR = false;
+  let timestamp = +Date.now();
+  const servers = [];
   const entry = Object.create(null);
   const checkTargetFile = (id) => config.ext.includes(id.split(".").pop() || "");
-  const debouncing = async () => {
-    if (!resolver) {
-      clearTimeout(timer);
-      timer = setTimeout(debouncing, 50);
-      return;
-    }
-    const allAtoms = Object.values(entry).map((id) => parseAtoms(_fs.readFileSync.call(void 0, id, "utf8"))).flat();
+  const makeStyle = () => {
+    const allAtoms = Object.values(entry).flat();
     const styles = generateCss([...new Set(allAtoms)]);
-    const a = [reset, ...styles].join("\n");
-    resolver(a);
+    return [reset, ...styles].join("\n");
   };
-  return {
-    name: `${NAME}:entry`,
-    enforce: "pre",
-    resolveId(id) {
-      clearTimeout(timer);
-      if (id === NAME || id === VIRTUAL_FILE_ID) {
-        return VIRTUAL_FILE_ID;
+  let readyTimer;
+  const invalidate = () => {
+    for (const server of servers) {
+      const mod = server.moduleGraph.getModuleById(VIRTUAL_PATH);
+      if (!mod) {
+        continue;
       }
-      timer = setTimeout(debouncing, isHMR ? 0 : 500);
-    },
-    async load(id) {
-      if (id === VIRTUAL_FILE_ID) {
-        return new Promise((resolve) => {
-          resolver = resolve;
-          if (isHMR)
-            debouncing();
-        });
+      clearTimeout(readyTimer);
+      server.moduleGraph.invalidateModule(mod);
+      server.ws.send({
+        type: "update",
+        updates: [{
+          acceptedPath: VIRTUAL_PATH,
+          path: VIRTUAL_PATH,
+          timestamp,
+          type: "js-update"
+        }]
+      });
+    }
+  };
+  let timer;
+  const debounceInvalidate = () => {
+    clearTimeout(timer);
+    timer = setTimeout(invalidate, DEBOUNCE_TIMEOUT);
+  };
+  return [{
+    name: `${ADORABLE_CSS}:dev`,
+    apply: "serve",
+    enforce: "pre",
+    configureServer: (_server) => void servers.push(_server),
+    resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
+    load: (id) => id === VIRTUAL_PATH ? makeStyle() : void 0,
+    transform(code, id) {
+      if (isHMR)
+        return code;
+      if (id === VIRTUAL_PATH) {
+        setTimeout(invalidate, READY_TIMEOUT);
+        return code;
       }
       if (!checkTargetFile(id))
-        return;
-      entry[id] = id;
+        return code;
+      entry[id] = parseAtoms(code);
+      timestamp = +Date.now();
+      debounceInvalidate();
     },
-    async handleHotUpdate({ server, file, modules }) {
+    async handleHotUpdate({ server, file, read, modules }) {
       if (!checkTargetFile(file))
         return;
       isHMR = true;
-      const module = server.moduleGraph.getModuleById(VIRTUAL_FILE_ID);
-      return [...modules, module].filter(Boolean);
+      entry[file] = parseAtoms(await read());
+      const module2 = server.moduleGraph.getModuleById(VIRTUAL_PATH);
+      return [module2, ...modules].filter(Boolean);
     }
-  };
+  }, {
+    name: `${ADORABLE_CSS}:build`,
+    apply: "build",
+    enforce: "pre",
+    resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
+    load: (id) => id === VIRTUAL_PATH ? "[##_adorable_css_##]" : void 0,
+    transform(code, id) {
+      if (!checkTargetFile(id))
+        return code;
+      entry[id] = parseAtoms(code);
+    },
+    generateBundle(options, bundle) {
+      const adorableCSS2 = makeStyle();
+      for (const chunk of Object.values(bundle)) {
+        if (!chunk.fileName.endsWith(".css"))
+          continue;
+        if (chunk.type === "asset" && typeof chunk.source === "string") {
+          chunk.source = chunk.source.replace(CHUNK_PLACEHOLDER, adorableCSS2);
+        }
+      }
+    }
+  }];
 };
-
-
-exports.adorableCSS = adorableCSS;
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  adorableCSS
+});
