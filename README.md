@@ -2,10 +2,10 @@
 
 > Rapid On-Demand Atomic CSS framework
 
-> 왜 AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
+> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
 
 ## Try It Online
-- try it online [here](https://developer-1px.github.io/adorable-css/).
+- Try it online [here](https://developer-1px.github.io/adorable-css/).
 
 ![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
 
@@ -23,7 +23,7 @@ export const Button = () =>
   </button>
 ```
 
-#### ... and auto generated css code on realtime! 😎
+#### ... and auto generate css on realtime! 😎
 
 ```css
 /* @adorable.css */
@@ -98,10 +98,6 @@ class="font(20) c(red)"와 같이 함수형으로 정의된 형식으로 입력�
 
 모든 수치와 색상을 지원하며, 필요한 만큼의 CSS만 만들어 냅니다.
 
-<br/>
-이러한 방식이 궁금하다면 Functional CSS, Atomic CSS를 한번 검색해보세요.
-
-
 ## Why Use AdorableCSS?
 
 **Easy!**
@@ -122,12 +118,10 @@ class="font(20) c(red)"와 같이 함수형으로 정의된 형식으로 입력�
 **Great for Auto Design HandOff!**
 : 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
 
-
-## Documentation
-For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
-
 ## Handshake
 > figma AdorableCSS plugin [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)
 
 ![](https://images.velog.io/images/teo/post/579cdb7b-8819-4902-8f97-06c3400b2021/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202021-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.17.17.mov.gif)
 
+## Documentation
+For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
