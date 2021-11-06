@@ -6,9 +6,7 @@ import {generateCss, reset} from "./src/atomizer"
 const ADORABLE_CSS = "@adorable.css"
 const VIRTUAL_PATH = "/" + ADORABLE_CSS
 const CHUNK_PLACEHOLDER = "[##_adorable_css_##]"
-
-const DEBOUNCE_TIMEOUT = 200
-const READY_TIMEOUT = 1000
+const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG = {
   ext: ["svelte", "vue", "tsx", "jsx"],
@@ -71,12 +69,20 @@ export const adorableCSS = (config = CONFIG):Plugin[] => {
 
     configureServer: (_server) => void servers.push(_server),
     resolveId: (id:string) => (id === ADORABLE_CSS || id === VIRTUAL_PATH) ? VIRTUAL_PATH : undefined,
-    load: (id:string) => id === VIRTUAL_PATH ? makeStyle() : undefined,
+
+    load: (id:string) => {
+      if (id === VIRTUAL_PATH) {
+        return new Promise(resolve => setTimeout(() => resolve(makeStyle()), DEBOUNCE_TIMEOUT))
+      }
+    },
 
     transform(code, id) {
       if (isHMR) return code
+
       if (id === VIRTUAL_PATH) {
-        setTimeout(invalidate, READY_TIMEOUT)
+        for (let i = 0; i < 10; i++) {
+          setTimeout(invalidate, DEBOUNCE_TIMEOUT * i)
+        }
         return code
       }
 

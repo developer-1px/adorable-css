@@ -609,10 +609,7 @@ const generateAtomicCss = (atom:string):[string, number]|undefined => {
       else {
         if (!RULES[name]) return
 
-        const makeRuleFunction = makeRule(name)
-        if (makeRuleFunction.length > 0 && !value) return
-
-        $declaration = makeRuleFunction(value).replace(/;/g, important).trim()
+        $declaration = makeRule(name)(value).replace(/;/g, important).trim()
         if (!$declaration) return
         if ($declaration.includes("undefined")) return
 

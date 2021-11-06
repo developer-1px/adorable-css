@@ -673,10 +673,7 @@ var generateAtomicCss = (atom) => {
       } else {
         if (!RULES[name])
           return;
-        const makeRuleFunction = makeRule(name);
-        if (makeRuleFunction.length > 0 && !value2)
-          return;
-        $declaration = makeRuleFunction(value2).replace(/;/g, important).trim();
+        $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
         if (!$declaration)
           return;
         if ($declaration.includes("undefined"))
@@ -699,8 +696,7 @@ var generateCss = (classList) => classList.map(generateAtomicCss).filter(Boolean
 var ADORABLE_CSS = "@adorable.css";
 var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
-var DEBOUNCE_TIMEOUT = 200;
-var READY_TIMEOUT = 1e3;
+var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
   ext: ["svelte", "vue", "tsx", "jsx"]
 };
@@ -746,12 +742,18 @@ var adorableCSS = (config = CONFIG) => {
     enforce: "pre",
     configureServer: (_server) => void servers.push(_server),
     resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
-    load: (id) => id === VIRTUAL_PATH ? makeStyle() : void 0,
+    load: (id) => {
+      if (id === VIRTUAL_PATH) {
+        return new Promise((resolve) => setTimeout(() => resolve(makeStyle()), DEBOUNCE_TIMEOUT));
+      }
+    },
     transform(code, id) {
       if (isHMR)
         return code;
       if (id === VIRTUAL_PATH) {
-        setTimeout(invalidate, READY_TIMEOUT);
+        for (let i = 0; i < 10; i++) {
+          setTimeout(invalidate, DEBOUNCE_TIMEOUT * i);
+        }
         return code;
       }
       if (!checkTargetFile(id))
