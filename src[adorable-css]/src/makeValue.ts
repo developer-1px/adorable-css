@@ -29,7 +29,7 @@ export const percentToEm = (value:string) => {
 
 export const makeHEX = (value:string) => {
   const [rgb, a] = value.split(".")
-  if (a && rgb.length === 4) return "rgba(" + [...rgb.slice(1)].map(value => parseInt(value + value, 16)).join(",") + ",." + a + ")"
+  if (a && rgb.length === 4) return "rgba(" + rgb.slice(1).split("").map(value => parseInt(value + value, 16)).join(",") + ",." + a + ")"
   if (a) return "rgba(" + [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)].map(value => parseInt(value, 16)).join(",") + ",." + a + ")"
   return value
 }

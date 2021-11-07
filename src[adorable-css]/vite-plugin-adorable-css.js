@@ -21,7 +21,7 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
-// vite-plugin-adorable-css.ts
+// src/vite-plugin-adorable-css.ts
 __export(exports, {
   adorableCSS: () => adorableCSS
 });
@@ -96,7 +96,7 @@ var percentToEm = (value2) => {
 var makeHEX = (value2) => {
   const [rgb, a] = value2.split(".");
   if (a && rgb.length === 4)
-    return "rgba(" + [...rgb.slice(1)].map((value3) => parseInt(value3 + value3, 16)).join(",") + ",." + a + ")";
+    return "rgba(" + rgb.slice(1).split("").map((value3) => parseInt(value3 + value3, 16)).join(",") + ",." + a + ")";
   if (a)
     return "rgba(" + [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)].map((value3) => parseInt(value3, 16)).join(",") + ",." + a + ")";
   return value2;
@@ -250,7 +250,7 @@ var makeTransition = (value2) => {
 };
 
 // src/atomizer.ts
-var strcmp = (a, b) => a > b ? 1 : a < b ? -1 : 0;
+var stricmp = (a, b) => a.localeCompare(b);
 var reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`;
 var RULES = {
   c: (value2) => `color:${makeColor(value2)};`,
@@ -278,7 +278,7 @@ var RULES = {
   bold: () => `font-weight:700;`,
   "extra-bold": () => `font-weight:800;`,
   heavy: () => `font-weight:900;`,
-  thicker: (value2 = 1) => `text-shadow:0 0 ${px(value2)} currentColor;`,
+  thicker: (value2 = "1") => `text-shadow:0 0 ${px(value2)} currentColor;`,
   italic: () => `font-style:italic;`,
   overline: () => `text-decoration:overline;`,
   underline: () => `text-decoration:underline;`,
@@ -472,10 +472,10 @@ var RULES = {
   "absolute": () => `position:absolute;`,
   "relative": () => `position:relative;`,
   "sticky": () => `position:sticky;`,
-  "sticky-top": (value2 = 0) => `position:sticky;top:${px(value2)};`,
-  "sticky-right": (value2 = 0) => `position:sticky;right:${px(value2)};`,
-  "sticky-bottom": (value2 = 0) => `position:sticky;bottom:${px(value2)};`,
-  "sticky-left": (value2 = 0) => `position:sticky;left:${px(value2)};`,
+  "sticky-top": (value2 = "0") => `position:sticky;top:${px(value2)};`,
+  "sticky-right": (value2 = "0") => `position:sticky;right:${px(value2)};`,
+  "sticky-bottom": (value2 = "0") => `position:sticky;bottom:${px(value2)};`,
+  "sticky-left": (value2 = "0") => `position:sticky;left:${px(value2)};`,
   "fixed": () => `position:fixed;`,
   "static": () => `position:static;`,
   x: (value2) => `left:${px(value2)};`,
@@ -621,7 +621,7 @@ var SELECTOR_PREFIX = {
   "+": (selector) => `&${selector}`,
   ".": (selector) => `&${selector}, ${selector} &`
 };
-var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => strcmp(a, b) || b.length - a.length);
+var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => stricmp(a, b) || b.length - a.length);
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var makeSelector = (prefix) => {
   const key = SELECTOR_PREFIX_KEYS.find((s) => prefix.startsWith(s)) || "";
@@ -629,96 +629,105 @@ var makeSelector = (prefix) => {
   if (selector)
     return { selector };
 };
-var makeRule = (r) => RULES[r] || (() => "");
-var priorityTable = Object.fromEntries(Object.entries(RULES).map(([key, value2], index) => [key, index]));
 var property = /([^:(]+)/.source;
 var value = /(?:\((.*?)\))?/.source;
 var delimiter = /(:|$)/.source;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
 var re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`);
-var generateAtomicCss = (atom) => {
-  try {
-    const isImportant = atom.endsWith("!");
-    const important = isImportant ? "!important;" : ";";
-    atom = isImportant ? atom.slice(0, -1) : atom;
-    if (!re_syntax_validator.test(atom))
-      return;
-    let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`];
-    let $mediaQuery = [];
-    let $postCSS = [];
-    let $declaration = "";
-    let $priority = 0;
-    re_syntax.lastIndex = 0;
-    for (; ; ) {
-      const chunk = re_syntax.exec(atom);
-      if (!chunk)
-        break;
-      const [input, name, value2, type] = chunk;
-      if (type === ":") {
-        const prefixRule = makeSelector(input) || PREFIX_RULES[name + ":"];
-        if (!prefixRule)
-          return;
-        $selector = $selector.map((s) => {
-          var _a;
-          return (((_a = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a.split(",")) || []).map((selector) => {
-            return selector.replace(/&/g, s).trim();
-          });
-        }).flat();
-        if (prefixRule.media) {
-          $mediaQuery = [...$mediaQuery, prefixRule.media];
+var generateAtomicCss = (rules, prefixRules) => {
+  const makeRule = (r) => rules[r] || (() => "");
+  const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value2], index) => [key, index]));
+  return (atom) => {
+    try {
+      const isImportant = atom.endsWith("!");
+      const important = isImportant ? "!important;" : ";";
+      atom = isImportant ? atom.slice(0, -1) : atom;
+      if (!re_syntax_validator.test(atom))
+        return;
+      let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`];
+      let $mediaQuery = [];
+      let $postCSS = [];
+      let $declaration = "";
+      let $priority = 0;
+      re_syntax.lastIndex = 0;
+      for (; ; ) {
+        const chunk = re_syntax.exec(atom);
+        if (!chunk)
+          break;
+        const [input, name, value2, type] = chunk;
+        if (type === ":") {
+          const prefixRule = makeSelector(input) || prefixRules[name + ":"];
+          if (!prefixRule)
+            return;
+          $selector = $selector.map((s) => {
+            var _a;
+            return (((_a = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a.split(",")) || []).map((selector) => {
+              return selector.replace(/&/g, s).trim();
+            });
+          }).flat();
+          if (prefixRule.media) {
+            $mediaQuery = [...$mediaQuery, prefixRule.media];
+          }
+          if (prefixRule.postCSS) {
+            $postCSS = [...$postCSS, prefixRule.postCSS];
+          }
+        } else {
+          if (!rules[name])
+            return;
+          $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
+          if (!$declaration)
+            return;
+          if ($declaration.includes("undefined"))
+            return;
+          $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0;
         }
-        if (prefixRule.postCSS) {
-          $postCSS = [...$postCSS, prefixRule.postCSS];
-        }
-      } else {
-        if (!RULES[name])
-          return;
-        $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
-        if (!$declaration)
-          return;
-        if ($declaration.includes("undefined"))
-          return;
-        $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0;
       }
+      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : "";
+      const selectors = $selector.join(",");
+      const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}";
+      return [media ? media + "{" + rule + "}" : rule, $priority];
+    } catch (e) {
+      return;
     }
-    const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : "";
-    const selectors = $selector.join(",");
-    const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}";
-    return [media ? media + "{" + rule + "}" : rule, $priority];
-  } catch (e) {
-    return;
-  }
+  };
 };
 var sortByRule = (a, b) => a[1] - b[1];
-var generateCss = (classList) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map((a) => a[0]).filter(Boolean);
+var createGenerateCss = (rules = {}, prefixRules = {}) => {
+  rules = __spreadValues(__spreadValues({}, RULES), rules);
+  prefixRules = __spreadValues(__spreadValues({}, PREFIX_RULES), prefixRules);
+  return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]).filter(Boolean);
+};
+var generateCss = createGenerateCss();
 
-// vite-plugin-adorable-css.ts
+// src/vite-plugin-adorable-css.ts
 var ADORABLE_CSS = "@adorable.css";
 var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
 var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
-  ext: ["svelte", "vue", "tsx", "jsx"]
+  ext: ["svelte", "vue", "tsx", "jsx"],
+  rules: {},
+  prefixRules: {}
 };
-var adorableCSS = (config = CONFIG) => {
+var adorableCSS = (config) => {
+  config = __spreadValues(__spreadValues({}, CONFIG), config);
   let isHMR = false;
-  let timestamp = +Date.now();
+  let timestamp = Date.now();
   const servers = [];
   const entry = Object.create(null);
+  const generateCss2 = createGenerateCss(config.rules, config.prefixRules);
   const checkTargetFile = (id) => config.ext.includes(id.split(".").pop() || "");
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat();
-    const styles = generateCss([...new Set(allAtoms)]);
+    const styles = generateCss2([...new Set(allAtoms)]);
     return [reset, ...styles].join("\n");
   };
-  let readyTimer;
   const invalidate = () => {
     for (const server of servers) {
       const mod = server.moduleGraph.getModuleById(VIRTUAL_PATH);
       if (!mod) {
         continue;
       }
-      clearTimeout(readyTimer);
       server.moduleGraph.invalidateModule(mod);
       server.ws.send({
         type: "update",
@@ -740,27 +749,34 @@ var adorableCSS = (config = CONFIG) => {
     name: `${ADORABLE_CSS}:dev`,
     apply: "serve",
     enforce: "pre",
-    configureServer: (_server) => void servers.push(_server),
+    configureServer: (_server) => {
+      servers.push(_server);
+      _server.middlewares.use((req, res, next) => {
+        if (!isHMR && req.url && checkTargetFile(req.url)) {
+          debounceInvalidate();
+        }
+        return next();
+      });
+    },
     resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
     load: (id) => {
       if (id === VIRTUAL_PATH) {
-        return new Promise((resolve) => setTimeout(() => resolve(makeStyle()), DEBOUNCE_TIMEOUT));
+        if (isHMR)
+          return makeStyle();
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(makeStyle()), 500);
+        });
       }
     },
     transform(code, id) {
       if (isHMR)
         return code;
-      if (id === VIRTUAL_PATH) {
-        for (let i = 0; i < 10; i++) {
-          setTimeout(invalidate, DEBOUNCE_TIMEOUT * i);
-        }
+      if (id === VIRTUAL_PATH)
         return code;
-      }
       if (!checkTargetFile(id))
         return code;
       entry[id] = parseAtoms(code);
-      timestamp = +Date.now();
-      debounceInvalidate();
+      timestamp = Date.now();
     },
     async handleHotUpdate({ server, file, read, modules }) {
       if (!checkTargetFile(file))

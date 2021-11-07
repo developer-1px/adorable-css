@@ -2,7 +2,7 @@
 import {generateCss} from "../src[adorable-css]/src/atomizer"
 import {parseAtoms} from "../src[adorable-css]/src/parser"
 import Design from "./Design.svelte"
-import MonacoEditor, {setValue} from "./MonacoEditor.svelte"
+import MonacoEditor from "./MonacoEditor.svelte"
 import {TURORIAL_0_Hello} from "./tutorials/0. Hello Adorable"
 import {TURORIAL_1_COLORS} from "./tutorials/1. Colors"
 import {TURORIAL_2_TYPOGRAPHY} from "./tutorials/2. Typography"

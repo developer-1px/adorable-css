@@ -9,7 +9,7 @@
       "./node_modules/@figma"
     ],
     "lib": [
-      "es2017",
+      "esnext",
       "dom"
     ]
   }

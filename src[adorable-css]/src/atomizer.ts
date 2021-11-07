@@ -1,11 +1,15 @@
 import {cssEscape} from "./cssEscape"
 import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
 
-const strcmp = (a:string, b:string) => a > b ? 1 : a < b ? -1 : 0
+const stricmp = (a:string, b:string) => a.localeCompare(b)
+
+export type Rules = Record<string, (value?:string) => string>
+export type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
+export type PrefixRules = Record<string, PrefixProps>
 
 export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
-export const RULES:Record<string, Function> = {
+export const RULES:Rules = {
 
   // -- Color
   c: (value:string) => `color:${makeColor(value)};`,
@@ -42,7 +46,7 @@ export const RULES:Record<string, Function> = {
   heavy: () => `font-weight:900;`,
 
   // Font Weight Utility
-  thicker: (value = 1) => `text-shadow:0 0 ${px(value)} currentColor;`,
+  thicker: (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
 
 
   // Font-Style
@@ -310,10 +314,10 @@ export const RULES:Record<string, Function> = {
   "absolute": () => `position:absolute;`,
   "relative": () => `position:relative;`,
   "sticky": () => `position:sticky;`,
-  "sticky-top": (value = 0) => `position:sticky;top:${px(value)};`,
-  "sticky-right": (value = 0) => `position:sticky;right:${px(value)};`,
-  "sticky-bottom": (value = 0) => `position:sticky;bottom:${px(value)};`,
-  "sticky-left": (value = 0) => `position:sticky;left:${px(value)};`,
+  "sticky-top": (value = "0") => `position:sticky;top:${px(value)};`,
+  "sticky-right": (value = "0") => `position:sticky;right:${px(value)};`,
+  "sticky-bottom": (value = "0") => `position:sticky;bottom:${px(value)};`,
+  "sticky-left": (value = "0") => `position:sticky;left:${px(value)};`,
   "fixed": () => `position:fixed;`,
   "static": () => `position:static;`,
 
@@ -437,9 +441,6 @@ export const RULES:Record<string, Function> = {
 }
 
 /// Prefix
-type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
-type PrefixRules = Record<string, PrefixProps>
-
 const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
   "active:": {selector: `html &:active, html &.\\:active`},
@@ -534,7 +535,7 @@ const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
   ".": (selector:string) => `&${selector}, ${selector} &`,
 }
 
-const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => strcmp(a, b) || b.length - a.length)
+const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => stricmp(a, b) || b.length - a.length)
 
 const PREFIX_RULES:PrefixRules = {
   ...PREFIX_PSEUDO_CLASS,
@@ -547,9 +548,6 @@ const makeSelector = (prefix:string):PrefixProps|undefined => {
   if (selector) return {selector}
 }
 
-const makeRule = (r:string) => RULES[r] || (() => "")
-
-const priorityTable = Object.fromEntries(Object.entries(RULES).map(([key, value], index) => [key, index]))
 
 
 // Parse & Generate
@@ -560,74 +558,85 @@ const delimiter = /(:|$)/.source
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
 const re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`)
 
-const generateAtomicCss = (atom:string):[string, number]|undefined => {
-  try {
-    // ...! -> !important
-    const isImportant = atom.endsWith("!")
-    const important = isImportant ? "!important;" : ";"
-    atom = isImportant ? atom.slice(0, -1) : atom
+const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
+  const makeRule = (r:string) => rules[r] || (() => "")
+  const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
 
-    // syntax validate
-    if (!re_syntax_validator.test(atom)) return
+  return (atom:string):[string, number]|undefined => {
+    try {
+      // ...! -> !important
+      const isImportant = atom.endsWith("!")
+      const important = isImportant ? "!important;" : ";"
+      atom = isImportant ? atom.slice(0, -1) : atom
 
-    // prepare result
-    let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`]
-    let $mediaQuery:string[] = []
-    let $postCSS:Function[] = []
-    let $declaration = ""
-    let $priority = 0
+      // syntax validate
+      if (!re_syntax_validator.test(atom)) return
 
-    // parse chunk
-    re_syntax.lastIndex = 0
-    for (; ;) {
-      const chunk = re_syntax.exec(atom)
-      if (!chunk) break
+      // prepare result
+      let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`]
+      let $mediaQuery:string[] = []
+      let $postCSS:Function[] = []
+      let $declaration = ""
+      let $priority = 0
 
-      const [input, name, value, type] = chunk
+      // parse chunk
+      re_syntax.lastIndex = 0
+      for (; ;) {
+        const chunk = re_syntax.exec(atom)
+        if (!chunk) break
 
-      // Make Prefix
-      if (type === ":") {
-        const prefixRule = makeSelector(input) || PREFIX_RULES[name + ":"]
-        if (!prefixRule) return
+        const [input, name, value, type] = chunk
 
-        // selector
-        $selector = $selector.map(s => (prefixRule?.selector?.split(",") || []).map((selector:string) => {
-          return selector.replace(/&/g, s).trim()
-        })).flat()
+        // Make Prefix
+        if (type === ":") {
+          const prefixRule = makeSelector(input) || prefixRules[name + ":"]
+          if (!prefixRule) return
 
-        // media query
-        if (prefixRule.media) {
-          $mediaQuery = [...$mediaQuery, prefixRule.media]
+          // selector
+          $selector = $selector.map(s => (prefixRule?.selector?.split(",") || []).map((selector:string) => {
+            return selector.replace(/&/g, s).trim()
+          })).flat()
+
+          // media query
+          if (prefixRule.media) {
+            $mediaQuery = [...$mediaQuery, prefixRule.media]
+          }
+
+          if (prefixRule.postCSS) {
+            $postCSS = [...$postCSS, prefixRule.postCSS]
+          }
         }
 
-        if (prefixRule.postCSS) {
-          $postCSS = [...$postCSS, prefixRule.postCSS]
+        // Make declaration
+        else {
+          if (!rules[name]) return
+
+          $declaration = makeRule(name)(value).replace(/;/g, important).trim()
+          if (!$declaration) return
+          if ($declaration.includes("undefined")) return
+
+          $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0
         }
       }
 
-      // Make declaration
-      else {
-        if (!RULES[name]) return
+      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
+      const selectors = $selector.join(",")
+      const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
 
-        $declaration = makeRule(name)(value).replace(/;/g, important).trim()
-        if (!$declaration) return
-        if ($declaration.includes("undefined")) return
-
-        $priority = priorityTable[name + (input.includes('(') ? '(' : '')] || priorityTable[name] || 0
-      }
+      return [media ? media + "{" + rule + "}" : rule, $priority]
     }
-
-    const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
-    const selectors = $selector.join(",")
-    const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
-
-    return [media ? media + "{" + rule + "}" : rule, $priority]
-  }
-  catch (e) {
-    return
+    catch (e) {
+      return
+    }
   }
 }
 
 const sortByRule = (a?:[string, number], b?:[string, number]) => a![1] - b![1]
 
-export const generateCss = (classList:string[]) => classList.map(generateAtomicCss).filter(Boolean).sort(sortByRule).map(a => a![0]).filter(Boolean)
+export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}) => {
+  rules = {...RULES, ...rules}
+  prefixRules = {...PREFIX_RULES, ...prefixRules}
+  return (classList:string[]) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map(a => a![0]).filter(Boolean)
+}
+
+export const generateCss = createGenerateCss()

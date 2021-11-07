@@ -1,24 +1,35 @@
 import type {Plugin, ViteDevServer} from "vite"
 
-import {parseAtoms} from "./src/parser"
-import {generateCss, reset} from "./src/atomizer"
+import {parseAtoms} from "./parser"
+import {createGenerateCss, PrefixRules, reset, Rules} from "./atomizer"
+
+interface Config {
+  ext: string[]
+  rules: Rules
+  prefixRules: PrefixRules
+}
 
 const ADORABLE_CSS = "@adorable.css"
 const VIRTUAL_PATH = "/" + ADORABLE_CSS
 const CHUNK_PLACEHOLDER = "[##_adorable_css_##]"
 const DEBOUNCE_TIMEOUT = 250
 
-const CONFIG = {
+const CONFIG:Config = {
   ext: ["svelte", "vue", "tsx", "jsx"],
+  rules: {},
+  prefixRules: {}
 }
 
-export const adorableCSS = (config = CONFIG):Plugin[] => {
+export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
+  config = {...CONFIG, ...config}
+
   let isHMR = false
-  let timestamp = +Date.now()
+  let timestamp = Date.now()
 
   const servers:ViteDevServer[] = []
   const entry:Record<string, string[]> = Object.create(null)
 
+  const generateCss = createGenerateCss(config.rules, config.prefixRules)
   const checkTargetFile = (id:string) => config.ext.includes(id.split(".").pop() || "")
 
   const makeStyle = () => {
@@ -29,8 +40,6 @@ export const adorableCSS = (config = CONFIG):Plugin[] => {
     return [reset, ...styles].join("\n")
   }
 
-  let readyTimer:NodeJS.Timer
-
   const invalidate = () => {
     // console.log("invalidate")
 
@@ -40,7 +49,6 @@ export const adorableCSS = (config = CONFIG):Plugin[] => {
         continue
       }
 
-      clearTimeout(readyTimer)
       server.moduleGraph.invalidateModule(mod)
 
       server.ws.send({
@@ -67,29 +75,33 @@ export const adorableCSS = (config = CONFIG):Plugin[] => {
     apply: "serve",
     enforce: "pre",
 
-    configureServer: (_server) => void servers.push(_server),
+    configureServer: (_server) => {
+      servers.push(_server)
+      _server.middlewares.use((req, res, next) => {
+        if (!isHMR && req.url && checkTargetFile(req.url)) {
+          debounceInvalidate()
+        }
+        return next()
+      })
+    },
+
     resolveId: (id:string) => (id === ADORABLE_CSS || id === VIRTUAL_PATH) ? VIRTUAL_PATH : undefined,
 
     load: (id:string) => {
       if (id === VIRTUAL_PATH) {
-        return new Promise(resolve => setTimeout(() => resolve(makeStyle()), DEBOUNCE_TIMEOUT))
+        if (isHMR) return makeStyle()
+        return new Promise(resolve => {
+          setTimeout(() => resolve(makeStyle()), 500)
+        })
       }
     },
 
     transform(code, id) {
       if (isHMR) return code
-
-      if (id === VIRTUAL_PATH) {
-        for (let i = 0; i < 10; i++) {
-          setTimeout(invalidate, DEBOUNCE_TIMEOUT * i)
-        }
-        return code
-      }
-
+      if (id === VIRTUAL_PATH) return code
       if (!checkTargetFile(id)) return code
       entry[id] = parseAtoms(code)
-      timestamp = +Date.now()
-      debounceInvalidate()
+      timestamp = Date.now()
     },
 
     // @ts-ignore
@@ -97,7 +109,6 @@ export const adorableCSS = (config = CONFIG):Plugin[] => {
       if (!checkTargetFile(file)) return
       isHMR = true
       entry[file] = parseAtoms(await read())
-
       const module = server.moduleGraph.getModuleById(VIRTUAL_PATH)
       return [module, ...modules].filter(Boolean)
     },

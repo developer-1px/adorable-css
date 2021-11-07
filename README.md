@@ -51,7 +51,7 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
 ## Getting Started
 
-https://www.youtube.com/watch?v=55W1rlJ4ukc
+https://www.youtube.com/watch?v=55W1rlJ4ukc&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL
 
 ```
 npm i -D adorable-css
