@@ -121,8 +121,10 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     load: (id:string) => id === VIRTUAL_PATH ? "[##_adorable_css_##]" : undefined,
 
     transform(code, id) {
-      if (!checkTargetFile(id)) return code
-      entry[id] = parseAtoms(code)
+      if (checkTargetFile(id)) {
+        entry[id] = parseAtoms(code)
+      }
+      return undefined
     },
 
     generateBundle(options, bundle) {
@@ -136,3 +138,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     },
   }]
 }
+
+export * from "./makeValue"
+export {parseAtoms} from "./parser"
+export {generateCss, createGenerateCss} from "./atomizer"

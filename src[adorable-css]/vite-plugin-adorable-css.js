@@ -23,7 +23,27 @@ var __export = (target, all) => {
 
 // src/vite-plugin-adorable-css.ts
 __export(exports, {
-  adorableCSS: () => adorableCSS
+  adorableCSS: () => adorableCSS,
+  createGenerateCss: () => createGenerateCss,
+  cssvar: () => cssvar,
+  generateCss: () => generateCss,
+  makeBorder: () => makeBorder,
+  makeColor: () => makeColor,
+  makeCommaValues: () => makeCommaValues,
+  makeFont: () => makeFont,
+  makeHBox: () => makeHBox,
+  makeHEX: () => makeHEX,
+  makeHLS: () => makeHLS,
+  makeNumber: () => makeNumber,
+  makeRGB: () => makeRGB,
+  makeRatio: () => makeRatio,
+  makeSide: () => makeSide,
+  makeTransition: () => makeTransition,
+  makeVBox: () => makeVBox,
+  makeValues: () => makeValues,
+  parseAtoms: () => parseAtoms,
+  percentToEm: () => percentToEm,
+  px: () => px
 });
 
 // src/parser.ts
@@ -793,9 +813,10 @@ var adorableCSS = (config) => {
     resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
     load: (id) => id === VIRTUAL_PATH ? "[##_adorable_css_##]" : void 0,
     transform(code, id) {
-      if (!checkTargetFile(id))
-        return code;
-      entry[id] = parseAtoms(code);
+      if (checkTargetFile(id)) {
+        entry[id] = parseAtoms(code);
+      }
+      return void 0;
     },
     generateBundle(options, bundle) {
       const adorableCSS2 = makeStyle();
@@ -811,5 +832,25 @@ var adorableCSS = (config) => {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  adorableCSS
+  adorableCSS,
+  createGenerateCss,
+  cssvar,
+  generateCss,
+  makeBorder,
+  makeColor,
+  makeCommaValues,
+  makeFont,
+  makeHBox,
+  makeHEX,
+  makeHLS,
+  makeNumber,
+  makeRGB,
+  makeRatio,
+  makeSide,
+  makeTransition,
+  makeVBox,
+  makeValues,
+  parseAtoms,
+  percentToEm,
+  px
 });
