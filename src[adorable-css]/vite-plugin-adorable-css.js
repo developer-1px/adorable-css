@@ -725,7 +725,7 @@ var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
 var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
-  ext: ["svelte", "vue", "tsx", "jsx"],
+  ext: ["svelte", "vue", "tsx", "jsx", "mdx", "svx", "html"],
   rules: {},
   prefixRules: {}
 };
