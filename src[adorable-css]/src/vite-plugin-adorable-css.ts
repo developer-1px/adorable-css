@@ -30,7 +30,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   const entry:Record<string, string[]> = Object.create(null)
 
   const generateCss = createGenerateCss(config.rules, config.prefixRules)
-  const checkTargetFile = (id:string) => config.ext.includes(id.split(".").pop() || "")
+  const checkTargetFile = (id:string) => (config?.ext ?? CONFIG.ext).includes(id.split(".").pop() || "")
 
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat()
@@ -105,12 +105,12 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     },
 
     // @ts-ignore
-    async handleHotUpdate({server, file, read, modules}) {
+    async handleHotUpdate({file, read}) {
       if (!checkTargetFile(file)) return
       isHMR = true
       entry[file] = parseAtoms(await read())
-      const module = server.moduleGraph.getModuleById(VIRTUAL_PATH)
-      return [module, ...modules].filter(Boolean)
+      timestamp = Date.now()
+      invalidate()
     },
   }, {
     name: `${ADORABLE_CSS}:build`,

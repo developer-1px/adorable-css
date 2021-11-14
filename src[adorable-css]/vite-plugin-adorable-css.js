@@ -736,7 +736,10 @@ var adorableCSS = (config) => {
   const servers = [];
   const entry = Object.create(null);
   const generateCss2 = createGenerateCss(config.rules, config.prefixRules);
-  const checkTargetFile = (id) => config.ext.includes(id.split(".").pop() || "");
+  const checkTargetFile = (id) => {
+    var _a;
+    return ((_a = config == null ? void 0 : config.ext) != null ? _a : CONFIG.ext).includes(id.split(".").pop() || "");
+  };
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat();
     const styles = generateCss2([...new Set(allAtoms)]);
@@ -798,13 +801,13 @@ var adorableCSS = (config) => {
       entry[id] = parseAtoms(code);
       timestamp = Date.now();
     },
-    async handleHotUpdate({ server, file, read, modules }) {
+    async handleHotUpdate({ file, read }) {
       if (!checkTargetFile(file))
         return;
       isHMR = true;
       entry[file] = parseAtoms(await read());
-      const module2 = server.moduleGraph.getModuleById(VIRTUAL_PATH);
-      return [module2, ...modules].filter(Boolean);
+      timestamp = Date.now();
+      invalidate();
     }
   }, {
     name: `${ADORABLE_CSS}:build`,
