@@ -1,7 +1,8 @@
 import type {Plugin, ViteDevServer} from "vite"
 
 import {parseAtoms} from "./parser"
-import {createGenerateCss, PrefixRules, reset, Rules} from "./atomizer"
+import {createGenerateCss, PrefixRules, Rules} from "./atomizer"
+import {reset} from "./rules"
 
 interface Config {
   ext: string[]

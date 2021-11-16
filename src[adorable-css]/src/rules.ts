@@ -1,6 +1,6 @@
-#Reference
+import {PrefixRules, Rules} from "./atomizer"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
 
-```typescript
 export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
 export const RULES:Rules = {
@@ -520,5 +520,5 @@ export const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
   ".": (selector:string) => `&${selector}, ${selector} &`,
   ">>": (selector:string) => `& ${selector.slice(2, 0)}`,
   ">": (selector:string) => `&${selector}`,
-  "+": (selector:string) => `&${selector}`
-```
+  "+": (selector:string) => `&${selector}`,
+}

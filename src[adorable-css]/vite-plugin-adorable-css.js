@@ -269,8 +269,7 @@ var makeTransition = (value2) => {
   return value2.split("/").map((item) => item.replace("=", " ")).join(",");
 };
 
-// src/atomizer.ts
-var stricmp = (a, b) => a.localeCompare(b);
+// src/rules.ts
 var reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`;
 var RULES = {
   c: (value2) => `color:${makeColor(value2)};`,
@@ -636,11 +635,14 @@ var PREFIX_MEDIA_QUERY = {
   "device": {}
 };
 var SELECTOR_PREFIX = {
+  ".": (selector) => `&${selector}, ${selector} &`,
   ">>": (selector) => `& ${selector.slice(2, 0)}`,
   ">": (selector) => `&${selector}`,
-  "+": (selector) => `&${selector}`,
-  ".": (selector) => `&${selector}, ${selector} &`
+  "+": (selector) => `&${selector}`
 };
+
+// src/atomizer.ts
+var stricmp = (a, b) => a.localeCompare(b);
 var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => stricmp(a, b) || b.length - a.length);
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var makeSelector = (prefix) => {

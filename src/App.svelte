@@ -10,6 +10,7 @@ import {TURORIAL_3_BOX_MODEL} from "./tutorials/3. Box Model"
 import {TURORIAL_4_OVERFLOW} from "./tutorials/4. Overflow"
 import {TURORIAL_5_LAYOUT_FLEXBOX} from "./tutorials/5. Layout - Flexbox"
 import {TURORIAL_6_LAYOUT_POSITION} from "./tutorials/6. Layout - Position"
+import {TURORIAL_7_PREFIX} from "./tutorials/7. Prefix"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
@@ -23,6 +24,7 @@ const tutorials = [
   ["4. Overflow", TURORIAL_4_OVERFLOW],
   ["5. Layout - Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
   ["6. Layout - Position", TURORIAL_6_LAYOUT_POSITION],
+  ["7. Pseudo-classes - :hover :active ...", TURORIAL_7_PREFIX],
   ["계속 작업 중입니다...", ""]
 ]
 
@@ -56,13 +58,13 @@ let editor
     <div class="space(30)"/>
 
     <div class="hbox gap(20)">
-      <a href="https://github.com/developer-1px/adorable-css" target="_blank">
+      <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank">
         <svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor">
           <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
         </svg>
       </a>
 
-      <a href="https://www.youtube.com/watch?v=O-eonCeumw8&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=2" target="_blank">
+      <a class="pack" href="https://www.youtube.com/watch?v=O-eonCeumw8&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=2" target="_blank">
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
              width="32" height="32"
              viewBox="0 0 48 48"
@@ -71,11 +73,10 @@ let editor
           <path fill="#FFF" d="M20 31L20 17 32 24z"></path>
         </svg>
       </a>
-    </div>
 
-    <!--    <div>REPL</div>-->
-    <!--    <div>Tutorial</div>-->
-    <!--    <div>Docs</div>-->
+      <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>
+      <a target="_blank" href="https://github.com/developer-1px/adorable-css/blob/master/src%5Badorable-css%5D/docs/Reference.md">Reference</a>
+    </div>
   </div>
 
   <div class="flex hbox(fill) clip">
@@ -106,4 +107,4 @@ let editor
   </div>
 </div>
 
-<UIVersion version="0.0.6"/>
+<UIVersion version="0.0.7"/>
