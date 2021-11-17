@@ -4,7 +4,8 @@
   "description": "Handshake - HandOff for designer and developer",
   "main": "dist/code.js",
   "scripts": {
-    "dev": "tsup src/code.ts --watch"
+    "dev": "tsup src/code.ts --watch",
+    "build": "tsup src/code.ts"
   },
   "author": "",
   "license": "",

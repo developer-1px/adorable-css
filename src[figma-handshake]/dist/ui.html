@@ -1,0 +1,96 @@
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: "SF Pro Text", "Apple SD Gothic Neo", -apple-system, "Noto Sans CJK KR", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: none;
+}
+.main {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  height: 100%;
+}
+.flex { flex: 1}
+
+/* FLEXBOX */
+.p-40 { padding: 20px;}
+.checkbox {
+  background-image: linear-gradient(45deg, #e8e8e8 25%, transparent 25%), linear-gradient(-45deg, #e8e8e8 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e8e8e8 75%), linear-gradient(-45deg, transparent 75%, #e8e8e8 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+.textarea {
+  white-space: pre-wrap;font-size: 7px;font-family: Menlo, monospace; width: 240px; border: 0; display: block;
+  background: #333; color: #eee;
+}
+.scroll-y { overflow-y: scroll }
+
+#html > * {
+  margin: auto
+}
+
+.vbox{display: flex; flex-flow: column; align-items: stretch;}
+.h\(100\%\) {height:100%}
+</style>
+
+
+<div class="vbox h(100%)">
+  <div class="main">
+    <div id="html" class="flex p-40 checkbox scroll-y"></div>
+    <textarea class="textarea" id="code" spellcheck="false"></textarea>
+  </div>
+</div>
+
+
+<script>
+function process(str) {
+  const div = document.createElement('div')
+  div.innerHTML = str.trim()
+  return format(div, 0).innerHTML
+}
+
+function format(node, level) {
+  let indentBefore = new Array(level++ + 1).join('  '),
+    indentAfter = new Array(level - 1).join('  '),
+    textNode
+
+  for (let i = 0; i < node.children.length; i++) {
+    textNode = document.createTextNode('\n' + indentBefore)
+    node.insertBefore(textNode, node.children[i])
+
+    format(node.children[i], level)
+
+    if (node.lastElementChild === node.children[i]) {
+      textNode = document.createTextNode('\n' + indentAfter)
+      node.appendChild(textNode)
+    }
+  }
+  return node
+}
+
+onmessage = (event) => {
+  const $code = document.getElementById('code')
+  const $html = document.getElementById('html')
+
+  const {code, css} = event.data.pluginMessage
+  $code.value = code.replace(/"data:image[^"]+"/g, "")
+  $html.innerHTML = code + `<style>${css}</style>`
+}
+</script>
