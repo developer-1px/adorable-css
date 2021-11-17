@@ -4,14 +4,15 @@
   "description": "Handshake - HandOff for designer and developer",
   "main": "dist/code.js",
   "scripts": {
-    "dev": "tsup src/code.ts --watch",
-    "build": "tsup src/code.ts"
+    "dev": "tsup ./src/code.ts --watch",
+    "build": "tsup src/code.ts",
+    "pwd": "echo $PWD"
   },
   "author": "",
   "license": "",
   "devDependencies": {
-    "@figma/plugin-typings": "^1.22.0",
-    "tsup": "^4.9.1",
+    "@figma/plugin-typings": "^1.39.0",
+    "tsup": "^5.7.1",
     "typescript-bundle": "^1.0.17"
   }
 }

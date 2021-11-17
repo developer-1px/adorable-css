@@ -2,6 +2,12 @@ import {parseAtoms} from "../../src[adorable-css]/src/parser"
 import {generateCss} from "../../src[adorable-css]/src/atomizer"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
+// @TODO: TBD
+const isReact = false
+const CLASS_NAME = isReact ? "className" : "class"
+const COMMENT_START = isReact ? "{/*" : "<!--"
+const COMMENT_END = isReact ? "*/}" : "-->"
+
 figma.showUI(__html__, {
   width: 300,
   height: 300,
@@ -24,14 +30,14 @@ const wrapInstance = (node, code) => {
   const mainComponentSet = mainComponent.parent?.type === "COMPONENT_SET" ? mainComponent.parent : mainComponent
 
   const name = capitalize(mainComponentSet.name.trim().replace(/\s*\/\s*/g, "_").replace(/-|\s+/g, "_").replace(/\s+/g, "_"))
-  return `\n<!-- <${name}/> -->\n${code}\n<!-- </${name}> -->\n`
+  return `\n${COMMENT_START} <${name}/> ${COMMENT_END}\n${code}\n${COMMENT_START} </${name}> ${COMMENT_END}\n`
 }
 
 const generateGroup = async (node, depth) => await generateChild(depth, node.children, content => content)
 
 const generateComponentSet = async (node, depth) => {
   const child = await generateChild(depth, node.children, content => content)
-  return `<div class="vbox gap(20)">${child}</div>`
+  return `<div ${CLASS_NAME}="vbox gap(20)">${child}</div>`
 }
 
 
@@ -198,7 +204,7 @@ const generateFrame = async (node, depth) => {
   if (hasChildren && node.clipsContent) addClass("clip")
 
   const className = cls.join(" ")
-  return await generateChild(depth, node.children, content => `<div class="${className}">\n${content}</div>`)
+  return await generateChild(depth, node.children, content => `<div ${CLASS_NAME}="${className}">\n${content}</div>`)
 }
 
 const generateShape = async (node) => {
@@ -231,7 +237,7 @@ const generateShape = async (node) => {
   addClassBorder(node, addClass)
 
   const className = cls.join(" ")
-  return `<div class="${className}"></div>`
+  return `<div ${CLASS_NAME}="${className}"></div>`
 }
 
 
@@ -315,7 +321,7 @@ const generateText = async (node) => {
   }
 
   const className = cls.join(" ")
-  return `<div class="${className}">${node.characters}</div>`
+  return `<div ${CLASS_NAME}="${className}">${node.characters}</div>`
 }
 
 

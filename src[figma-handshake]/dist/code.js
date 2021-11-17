@@ -724,6 +724,10 @@ var ab2str = (buf) => String.fromCharCode.apply(null, new Uint16Array(buf));
 var capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 // src/code.ts
+var isReact = false;
+var CLASS_NAME = isReact ? "className" : "class";
+var COMMENT_START = isReact ? "{/*" : "<!--";
+var COMMENT_END = isReact ? "*/}" : "-->";
 figma.showUI(__html__, {
   width: 300,
   height: 300
@@ -743,15 +747,15 @@ var wrapInstance = (node, code) => {
   const mainComponentSet = ((_a = mainComponent.parent) == null ? void 0 : _a.type) === "COMPONENT_SET" ? mainComponent.parent : mainComponent;
   const name = capitalize(mainComponentSet.name.trim().replace(/\s*\/\s*/g, "_").replace(/-|\s+/g, "_").replace(/\s+/g, "_"));
   return `
-<!-- <${name}/> -->
+${COMMENT_START} <${name}/> ${COMMENT_END}
 ${code}
-<!-- </${name}> -->
+${COMMENT_START} </${name}> ${COMMENT_END}
 `;
 };
 var generateGroup = async (node, depth) => await generateChild(depth, node.children, (content) => content);
 var generateComponentSet = async (node, depth) => {
   const child = await generateChild(depth, node.children, (content) => content);
-  return `<div class="vbox gap(20)">${child}</div>`;
+  return `<div ${CLASS_NAME}="vbox gap(20)">${child}</div>`;
 };
 var generateInstance = async (node, depth) => {
   const code = await generateFrame(node, depth);
@@ -887,7 +891,7 @@ var generateFrame = async (node, depth) => {
   if (hasChildren && node.clipsContent)
     addClass("clip");
   const className = cls.join(" ");
-  return await generateChild(depth, node.children, (content) => `<div class="${className}">
+  return await generateChild(depth, node.children, (content) => `<div ${CLASS_NAME}="${className}">
 ${content}</div>`);
 };
 var generateShape = async (node) => {
@@ -910,7 +914,7 @@ var generateShape = async (node) => {
   }
   addClassBorder(node, addClass);
   const className = cls.join(" ");
-  return `<div class="${className}"></div>`;
+  return `<div ${CLASS_NAME}="${className}"></div>`;
 };
 var generateText = async (node) => {
   var _a, _b, _c, _d, _e, _f;
@@ -975,7 +979,7 @@ var generateText = async (node) => {
     }
   }
   const className = cls.join(" ");
-  return `<div class="${className}">${node.characters}</div>`;
+  return `<div ${CLASS_NAME}="${className}">${node.characters}</div>`;
 };
 var isSVG = (node) => {
   var _a;
