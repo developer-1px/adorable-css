@@ -1,7 +1,7 @@
 {
   "name": "adorable-css",
   "description": "Rapid On-Demand Atomic CSS generator",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "scripts": {
     "build": "tsup ./src/vite-plugin-adorable-css.ts --dts -d ./",
     "deploy": "npm run build && npm publish"

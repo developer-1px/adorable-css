@@ -2,18 +2,17 @@
 
 > Rapid On-Demand Atomic CSS framework
 
-> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
-
 ## Try It Online
+![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
+
 - try it online [here](https://developer-1px.github.io/adorable-css/).
 
-![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
+> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
 
 #### Don't write your own css. Just write down in HTML.
 
 ```tsx
 // Button.tsx
-
 export const Button = () =>
   <button class="hbox pack bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
   hover:bg(#555)
@@ -26,22 +25,20 @@ export const Button = () =>
 /* @adorable.css */
 
 * {margin: 0;padding: 0;box-sizing: border-box;font: inherit;color: inherit;flex-shrink: 0;}
-.c\(\#fff\) {color: #fff;}
-html .active\:bg\(\#000\)\!:active, html .active\:bg\(\#000\)\!.\:active {background-color: #000 !important;}
-.bg\(\#333\) {background-color: #333;}
-@media (hover: hover) {
-  .hover\:bg\(\#555\):hover, .hover\:bg\(\#555\).\:hover {background-color: #555;}
-}
-.font\(14\/16\/-1\%\) {font-size: 14px;line-height: 16px;letter-spacing: -0.01em}
-.bold {font-weight: 700;}
-.hbox {display: flex;flex-flow: row;align-items: center;}
-.p\(8\/12\) {padding: 8px 12px;}
-.pack {display: flex;align-items: center;justify-content: center;}
-.pointer {cursor: pointer;}
-html .active\:b\(\#000\.2\):active, html .active\:b\(\#000\.2\).\:active {border: 1px solid rgba(0, 0, 0, .2);}
-.b\(\#000\.2\) {border: 1px solid rgba(0, 0, 0, .2);}
-.r\(6\) {border-radius: 6px;}
-.transition\(\.2s\) {transition: all .2s;}
+.c\(\#fff\){color:#fff;}
+.bg\(\#333\){background-color:#333;}
+@media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
+html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
+.font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
+.bold{font-weight:700;}
+.p\(8\/12\){padding:8px 12px;}
+.b\(\#000\.2\){border:solid 1px rgba(0,0,0,.2);}
+html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:solid 1px rgba(0,0,0,.2);}
+.r\(6\){border-radius:6px;}
+.hbox{display:flex;flex-flow:row;align-items: center;}
+.pack{display:flex;align-items:center;justify-content:center;}
+.pointer{cursor:pointer;}
+.transition\(\.2s\){transition:all .2s;}
 ```
 
 ---
@@ -85,6 +82,8 @@ ReactDOM.render(
 
 
 ## New features
+- 0.4.5 - attribute selector 기능 추가 ex) [attr='value']:c(red)
+- 0.4.4 - build시 sourcemap 포함되면 error나던 현상 수정
 - 0.3.4 - 성능 속도 개선, 간할적으로 최초 로딩시 일부 css만 만들어지는 현상 수정
 - 0.3.1 - border 지원 업데이트
 - 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
@@ -101,15 +100,17 @@ ReactDOM.render(
 
 지난 20년간 jQuery시대에서 React등의 시대로 넘어 오면서 웹 개발의 패러다임이 변했습니다.
 
+백엔드에서 전달 받는 결과물이 HTML이던 시절에서 Ajax등의 발전을 통해 이제 JSON과 같은 데이터로 전달하게 됨에 다라 HTML의 개발의 주도권이 클라이언트로 내려오면서 프론트엔드라는 전에 없던 직군이 생겨났습니다.  
+
 jQuery 시절 우리는 html에 직접 이벤트를 연동하지 않고 DOM을 이용해서 js와 html의 관점을 최대한 분리하여 작업할 수 있는 것들이 미덕인 시절이 있었습니다.
 
 하지만 현재는 관점의 분리보다 목적의 결합인 컴포넌트 방식이 훨씬 더 좋은 방식이며 HTML에 직접 이벤트 핸들러를 연동하고 DOM의 사용을 줄이는 방향으로 진화했습니다.
 
 css는 어떨까요? css 역시 html과 css의 관점의 분리 그리고 시멘틱한 개발 방식이 미덕인 시절이 있었고 이 관점은 아직까지 유효합니다.
 
-하지만 현재의 컴포넌트 기반의 프레임워크기반 개발이 당연시 되는 현 시점에서 css는 그 한계점이 도출이 되고 있는 상황이며 새로운 해결책이 필요하다고 생각합니다. (global scope, dead code 문제 등..)   
+하지만 현재의 컴포넌트 기반의 프레임워크기반 개발이 메인스트림인 현 시점에서 css는 그 한계점이 도출이 되고 있는 상황이며 새로운 해결책이 필요하다고 생각합니다. (global scope, dead code 문제 등..)   
 
-jQuery가 웹 프레임워크로 전환되었던것 처럼 기존의 시멘틱과 관점의 분리라는 패러다임이 아니라 html에 직접 binding을 하면서 DOM를 쓰지 않듯이 CSS를 쓰지 않는 형태의 functional CSS Framework 패러다임을 제안합니다. 
+jQuery가 웹 프레임워크로 전환되었던것 처럼 기존의 시멘틱과 관점의 분리라는 패러다임이 아니라 html에 직접 binding을 하면서 DOM를 쓰지 않듯이 CSS를 쓰지 않는 형태의 on-demand atomic css generator 패러다임을 제안합니다. 
 
 
 ## 소개

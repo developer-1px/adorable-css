@@ -638,7 +638,8 @@ var SELECTOR_PREFIX = {
   ".": (selector) => `&${selector}, ${selector} &`,
   ">>": (selector) => `& ${selector.slice(2, 0)}`,
   ">": (selector) => `&${selector}`,
-  "+": (selector) => `&${selector}`
+  "+": (selector) => `&${selector}`,
+  "[": (selector) => `&${selector}`
 };
 
 // src/atomizer.ts
