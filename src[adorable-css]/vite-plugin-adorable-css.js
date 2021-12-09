@@ -270,7 +270,7 @@ var makeTransition = (value2) => {
 };
 
 // src/rules.ts
-var reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`;
+var reset = `*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`;
 var RULES = {
   c: (value2) => `color:${makeColor(value2)};`,
   bg: (value2) => `background-color:${makeColor(value2)};`,
@@ -387,7 +387,13 @@ var RULES = {
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
   "box-shadow": (value2) => `box-shadow:${makeValues(value2)}`,
-  outline: (value2) => `outline:1px solid ${makeColor(value2)};`,
+  outline: (value2) => {
+    if (value2 === "-")
+      return `outline:none;`;
+    if (value2 === "none" || value2 === "unset" || value2 === "inherit" || value2 === "initial")
+      return `outline:${value2};`;
+    return `outline:1px solid ${makeColor(value2)};`;
+  },
   "guide": (value2 = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value2)};}`,
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,

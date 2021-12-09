@@ -1,19 +1,11 @@
 {
   "name": "adorable-css",
+  "version": "0.4.6",
   "description": "Rapid On-Demand Atomic CSS generator",
-  "version": "0.4.5",
-  "scripts": {
-    "build": "tsup ./src/vite-plugin-adorable-css.ts --dts -d ./",
-    "deploy": "npm run build && npm publish"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/developer-1px/adorable-css"
   },
-  "files": [
-    "*.d.ts",
-    "*.js"
-  ],
   "homepage": "https://developer-1px.github.io/adorable-css/",
   "keywords": [
     "css",
@@ -26,5 +18,20 @@
     "vite"
   ],
   "author": "teo.yu",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup ./src/vite-plugin-adorable-css.ts --dts -d ./",
+    "deploy": "npm run build && npm publish"
+  },
+  "files": [
+    "*.d.ts",
+    "*.js"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./vite-plugin-adorable-css": {
+      "import": "./vite-plugin-adorable-css.js",
+      "require": "./vite-plugin-adorable-css.js"
+    }
+  }
 }

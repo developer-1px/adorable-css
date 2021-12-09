@@ -1,7 +1,7 @@
 import {PrefixRules, Rules} from "./atomizer"
 import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, px} from "./makeValue"
 
-export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
+export const reset = `*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
 
 export const RULES:Rules = {
 
@@ -163,7 +163,12 @@ export const RULES:Rules = {
 
   "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
 
-  outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
+  outline: (value:string) => {
+    if (value === "-") return `outline:none;`
+    if (value === "none" || value === "unset" || value === "inherit" || value === "initial") return `outline:${value};`
+    return `outline:1px solid ${makeColor(value)};`
+  },
+
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
   // -- Background Image

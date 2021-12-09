@@ -2,6 +2,8 @@ import {parseAtoms} from "../../src[adorable-css]/src/parser"
 import {generateCss} from "../../src[adorable-css]/src/atomizer"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
+type AddClass = (prop, value?) => number
+
 // @TODO: TBD
 const isReact = false
 const CLASS_NAME = isReact ? "className" : "class"
@@ -46,7 +48,7 @@ const generateInstance = async (node, depth) => {
   return wrapInstance(node, code)
 }
 
-const addClassWidth = (node, addClass) => {
+const addClassWidth = (node, addClass:AddClass) => {
   const {parent, layoutGrow, layoutAlign} = node
   const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
@@ -58,7 +60,7 @@ const addClassWidth = (node, addClass) => {
   else if (layoutMode === "VERTICAL" && counterAxisSizingMode === "FIXED") addClass("w", makeInt(width))
 }
 
-const addClassHeight = (node, addClass) => {
+const addClassHeight = (node, addClass:AddClass) => {
   const {layoutGrow, layoutAlign} = node
   const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
@@ -71,30 +73,38 @@ const addClassHeight = (node, addClass) => {
 }
 
 
-function addClassBorder(node, addClass:(prop, value?) => number) {
-  const {strokes, strokeAlign, strokeWeight} = node
+const addClassBorder = (node, addClass:AddClass) => {
+  try {
+    const {strokes, strokeAlign, strokeWeight} = node
 
-  const border = strokes.filter(stroke => stroke.visible)[0]
+    const border = strokes.filter(stroke => stroke.visible)[0]
 
-  // @ts-ignore
-  if (border && border.color && strokeWeight > 0) {
+    // @ts-ignore
+    if (border && border.color && strokeWeight > 0) {
 
-    if (strokeAlign === "OUTSIDE") {
-      addClass("ring", [strokeWeight > 1 ? strokeWeight : null, makeColor(border.color, border.opacity)].filter(Boolean).join("/"))
-    }
-    else {
-      // @ts-ignore
-      addClass("b", `${makeColor(border.color, border.opacity)}`)
-      if (strokeWeight > 1) {
-        addClass("bw", node.strokeWeight)
+      if (strokeAlign === "OUTSIDE") {
+        addClass("ring", [strokeWeight > 1 ? strokeWeight : null, makeColor(border.color, border.opacity)].filter(Boolean).join("/"))
+      }
+      else {
+        // @ts-ignore
+        addClass("b", `${makeColor(border.color, border.opacity)}`)
+        if (strokeWeight > 1) {
+          addClass("bw", node.strokeWeight)
+        }
       }
     }
   }
+  catch (e) {}
 }
 
+const addEffectStyle = (node, addClass:AddClass) => {
+  if (node.effectStyleId) {
+    const style = figma.getStyleById(node.effectStyleId)
+    addClass(style.name.toLowerCase())
+  }
+}
 
 const everyChildrenHasStretchVbox = (node) => node.children?.every(c => c.layoutAlign === "STRETCH" || c.width === node.width)
-
 
 const generateFrame = async (node, depth) => {
   const cls = []
@@ -192,10 +202,8 @@ const generateFrame = async (node, depth) => {
   addClassBorder(node, addClass)
 
   // effectStyle
-  if (node.effectStyleId) {
-    const style = figma.getStyleById(node.effectStyleId)
-    addClass(style.name.toLowerCase())
-  }
+  addEffectStyle(node, addClass)
+
 
   // opacity
   if (node.opacity !== 1) addClass("opacity", makeNumber(node.opacity))
@@ -235,6 +243,9 @@ const generateShape = async (node) => {
 
   // border
   addClassBorder(node, addClass)
+
+  // effectStyle
+  addEffectStyle(node, addClass)
 
   const className = cls.join(" ")
   return `<div ${CLASS_NAME}="${className}"></div>`
@@ -326,7 +337,7 @@ const generateText = async (node) => {
 
 
 const isSVG = (node) => {
-  return node.children?.find(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION")
+  return node.children?.every(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION" || node.type === "TEXT")
 }
 
 const generateCode = async (node:SceneNode, depth:number = 0) => {
@@ -335,6 +346,8 @@ const generateCode = async (node:SceneNode, depth:number = 0) => {
   let code = ""
 
   if (node.exportSettings.length > 0 || (node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0) || isSVG(node)) {
+    console.warn("node", node)
+
     try {
       const svgCodeArrayBuffer = await node.exportAsync({format: "SVG", svgIdAttribute: false})
       const svgCode = ab2str(svgCodeArrayBuffer)

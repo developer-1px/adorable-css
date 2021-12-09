@@ -606,7 +606,8 @@ var SELECTOR_PREFIX = {
   ".": (selector) => `&${selector}, ${selector} &`,
   ">>": (selector) => `& ${selector.slice(2, 0)}`,
   ">": (selector) => `&${selector}`,
-  "+": (selector) => `&${selector}`
+  "+": (selector) => `&${selector}`,
+  "[": (selector) => `&${selector}`
 };
 
 // ../src[adorable-css]/src/atomizer.ts
@@ -793,20 +794,29 @@ var addClassHeight = (node, addClass) => {
   else if (layoutMode === "VERTICAL" && primaryAxisSizingMode === "FIXED")
     addClass("h", makeInt(height));
 };
-function addClassBorder(node, addClass) {
-  const { strokes, strokeAlign, strokeWeight } = node;
-  const border = strokes.filter((stroke) => stroke.visible)[0];
-  if (border && border.color && strokeWeight > 0) {
-    if (strokeAlign === "OUTSIDE") {
-      addClass("ring", [strokeWeight > 1 ? strokeWeight : null, makeColor2(border.color, border.opacity)].filter(Boolean).join("/"));
-    } else {
-      addClass("b", `${makeColor2(border.color, border.opacity)}`);
-      if (strokeWeight > 1) {
-        addClass("bw", node.strokeWeight);
+var addClassBorder = (node, addClass) => {
+  try {
+    const { strokes, strokeAlign, strokeWeight } = node;
+    const border = strokes.filter((stroke) => stroke.visible)[0];
+    if (border && border.color && strokeWeight > 0) {
+      if (strokeAlign === "OUTSIDE") {
+        addClass("ring", [strokeWeight > 1 ? strokeWeight : null, makeColor2(border.color, border.opacity)].filter(Boolean).join("/"));
+      } else {
+        addClass("b", `${makeColor2(border.color, border.opacity)}`);
+        if (strokeWeight > 1) {
+          addClass("bw", node.strokeWeight);
+        }
       }
     }
+  } catch (e) {
   }
-}
+};
+var addEffectStyle = (node, addClass) => {
+  if (node.effectStyleId) {
+    const style = figma.getStyleById(node.effectStyleId);
+    addClass(style.name.toLowerCase());
+  }
+};
 var everyChildrenHasStretchVbox = (node) => {
   var _a;
   return (_a = node.children) == null ? void 0 : _a.every((c) => c.layoutAlign === "STRETCH" || c.width === node.width);
@@ -882,10 +892,7 @@ var generateFrame = async (node, depth) => {
     addClass("bg", makeColor2(bg.color, bg.opacity));
   }
   addClassBorder(node, addClass);
-  if (node.effectStyleId) {
-    const style = figma.getStyleById(node.effectStyleId);
-    addClass(style.name.toLowerCase());
-  }
+  addEffectStyle(node, addClass);
   if (node.opacity !== 1)
     addClass("opacity", makeNumber2(node.opacity));
   if (hasChildren && node.clipsContent)
@@ -913,6 +920,7 @@ var generateShape = async (node) => {
     addClass("bg", makeColor2(bg.color, bg.opacity));
   }
   addClassBorder(node, addClass);
+  addEffectStyle(node, addClass);
   const className = cls.join(" ");
   return `<div ${CLASS_NAME}="${className}"></div>`;
 };
@@ -983,13 +991,14 @@ var generateText = async (node) => {
 };
 var isSVG = (node) => {
   var _a;
-  return (_a = node.children) == null ? void 0 : _a.find((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION");
+  return (_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION" || node2.type === "TEXT");
 };
 var generateCode = async (node, depth = 0) => {
   if (node.visible === false)
     return "";
   let code = "";
   if (node.exportSettings.length > 0 || node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0 || isSVG(node)) {
+    console.warn("node", node);
     try {
       const svgCodeArrayBuffer = await node.exportAsync({ format: "SVG", svgIdAttribute: false });
       const svgCode = ab2str(svgCodeArrayBuffer);
