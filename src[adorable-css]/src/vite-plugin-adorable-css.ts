@@ -18,7 +18,7 @@ const CHUNK_PLACEHOLDER = "[##_adorable_css_##]"
 const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG:Config = {
-  include: ["src/**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
+  include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
   rules: {},
   prefixRules: {}
 }

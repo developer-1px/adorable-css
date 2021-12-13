@@ -3442,7 +3442,7 @@ var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
 var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
-  include: ["src/**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
+  include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
   rules: {},
   prefixRules: {}
 };
