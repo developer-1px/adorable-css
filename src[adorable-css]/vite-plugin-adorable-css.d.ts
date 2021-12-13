@@ -31,7 +31,7 @@ declare const makeTransition: (value: string) => string;
 declare const parseAtoms: (code: string) => string[];
 
 interface Config {
-    ext: string[];
+    include: string[];
     rules: Rules;
     prefixRules: PrefixRules;
 }

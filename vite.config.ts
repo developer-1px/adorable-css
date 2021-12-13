@@ -1,5 +1,5 @@
 import {svelte} from "@sveltejs/vite-plugin-svelte"
-import {adorableCSS} from "./src[adorable-css]/vite-plugin-adorable-css"
+import {adorableCSS} from "./src[adorable-css]/src/vite-plugin-adorable-css"
 
 import {defineConfig} from "vite"
 

@@ -4,10 +4,12 @@ import {parseAtoms} from "./parser"
 import {createGenerateCss, PrefixRules, Rules} from "./atomizer"
 import {reset} from "./rules"
 
+const micromatch = require("micromatch")
+
 interface Config {
-  ext: string[]
-  rules: Rules
-  prefixRules: PrefixRules
+  include:string[]
+  rules:Rules
+  prefixRules:PrefixRules
 }
 
 const ADORABLE_CSS = "@adorable.css"
@@ -16,7 +18,7 @@ const CHUNK_PLACEHOLDER = "[##_adorable_css_##]"
 const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG:Config = {
-  ext: ["svelte", "vue", "tsx", "jsx", "mdx", "svx", "html"],
+  include: ["src/**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
   rules: {},
   prefixRules: {}
 }
@@ -27,11 +29,19 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   let isHMR = false
   let timestamp = Date.now()
 
+  let configRoot = ""
+
   const servers:ViteDevServer[] = []
   const entry:Record<string, string[]> = Object.create(null)
 
   const generateCss = createGenerateCss(config.rules, config.prefixRules)
-  const checkTargetFile = (id:string) => (config?.ext ?? CONFIG.ext).includes(id.split(".").pop() || "")
+  const checkTargetFile = (id:string) => {
+    if (!id.startsWith(configRoot)) {
+      return false
+    }
+    id = id.slice(configRoot.length)
+    return (config.include ?? []).some(glob => micromatch.isMatch(id, glob))
+  }
 
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat()
@@ -70,6 +80,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     timer = setTimeout(invalidate, DEBOUNCE_TIMEOUT)
   }
 
+
   // @ts-ignore
   return [{
     name: `${ADORABLE_CSS}:dev`,
@@ -77,6 +88,10 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     enforce: "pre",
 
     configureServer: (_server) => {
+
+      // glob을 위한 config.root
+      configRoot = _server.config.root + "/"
+
       servers.push(_server)
       _server.middlewares.use((req, res, next) => {
         if (!isHMR && req.url && checkTargetFile(req.url)) {

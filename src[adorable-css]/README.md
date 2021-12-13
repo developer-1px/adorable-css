@@ -2,6 +2,16 @@
 
 > Rapid On-Demand Atomic CSS framework
 
+## New features
+- 0.4.7 - glob방식의 config.include 추가 ex) ```adorableCSS({include: "src/**/*.{svelte,svx})"```  
+- 0.4.5 - attribute selector 기능 추가 ex) [attr='value']:c(red)
+- 0.4.4 - build시 sourcemap 포함되면 error나던 현상 수정
+
+## 지금 준비하고 있는 기능들
+- transform 결합: ex) translateX(10)+scale(.5)
+- more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
+
+
 ## Try It Online
 ![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
 
@@ -77,22 +87,7 @@ ReactDOM.render(
   document.getElementById("root")
 )
 ```
-
 #### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
-
-
-## New features
-- 0.4.5 - attribute selector 기능 추가 ex) [attr='value']:c(red)
-- 0.4.4 - build시 sourcemap 포함되면 error나던 현상 수정
-- 0.3.4 - 성능 속도 개선, 간할적으로 최초 로딩시 일부 css만 만들어지는 현상 수정
-- 0.3.1 - border 지원 업데이트
-- 0.3.0 - +나 -로 시작하는 value인 경우 calc가 되지 않도록 하는 버그 수정
-- 0.2.9 - +selector 지원 ex) +&:bl(#ccc)
-- 0.2.8 - calc() 지원 ex) w(100%-10px)
-
-## 지금 준비하고 있는 기능들
-- transform 결합: ex) translateX(10)+scale(.5)
-- more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!
 
 
 ## 프롤로그
