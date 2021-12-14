@@ -11,6 +11,7 @@ import {TURORIAL_4_OVERFLOW} from "./tutorials/4. Overflow"
 import {TURORIAL_5_LAYOUT_FLEXBOX} from "./tutorials/5. Layout - Flexbox"
 import {TURORIAL_6_LAYOUT_POSITION} from "./tutorials/6. Layout - Position"
 import {TURORIAL_7_PREFIX} from "./tutorials/7. Prefix"
+import {TURORIAL_8_PREFIX2} from "./tutorials/8. Prefix2"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
@@ -24,14 +25,15 @@ const tutorials = [
   ["4. Overflow", TURORIAL_4_OVERFLOW],
   ["5. Layout - Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
   ["6. Layout - Position", TURORIAL_6_LAYOUT_POSITION],
-  ["7. Pseudo-classes - :hover :active ...", TURORIAL_7_PREFIX],
+  ["7. Pseudo - :hover, :group-hover", TURORIAL_7_PREFIX],
+  ["8. Pseudo2 - :nth-child", TURORIAL_8_PREFIX2],
   ["계속 작업 중입니다...", ""]
 ]
 
 let currentTutorialIndex = 0
 
 $: css = generateCss(parseAtoms(value)).join("\n")
-$: element && (element.contentWindow.document.body.innerHTML = value + `<style>${css}</style>`)
+$: element && (element.contentWindow.document.body.innerHTML = `<style`+ `>${css}</` + `style>\n` + value)
 
 const hbox = () => {}
 const vbox = () => {}

@@ -2795,9 +2795,6 @@ var cssEscape = (string) => {
   return result;
 };
 
-// src/rules.ts
-init_cjs_shims();
-
 // src/makeValue.ts
 init_cjs_shims();
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
@@ -2977,6 +2974,7 @@ var makeTransition = (value2) => {
 };
 
 // src/rules.ts
+init_cjs_shims();
 var reset = `*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`;
 var RULES = {
   c: (value2) => `color:${makeColor(value2)};`,
@@ -3290,12 +3288,14 @@ var RULES = {
     const diry = dp < 10 ? dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2 : dp - 4;
     const dira = (24 - Math.round(dp / 10)) / 100;
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`;
-  }
+  },
+  "aspect-ratio": (value2) => `aspect-ratio:${cssvar(value2.replace(/:/g, "/"))}`
 };
 var PREFIX_PSEUDO_CLASS = {
   "hover:": { media: `(hover:hover)`, selector: `&:hover, &.\\:hover` },
   "active:": { selector: `html &:active, html &.\\:active` },
   "focus:": { selector: `html &:focus, html &.\\:focus` },
+  "focus-visible": { selector: `html &:focus-visible, html &.\\:focus-visible` },
   "focus-within:": { selector: `html &:focus-within, html &.\\:focus-within` },
   "checked:": { selector: `html &:checked, html &.\\:checked` },
   "read-only:": { selector: `html &:read-only, html &.\\:read-only` },
@@ -3310,12 +3310,6 @@ var PREFIX_PSEUDO_CLASS = {
   "group-enabled:": { selector: `html .group:enabled &, html .group.\\:enabled &` },
   "group-disabled:": { selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &` },
   "placeholder:": { selector: `&::placeholder` },
-  "link:": { selector: `&:link` },
-  "visited:": { selector: `&:visited` },
-  "first:": { selector: `&:first-child` },
-  "first-child:": { selector: `&:first-child` },
-  "last:": { selector: `&:last-child` },
-  "last-child:": { selector: `&:last-child` },
   "odd:": { selector: `&:nth-child(2n+1)` },
   "even:": { selector: `&:nth-child(2n)` }
 };
@@ -3344,8 +3338,7 @@ var PREFIX_MEDIA_QUERY = {
   "print:": { media: `print`, selector: `html &` },
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
-  "dark:": { selector: `html.dark &` },
-  "device": {}
+  "dark:": { selector: `html.dark &` }
 };
 var SELECTOR_PREFIX = {
   ".": (selector) => `&${selector}, ${selector} &`,
@@ -3370,10 +3363,12 @@ var value = /(?:\((.*?)\))?/.source;
 var delimiter = /(:|$)/.source;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
 var re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`);
+var makeDefaultPseudoClass = (input) => ({ selector: `&:${input.replace(/>>/g, " ")}` });
 var generateAtomicCss = (rules, prefixRules) => {
-  const makeRule = (r) => rules[r] || (() => "");
+  const makeRule = (r) => rules[r] || ((value2) => `${r}:${cssvar(value2)}`);
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value2], index) => [key, index]));
   return (atom) => {
+    var _a, _b;
     try {
       const isImportant = atom.endsWith("!");
       const important = isImportant ? "!important;" : ";";
@@ -3392,12 +3387,10 @@ var generateAtomicCss = (rules, prefixRules) => {
           break;
         const [input, name, value2, type] = chunk;
         if (type === ":") {
-          const prefixRule = makeSelector(input) || prefixRules[name + ":"];
-          if (!prefixRule)
-            return;
+          const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + ":"]) != null ? _b : makeDefaultPseudoClass(input.slice(0, -1));
           $selector = $selector.map((s) => {
-            var _a;
-            return (((_a = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a.split(",")) || []).map((selector) => {
+            var _a2, _b2;
+            return ((_b2 = (_a2 = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a2.split(",")) != null ? _b2 : []).map((selector) => {
               return selector.replace(/&/g, s).trim();
             });
           }).flat();
@@ -3408,8 +3401,6 @@ var generateAtomicCss = (rules, prefixRules) => {
             $postCSS = [...$postCSS, prefixRule.postCSS];
           }
         } else {
-          if (!rules[name])
-            return;
           $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
           if (!$declaration)
             return;

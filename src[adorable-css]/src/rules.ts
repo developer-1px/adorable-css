@@ -279,9 +279,7 @@ export const RULES:Rules = {
   "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value:string) => `text-indent:${px(value)};`,
 
-
   // Scroll Snap -- TBD @TODO:
-
 
   // Visibility
   none: () => `display:none;`,
@@ -428,7 +426,9 @@ export const RULES:Rules = {
     const dira = (24 - (Math.round(dp / 10))) / 100
 
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
-  }
+  },
+
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 }
 
 // Prefix
@@ -437,6 +437,7 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
   "active:": {selector: `html &:active, html &.\\:active`},
   "focus:": {selector: `html &:focus, html &.\\:focus`},
+  "focus-visible": {selector: `html &:focus-visible, html &.\\:focus-visible`},
   "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
   "checked:": {selector: `html &:checked, html &.\\:checked`},
   "read-only:": {selector: `html &:read-only, html &.\\:read-only`},
@@ -454,21 +455,11 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
 
   "placeholder:": {selector: `&::placeholder`},
 
-  "link:": {selector: `&:link`},
-  "visited:": {selector: `&:visited`},
-
-  "first:": {selector: `&:first-child`},
-  "first-child:": {selector: `&:first-child`},
-  "last:": {selector: `&:last-child`},
-  "last-child:": {selector: `&:last-child`},
   "odd:": {selector: `&:nth-child(2n+1)`},
   "even:": {selector: `&:nth-child(2n)`},
-
-  // @TBD:!!
-  // "before:": {selector: `&:before`},
-  // "after:": {selector: `&:after`},
-  // "nth-child(?):": {selector: `&:nth-child(?)`},
 }
+
+
 
 // media query
 export const PREFIX_MEDIA_QUERY:PrefixRules = {
@@ -508,16 +499,6 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
 
   // dark:@TBD
   "dark:": {selector: `html.dark &`},
-
-  // device:@TBD
-  "device": {
-    // postCSS: ({media, ...props}) => {
-    //   media = media.replace(/(max|min)-width/g, (a, b) => {
-    //     return b + "-device-width"
-    //   })
-    //   return {media, ...props}
-    // }
-  },
 }
 
 // selector

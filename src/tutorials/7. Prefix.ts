@@ -22,16 +22,6 @@ https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW
 "group-disabled:": {selector: \`html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &\`},
 
 "placeholder:": {selector: \`&::placeholder\`},
-
-"link:": {selector: \`&:link\`},
-"visited:": {selector: \`&:visited\`},
-
-"first:": {selector: \`&:first-child\`},
-"first-child:": {selector: \`&:first-child\`},
-"last:": {selector: \`&:last-child\`},
-"last-child:": {selector: \`&:last-child\`},
-"odd:": {selector: \`&:nth-child(2n+1)\`},
-"even:": {selector: \`&:nth-child(2n)\`},
 -->
 
 <div class="vbox gap(20) bg(#fff) p(10)">

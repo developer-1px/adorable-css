@@ -3,6 +3,7 @@
 > Rapid On-Demand Atomic CSS framework
 
 ## New features
+- 0.4.9 - :nth-child를 비롯한 **모든 pseudo class** 지원, 등록되지 않은 모든 css도 일단 지원. ex) touch-action(pan-x)
 - 0.4.7 - glob방식의 config.include 추가 ex) ```adorableCSS({include: "src/**/*.{svelte,svx})"```  
 - 0.4.5 - attribute selector 기능 추가 ex) [attr='value']:c(red)
 - 0.4.4 - build시 sourcemap 포함되면 error나던 현상 수정

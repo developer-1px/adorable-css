@@ -1,4 +1,5 @@
 import {cssEscape} from "./cssEscape"
+import {cssvar} from "./makeValue"
 import {PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX} from "./rules"
 
 const stricmp = (a:string, b:string) => a.localeCompare(b)
@@ -30,8 +31,10 @@ const delimiter = /(:|$)/.source
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
 const re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`)
 
+const makeDefaultPseudoClass = (input:string):PrefixProps => ({selector: `&:${input.replace(/>>/g, " ")}`})
+
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
-  const makeRule = (r:string) => rules[r] || (() => "")
+  const makeRule = (r:string) => rules[r] || ((value:string) => `${r}:${cssvar(value)}`)
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
 
   return (atom:string):[string, number]|undefined => {
@@ -61,11 +64,10 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
         // Make Prefix
         if (type === ":") {
-          const prefixRule = makeSelector(input) || prefixRules[name + ":"]
-          if (!prefixRule) return
+          const prefixRule = makeSelector(input) ?? prefixRules[name + ":"] ?? makeDefaultPseudoClass(input.slice(0, -1))
 
           // selector
-          $selector = $selector.map(s => (prefixRule?.selector?.split(",") || []).map((selector:string) => {
+          $selector = $selector.map(s => (prefixRule?.selector?.split(",") ?? []).map((selector:string) => {
             return selector.replace(/&/g, s).trim()
           })).flat()
 
@@ -81,8 +83,6 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
         // Make declaration
         else {
-          if (!rules[name]) return
-
           $declaration = makeRule(name)(value).replace(/;/g, important).trim()
           if (!$declaration) return
           if ($declaration.includes("undefined")) return
