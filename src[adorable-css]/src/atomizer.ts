@@ -1,6 +1,6 @@
 import {cssEscape} from "./cssEscape"
-import {cssvar} from "./makeValue"
-import {PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX} from "./rules"
+import {makeValues} from "./makeValue"
+import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX} from "./rules"
 
 const stricmp = (a:string, b:string) => a.localeCompare(b)
 
@@ -22,30 +22,33 @@ const makeSelector = (prefix:string):PrefixProps|undefined => {
 }
 
 
-
 // Parse & Generate
 const property = /([^:(]+)/.source
 const value = /(?:\((.*?)\))?/.source
 const delimiter = /(:|$)/.source
 
+const re_value = /(\((.*?)\))[!]*/g
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
-const re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`)
 
 const makeDefaultPseudoClass = (input:string):PrefixProps => ({selector: `&:${input.replace(/>>/g, " ")}`})
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
-  const makeRule = (r:string) => rules[r] || ((value:string) => `${r}:${cssvar(value)}`)
+  const makeRule = (r:string) => rules[r] ?? ((value:string) => (ALL_PROPERTIES[r] && value) ? `${r}:${makeValues(value)}` : "")
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
 
   return (atom:string):[string, number]|undefined => {
+
     try {
+      // syntax validate
+      const prop = atom.replace(re_value, "").split(":").pop()
+      if (!rules[prop] && !ALL_PROPERTIES[prop]) {
+        return
+      }
+
       // ...! -> !important
       const isImportant = atom.endsWith("!")
       const important = isImportant ? "!important;" : ";"
       atom = isImportant ? atom.slice(0, -1) : atom
-
-      // syntax validate
-      if (!re_syntax_validator.test(atom)) return
 
       // prepare result
       let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`]
@@ -95,10 +98,11 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
       const selectors = $selector.join(",")
       const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
 
+
       return [media ? media + "{" + rule + "}" : rule, $priority]
     }
     catch (e) {
-      return
+
     }
   }
 }

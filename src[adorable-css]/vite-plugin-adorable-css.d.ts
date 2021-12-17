@@ -11,7 +11,7 @@ declare const createGenerateCss: (rules?: Rules, prefixRules?: PrefixRules) => (
 declare const generateCss: (classList: string[]) => string[];
 
 declare const makeNumber: (num: number) => string;
-declare const cssvar: (value: string) => string;
+declare const cssvar: (value: string | number) => string | number;
 declare const px: (value: string | number) => string | number;
 declare const percentToEm: (value: string) => string;
 declare const makeHEX: (value: string) => string;
@@ -20,7 +20,7 @@ declare const makeRGB: (value: string) => string;
 declare const makeColor: (value?: string) => string;
 declare const makeFont: (value: string) => string;
 declare const makeBorder: (value: string) => string;
-declare const makeValues: (value: string, project?: (a: string) => string | number) => string;
+declare const makeValues: (value: string, project?: (value: string | number) => string | number) => string;
 declare const makeCommaValues: (value: string, project?: (a: string) => string | number) => string;
 declare const makeSide: (value: string) => string;
 declare const makeRatio: (value: string) => string;

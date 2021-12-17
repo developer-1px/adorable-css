@@ -1,6 +1,6 @@
 export const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0"
 
-export const cssvar = (value:string) => String(value).startsWith("--") ? `var(${value})` : value
+export const cssvar = (value:string|number) => String(value).startsWith("--") ? `var(${value})` : value
 
 // <length> default: px
 export const px = (value:string|number) => {
@@ -98,7 +98,7 @@ export const makeBorder = (value:string) => {
   return values.join(" ")
 }
 
-export const makeValues = (value:string, project = (a:string):string|number => a) => {
+export const makeValues = (value:string, project = cssvar) => {
   if (String(value).startsWith("--")) return `var(${value})`
   return value && value.split("/").map(project).join(" ")
 }
@@ -120,20 +120,20 @@ export const makeHBox = (value = "") => {
 
   const result = values.map(v => {
     switch (v) {
-      case "top": {return "align-items: flex-start;"}
-      case "bottom": {return "align-items: flex-end;"}
-      case "fill": {return "align-items: stretch;"}
-      case "stretch": {return "align-items: stretch;"}
-      case "center": {return "justify-content: center;"}
-      case "left": {return values.includes("reverse") ? "justify-content: flex-end;" : ""}
-      case "right": {return !values.includes("reverse") ? "justify-content: flex-end;" : ""}
-      case "reverse": {return "flex-direction: row-reverse;"}
+      case "top": {return "align-items:flex-start;"}
+      case "bottom": {return "align-items:flex-end;"}
+      case "fill": {return "align-items:stretch;"}
+      case "stretch": {return "align-items:stretch;"}
+      case "center": {return "justify-content:center;"}
+      case "left": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "right": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "reverse": {return "flex-direction:row-reverse;"}
     }
   })
 
   if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
     // @ts-ignore
-    result.unshift("align-items: center;")
+    result.unshift("align-items:center;")
   }
 
   return result.join("")
@@ -144,18 +144,18 @@ export const makeVBox = (value = "") => {
 
   const result = values.map(v => {
     switch (v) {
-      case "left": {return "align-items: flex-start;"}
-      case "center": {return "align-items: center;"}
-      case "right": {return "align-items: flex-end;"}
-      case "top": {return values.includes("reverse") ? "justify-content: flex-end;" : ""}
-      case "bottom": {return !values.includes("reverse") ? "justify-content: flex-end;" : ""}
-      case "reverse": {return "flex-direction: column-reverse;"}
+      case "left": {return "align-items:flex-start;"}
+      case "center": {return "align-items:center;"}
+      case "right": {return "align-items:flex-end;"}
+      case "top": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "bottom": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "reverse": {return "flex-direction:column-reverse;"}
     }
   })
 
   if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
     // @ts-ignore
-    result.unshift("align-items: stretch;")
+    result.unshift("align-items:stretch;")
   }
 
   return result.join("")

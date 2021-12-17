@@ -35,19 +35,17 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   const entry:Record<string, string[]> = Object.create(null)
 
   const generateCss = createGenerateCss(config.rules, config.prefixRules)
+
   const checkTargetFile = (id:string) => {
-    if (!id.startsWith(configRoot)) {
-      return false
+    if (id.startsWith(configRoot)) {
+      id = id.slice(configRoot.length)
     }
-    id = id.slice(configRoot.length)
     return (config.include ?? []).some(glob => micromatch.isMatch(id, glob))
   }
 
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat()
     const styles = generateCss([...new Set(allAtoms)])
-    // console.log("styles", styles, entry)
-
     return [reset, ...styles].join("\n")
   }
 
@@ -105,10 +103,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 
     load: (id:string) => {
       if (id === VIRTUAL_PATH) {
-        if (isHMR) return makeStyle()
-        return new Promise(resolve => {
-          setTimeout(() => resolve(makeStyle()), 500)
-        })
+        return makeStyle()
       }
     },
 
