@@ -1,4 +1,4 @@
-html,body{height:100%;background:#1e1e1e;color:#fff}body{font-family:-apple-system,"Noto Sans CJK KR","Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;line-height:1.5}a{text-decoration:none}a:hover{text-decoration:underline}button{border:none;background:inherit;cursor:pointer}.check-board{background-color:#fff;background-image:linear-gradient(45deg,#e8e8e8 25%,transparent 25%),linear-gradient(-45deg,#e8e8e8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e8e8e8 75%),linear-gradient(-45deg,transparent 75%,#e8e8e8 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px}* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
+html,body{height:100%;background:#1e1e1e;color:#fff}body{font-family:-apple-system,"Noto Sans CJK KR","Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;line-height:1.5}a{text-decoration:none}a:hover{text-decoration:underline}button{border:none;background:inherit;cursor:pointer}.check-board{background-color:#fff;background-image:linear-gradient(45deg,#e8e8e8 25%,transparent 25%),linear-gradient(-45deg,#e8e8e8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#e8e8e8 75%),linear-gradient(-45deg,transparent 75%,#e8e8e8 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0px}*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
 .\31 00{font-weight:100;}
 .\35 00{font-weight:500;}
 .c\(\#fff\){color:#fff;}
@@ -40,10 +40,10 @@ html,body{height:100%;background:#1e1e1e;color:#fff}body{font-family:-apple-syst
 .bb\(4\/transparent\){border-bottom:solid 4px transparent;}
 .\.selected\:bbc\(orange\).selected,.selected .\.selected\:bbc\(orange\){border-bottom-color:orange;}
 .block{display:block;}
-.hbox{display:flex;flex-flow:row;align-items: center;}
-.vbox{display:flex;flex-flow:column;align-items: stretch;}
+.hbox{display:flex;flex-flow:row;align-items:center;}
+.vbox{display:flex;flex-flow:column;align-items:stretch;}
 .pack{display:flex;align-items:center;justify-content:center;}
-.hbox\(fill\){display:flex;flex-flow:row;align-items: center;align-items: stretch;}
+.hbox\(fill\){display:flex;flex-flow:row;align-items:center;align-items:stretch;}
 .gap\(10\){gap:10px;}
 .gap\(4\){gap:4px;}
 .gap\(20\){gap:20px;}
