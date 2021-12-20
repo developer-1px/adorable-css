@@ -3433,7 +3433,7 @@ var generateCss = createGenerateCss();
 var micromatch = require_micromatch();
 var ADORABLE_CSS = "@adorable.css";
 var VIRTUAL_PATH = "/" + ADORABLE_CSS;
-var CHUNK_PLACEHOLDER = "[##_adorable_css_##]";
+var BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`;
 var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
   include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
@@ -3526,7 +3526,7 @@ var adorableCSS = (config) => {
     apply: "build",
     enforce: "pre",
     resolveId: (id) => id === ADORABLE_CSS || id === VIRTUAL_PATH ? VIRTUAL_PATH : void 0,
-    load: (id) => id === VIRTUAL_PATH ? "[##_adorable_css_##]" : void 0,
+    load: (id) => id === VIRTUAL_PATH ? BUILD_PLACEHOLDER : void 0,
     transform(code, id) {
       if (checkTargetFile(id)) {
         entry[id] = parseAtoms(code);
@@ -3539,7 +3539,7 @@ var adorableCSS = (config) => {
         if (!chunk.fileName.endsWith(".css"))
           continue;
         if (chunk.type === "asset" && typeof chunk.source === "string") {
-          chunk.source = chunk.source.replace(CHUNK_PLACEHOLDER, adorableCSS2);
+          chunk.source = chunk.source.replace(BUILD_PLACEHOLDER, adorableCSS2);
         }
       }
     }
