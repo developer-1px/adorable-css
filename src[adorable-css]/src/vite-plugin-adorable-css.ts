@@ -14,7 +14,7 @@ interface Config {
 
 const ADORABLE_CSS = "@adorable.css"
 const VIRTUAL_PATH = "/" + ADORABLE_CSS
-const CHUNK_PLACEHOLDER = "[##_adorable_css_##]"
+const BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`
 const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG:Config = {
@@ -129,7 +129,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     enforce: "pre",
 
     resolveId: (id:string) => (id === ADORABLE_CSS || id === VIRTUAL_PATH) ? VIRTUAL_PATH : undefined,
-    load: (id:string) => id === VIRTUAL_PATH ? "[##_adorable_css_##]" : undefined,
+    load: (id:string) => id === VIRTUAL_PATH ? BUILD_PLACEHOLDER : undefined,
 
     transform(code, id) {
       if (checkTargetFile(id)) {
@@ -143,7 +143,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
       for (const chunk of Object.values(bundle)) {
         if (!chunk.fileName.endsWith(".css")) continue
         if (chunk.type === "asset" && typeof chunk.source === "string") {
-          chunk.source = chunk.source.replace(CHUNK_PLACEHOLDER, adorableCSS)
+          chunk.source = chunk.source.replace(BUILD_PLACEHOLDER, adorableCSS)
         }
       }
     },
