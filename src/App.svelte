@@ -109,4 +109,4 @@ let editor
   </div>
 </div>
 
-<UIVersion version="0.0.7"/>
+<UIVersion version="0.0.8"/>
