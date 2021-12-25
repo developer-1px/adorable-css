@@ -3,6 +3,7 @@
 > Rapid On-Demand Atomic CSS framework
 
 ## Release Notes
+- 0.5.3 - CSS Reset 보강 https://github.com/developer-1px/adorable-css/blob/master/src%5Badorable-css%5D/src/rules.ts
 - 0.5.2 - PostCSS를 사용하는 build 환경에서 에러발생하는 오류 수정함. 
 - 0.4.9 - :nth-child를 비롯한 **모든 pseudo class** 지원, 등록되지 않은 모든 css도 일단 지원. ex) touch-action(pan-x)
 - 0.4.7 - glob방식의 config.include 추가 ex) ```adorableCSS({include: "src/**/*.{svelte,svx})"```  
@@ -35,8 +36,7 @@ export const Button = () =>
 
 ```css
 /* @adorable.css */
-
-* {margin: 0;padding: 0;box-sizing: border-box;font: inherit;color: inherit;flex-shrink: 0;}
+*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
 .c\(\#fff\){color:#fff;}
 .bg\(\#333\){background-color:#333;}
 @media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
