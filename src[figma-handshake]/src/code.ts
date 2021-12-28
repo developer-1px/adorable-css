@@ -337,7 +337,7 @@ const generateText = async (node) => {
 
 
 const isSVG = (node) => {
-  return node.children?.every(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION" || node.type === "TEXT")
+  return node.children?.every(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION")
 }
 
 const generateCode = async (node:SceneNode, depth:number = 0) => {
@@ -346,8 +346,6 @@ const generateCode = async (node:SceneNode, depth:number = 0) => {
   let code = ""
 
   if (node.exportSettings.length > 0 || (node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0) || isSVG(node)) {
-    console.warn("node", node)
-
     try {
       const svgCodeArrayBuffer = await node.exportAsync({format: "SVG", svgIdAttribute: false})
       const svgCode = ab2str(svgCodeArrayBuffer)

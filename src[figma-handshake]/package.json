@@ -1,6 +1,6 @@
 {
   "name": "handshake",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Handshake - HandOff for designer and developer",
   "main": "dist/code.js",
   "scripts": {

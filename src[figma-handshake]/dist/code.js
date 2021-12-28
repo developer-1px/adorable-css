@@ -19,11 +19,9 @@ var __spreadValues = (a, b) => {
 var REGEXP_STRING1 = /(?:"(?:[^"]|\\"])*")/gm;
 var REGEXP_STRING2 = /(?:'(?:[^']|\\'])*')/gm;
 var REGEXP_STRING3 = /(?:`(?:[^`]|\\`])*`)/gm;
-var REGEXP_SVG = /<svg((\s|.)*?)<\/svg/g;
 var trim = (a) => a.trim();
 var findAll = (str, regex, callback) => String(str).replace(regex, (...args) => (callback(...args), args[0]));
 var parseAtoms = (code) => {
-  code = code.replace(REGEXP_SVG, "");
   const atoms = Object.create(null);
   findAll(code, REGEXP_STRING1, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
   findAll(code, REGEXP_STRING2, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
@@ -153,7 +151,7 @@ var makeBorder = (value2) => {
     values.unshift("solid");
   return values.join(" ");
 };
-var makeValues = (value2, project = (a) => a) => {
+var makeValues = (value2, project = cssvar) => {
   if (String(value2).startsWith("--"))
     return `var(${value2})`;
   return value2 && value2.split("/").map(project).join(" ");
@@ -173,33 +171,33 @@ var makeHBox = (value2 = "") => {
   const result = values.map((v) => {
     switch (v) {
       case "top": {
-        return "align-items: flex-start;";
+        return "align-items:flex-start;";
       }
       case "bottom": {
-        return "align-items: flex-end;";
+        return "align-items:flex-end;";
       }
       case "fill": {
-        return "align-items: stretch;";
+        return "align-items:stretch;";
       }
       case "stretch": {
-        return "align-items: stretch;";
+        return "align-items:stretch;";
       }
       case "center": {
-        return "justify-content: center;";
+        return "justify-content:center;";
       }
       case "left": {
-        return values.includes("reverse") ? "justify-content: flex-end;" : "";
+        return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
       case "right": {
-        return !values.includes("reverse") ? "justify-content: flex-end;" : "";
+        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
       case "reverse": {
-        return "flex-direction: row-reverse;";
+        return "flex-direction:row-reverse;";
       }
     }
   });
   if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
-    result.unshift("align-items: center;");
+    result.unshift("align-items:center;");
   }
   return result.join("");
 };
@@ -208,27 +206,27 @@ var makeVBox = (value2 = "") => {
   const result = values.map((v) => {
     switch (v) {
       case "left": {
-        return "align-items: flex-start;";
+        return "align-items:flex-start;";
       }
       case "center": {
-        return "align-items: center;";
+        return "align-items:center;";
       }
       case "right": {
-        return "align-items: flex-end;";
+        return "align-items:flex-end;";
       }
       case "top": {
-        return values.includes("reverse") ? "justify-content: flex-end;" : "";
+        return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
       case "bottom": {
-        return !values.includes("reverse") ? "justify-content: flex-end;" : "";
+        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
       case "reverse": {
-        return "flex-direction: column-reverse;";
+        return "flex-direction:column-reverse;";
       }
     }
   });
   if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
-    result.unshift("align-items: stretch;");
+    result.unshift("align-items:stretch;");
   }
   return result.join("");
 };
@@ -239,10 +237,525 @@ var makeTransition = (value2) => {
 };
 
 // ../src[adorable-css]/src/rules.ts
+var ALL_PROPERTIES = {
+  "--*": 1,
+  "-ms-accelerator": 1,
+  "-ms-block-progression": 1,
+  "-ms-content-zoom-chaining": 1,
+  "-ms-content-zooming": 1,
+  "-ms-content-zoom-limit": 1,
+  "-ms-content-zoom-limit-max": 1,
+  "-ms-content-zoom-limit-min": 1,
+  "-ms-content-zoom-snap": 1,
+  "-ms-content-zoom-snap-points": 1,
+  "-ms-content-zoom-snap-type": 1,
+  "-ms-filter": 1,
+  "-ms-flow-from": 1,
+  "-ms-flow-into": 1,
+  "-ms-grid-columns": 1,
+  "-ms-grid-rows": 1,
+  "-ms-high-contrast-adjust": 1,
+  "-ms-hyphenate-limit-chars": 1,
+  "-ms-hyphenate-limit-lines": 1,
+  "-ms-hyphenate-limit-zone": 1,
+  "-ms-ime-align": 1,
+  "-ms-overflow-style": 1,
+  "-ms-scrollbar-3dlight-color": 1,
+  "-ms-scrollbar-arrow-color": 1,
+  "-ms-scrollbar-base-color": 1,
+  "-ms-scrollbar-darkshadow-color": 1,
+  "-ms-scrollbar-face-color": 1,
+  "-ms-scrollbar-highlight-color": 1,
+  "-ms-scrollbar-shadow-color": 1,
+  "-ms-scrollbar-track-color": 1,
+  "-ms-scroll-chaining": 1,
+  "-ms-scroll-limit": 1,
+  "-ms-scroll-limit-x-max": 1,
+  "-ms-scroll-limit-x-min": 1,
+  "-ms-scroll-limit-y-max": 1,
+  "-ms-scroll-limit-y-min": 1,
+  "-ms-scroll-rails": 1,
+  "-ms-scroll-snap-points-x": 1,
+  "-ms-scroll-snap-points-y": 1,
+  "-ms-scroll-snap-type": 1,
+  "-ms-scroll-snap-x": 1,
+  "-ms-scroll-snap-y": 1,
+  "-ms-scroll-translation": 1,
+  "-ms-text-autospace": 1,
+  "-ms-touch-select": 1,
+  "-ms-user-select": 1,
+  "-ms-wrap-flow": 1,
+  "-ms-wrap-margin": 1,
+  "-ms-wrap-through": 1,
+  "-moz-appearance": 1,
+  "-moz-binding": 1,
+  "-moz-border-bottom-colors": 1,
+  "-moz-border-left-colors": 1,
+  "-moz-border-right-colors": 1,
+  "-moz-border-top-colors": 1,
+  "-moz-context-properties": 1,
+  "-moz-float-edge": 1,
+  "-moz-force-broken-image-icon": 1,
+  "-moz-image-region": 1,
+  "-moz-orient": 1,
+  "-moz-outline-radius": 1,
+  "-moz-outline-radius-bottomleft": 1,
+  "-moz-outline-radius-bottomright": 1,
+  "-moz-outline-radius-topleft": 1,
+  "-moz-outline-radius-topright": 1,
+  "-moz-stack-sizing": 1,
+  "-moz-text-blink": 1,
+  "-moz-user-focus": 1,
+  "-moz-user-input": 1,
+  "-moz-user-modify": 1,
+  "-moz-window-dragging": 1,
+  "-moz-window-shadow": 1,
+  "-webkit-appearance": 1,
+  "-webkit-border-before": 1,
+  "-webkit-border-before-color": 1,
+  "-webkit-border-before-style": 1,
+  "-webkit-border-before-width": 1,
+  "-webkit-box-reflect": 1,
+  "-webkit-line-clamp": 1,
+  "-webkit-mask": 1,
+  "-webkit-mask-attachment": 1,
+  "-webkit-mask-clip": 1,
+  "-webkit-mask-composite": 1,
+  "-webkit-mask-image": 1,
+  "-webkit-mask-origin": 1,
+  "-webkit-mask-position": 1,
+  "-webkit-mask-position-x": 1,
+  "-webkit-mask-position-y": 1,
+  "-webkit-mask-repeat": 1,
+  "-webkit-mask-repeat-x": 1,
+  "-webkit-mask-repeat-y": 1,
+  "-webkit-mask-size": 1,
+  "-webkit-overflow-scrolling": 1,
+  "-webkit-tap-highlight-color": 1,
+  "-webkit-text-fill-color": 1,
+  "-webkit-text-stroke": 1,
+  "-webkit-text-stroke-color": 1,
+  "-webkit-text-stroke-width": 1,
+  "-webkit-touch-callout": 1,
+  "-webkit-user-modify": 1,
+  "accent-color": 1,
+  "align-content": 1,
+  "align-items": 1,
+  "align-self": 1,
+  "align-tracks": 1,
+  "all": 1,
+  "animation": 1,
+  "animation-delay": 1,
+  "animation-direction": 1,
+  "animation-duration": 1,
+  "animation-fill-mode": 1,
+  "animation-iteration-count": 1,
+  "animation-name": 1,
+  "animation-play-state": 1,
+  "animation-timing-function": 1,
+  "appearance": 1,
+  "aspect-ratio": 1,
+  "azimuth": 1,
+  "backdrop-filter": 1,
+  "backface-visibility": 1,
+  "background": 1,
+  "background-attachment": 1,
+  "background-blend-mode": 1,
+  "background-clip": 1,
+  "background-color": 1,
+  "background-image": 1,
+  "background-origin": 1,
+  "background-position": 1,
+  "background-position-x": 1,
+  "background-position-y": 1,
+  "background-repeat": 1,
+  "background-size": 1,
+  "block-overflow": 1,
+  "block-size": 1,
+  "border": 1,
+  "border-block": 1,
+  "border-block-color": 1,
+  "border-block-style": 1,
+  "border-block-width": 1,
+  "border-block-end": 1,
+  "border-block-end-color": 1,
+  "border-block-end-style": 1,
+  "border-block-end-width": 1,
+  "border-block-start": 1,
+  "border-block-start-color": 1,
+  "border-block-start-style": 1,
+  "border-block-start-width": 1,
+  "border-bottom": 1,
+  "border-bottom-color": 1,
+  "border-bottom-left-radius": 1,
+  "border-bottom-right-radius": 1,
+  "border-bottom-style": 1,
+  "border-bottom-width": 1,
+  "border-collapse": 1,
+  "border-color": 1,
+  "border-end-end-radius": 1,
+  "border-end-start-radius": 1,
+  "border-image": 1,
+  "border-image-outset": 1,
+  "border-image-repeat": 1,
+  "border-image-slice": 1,
+  "border-image-source": 1,
+  "border-image-width": 1,
+  "border-inline": 1,
+  "border-inline-end": 1,
+  "border-inline-color": 1,
+  "border-inline-style": 1,
+  "border-inline-width": 1,
+  "border-inline-end-color": 1,
+  "border-inline-end-style": 1,
+  "border-inline-end-width": 1,
+  "border-inline-start": 1,
+  "border-inline-start-color": 1,
+  "border-inline-start-style": 1,
+  "border-inline-start-width": 1,
+  "border-left": 1,
+  "border-left-color": 1,
+  "border-left-style": 1,
+  "border-left-width": 1,
+  "border-radius": 1,
+  "border-right": 1,
+  "border-right-color": 1,
+  "border-right-style": 1,
+  "border-right-width": 1,
+  "border-spacing": 1,
+  "border-start-end-radius": 1,
+  "border-start-start-radius": 1,
+  "border-style": 1,
+  "border-top": 1,
+  "border-top-color": 1,
+  "border-top-left-radius": 1,
+  "border-top-right-radius": 1,
+  "border-top-style": 1,
+  "border-top-width": 1,
+  "border-width": 1,
+  "bottom": 1,
+  "box-align": 1,
+  "box-decoration-break": 1,
+  "box-direction": 1,
+  "box-flex": 1,
+  "box-flex-group": 1,
+  "box-lines": 1,
+  "box-ordinal-group": 1,
+  "box-orient": 1,
+  "box-pack": 1,
+  "box-shadow": 1,
+  "box-sizing": 1,
+  "break-after": 1,
+  "break-before": 1,
+  "break-inside": 1,
+  "caption-side": 1,
+  "caret-color": 1,
+  "clear": 1,
+  "clip": 1,
+  "clip-path": 1,
+  "color": 1,
+  "color-adjust": 1,
+  "color-scheme": 1,
+  "column-count": 1,
+  "column-fill": 1,
+  "column-gap": 1,
+  "column-rule": 1,
+  "column-rule-color": 1,
+  "column-rule-style": 1,
+  "column-rule-width": 1,
+  "column-span": 1,
+  "column-width": 1,
+  "columns": 1,
+  "contain": 1,
+  "content": 1,
+  "content-visibility": 1,
+  "counter-increment": 1,
+  "counter-reset": 1,
+  "counter-set": 1,
+  "cursor": 1,
+  "direction": 1,
+  "display": 1,
+  "empty-cells": 1,
+  "filter": 1,
+  "flex": 1,
+  "flex-basis": 1,
+  "flex-direction": 1,
+  "flex-flow": 1,
+  "flex-grow": 1,
+  "flex-shrink": 1,
+  "flex-wrap": 1,
+  "float": 1,
+  "font": 1,
+  "font-family": 1,
+  "font-feature-settings": 1,
+  "font-kerning": 1,
+  "font-language-override": 1,
+  "font-optical-sizing": 1,
+  "font-variation-settings": 1,
+  "font-size": 1,
+  "font-size-adjust": 1,
+  "font-smooth": 1,
+  "font-stretch": 1,
+  "font-style": 1,
+  "font-synthesis": 1,
+  "font-variant": 1,
+  "font-variant-alternates": 1,
+  "font-variant-caps": 1,
+  "font-variant-east-asian": 1,
+  "font-variant-ligatures": 1,
+  "font-variant-numeric": 1,
+  "font-variant-position": 1,
+  "font-weight": 1,
+  "forced-color-adjust": 1,
+  "gap": 1,
+  "grid": 1,
+  "grid-area": 1,
+  "grid-auto-columns": 1,
+  "grid-auto-flow": 1,
+  "grid-auto-rows": 1,
+  "grid-column": 1,
+  "grid-column-end": 1,
+  "grid-column-gap": 1,
+  "grid-column-start": 1,
+  "grid-gap": 1,
+  "grid-row": 1,
+  "grid-row-end": 1,
+  "grid-row-gap": 1,
+  "grid-row-start": 1,
+  "grid-template": 1,
+  "grid-template-areas": 1,
+  "grid-template-columns": 1,
+  "grid-template-rows": 1,
+  "hanging-punctuation": 1,
+  "height": 1,
+  "hyphens": 1,
+  "image-orientation": 1,
+  "image-rendering": 1,
+  "image-resolution": 1,
+  "ime-mode": 1,
+  "initial-letter": 1,
+  "initial-letter-align": 1,
+  "inline-size": 1,
+  "input-security": 1,
+  "inset": 1,
+  "inset-block": 1,
+  "inset-block-end": 1,
+  "inset-block-start": 1,
+  "inset-inline": 1,
+  "inset-inline-end": 1,
+  "inset-inline-start": 1,
+  "isolation": 1,
+  "justify-content": 1,
+  "justify-items": 1,
+  "justify-self": 1,
+  "justify-tracks": 1,
+  "left": 1,
+  "letter-spacing": 1,
+  "line-break": 1,
+  "line-clamp": 1,
+  "line-height": 1,
+  "line-height-step": 1,
+  "list-style": 1,
+  "list-style-image": 1,
+  "list-style-position": 1,
+  "list-style-type": 1,
+  "margin": 1,
+  "margin-block": 1,
+  "margin-block-end": 1,
+  "margin-block-start": 1,
+  "margin-bottom": 1,
+  "margin-inline": 1,
+  "margin-inline-end": 1,
+  "margin-inline-start": 1,
+  "margin-left": 1,
+  "margin-right": 1,
+  "margin-top": 1,
+  "margin-trim": 1,
+  "mask": 1,
+  "mask-border": 1,
+  "mask-border-mode": 1,
+  "mask-border-outset": 1,
+  "mask-border-repeat": 1,
+  "mask-border-slice": 1,
+  "mask-border-source": 1,
+  "mask-border-width": 1,
+  "mask-clip": 1,
+  "mask-composite": 1,
+  "mask-image": 1,
+  "mask-mode": 1,
+  "mask-origin": 1,
+  "mask-position": 1,
+  "mask-repeat": 1,
+  "mask-size": 1,
+  "mask-type": 1,
+  "masonry-auto-flow": 1,
+  "math-style": 1,
+  "max-block-size": 1,
+  "max-height": 1,
+  "max-inline-size": 1,
+  "max-lines": 1,
+  "max-width": 1,
+  "min-block-size": 1,
+  "min-height": 1,
+  "min-inline-size": 1,
+  "min-width": 1,
+  "mix-blend-mode": 1,
+  "object-fit": 1,
+  "object-position": 1,
+  "offset": 1,
+  "offset-anchor": 1,
+  "offset-distance": 1,
+  "offset-path": 1,
+  "offset-position": 1,
+  "offset-rotate": 1,
+  "opacity": 1,
+  "order": 1,
+  "orphans": 1,
+  "outline": 1,
+  "outline-color": 1,
+  "outline-offset": 1,
+  "outline-style": 1,
+  "outline-width": 1,
+  "overflow": 1,
+  "overflow-anchor": 1,
+  "overflow-block": 1,
+  "overflow-clip-box": 1,
+  "overflow-clip-margin": 1,
+  "overflow-inline": 1,
+  "overflow-wrap": 1,
+  "overflow-x": 1,
+  "overflow-y": 1,
+  "overscroll-behavior": 1,
+  "overscroll-behavior-block": 1,
+  "overscroll-behavior-inline": 1,
+  "overscroll-behavior-x": 1,
+  "overscroll-behavior-y": 1,
+  "padding": 1,
+  "padding-block": 1,
+  "padding-block-end": 1,
+  "padding-block-start": 1,
+  "padding-bottom": 1,
+  "padding-inline": 1,
+  "padding-inline-end": 1,
+  "padding-inline-start": 1,
+  "padding-left": 1,
+  "padding-right": 1,
+  "padding-top": 1,
+  "page-break-after": 1,
+  "page-break-before": 1,
+  "page-break-inside": 1,
+  "paint-order": 1,
+  "perspective": 1,
+  "perspective-origin": 1,
+  "place-content": 1,
+  "place-items": 1,
+  "place-self": 1,
+  "pointer-events": 1,
+  "position": 1,
+  "quotes": 1,
+  "resize": 1,
+  "right": 1,
+  "rotate": 1,
+  "row-gap": 1,
+  "ruby-align": 1,
+  "ruby-merge": 1,
+  "ruby-position": 1,
+  "scale": 1,
+  "scrollbar-color": 1,
+  "scrollbar-gutter": 1,
+  "scrollbar-width": 1,
+  "scroll-behavior": 1,
+  "scroll-margin": 1,
+  "scroll-margin-block": 1,
+  "scroll-margin-block-start": 1,
+  "scroll-margin-block-end": 1,
+  "scroll-margin-bottom": 1,
+  "scroll-margin-inline": 1,
+  "scroll-margin-inline-start": 1,
+  "scroll-margin-inline-end": 1,
+  "scroll-margin-left": 1,
+  "scroll-margin-right": 1,
+  "scroll-margin-top": 1,
+  "scroll-padding": 1,
+  "scroll-padding-block": 1,
+  "scroll-padding-block-start": 1,
+  "scroll-padding-block-end": 1,
+  "scroll-padding-bottom": 1,
+  "scroll-padding-inline": 1,
+  "scroll-padding-inline-start": 1,
+  "scroll-padding-inline-end": 1,
+  "scroll-padding-left": 1,
+  "scroll-padding-right": 1,
+  "scroll-padding-top": 1,
+  "scroll-snap-align": 1,
+  "scroll-snap-coordinate": 1,
+  "scroll-snap-destination": 1,
+  "scroll-snap-points-x": 1,
+  "scroll-snap-points-y": 1,
+  "scroll-snap-stop": 1,
+  "scroll-snap-type": 1,
+  "scroll-snap-type-x": 1,
+  "scroll-snap-type-y": 1,
+  "shape-image-threshold": 1,
+  "shape-margin": 1,
+  "shape-outside": 1,
+  "tab-size": 1,
+  "table-layout": 1,
+  "text-align": 1,
+  "text-align-last": 1,
+  "text-combine-upright": 1,
+  "text-decoration": 1,
+  "text-decoration-color": 1,
+  "text-decoration-line": 1,
+  "text-decoration-skip": 1,
+  "text-decoration-skip-ink": 1,
+  "text-decoration-style": 1,
+  "text-decoration-thickness": 1,
+  "text-emphasis": 1,
+  "text-emphasis-color": 1,
+  "text-emphasis-position": 1,
+  "text-emphasis-style": 1,
+  "text-indent": 1,
+  "text-justify": 1,
+  "text-orientation": 1,
+  "text-overflow": 1,
+  "text-rendering": 1,
+  "text-shadow": 1,
+  "text-size-adjust": 1,
+  "text-transform": 1,
+  "text-underline-offset": 1,
+  "text-underline-position": 1,
+  "top": 1,
+  "touch-action": 1,
+  "transform": 1,
+  "transform-box": 1,
+  "transform-origin": 1,
+  "transform-style": 1,
+  "transition": 1,
+  "transition-delay": 1,
+  "transition-duration": 1,
+  "transition-property": 1,
+  "transition-timing-function": 1,
+  "translate": 1,
+  "unicode-bidi": 1,
+  "user-select": 1,
+  "vertical-align": 1,
+  "visibility": 1,
+  "white-space": 1,
+  "widows": 1,
+  "width": 1,
+  "will-change": 1,
+  "word-break": 1,
+  "word-spacing": 1,
+  "word-wrap": 1,
+  "writing-mode": 1,
+  "z-index": 1,
+  "zoom": 1
+};
 var RULES = {
-  c: (value2) => `color:${makeColor(value2)};`,
-  bg: (value2) => `background-color:${makeColor(value2)};`,
-  font: (value2) => makeFont(value2),
+  "c": (value2) => `color:${makeColor(value2)};`,
+  "bg": (value2) => `background-color:${makeColor(value2)};`,
+  "font": (value2) => makeFont(value2),
   "font-size": (value2) => `font-size:${px(value2)};`,
   "line-height": (value2) => `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`,
   "letter-spacing": (value2) => `letter-spacing:${px(value2)};`,
@@ -256,32 +769,32 @@ var RULES = {
   "700": () => `font-weight:700;`,
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
-  thin: () => `font-weight:100;`,
+  "thin": () => `font-weight:100;`,
   "extra-light": () => `font-weight:200;`,
-  light: () => `font-weight:300;`,
-  regular: () => `font-weight:400;`,
-  medium: () => `font-weight:500;`,
-  semibold: () => `font-weight:600;`,
-  bold: () => `font-weight:700;`,
+  "light": () => `font-weight:300;`,
+  "regular": () => `font-weight:400;`,
+  "medium": () => `font-weight:500;`,
+  "semibold": () => `font-weight:600;`,
+  "bold": () => `font-weight:700;`,
   "extra-bold": () => `font-weight:800;`,
-  heavy: () => `font-weight:900;`,
-  thicker: (value2 = "1") => `text-shadow:0 0 ${px(value2)} currentColor;`,
-  italic: () => `font-style:italic;`,
-  overline: () => `text-decoration:overline;`,
-  underline: () => `text-decoration:underline;`,
+  "heavy": () => `font-weight:900;`,
+  "thicker": (value2 = "1") => `text-shadow:0 0 ${px(value2)} currentColor;`,
+  "italic": () => `font-style:italic;`,
+  "overline": () => `text-decoration:overline;`,
+  "underline": () => `text-decoration:underline;`,
   "line-through": () => `text-decoration:line-through;`,
   "strike": () => `text-decoration:line-through;`,
-  del: () => `text-decoration:line-through;`,
+  "del": () => `text-decoration:line-through;`,
   "sans-serif": () => `font-family:sans-serif;`,
-  serif: () => `font-family:serif;`,
-  monospace: () => `font-family:menlo,monospace;`,
-  cursive: () => `font-family:cursive;`,
-  fantasy: () => `font-family:fantasy;`,
+  "serif": () => `font-family:serif;`,
+  "monospace": () => `font-family:menlo,monospace;`,
+  "cursive": () => `font-family:cursive;`,
+  "fantasy": () => `font-family:fantasy;`,
   "system-ui": () => `font-family:system-ui;`,
   "small-caps": () => `font-variant:small-caps`,
-  lowercase: () => `text-transform:lowercase;`,
-  uppercase: () => `text-transform:uppercase;`,
-  capitalize: () => `text-transform:capitalize;`,
+  "lowercase": () => `text-transform:lowercase;`,
+  "uppercase": () => `text-transform:uppercase;`,
+  "capitalize": () => `text-transform:capitalize;`,
   "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
@@ -291,7 +804,7 @@ var RULES = {
   "keep-all": () => `word-break:keep-all;`,
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
-  w: (value2) => {
+  "w": (value2) => {
     if (value2.includes("~")) {
       const result = [];
       const [min, max] = value2.split("~");
@@ -301,7 +814,7 @@ var RULES = {
     }
     return value2 === "stretch" || value2 === "fill" ? `align-self:stretch` : `width:${px(value2)};`;
   },
-  h: (value2) => {
+  "h": (value2) => {
     if (value2.includes("~")) {
       const result = [];
       const [min, max] = value2.split("~");
@@ -311,51 +824,57 @@ var RULES = {
     }
     return value2 === "stretch" || value2 === "fill" ? `align-self:stretch` : `height:${px(value2)};`;
   },
-  m: (value2) => `margin:${makeSide(value2)};`,
-  mt: (value2) => `margin-top:${px(value2)};`,
-  mr: (value2) => `margin-right:${px(value2)};`,
-  mb: (value2) => `margin-bottom:${px(value2)};`,
-  ml: (value2) => `margin-left:${px(value2)};`,
-  p: (value2) => `padding:${makeSide(value2)};`,
-  pt: (value2) => `padding-top:${px(value2)};`,
-  pr: (value2) => `padding-right:${px(value2)};`,
-  pb: (value2) => `padding-bottom:${px(value2)};`,
-  pl: (value2) => `padding-left:${px(value2)};`,
-  b: (value2) => `border:${makeBorder(value2)};`,
-  bt: (value2) => `border-top:${makeBorder(value2)};`,
-  br: (value2) => `border-right:${makeBorder(value2)};`,
-  bb: (value2) => `border-bottom:${makeBorder(value2)};`,
-  bl: (value2) => `border-left:${makeBorder(value2)};`,
-  bw: (value2) => `border-width:${px(value2)};`,
-  btw: (value2) => `border-top-width:${px(value2)};`,
-  brw: (value2) => `border-right-width:${px(value2)};`,
-  bbw: (value2) => `border-bottom-width:${px(value2)};`,
-  blw: (value2) => `border-left-width:${px(value2)};`,
-  bs: (value2) => `border-style:${cssvar(value2)};`,
-  bts: (value2) => `border-top-style:${cssvar(value2)};`,
-  brs: (value2) => `border-right-style:${cssvar(value2)};`,
-  bbs: (value2) => `border-bottom-style:${cssvar(value2)};`,
-  bls: (value2) => `border-left-style:${cssvar(value2)};`,
-  bc: (value2) => `border-color:${makeColor(value2)};`,
-  btc: (value2) => `border-top-color:${makeColor(value2)};`,
-  brc: (value2) => `border-right-color:${makeColor(value2)};`,
-  bbc: (value2) => `border-bottom-color:${makeColor(value2)};`,
-  blc: (value2) => `border-left-color:${makeColor(value2)};`,
-  r: (value2) => `border-radius:${makeSide(value2)};`,
-  rt: (value2) => `border-top-left-radius:${px(value2)};border-top-right-radius:${px(value2)};`,
-  rr: (value2) => `border-top-right-radius:${px(value2)};border-bottom-right-radius:${px(value2)};`,
-  rb: (value2) => `border-bottom-left-radius:${px(value2)};border-bottom-right-radius:${px(value2)};`,
-  rl: (value2) => `border-top-left-radius:${px(value2)};border-bottom-left-radius:${px(value2)};`,
-  rtl: (value2) => `border-top-left-radius:${px(value2)};`,
-  rtr: (value2) => `border-top-right-radius:${px(value2)};`,
-  rbr: (value2) => `border-bottom-right-radius:${px(value2)};`,
-  rbl: (value2) => `border-bottom-left-radius:${px(value2)};`,
-  ring: (value2) => {
+  "m": (value2) => `margin:${makeSide(value2)};`,
+  "mt": (value2) => `margin-top:${px(value2)};`,
+  "mr": (value2) => `margin-right:${px(value2)};`,
+  "mb": (value2) => `margin-bottom:${px(value2)};`,
+  "ml": (value2) => `margin-left:${px(value2)};`,
+  "p": (value2) => `padding:${makeSide(value2)};`,
+  "pt": (value2) => `padding-top:${px(value2)};`,
+  "pr": (value2) => `padding-right:${px(value2)};`,
+  "pb": (value2) => `padding-bottom:${px(value2)};`,
+  "pl": (value2) => `padding-left:${px(value2)};`,
+  "b": (value2) => `border:${makeBorder(value2)};`,
+  "bt": (value2) => `border-top:${makeBorder(value2)};`,
+  "br": (value2) => `border-right:${makeBorder(value2)};`,
+  "bb": (value2) => `border-bottom:${makeBorder(value2)};`,
+  "bl": (value2) => `border-left:${makeBorder(value2)};`,
+  "bw": (value2) => `border-width:${px(value2)};`,
+  "btw": (value2) => `border-top-width:${px(value2)};`,
+  "brw": (value2) => `border-right-width:${px(value2)};`,
+  "bbw": (value2) => `border-bottom-width:${px(value2)};`,
+  "blw": (value2) => `border-left-width:${px(value2)};`,
+  "bs": (value2) => `border-style:${cssvar(value2)};`,
+  "bts": (value2) => `border-top-style:${cssvar(value2)};`,
+  "brs": (value2) => `border-right-style:${cssvar(value2)};`,
+  "bbs": (value2) => `border-bottom-style:${cssvar(value2)};`,
+  "bls": (value2) => `border-left-style:${cssvar(value2)};`,
+  "bc": (value2) => `border-color:${makeColor(value2)};`,
+  "btc": (value2) => `border-top-color:${makeColor(value2)};`,
+  "brc": (value2) => `border-right-color:${makeColor(value2)};`,
+  "bbc": (value2) => `border-bottom-color:${makeColor(value2)};`,
+  "blc": (value2) => `border-left-color:${makeColor(value2)};`,
+  "r": (value2) => `border-radius:${makeSide(value2)};`,
+  "rt": (value2) => `border-top-left-radius:${px(value2)};border-top-right-radius:${px(value2)};`,
+  "rr": (value2) => `border-top-right-radius:${px(value2)};border-bottom-right-radius:${px(value2)};`,
+  "rb": (value2) => `border-bottom-left-radius:${px(value2)};border-bottom-right-radius:${px(value2)};`,
+  "rl": (value2) => `border-top-left-radius:${px(value2)};border-bottom-left-radius:${px(value2)};`,
+  "rtl": (value2) => `border-top-left-radius:${px(value2)};`,
+  "rtr": (value2) => `border-top-right-radius:${px(value2)};`,
+  "rbr": (value2) => `border-bottom-right-radius:${px(value2)};`,
+  "rbl": (value2) => `border-bottom-left-radius:${px(value2)};`,
+  "ring": (value2) => {
     const [color, size = 1] = value2.split("/");
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
   "box-shadow": (value2) => `box-shadow:${makeValues(value2)}`,
-  outline: (value2) => `outline:1px solid ${makeColor(value2)};`,
+  "outline": (value2) => {
+    if (value2 === "-")
+      return `outline:none;`;
+    if (value2 === "none" || value2 === "unset" || value2 === "inherit" || value2 === "initial")
+      return `outline:${value2};`;
+    return `outline:1px solid ${makeColor(value2)};`;
+  },
   "guide": (value2 = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value2)};}`,
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
@@ -363,8 +882,8 @@ var RULES = {
   "bg-fixed": () => `background-attachment:fixed;`,
   "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value2) => `background-position:${value2};`,
-  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
-  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
+  "contain": () => `background-size:contain;background-position:center;object-fit:contain;`,
+  "cover": () => `background-size:cover;background-position:center;object-fit:cover;`,
   "block": () => "display:block;",
   "inline-block": () => "display:inline-block;",
   "inline": () => "display:inline;",
@@ -384,21 +903,21 @@ var RULES = {
   "inline-grid": () => "display:inline-grid;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
-  hbox: (value2) => `display:flex;flex-flow:row;${makeHBox(value2)}`,
-  vbox: (value2) => `display:flex;flex-flow:column;${makeVBox(value2)}`,
-  pack: () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox": (value2) => `display:flex;flex-flow:row;${makeHBox(value2)}`,
+  "vbox": (value2) => `display:flex;flex-flow:column;${makeVBox(value2)}`,
+  "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
-  gap: (value2) => `gap:${makeSide(value2)};`,
-  hgap: (value2) => `&>*+* {margin-left:${px(value2)};}`,
+  "gap": (value2) => `gap:${makeSide(value2)};`,
+  "hgap": (value2) => `&>*+* {margin-left:${px(value2)};}`,
   "hgap-reverse": (value2) => `&>*+* {margin-right:${px(value2)};}`,
-  vgap: (value2) => `&>*+* {margin-top:${px(value2)};}`,
+  "vgap": (value2) => `&>*+* {margin-top:${px(value2)};}`,
   "vgap-reverse": (value2) => `&>*+* {margin-bottom:${px(value2)};}`,
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
-  flex: (value2 = "1") => `flex:${makeValues(value2)};`,
-  space: (value2) => `[class*="hbox"]>& {width:${px(value2)};} [class*="vbox"]>& {height:${px(value2)};}`,
+  "flex": (value2 = "1") => `flex:${makeValues(value2)};`,
+  "space": (value2) => `[class*="hbox"]>& {width:${px(value2)};} [class*="vbox"]>& {height:${px(value2)};}`,
   "flex-grow": (value2) => `flex-grow:${cssvar(value2)};`,
   "flex-shrink": (value2) => `flex-shrink:${cssvar(value2)};`,
   "flex-basis": (value2) => `flex-basis:${px(value2)};`,
@@ -406,10 +925,10 @@ var RULES = {
   "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value2) => `order:${cssvar(value2)};`,
-  overflow: (value2) => `overflow:${value2};`,
+  "overflow": (value2) => `overflow:${value2};`,
   "overflow-x": (value2) => `overflow-x:${value2};`,
   "overflow-y": (value2) => `overflow-y:${value2};`,
-  clip: () => `overflow:hidden;`,
+  "clip": () => `overflow:hidden;`,
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
@@ -431,26 +950,26 @@ var RULES = {
   "line-clamp": (value2) => `display:-webkit-box;-webkit-line-clamp:${value2};-webkit-box-orient:vertical;overflow:hidden;`,
   "max-lines": (value2) => `display:-webkit-box;-webkit-line-clamp:${value2};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value2) => `text-indent:${px(value2)};`,
-  none: () => `display:none;`,
-  opacity: (value2) => `opacity:${cssvar(value2)};`,
-  invisible: () => `visibility:hidden;`,
-  visible: () => `visibility:visible;`,
+  "none": () => `display:none;`,
+  "opacity": (value2) => `opacity:${cssvar(value2)};`,
+  "invisible": () => `visibility:hidden;`,
+  "visible": () => `visibility:visible;`,
   "gone": () => `position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
-  layer: (value2 = "") => {
+  "layer": (value2 = "") => {
     const pos = { top: 0, right: 0, bottom: 0, left: 0 };
     value2.split("+").forEach((v) => {
       switch (v) {
         case "top": {
-          return delete pos["bottom"];
+          return delete pos.bottom;
         }
         case "right": {
-          return delete pos["left"];
+          return delete pos.left;
         }
         case "bottom": {
-          return delete pos["top"];
+          return delete pos.top;
         }
         case "left": {
-          return delete pos["right"];
+          return delete pos.right;
         }
       }
     });
@@ -465,43 +984,43 @@ var RULES = {
   "sticky-left": (value2 = "0") => `position:sticky;left:${px(value2)};`,
   "fixed": () => `position:fixed;`,
   "static": () => `position:static;`,
-  x: (value2) => `left:${px(value2)};`,
-  y: (value2) => `top:${px(value2)};`,
-  z: (value2) => `z-index:${cssvar(value2)};`,
-  top: (value2) => `top:${px(value2)};`,
-  left: (value2) => `left:${px(value2)};`,
-  right: (value2) => `right:${px(value2)};`,
-  bottom: (value2) => `bottom:${px(value2)};`,
+  "x": (value2) => `left:${px(value2)};`,
+  "y": (value2) => `top:${px(value2)};`,
+  "z": (value2) => `z-index:${cssvar(value2)};`,
+  "top": (value2) => `top:${px(value2)};`,
+  "left": (value2) => `left:${px(value2)};`,
+  "right": (value2) => `right:${px(value2)};`,
+  "bottom": (value2) => `bottom:${px(value2)};`,
   "user-select-none": () => "user-select:none;",
   "user-select-all": () => "user-select:all;",
   "user-select-auto": () => "user-select:auto;",
   "user-select-text": () => "user-select:text;",
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
-  pointer: () => `cursor:pointer;`,
-  grab: () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
-  grabbing: () => `cursor:grabbing;`,
-  cursor: (value2) => `cursor:${value2};`,
-  transition: (value2) => `transition:${makeTransition(value2)};`,
-  translate: (value2) => `transform:translate(${makeCommaValues(value2)});`,
-  translateX: (value2) => `transform:translateX(${cssvar(value2)});`,
-  translateY: (value2) => `transform:translateY(${cssvar(value2)});`,
-  translateZ: (value2) => `transform:translateZ(${cssvar(value2)});`,
-  translate3d: (value2) => `transform:translate3d(${makeCommaValues(value2)});`,
-  rotate: (value2) => `transform:rotate(${makeCommaValues(value2)});`,
-  rotateX: (value2) => `transform:rotateX(${cssvar(value2)});`,
-  rotateY: (value2) => `transform:rotateY(${cssvar(value2)});`,
-  rotateZ: (value2) => `transform:rotateZ(${cssvar(value2)});`,
-  rotate3d: (value2) => `transform:rotateZ(${makeCommaValues(value2)});`,
-  scale: (value2) => `transform:scale(${makeCommaValues(value2)});`,
-  scaleX: (value2) => `transform:scaleX(${makeCommaValues(value2)});`,
-  scaleY: (value2) => `transform:scaleY(${makeCommaValues(value2)});`,
-  scaleZ: (value2) => `transform:scaleZ(${makeCommaValues(value2)});`,
-  ratio: (value2) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value2)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
-  gpu: () => `transform:translateZ(0.1px);`,
+  "pointer": () => `cursor:pointer;`,
+  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "cursor": (value2) => `cursor:${value2};`,
+  "transition": (value2) => `transition:${makeTransition(value2)};`,
+  "translate": (value2) => `transform:translate(${makeCommaValues(value2)});`,
+  "translateX": (value2) => `transform:translateX(${cssvar(value2)});`,
+  "translateY": (value2) => `transform:translateY(${cssvar(value2)});`,
+  "translateZ": (value2) => `transform:translateZ(${cssvar(value2)});`,
+  "translate3d": (value2) => `transform:translate3d(${makeCommaValues(value2)});`,
+  "rotate": (value2) => `transform:rotate(${makeCommaValues(value2)});`,
+  "rotateX": (value2) => `transform:rotateX(${cssvar(value2)});`,
+  "rotateY": (value2) => `transform:rotateY(${cssvar(value2)});`,
+  "rotateZ": (value2) => `transform:rotateZ(${cssvar(value2)});`,
+  "rotate3d": (value2) => `transform:rotateZ(${makeCommaValues(value2)});`,
+  "scale": (value2) => `transform:scale(${makeCommaValues(value2)});`,
+  "scaleX": (value2) => `transform:scaleX(${makeCommaValues(value2)});`,
+  "scaleY": (value2) => `transform:scaleY(${makeCommaValues(value2)});`,
+  "scaleZ": (value2) => `transform:scaleZ(${makeCommaValues(value2)});`,
+  "ratio": (value2) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value2)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "gpu": () => `transform:translateZ(0.1px);`,
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value2) => `-webkit-app-region:${value2};`,
-  content: (value2) => `content:'${cssvar(value2)}'`,
+  "content": (value2) => `content:'${cssvar(value2)}'`,
   "clip-path": (value2) => `clip-path:${cssvar(value2)};-webkit-clip-path:${cssvar(value2)};`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "float": (value2) => `float:${cssvar(value2)}`,
@@ -524,7 +1043,7 @@ var RULES = {
   "backdrop-invert": (value2) => `backdrop-filter:invert(${cssvar(value2)})`,
   "backdrop-sepia": (value2) => `backdrop-filter:sepia(${cssvar(value2)})`,
   "backdrop-saturate": (value2) => `backdrop-filter:saturate(${cssvar(value2)})`,
-  triangle: (value2) => {
+  "triangle": (value2) => {
     const [direction, size, angle = 0] = value2.split("/");
     const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"];
     const bdr = bd.slice(bd.indexOf(direction));
@@ -535,7 +1054,7 @@ var RULES = {
     css += "border-" + bdr[2] + ":" + Math.round(+size * height) + "px solid black;";
     return css;
   },
-  elevation: (value2) => {
+  "elevation": (value2) => {
     const dp = +value2;
     if (!dp) {
       return `box-shadow: none`;
@@ -545,12 +1064,14 @@ var RULES = {
     const diry = dp < 10 ? dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2 : dp - 4;
     const dira = (24 - Math.round(dp / 10)) / 100;
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`;
-  }
+  },
+  "aspect-ratio": (value2) => `aspect-ratio:${cssvar(value2.replace(/:/g, "/"))}`
 };
 var PREFIX_PSEUDO_CLASS = {
   "hover:": { media: `(hover:hover)`, selector: `&:hover, &.\\:hover` },
   "active:": { selector: `html &:active, html &.\\:active` },
   "focus:": { selector: `html &:focus, html &.\\:focus` },
+  "focus-visible": { selector: `html &:focus-visible, html &.\\:focus-visible` },
   "focus-within:": { selector: `html &:focus-within, html &.\\:focus-within` },
   "checked:": { selector: `html &:checked, html &.\\:checked` },
   "read-only:": { selector: `html &:read-only, html &.\\:read-only` },
@@ -565,14 +1086,10 @@ var PREFIX_PSEUDO_CLASS = {
   "group-enabled:": { selector: `html .group:enabled &, html .group.\\:enabled &` },
   "group-disabled:": { selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &` },
   "placeholder:": { selector: `&::placeholder` },
-  "link:": { selector: `&:link` },
-  "visited:": { selector: `&:visited` },
-  "first:": { selector: `&:first-child` },
-  "first-child:": { selector: `&:first-child` },
-  "last:": { selector: `&:last-child` },
-  "last-child:": { selector: `&:last-child` },
   "odd:": { selector: `&:nth-child(2n+1)` },
-  "even:": { selector: `&:nth-child(2n)` }
+  "even:": { selector: `&:nth-child(2n)` },
+  "first:": { selector: `&:first-child` },
+  "last:": { selector: `&:last-child` }
 };
 var PREFIX_MEDIA_QUERY = {
   "sm:": { media: `(min-width:480px)`, selector: `html &` },
@@ -599,8 +1116,7 @@ var PREFIX_MEDIA_QUERY = {
   "print:": { media: `print`, selector: `html &` },
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
-  "dark:": { selector: `html.dark &` },
-  "device": {}
+  "dark:": { selector: `html.dark &` }
 };
 var SELECTOR_PREFIX = {
   ".": (selector) => `&${selector}, ${selector} &`,
@@ -623,18 +1139,25 @@ var makeSelector = (prefix) => {
 var property = /([^:(]+)/.source;
 var value = /(?:\((.*?)\))?/.source;
 var delimiter = /(:|$)/.source;
+var re_value = /(\((.*?)\))[!]*/g;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
-var re_syntax_validator = new RegExp(`^(${re_syntax.source})+$`);
+var makeDefaultPseudoClass = (input) => ({ selector: `&:${input.replace(/>>/g, " ")}` });
 var generateAtomicCss = (rules, prefixRules) => {
-  const makeRule = (r) => rules[r] || (() => "");
+  const makeRule = (r) => {
+    var _a;
+    return (_a = rules[r]) != null ? _a : (value2) => ALL_PROPERTIES[r] && value2 ? `${r}:${makeValues(value2)}` : "";
+  };
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value2], index) => [key, index]));
   return (atom) => {
+    var _a, _b;
     try {
+      const prop = atom.replace(re_value, "").split(":").pop();
+      if (!rules[prop] && !ALL_PROPERTIES[prop]) {
+        return;
+      }
       const isImportant = atom.endsWith("!");
       const important = isImportant ? "!important;" : ";";
       atom = isImportant ? atom.slice(0, -1) : atom;
-      if (!re_syntax_validator.test(atom))
-        return;
       let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`];
       let $mediaQuery = [];
       let $postCSS = [];
@@ -647,12 +1170,10 @@ var generateAtomicCss = (rules, prefixRules) => {
           break;
         const [input, name, value2, type] = chunk;
         if (type === ":") {
-          const prefixRule = makeSelector(input) || prefixRules[name + ":"];
-          if (!prefixRule)
-            return;
+          const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + ":"]) != null ? _b : makeDefaultPseudoClass(input.slice(0, -1));
           $selector = $selector.map((s) => {
-            var _a;
-            return (((_a = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a.split(",")) || []).map((selector) => {
+            var _a2, _b2;
+            return ((_b2 = (_a2 = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a2.split(",")) != null ? _b2 : []).map((selector) => {
               return selector.replace(/&/g, s).trim();
             });
           }).flat();
@@ -663,8 +1184,6 @@ var generateAtomicCss = (rules, prefixRules) => {
             $postCSS = [...$postCSS, prefixRule.postCSS];
           }
         } else {
-          if (!rules[name])
-            return;
           $declaration = makeRule(name)(value2).replace(/;/g, important).trim();
           if (!$declaration)
             return;
@@ -678,7 +1197,6 @@ var generateAtomicCss = (rules, prefixRules) => {
       const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}";
       return [media ? media + "{" + rule + "}" : rule, $priority];
     } catch (e) {
-      return;
     }
   };
 };
@@ -991,14 +1509,20 @@ var generateText = async (node) => {
 };
 var isSVG = (node) => {
   var _a;
-  return (_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION" || node2.type === "TEXT");
+  return (_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION");
 };
 var generateCode = async (node, depth = 0) => {
   if (node.visible === false)
     return "";
   let code = "";
+  if (node.exportSettings.length > 0) {
+    console.warn("111", node.exportSettings);
+  }
+  if (isSVG(node)) {
+    console.warn("222", node);
+  }
   if (node.exportSettings.length > 0 || node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0 || isSVG(node)) {
-    console.warn("node", node);
+    console.warn("node!!!", node);
     try {
       const svgCodeArrayBuffer = await node.exportAsync({ format: "SVG", svgIdAttribute: false });
       const svgCode = ab2str(svgCodeArrayBuffer);
