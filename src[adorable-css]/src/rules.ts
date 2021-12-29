@@ -297,7 +297,7 @@ export const RULES:Rules = {
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "invisible": () => `visibility:hidden;`,
   "visible": () => `visibility:visible;`,
-  "gone": () => `position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
 
   // Position
   "layer": (value = "") => {
@@ -337,10 +337,11 @@ export const RULES:Rules = {
   "bottom": (value:string) => `bottom:${px(value)};`,
 
   // Interactions
-  "user-select-none": () => "user-select:none;",
-  "user-select-all": () => "user-select:all;",
-  "user-select-auto": () => "user-select:auto;",
-  "user-select-text": () => "user-select:text;",
+  "user-select-none": () => "user-select:none;-webkit-user-select:none;",
+  "user-select-all": () => "user-select:all;-webkit-user-select:all;",
+  "user-select-auto": () => "user-select:auto;-webkit-user-select:auto;",
+  "user-select-text": () => "user-select:text;-webkit-user-select:text;",
+  "user-select": (value:string) => `user-select:${cssvar(value)};-webkit-user-select:${cssvar(value)};`,
 
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
