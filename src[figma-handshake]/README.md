@@ -1,3 +1,21 @@
+# Release Note
+
+### 1.0.9
+- Constraints의 기능 중 top, left, bottom, right 기능이 추가 되었습니다. (center, scale, top and bottom은 개발 중입니다)
+- class의 출력 순서를 조절하였으며 children의 개수가 0~1개일 경우에는 불필요한 gap이 출력되지 않도록 수정하였습니다.
+
+---
+
+## 디자이너분들을 위한 작업 가이드
+
+> 개발과 디자인의 방식의 차이로 인해서 레이어를 겹쳐서 그리는 방식이 아니라 구조적으로 만들어야만 개발에서 바로 사용할 수 있습니다. figma는 디자인 툴이기 때문에 이러한 방식을 강제하지 못합니다. 그래서 플러그인을 제대로 쓰고 개발하기 좋은 형태를 만들기 위한 가이드를 기록합니다. (추후 멋짓 문서로 보강해보곘습니다!)   
+
+1. 모든 요소들은 Frame과 Text을 이용해서 구조적으로 작성을 합니다. Rectangle과 Circle을 이용해서 겹쳐서 그리지 않습니다.
+2. Circle의 경우 Frame의 border-radius를 이용해서 그립니다.
+3. 레이아웃은 가급적 Autolayout을 이용하여 작업합니다.
+4. 겹치는 Overlay를 표현해야하는 경우 Frame을 겹쳐둔뒤 선택해서 Frame Selection(option + cmd + G) 을 사용해줍니다. (Group Selection를 사용하지 않습니다. Group Selection를 사용할 경우 Constraints 기능을 쓸 수 가 없습니다.)
+
+
 # Handoff figma plug-in for Designer & Markup
 
 ![](https://images.velog.io/images/teo/post/579cdb7b-8819-4902-8f97-06c3400b2021/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202021-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.17.17.mov.gif)
@@ -77,3 +95,9 @@ Design -> Code로 만드는 과정을 자동으로 할 경우 개발친화적인
 
 
 좋은 아이디어나 개선 방향성이 있다면 알려주세요. 감사합니다. :)
+
+
+
+
+
+

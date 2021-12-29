@@ -1,5 +1,5 @@
-import {parseAtoms} from "../../src[adorable-css]/src/parser"
 import {generateCss} from "../../src[adorable-css]/src/atomizer"
+import {parseAtoms} from "../../src[adorable-css]/src/parser"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
 type AddClass = (prop, value?) => number
@@ -15,9 +15,9 @@ figma.showUI(__html__, {
   height: 300,
 })
 
-const createClassBuilder = (cls) => {
+const createClassBuilder = (cls:string[]) => {
   const addClass = (prop, value?) => cls.push(`${prop}${value ? "(" + value + ")" : ""}`)
-  return {addClass}
+  return {addClass, cls}
 }
 
 const generateChild = async (depth, children, callback) => {
@@ -97,6 +97,23 @@ const addClassBorder = (node, addClass:AddClass) => {
   catch (e) {}
 }
 
+const addClassBorderRadius = (node, addClass:AddClass) => {
+  try {
+    if (node.type === "ELLIPSE") addClass("r", "100%")
+    const {topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius} = node
+    if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0) {
+      const size = Math.max(node.width, node.height)
+      if (topLeftRadius > size && topRightRadius > size && bottomRightRadius > size && bottomLeftRadius > size) {
+        addClass(`r(100%)`)
+      }
+      else {
+        addClass(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`)
+      }
+    }
+  }
+  catch (e) {}
+}
+
 const addEffectStyle = (node, addClass:AddClass) => {
   if (node.effectStyleId) {
     const style = figma.getStyleById(node.effectStyleId)
@@ -106,12 +123,109 @@ const addEffectStyle = (node, addClass:AddClass) => {
 
 const everyChildrenHasStretchVbox = (node) => node.children?.every(c => c.layoutAlign === "STRETCH" || c.width === node.width)
 
-const generateFrame = async (node, depth) => {
-  const cls = []
-  const {addClass} = createClassBuilder(cls)
+const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
+  const {addClass, cls} = createClassBuilder([])
 
-  const hasChildren = node.children?.filter(child => child.visible).length > 1
+  // Constraints
+  if (node.parent?.type === "FRAME" && node.parent?.layoutMode === "NONE") {
+    addClass("absolute")
 
+    //"MIN" | "CENTER" | "MAX" | "STRETCH" | "SCALE"
+    switch (node.constraints.vertical) {
+      case "MIN":
+        addClass(`top(${node.y})`)
+        break
+      case "MAX":
+        addClass(`bottom(${node.parent.height - node.y - node.height})`)
+        break
+    }
+
+    switch (node.constraints.horizontal) {
+      case "MIN":
+        addClass(`left(${node.x})`)
+        break
+      case "MAX":
+        addClass(`right(${node.parent.width - node.x - node.width})`)
+        break
+    }
+  }
+
+  // Layout
+  const numChildren = node.children?.filter(child => child.visible).length
+  const hasChildren = numChildren > 0
+  const hasMoreChildren = numChildren > 1
+  const {layoutGrow, layoutAlign} = node
+  const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
+
+  console.log("@@@@@@@@@@!!! * Layout Mode", node, node.children)
+
+  if (hasChildren) {
+    if (layoutMode === "HORIZONTAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1) addClass("hbox")
+        addClass("pack")
+      }
+      else {
+        const value = []
+
+        // V - Hug contents
+        if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
+          if (primaryAxisAlignItems === "MAX") value.push("right")
+          else if (primaryAxisAlignItems === "CENTER") value.push("right")
+        }
+
+        // V - Fixed || Fill
+        else {
+          if (counterAxisAlignItems === "MIN") value.push("top")
+          else if (counterAxisAlignItems === "MAX") value.push("bottom")
+          if (primaryAxisAlignItems === "MAX") value.push("right")
+          else if (primaryAxisAlignItems === "CENTER") value.push("right")
+        }
+        addClass("hbox", value.join("+"))
+      }
+    }
+
+    else if (layoutMode === "VERTICAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1) addClass("vbox")
+        addClass("pack")
+      }
+      else {
+        // V - Hug contents
+        const value = []
+
+        if (everyChildrenHasStretchVbox(node)) {}
+        // else if (counterAxisAlignItems === "MIN") value.push("left")
+        else if (counterAxisAlignItems === "CENTER") value.push("center")
+        else if (counterAxisAlignItems === "MAX") value.push("right")
+
+        if (primaryAxisAlignItems === "MAX") value.push("bottom")
+        addClass("vbox", value.join("+"))
+        if (primaryAxisAlignItems === "CENTER") addClass("pack")
+      }
+    }
+    else {
+      addClass("relative")
+    }
+
+    // gap
+    if (hasMoreChildren) {
+      if (layoutMode !== "NONE") {
+        if (primaryAxisAlignItems === "SPACE_BETWEEN") addClass("space-between")
+
+        const {itemSpacing} = node
+        if (hasChildren && itemSpacing > 0 && itemSpacing < width) {
+          layoutMode === "HORIZONTAL" ? addClass("hgap", itemSpacing) : addClass("vgap", itemSpacing)
+        }
+      }
+    }
+
+    // padding
+    if (layoutMode !== "NONE") {
+      const {paddingTop, paddingRight, paddingBottom, paddingLeft} = node
+      if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0) addClass("p", makeFourSideValues(paddingTop, paddingRight, paddingBottom, paddingLeft))
+    }
+  }
 
   // width
   addClassWidth(node, addClass)
@@ -119,84 +233,17 @@ const generateFrame = async (node, depth) => {
   // height
   addClassHeight(node, addClass)
 
-
-  const {layoutGrow, layoutAlign} = node
-  const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
-
-  if (layoutMode === "HORIZONTAL") {
-    if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
-      addClass("hbox")
-      addClass("pack")
-    }
-    else {
-      const value = []
-
-      // V - Hug contents
-      if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
-        if (primaryAxisAlignItems === "MAX") value.push("right")
-        else if (primaryAxisAlignItems === "CENTER") value.push("right")
-      }
-
-      // V - Fixed || Fill
-      else {
-        if (counterAxisAlignItems === "MIN") value.push("top")
-        else if (counterAxisAlignItems === "MAX") value.push("bottom")
-        if (primaryAxisAlignItems === "MAX") value.push("right")
-        else if (primaryAxisAlignItems === "CENTER") value.push("right")
-      }
-      addClass("hbox", value.join("+"))
+  // bg
+  try {
+    const bg = node.fills.filter(fill => fill.visible)[0]
+    if (bg?.type === "SOLID") {
+      addClass("bg", makeColor(bg.color, bg.opacity))
     }
   }
-
-  else if (layoutMode === "VERTICAL") {
-    if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
-      addClass("vbox")
-      addClass("pack")
-    }
-    else {
-
-      // V - Hug contents
-      const value = []
-
-      if (everyChildrenHasStretchVbox(node)) {}
-      // else if (counterAxisAlignItems === "MIN") value.push("left")
-      else if (counterAxisAlignItems === "CENTER") value.push("center")
-      else if (counterAxisAlignItems === "MAX") value.push("right")
-
-      if (primaryAxisAlignItems === "MAX") value.push("bottom")
-      addClass("vbox", value.join("+"))
-      if (primaryAxisAlignItems === "CENTER") addClass("pack")
-    }
-  }
-
-
-  // gap
-  if (layoutMode !== "NONE") {
-    if (primaryAxisAlignItems === "SPACE_BETWEEN") addClass("space-between")
-
-    const {itemSpacing} = node
-    if (hasChildren && itemSpacing > 0 && itemSpacing < width) {
-      layoutMode === "HORIZONTAL" ? addClass("hgap", itemSpacing) : addClass("vgap", itemSpacing)
-    }
-  }
-
-  // padding
-  if (layoutMode !== "NONE") {
-    const {paddingTop, paddingRight, paddingBottom, paddingLeft} = node
-    if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0) addClass("p", makeFourSideValues(paddingTop, paddingRight, paddingBottom, paddingLeft))
-  }
-
+  catch (e) {}
 
   // Radius
-  const {topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius} = node
-  if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0) cls.push(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`)
-
-
-  // bg
-  const bg = node.fills.filter(fill => fill.visible)[0]
-  if (bg?.type === "SOLID") {
-    addClass("bg", makeColor(bg.color, bg.opacity))
-  }
+  addClassBorderRadius(node, addClass)
 
   // border
   addClassBorder(node, addClass)
@@ -229,11 +276,7 @@ const generateShape = async (node) => {
   addClassHeight(node, addClass)
 
   // Radius
-  if (node.type === "ELLIPSE") addClass("r", "100%")
-  else {
-    const {topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius} = node
-    if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0) cls.push(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`)
-  }
+  addClassBorderRadius(node, addClass)
 
   // bg
   const bg = node.fills.filter(fill => fill.visible)[0]
@@ -337,7 +380,7 @@ const generateText = async (node) => {
 
 
 const isSVG = (node) => {
-  return node.children?.every(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION")
+  return node.type === "GROUP" && node.children?.every(node => node.type === "VECTOR" || node.type === "BOOLEAN_OPERATION")
 }
 
 const generateCode = async (node:SceneNode, depth:number = 0) => {
@@ -356,8 +399,8 @@ const generateCode = async (node:SceneNode, depth:number = 0) => {
 
   else if (node.type === "GROUP") code = await generateGroup(node, depth)
   else if (node.type === "INSTANCE") code = await generateInstance(node, depth)
-  else if (node.type === "COMPONENT" || node.type === "FRAME" || node.type === "LINE") code = await generateFrame(node, depth)
-  else if (node.type === "RECTANGLE" || node.type === "ELLIPSE") code = await generateShape(node)
+  else if (node.type === "COMPONENT" || node.type === "FRAME") code = await generateFrame(node, depth)
+  else if (node.type === "RECTANGLE" || node.type === "ELLIPSE" || node.type === "LINE") code = await generateShape(node)
   else if (node.type === "TEXT") code = await generateText(node)
   else if (node.type === "COMPONENT_SET") code = await generateComponentSet(node, depth)
 
@@ -369,7 +412,7 @@ const generate = async () => {
 
   if (!selection.length) return
 
-  const node:SceneNode = selection[0]
+  const node = selection[0]
   console.log(node.type)
   console.log(node)
 

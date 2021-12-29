@@ -15,20 +15,6 @@ var __spreadValues = (a, b) => {
   return a;
 };
 
-// ../src[adorable-css]/src/parser.ts
-var REGEXP_STRING1 = /(?:"(?:[^"]|\\"])*")/gm;
-var REGEXP_STRING2 = /(?:'(?:[^']|\\'])*')/gm;
-var REGEXP_STRING3 = /(?:`(?:[^`]|\\`])*`)/gm;
-var trim = (a) => a.trim();
-var findAll = (str, regex, callback) => String(str).replace(regex, (...args) => (callback(...args), args[0]));
-var parseAtoms = (code) => {
-  const atoms = Object.create(null);
-  findAll(code, REGEXP_STRING1, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
-  findAll(code, REGEXP_STRING2, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
-  findAll(code, REGEXP_STRING3, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
-  return Object.values(atoms);
-};
-
 // ../src[adorable-css]/src/cssEscape.ts
 var cssEscape = (string) => {
   const length = string.length;
@@ -1208,6 +1194,20 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
 };
 var generateCss = createGenerateCss();
 
+// ../src[adorable-css]/src/parser.ts
+var REGEXP_STRING1 = /(?:"(?:[^"]|\\"])*")/gm;
+var REGEXP_STRING2 = /(?:'(?:[^']|\\'])*')/gm;
+var REGEXP_STRING3 = /(?:`(?:[^`]|\\`])*`)/gm;
+var trim = (a) => a.trim();
+var findAll = (str, regex, callback) => String(str).replace(regex, (...args) => (callback(...args), args[0]));
+var parseAtoms = (code) => {
+  const atoms = Object.create(null);
+  findAll(code, REGEXP_STRING1, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
+  findAll(code, REGEXP_STRING2, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
+  findAll(code, REGEXP_STRING3, (a) => a.slice(1, -1).split(/\s+/).map(trim).filter(Boolean).forEach((atom) => atoms[atom] = atom));
+  return Object.values(atoms);
+};
+
 // src/util.ts
 var pad = (s) => s.length === 1 ? "0" + s : s;
 var hex = (num) => pad(Math.round(num * 255).toString(16));
@@ -1253,7 +1253,7 @@ figma.showUI(__html__, {
 });
 var createClassBuilder = (cls) => {
   const addClass = (prop, value2) => cls.push(`${prop}${value2 ? "(" + value2 + ")" : ""}`);
-  return { addClass };
+  return { addClass, cls };
 };
 var generateChild = async (depth, children, callback) => {
   const contents = await Promise.all((children || []).map((params) => generateCode(params, depth + 1)));
@@ -1329,6 +1329,22 @@ var addClassBorder = (node, addClass) => {
   } catch (e) {
   }
 };
+var addClassBorderRadius = (node, addClass) => {
+  try {
+    if (node.type === "ELLIPSE")
+      addClass("r", "100%");
+    const { topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius } = node;
+    if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0) {
+      const size = Math.max(node.width, node.height);
+      if (topLeftRadius > size && topRightRadius > size && bottomRightRadius > size && bottomLeftRadius > size) {
+        addClass(`r(100%)`);
+      } else {
+        addClass(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`);
+      }
+    }
+  } catch (e) {
+  }
+};
 var addEffectStyle = (node, addClass) => {
   if (node.effectStyleId) {
     const style = figma.getStyleById(node.effectStyleId);
@@ -1340,75 +1356,105 @@ var everyChildrenHasStretchVbox = (node) => {
   return (_a = node.children) == null ? void 0 : _a.every((c) => c.layoutAlign === "STRETCH" || c.width === node.width);
 };
 var generateFrame = async (node, depth) => {
-  var _a;
-  const cls = [];
-  const { addClass } = createClassBuilder(cls);
-  const hasChildren = ((_a = node.children) == null ? void 0 : _a.filter((child) => child.visible).length) > 1;
-  addClassWidth(node, addClass);
-  addClassHeight(node, addClass);
+  var _a, _b, _c;
+  const { addClass, cls } = createClassBuilder([]);
+  if (((_a = node.parent) == null ? void 0 : _a.type) === "FRAME" && ((_b = node.parent) == null ? void 0 : _b.layoutMode) === "NONE") {
+    addClass("absolute");
+    switch (node.constraints.vertical) {
+      case "MIN":
+        addClass(`top(${node.y})`);
+        break;
+      case "MAX":
+        addClass(`bottom(${node.parent.height - node.y - node.height})`);
+        break;
+    }
+    switch (node.constraints.horizontal) {
+      case "MIN":
+        addClass(`left(${node.x})`);
+        break;
+      case "MAX":
+        addClass(`right(${node.parent.width - node.x - node.width})`);
+        break;
+    }
+  }
+  const numChildren = (_c = node.children) == null ? void 0 : _c.filter((child) => child.visible).length;
+  const hasChildren = numChildren > 0;
+  const hasMoreChildren = numChildren > 1;
   const { layoutGrow, layoutAlign } = node;
   const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
-  if (layoutMode === "HORIZONTAL") {
-    if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
-      addClass("hbox");
-      addClass("pack");
-    } else {
-      const value2 = [];
-      if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
-        if (primaryAxisAlignItems === "MAX")
-          value2.push("right");
-        else if (primaryAxisAlignItems === "CENTER")
-          value2.push("right");
-      } else {
-        if (counterAxisAlignItems === "MIN")
-          value2.push("top");
-        else if (counterAxisAlignItems === "MAX")
-          value2.push("bottom");
-        if (primaryAxisAlignItems === "MAX")
-          value2.push("right");
-        else if (primaryAxisAlignItems === "CENTER")
-          value2.push("right");
-      }
-      addClass("hbox", value2.join("+"));
-    }
-  } else if (layoutMode === "VERTICAL") {
-    if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
-      addClass("vbox");
-      addClass("pack");
-    } else {
-      const value2 = [];
-      if (everyChildrenHasStretchVbox(node)) {
-      } else if (counterAxisAlignItems === "CENTER")
-        value2.push("center");
-      else if (counterAxisAlignItems === "MAX")
-        value2.push("right");
-      if (primaryAxisAlignItems === "MAX")
-        value2.push("bottom");
-      addClass("vbox", value2.join("+"));
-      if (primaryAxisAlignItems === "CENTER")
+  console.log("@@@@@@@@@@!!! * Layout Mode", node, node.children);
+  if (hasChildren) {
+    if (layoutMode === "HORIZONTAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1)
+          addClass("hbox");
         addClass("pack");
+      } else {
+        const value2 = [];
+        if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
+          if (primaryAxisAlignItems === "MAX")
+            value2.push("right");
+          else if (primaryAxisAlignItems === "CENTER")
+            value2.push("right");
+        } else {
+          if (counterAxisAlignItems === "MIN")
+            value2.push("top");
+          else if (counterAxisAlignItems === "MAX")
+            value2.push("bottom");
+          if (primaryAxisAlignItems === "MAX")
+            value2.push("right");
+          else if (primaryAxisAlignItems === "CENTER")
+            value2.push("right");
+        }
+        addClass("hbox", value2.join("+"));
+      }
+    } else if (layoutMode === "VERTICAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1)
+          addClass("vbox");
+        addClass("pack");
+      } else {
+        const value2 = [];
+        if (everyChildrenHasStretchVbox(node)) {
+        } else if (counterAxisAlignItems === "CENTER")
+          value2.push("center");
+        else if (counterAxisAlignItems === "MAX")
+          value2.push("right");
+        if (primaryAxisAlignItems === "MAX")
+          value2.push("bottom");
+        addClass("vbox", value2.join("+"));
+        if (primaryAxisAlignItems === "CENTER")
+          addClass("pack");
+      }
+    } else {
+      addClass("relative");
+    }
+    if (hasMoreChildren) {
+      if (layoutMode !== "NONE") {
+        if (primaryAxisAlignItems === "SPACE_BETWEEN")
+          addClass("space-between");
+        const { itemSpacing } = node;
+        if (hasChildren && itemSpacing > 0 && itemSpacing < width) {
+          layoutMode === "HORIZONTAL" ? addClass("hgap", itemSpacing) : addClass("vgap", itemSpacing);
+        }
+      }
+    }
+    if (layoutMode !== "NONE") {
+      const { paddingTop, paddingRight, paddingBottom, paddingLeft } = node;
+      if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0)
+        addClass("p", makeFourSideValues(paddingTop, paddingRight, paddingBottom, paddingLeft));
     }
   }
-  if (layoutMode !== "NONE") {
-    if (primaryAxisAlignItems === "SPACE_BETWEEN")
-      addClass("space-between");
-    const { itemSpacing } = node;
-    if (hasChildren && itemSpacing > 0 && itemSpacing < width) {
-      layoutMode === "HORIZONTAL" ? addClass("hgap", itemSpacing) : addClass("vgap", itemSpacing);
+  addClassWidth(node, addClass);
+  addClassHeight(node, addClass);
+  try {
+    const bg = node.fills.filter((fill) => fill.visible)[0];
+    if ((bg == null ? void 0 : bg.type) === "SOLID") {
+      addClass("bg", makeColor2(bg.color, bg.opacity));
     }
+  } catch (e) {
   }
-  if (layoutMode !== "NONE") {
-    const { paddingTop, paddingRight, paddingBottom, paddingLeft } = node;
-    if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0)
-      addClass("p", makeFourSideValues(paddingTop, paddingRight, paddingBottom, paddingLeft));
-  }
-  const { topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius } = node;
-  if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0)
-    cls.push(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`);
-  const bg = node.fills.filter((fill) => fill.visible)[0];
-  if ((bg == null ? void 0 : bg.type) === "SOLID") {
-    addClass("bg", makeColor2(bg.color, bg.opacity));
-  }
+  addClassBorderRadius(node, addClass);
   addClassBorder(node, addClass);
   addEffectStyle(node, addClass);
   if (node.opacity !== 1)
@@ -1426,13 +1472,7 @@ var generateShape = async (node) => {
   const hasChildren = ((_a = node.children) == null ? void 0 : _a.filter((child) => child.visible).length) > 1;
   addClassWidth(node, addClass);
   addClassHeight(node, addClass);
-  if (node.type === "ELLIPSE")
-    addClass("r", "100%");
-  else {
-    const { topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius } = node;
-    if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0)
-      cls.push(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`);
-  }
+  addClassBorderRadius(node, addClass);
   const bg = node.fills.filter((fill) => fill.visible)[0];
   if ((bg == null ? void 0 : bg.type) === "SOLID") {
     addClass("bg", makeColor2(bg.color, bg.opacity));
@@ -1509,20 +1549,13 @@ var generateText = async (node) => {
 };
 var isSVG = (node) => {
   var _a;
-  return (_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION");
+  return node.type === "GROUP" && ((_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION"));
 };
 var generateCode = async (node, depth = 0) => {
   if (node.visible === false)
     return "";
   let code = "";
-  if (node.exportSettings.length > 0) {
-    console.warn("111", node.exportSettings);
-  }
-  if (isSVG(node)) {
-    console.warn("222", node);
-  }
   if (node.exportSettings.length > 0 || node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0 || isSVG(node)) {
-    console.warn("node!!!", node);
     try {
       const svgCodeArrayBuffer = await node.exportAsync({ format: "SVG", svgIdAttribute: false });
       const svgCode = ab2str(svgCodeArrayBuffer);
@@ -1533,9 +1566,9 @@ var generateCode = async (node, depth = 0) => {
     code = await generateGroup(node, depth);
   else if (node.type === "INSTANCE")
     code = await generateInstance(node, depth);
-  else if (node.type === "COMPONENT" || node.type === "FRAME" || node.type === "LINE")
+  else if (node.type === "COMPONENT" || node.type === "FRAME")
     code = await generateFrame(node, depth);
-  else if (node.type === "RECTANGLE" || node.type === "ELLIPSE")
+  else if (node.type === "RECTANGLE" || node.type === "ELLIPSE" || node.type === "LINE")
     code = await generateShape(node);
   else if (node.type === "TEXT")
     code = await generateText(node);
