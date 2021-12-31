@@ -25,12 +25,12 @@ const makeSelector = (prefix:string):PrefixProps|undefined => {
 // Parse & Generate
 const property = /([^:(]+)/.source
 const value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source
-const delimiter = /(:|$)/.source
+const delimiter = /(:{1,2}|$)/.source
 
 const re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
 
-const makeDefaultPseudoClass = (input:string):PrefixProps => ({selector: `&:${input.replace(/>>/g, " ")}`})
+const makeDefaultPseudoClass = (input:string, type:":"|"::"):PrefixProps => ({selector: `&${type}${input.slice(0, -type.length).replace(/>>/g, " ")}`})
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   const makeRule = (r:string) => rules[r] ?? ((value:string) => (ALL_PROPERTIES[r] && value) ? `${r}:${makeValues(value)}` : "")
@@ -67,8 +67,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         const value = _value && _value.slice(1, -1)
 
         // Make Prefix
-        if (type === ":") {
-          const prefixRule = makeSelector(input) ?? prefixRules[name + ":"] ?? makeDefaultPseudoClass(input.slice(0, -1))
+        if (type === ":" || type === "::") {
+          const prefixRule = makeSelector(input) ?? prefixRules[name + type] ?? makeDefaultPseudoClass(input, type)
 
           // selector
           $selector = $selector.map(s => (prefixRule?.selector?.split(",") ?? []).map((selector:string) => {

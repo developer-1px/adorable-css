@@ -29,7 +29,7 @@ Great for Auto Design HandOff!
 
 -->
 <div class="layer pack">
-  <div class="vbox bg(#fff) w(300) r(12) p(32) elevation(6)">
+  <div class="vbox bg(#fff) w(400) r(12) p(32) elevation(6)">
 
     <div class="vbox gap(10)">
       <div class="font(30/-/-1%) bold">🐳 Hello Adorable!</div>

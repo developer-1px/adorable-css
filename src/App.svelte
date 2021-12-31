@@ -1,6 +1,7 @@
 <script lang="ts">
 import {generateCss} from "../src[adorable-css]/src/atomizer"
 import {parseAtoms} from "../src[adorable-css]/src/parser"
+import {reset} from "../src[adorable-css]/src/rules"
 import Design from "./Design.svelte"
 import MonacoEditor from "./MonacoEditor.svelte"
 import {TURORIAL_0_Hello} from "./tutorials/0. Hello Adorable"
@@ -12,6 +13,7 @@ import {TURORIAL_5_LAYOUT_FLEXBOX} from "./tutorials/5. Layout - Flexbox"
 import {TURORIAL_6_LAYOUT_POSITION} from "./tutorials/6. Layout - Position"
 import {TURORIAL_7_PREFIX} from "./tutorials/7. Prefix"
 import {TURORIAL_8_PREFIX2} from "./tutorials/8. Prefix2"
+import {TURORIAL_9_PSEUDO_ELEMENT} from "./tutorials/9. Pseudo Element"
 import UIVersion from "./UIVersion.svelte"
 
 let element:HTMLElement
@@ -25,14 +27,15 @@ const tutorials = [
   ["4. Overflow", TURORIAL_4_OVERFLOW],
   ["5. Layout - Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
   ["6. Layout - Position", TURORIAL_6_LAYOUT_POSITION],
-  ["7. Pseudo - :hover, :group-hover", TURORIAL_7_PREFIX],
-  ["8. Pseudo2 - :nth-child", TURORIAL_8_PREFIX2],
+  ["7. Pseudo Class - :hover, :group-hover", TURORIAL_7_PREFIX],
+  ["8. Pseudo Class 2 - :nth-child(3n+1)", TURORIAL_8_PREFIX2],
+  ["✨ 9. Pseudo Element - ::first-line, -webkit-scrollbar", TURORIAL_9_PSEUDO_ELEMENT],
   ["계속 작업 중입니다...", ""]
 ]
 
 let currentTutorialIndex = 0
 
-$: css = generateCss(parseAtoms(value)).join("\n")
+$: css = reset + generateCss(parseAtoms(value)).join("\n")
 $: element && (element.contentWindow.document.body.innerHTML = `<style`+ `>${css}</` + `style>\n` + value)
 
 const hbox = () => {}

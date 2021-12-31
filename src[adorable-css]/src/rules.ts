@@ -6,13 +6,15 @@ export const ALL_PROPERTIES = {
 }
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*, :after, :before {box-sizing:border-box;flex-shrink:0;}
-:root {-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;-moz-tab-size:4;tab-size:4}
-html, body {height:100%;}
-img, picture, video, canvas, svg {display: block;max-width:100%;}
-button {background:none;border:0;cursor:pointer;}
-a {text-decoration:none}
-table {border-collapse:collapse;border-spacing:0}`
+*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
+html,body{height:100%;}
+img,picture,video,canvas,svg{display:block;max-width:100%;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,menu,dir{list-style:none;}
+`
 
 export const RULES:Rules = {
 
@@ -384,7 +386,7 @@ export const RULES:Rules = {
   // etc
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  "content": (value:string) => `content:'${cssvar(value)}'`,
+  "content": (value:string) => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-layout-fixed": () => `table-layout:fixed;`,
@@ -476,6 +478,11 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
 
   "first:": {selector: `&:first-child`},
   "last:": {selector: `&:last-child`},
+
+  "after:": {selector: `&::after`},
+  "before:": {selector: `&::before`},
+
+  "selection::": {selector: `&::selection, & *::selection`},
 }
 
 

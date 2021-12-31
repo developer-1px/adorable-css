@@ -8,6 +8,7 @@ const micromatch = require("micromatch")
 
 interface Config {
   include:string[]
+  reset:string
   rules:Rules
   prefixRules:PrefixRules
 }
@@ -19,6 +20,7 @@ const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG:Config = {
   include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
+  reset,
   rules: {},
   prefixRules: {}
 }
@@ -46,7 +48,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat()
     const styles = generateCss([...new Set(allAtoms)])
-    return [reset, ...styles].join("\n")
+    return [config.reset, ...styles].join("\n")
   }
 
   const invalidate = () => {
