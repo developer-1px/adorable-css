@@ -3,6 +3,7 @@
 > Rapid On-Demand Atomic CSS framework
 
 ## Release Notes
+- 0.5.6 - (beta) bg(linear-gradient) 기능 추가
 - 0.5.5 - user-select 사파리에서 동작하지 않는 버그 수정, -webkit- prefix 추가
 - 0.5.3 - CSS Reset 보강 https://github.com/developer-1px/adorable-css/blob/master/src%5Badorable-css%5D/src/rules.ts
 - 0.5.2 - PostCSS를 사용하는 build 환경에서 에러발생하는 오류 수정함. 

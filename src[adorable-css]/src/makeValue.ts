@@ -148,6 +148,7 @@ export const makeVBox = (value = "") => {
       case "center": {return "align-items:center;"}
       case "right": {return "align-items:flex-end;"}
       case "top": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "middle": {return "justify-content:center;"}
       case "bottom": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "reverse": {return "flex-direction:column-reverse;"}
     }
@@ -165,3 +166,4 @@ export const makeTransition = (value:string) => {
   if (!value.includes("=")) return `all ${value}`
   return value.split("/").map(item => item.replace("=", " ")).join(",")
 }
+

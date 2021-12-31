@@ -2952,6 +2952,9 @@ var makeVBox = (value2 = "") => {
       case "top": {
         return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
+      case "middle": {
+        return "justify-content:center;";
+      }
       case "bottom": {
         return !values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
@@ -3498,7 +3501,11 @@ a {text-decoration:none}
 table {border-collapse:collapse;border-spacing:0}`;
 var RULES = {
   "c": (value2) => `color:${makeColor(value2)};`,
-  "bg": (value2) => `background-color:${makeColor(value2)};`,
+  "bg": (value2) => {
+    if (value2.startsWith("linear-gradient"))
+      return `background:${value2.replace(/\//g, " ")};`;
+    return `background-color:${makeColor(value2)};`;
+  },
   "font": (value2) => makeFont(value2),
   "font-size": (value2) => `font-size:${px(value2)};`,
   "line-height": (value2) => `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`,
@@ -3882,9 +3889,9 @@ var makeSelector = (prefix) => {
     return { selector };
 };
 var property = /([^:(]+)/.source;
-var value = /(?:\((.*?)\))?/.source;
+var value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source;
 var delimiter = /(:|$)/.source;
-var re_value = /(\((.*?)\))[!]*/g;
+var re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
 var makeDefaultPseudoClass = (input) => ({ selector: `&:${input.replace(/>>/g, " ")}` });
 var generateAtomicCss = (rules, prefixRules) => {
@@ -3913,7 +3920,8 @@ var generateAtomicCss = (rules, prefixRules) => {
         const chunk = re_syntax.exec(atom);
         if (!chunk)
           break;
-        const [input, name, value2, type] = chunk;
+        const [input, name, _value, type] = chunk;
+        const value2 = _value && _value.slice(1, -1);
         if (type === ":") {
           const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + ":"]) != null ? _b : makeDefaultPseudoClass(input.slice(0, -1));
           $selector = $selector.map((s) => {

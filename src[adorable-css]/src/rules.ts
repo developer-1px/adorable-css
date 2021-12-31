@@ -20,7 +20,11 @@ export const RULES:Rules = {
   "c": (value:string) => `color:${makeColor(value)};`,
 
   // -- Background Color
-  "bg": (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
+  "bg": (value:string) => {
+    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    return `background-color:${makeColor(value)};`
+  },
 
   // -- Typography
   "font": (value:string) => makeFont(value),

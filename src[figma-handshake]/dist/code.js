@@ -203,6 +203,9 @@ var makeVBox = (value2 = "") => {
       case "top": {
         return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
+      case "middle": {
+        return "justify-content:center;";
+      }
       case "bottom": {
         return !values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
@@ -740,7 +743,11 @@ var ALL_PROPERTIES = {
 };
 var RULES = {
   "c": (value2) => `color:${makeColor(value2)};`,
-  "bg": (value2) => `background-color:${makeColor(value2)};`,
+  "bg": (value2) => {
+    if (value2.startsWith("linear-gradient"))
+      return `background:${value2.replace(/\//g, " ")};`;
+    return `background-color:${makeColor(value2)};`;
+  },
   "font": (value2) => makeFont(value2),
   "font-size": (value2) => `font-size:${px(value2)};`,
   "line-height": (value2) => `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`,
@@ -940,7 +947,7 @@ var RULES = {
   "opacity": (value2) => `opacity:${cssvar(value2)};`,
   "invisible": () => `visibility:hidden;`,
   "visible": () => `visibility:visible;`,
-  "gone": () => `position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
   "layer": (value2 = "") => {
     const pos = { top: 0, right: 0, bottom: 0, left: 0 };
     value2.split("+").forEach((v) => {
@@ -977,10 +984,11 @@ var RULES = {
   "left": (value2) => `left:${px(value2)};`,
   "right": (value2) => `right:${px(value2)};`,
   "bottom": (value2) => `bottom:${px(value2)};`,
-  "user-select-none": () => "user-select:none;",
-  "user-select-all": () => "user-select:all;",
-  "user-select-auto": () => "user-select:auto;",
-  "user-select-text": () => "user-select:text;",
+  "user-select-none": () => "user-select:none;-webkit-user-select:none;",
+  "user-select-all": () => "user-select:all;-webkit-user-select:all;",
+  "user-select-auto": () => "user-select:auto;-webkit-user-select:auto;",
+  "user-select-text": () => "user-select:text;-webkit-user-select:text;",
+  "user-select": (value2) => `user-select:${cssvar(value2)};-webkit-user-select:${cssvar(value2)};`,
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
   "pointer": () => `cursor:pointer;`,
@@ -1123,9 +1131,9 @@ var makeSelector = (prefix) => {
     return { selector };
 };
 var property = /([^:(]+)/.source;
-var value = /(?:\((.*?)\))?/.source;
+var value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source;
 var delimiter = /(:|$)/.source;
-var re_value = /(\((.*?)\))[!]*/g;
+var re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
 var makeDefaultPseudoClass = (input) => ({ selector: `&:${input.replace(/>>/g, " ")}` });
 var generateAtomicCss = (rules, prefixRules) => {
@@ -1154,7 +1162,8 @@ var generateAtomicCss = (rules, prefixRules) => {
         const chunk = re_syntax.exec(atom);
         if (!chunk)
           break;
-        const [input, name, value2, type] = chunk;
+        const [input, name, _value, type] = chunk;
+        const value2 = _value && _value.slice(1, -1);
         if (type === ":") {
           const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + ":"]) != null ? _b : makeDefaultPseudoClass(input.slice(0, -1));
           $selector = $selector.map((s) => {
@@ -1351,6 +1360,42 @@ var addEffectStyle = (node, addClass) => {
     addClass(style.name.toLowerCase());
   }
 };
+var makeGradientLinear = (paint) => {
+  const { gradientTransform, gradientStops } = paint;
+  if (!gradientTransform || !gradientStops) {
+    return "";
+  }
+  let gradientTransformData = {
+    m00: 1,
+    m01: 0,
+    m02: 0,
+    m10: 0,
+    m11: 1,
+    m12: 0
+  };
+  const delta = gradientTransform[0][0] * gradientTransform[1][1] - gradientTransform[0][1] * gradientTransform[1][0];
+  if (delta !== 0) {
+    const deltaVal = 1 / delta;
+    gradientTransformData = {
+      m00: gradientTransform[1][1] * deltaVal,
+      m01: -gradientTransform[0][1] * deltaVal,
+      m02: (gradientTransform[0][1] * gradientTransform[1][2] - gradientTransform[1][1] * gradientTransform[0][2]) * deltaVal,
+      m10: -gradientTransform[1][0] * deltaVal,
+      m11: gradientTransform[0][0] * deltaVal,
+      m12: (gradientTransform[1][0] * gradientTransform[0][2] - gradientTransform[0][0] * gradientTransform[1][2]) * deltaVal
+    };
+  }
+  const rotationTruthy = gradientTransformData.m00 * gradientTransformData.m11 - gradientTransformData.m01 * gradientTransformData.m10 > 0 ? 1 : -1;
+  const data = gradientTransformData;
+  const param = { x: 0, y: 1 };
+  const rotationData = {
+    x: data.m00 * param.x + data.m01 * param.y,
+    y: data.m10 * param.x + data.m11 * param.y
+  };
+  const rad = makeNumber2(Math.atan2(rotationData.y * rotationTruthy, rotationData.x * rotationTruthy) / Math.PI * 180);
+  const gradientColors = gradientStops.map((gradient) => `${makeColor2(gradient.color)}/${makeNumber2(gradient.position * 100)}%`);
+  return `linear-gradient(${rad}deg,${gradientColors})`;
+};
 var everyChildrenHasStretchVbox = (node) => {
   var _a;
   return (_a = node.children) == null ? void 0 : _a.every((c) => c.layoutAlign === "STRETCH" || c.width === node.width);
@@ -1382,7 +1427,6 @@ var generateFrame = async (node, depth) => {
   const hasMoreChildren = numChildren > 1;
   const { layoutGrow, layoutAlign } = node;
   const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
-  console.log("@@@@@@@@@@!!! * Layout Mode", node, node.children);
   if (hasChildren) {
     if (layoutMode === "HORIZONTAL") {
       if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
@@ -1394,8 +1438,6 @@ var generateFrame = async (node, depth) => {
         if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
           if (primaryAxisAlignItems === "MAX")
             value2.push("right");
-          else if (primaryAxisAlignItems === "CENTER")
-            value2.push("right");
         } else {
           if (counterAxisAlignItems === "MIN")
             value2.push("top");
@@ -1403,10 +1445,10 @@ var generateFrame = async (node, depth) => {
             value2.push("bottom");
           if (primaryAxisAlignItems === "MAX")
             value2.push("right");
-          else if (primaryAxisAlignItems === "CENTER")
-            value2.push("right");
         }
         addClass("hbox", value2.join("+"));
+        if (primaryAxisAlignItems === "CENTER")
+          addClass("pack");
       }
     } else if (layoutMode === "VERTICAL") {
       if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
@@ -1420,11 +1462,11 @@ var generateFrame = async (node, depth) => {
           value2.push("center");
         else if (counterAxisAlignItems === "MAX")
           value2.push("right");
+        if (primaryAxisAlignItems === "CENTER")
+          value2.push("middle");
         if (primaryAxisAlignItems === "MAX")
           value2.push("bottom");
         addClass("vbox", value2.join("+"));
-        if (primaryAxisAlignItems === "CENTER")
-          addClass("pack");
       }
     } else {
       addClass("relative");
@@ -1451,6 +1493,8 @@ var generateFrame = async (node, depth) => {
     const bg = node.fills.filter((fill) => fill.visible)[0];
     if ((bg == null ? void 0 : bg.type) === "SOLID") {
       addClass("bg", makeColor2(bg.color, bg.opacity));
+    } else if ((bg == null ? void 0 : bg.type) === "GRADIENT_LINEAR") {
+      addClass("bg", makeGradientLinear(bg));
     }
   } catch (e) {
   }

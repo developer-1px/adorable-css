@@ -24,10 +24,10 @@ const makeSelector = (prefix:string):PrefixProps|undefined => {
 
 // Parse & Generate
 const property = /([^:(]+)/.source
-const value = /(?:\((.*?)\))?/.source
+const value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source
 const delimiter = /(:|$)/.source
 
-const re_value = /(\((.*?)\))[!]*/g
+const re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
 
 const makeDefaultPseudoClass = (input:string):PrefixProps => ({selector: `&:${input.replace(/>>/g, " ")}`})
@@ -63,7 +63,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         const chunk = re_syntax.exec(atom)
         if (!chunk) break
 
-        const [input, name, value, type] = chunk
+        const [input, name, _value, type] = chunk
+        const value = _value && _value.slice(1, -1)
 
         // Make Prefix
         if (type === ":") {
@@ -97,7 +98,6 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
       const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
       const selectors = $selector.join(",")
       const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
-
 
       return [media ? media + "{" + rule + "}" : rule, $priority]
     }

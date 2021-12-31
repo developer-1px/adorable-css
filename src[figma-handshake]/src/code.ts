@@ -121,6 +121,48 @@ const addEffectStyle = (node, addClass:AddClass) => {
   }
 }
 
+const makeGradientLinear = (paint:GradientPaint) => {
+  // https://github.com/jiangyijie27/figma-copy-css-and-react-style/blob/master/code.ts
+  const {gradientTransform, gradientStops} = paint as GradientPaint
+  if (!gradientTransform || !gradientStops) {
+    return ""
+  }
+  let gradientTransformData = {
+    m00: 1,
+    m01: 0,
+    m02: 0,
+    m10: 0,
+    m11: 1,
+    m12: 0,
+  }
+  const delta = gradientTransform[0][0] * gradientTransform[1][1] - gradientTransform[0][1] * gradientTransform[1][0]
+
+  if (delta !== 0) {
+    const deltaVal = 1 / delta
+    gradientTransformData = {
+      m00: gradientTransform[1][1] * deltaVal,
+      m01: -gradientTransform[0][1] * deltaVal,
+      m02: (gradientTransform[0][1] * gradientTransform[1][2] - gradientTransform[1][1] * gradientTransform[0][2]) * deltaVal,
+      m10: -gradientTransform[1][0] * deltaVal,
+      m11: gradientTransform[0][0] * deltaVal,
+      m12: (gradientTransform[1][0] * gradientTransform[0][2] - gradientTransform[0][0] * gradientTransform[1][2]) * deltaVal,
+    }
+  }
+  const rotationTruthy = gradientTransformData.m00 * gradientTransformData.m11 - gradientTransformData.m01 * gradientTransformData.m10 > 0 ? 1 : -1
+
+  const data = gradientTransformData
+  const param = {x: 0, y: 1}
+  const rotationData = {
+    x: data.m00 * param.x + data.m01 * param.y,
+    y: data.m10 * param.x + data.m11 * param.y,
+  }
+  const rad = makeNumber((Math.atan2(rotationData.y * rotationTruthy, rotationData.x * rotationTruthy) / Math.PI) * 180)
+  const gradientColors = gradientStops.map((gradient) => `${makeColor(gradient.color)}/${makeNumber(gradient.position * 100)}%`)
+
+  return `linear-gradient(${rad}deg,${gradientColors})`
+}
+
+
 const everyChildrenHasStretchVbox = (node) => node.children?.every(c => c.layoutAlign === "STRETCH" || c.width === node.width)
 
 const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
@@ -157,8 +199,6 @@ const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
   const {layoutGrow, layoutAlign} = node
   const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
-  console.log("@@@@@@@@@@!!! * Layout Mode", node, node.children)
-
   if (hasChildren) {
     if (layoutMode === "HORIZONTAL") {
       if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
@@ -168,20 +208,19 @@ const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
       else {
         const value = []
 
-        // V - Hug contents
+        // H - Hug contents
         if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
           if (primaryAxisAlignItems === "MAX") value.push("right")
-          else if (primaryAxisAlignItems === "CENTER") value.push("right")
         }
 
-        // V - Fixed || Fill
+        // H - Fixed || Fill
         else {
           if (counterAxisAlignItems === "MIN") value.push("top")
           else if (counterAxisAlignItems === "MAX") value.push("bottom")
           if (primaryAxisAlignItems === "MAX") value.push("right")
-          else if (primaryAxisAlignItems === "CENTER") value.push("right")
         }
         addClass("hbox", value.join("+"))
+        if (primaryAxisAlignItems === "CENTER") addClass("pack")
       }
     }
 
@@ -195,13 +234,11 @@ const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
         const value = []
 
         if (everyChildrenHasStretchVbox(node)) {}
-        // else if (counterAxisAlignItems === "MIN") value.push("left")
         else if (counterAxisAlignItems === "CENTER") value.push("center")
         else if (counterAxisAlignItems === "MAX") value.push("right")
-
+        if (primaryAxisAlignItems === "CENTER") value.push("middle")
         if (primaryAxisAlignItems === "MAX") value.push("bottom")
         addClass("vbox", value.join("+"))
-        if (primaryAxisAlignItems === "CENTER") addClass("pack")
       }
     }
     else {
@@ -238,6 +275,9 @@ const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
     const bg = node.fills.filter(fill => fill.visible)[0]
     if (bg?.type === "SOLID") {
       addClass("bg", makeColor(bg.color, bg.opacity))
+    }
+    else if (bg?.type === "GRADIENT_LINEAR") {
+      addClass("bg", makeGradientLinear(bg))
     }
   }
   catch (e) {}
