@@ -3492,13 +3492,15 @@ var ALL_PROPERTIES = {
   "zoom": 1
 };
 var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*, :after, :before {box-sizing:border-box;flex-shrink:0;}
-:root {-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;-moz-tab-size:4;tab-size:4}
-html, body {height:100%;}
-img, picture, video, canvas, svg {display: block;max-width:100%;}
-button {background:none;border:0;cursor:pointer;}
-a {text-decoration:none}
-table {border-collapse:collapse;border-spacing:0}`;
+*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
+html,body{height:100%;}
+img,picture,video,canvas,svg{display:block;max-width:100%;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,menu,dir{list-style:none;}
+`;
 var RULES = {
   "c": (value2) => `color:${makeColor(value2)};`,
   "bg": (value2) => {
@@ -3772,7 +3774,7 @@ var RULES = {
   "gpu": () => `transform:translateZ(0.1px);`,
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value2) => `-webkit-app-region:${value2};`,
-  "content": (value2) => `content:'${cssvar(value2)}'`,
+  "content": (value2) => `content:${cssvar(value2)}`,
   "clip-path": (value2) => `clip-path:${cssvar(value2)};-webkit-clip-path:${cssvar(value2)};`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "float": (value2) => `float:${cssvar(value2)}`,
@@ -3841,7 +3843,10 @@ var PREFIX_PSEUDO_CLASS = {
   "odd:": { selector: `&:nth-child(2n+1)` },
   "even:": { selector: `&:nth-child(2n)` },
   "first:": { selector: `&:first-child` },
-  "last:": { selector: `&:last-child` }
+  "last:": { selector: `&:last-child` },
+  "after:": { selector: `&::after` },
+  "before:": { selector: `&::before` },
+  "selection::": { selector: `&::selection, & *::selection` }
 };
 var PREFIX_MEDIA_QUERY = {
   "sm:": { media: `(min-width:480px)`, selector: `html &` },
@@ -3890,10 +3895,10 @@ var makeSelector = (prefix) => {
 };
 var property = /([^:(]+)/.source;
 var value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source;
-var delimiter = /(:|$)/.source;
+var delimiter = /(:{1,2}|$)/.source;
 var re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
-var makeDefaultPseudoClass = (input) => ({ selector: `&:${input.replace(/>>/g, " ")}` });
+var makeDefaultPseudoClass = (input, type) => ({ selector: `&${type}${input.slice(0, -type.length).replace(/>>/g, " ")}` });
 var generateAtomicCss = (rules, prefixRules) => {
   const makeRule = (r) => {
     var _a;
@@ -3922,8 +3927,8 @@ var generateAtomicCss = (rules, prefixRules) => {
           break;
         const [input, name, _value, type] = chunk;
         const value2 = _value && _value.slice(1, -1);
-        if (type === ":") {
-          const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + ":"]) != null ? _b : makeDefaultPseudoClass(input.slice(0, -1));
+        if (type === ":" || type === "::") {
+          const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + type]) != null ? _b : makeDefaultPseudoClass(input, type);
           $selector = $selector.map((s) => {
             var _a2, _b2;
             return ((_b2 = (_a2 = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a2.split(",")) != null ? _b2 : []).map((selector) => {
@@ -3969,6 +3974,7 @@ var BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`;
 var DEBOUNCE_TIMEOUT = 250;
 var CONFIG = {
   include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
+  reset,
   rules: {},
   prefixRules: {}
 };
@@ -3990,7 +3996,7 @@ var adorableCSS = (config) => {
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat();
     const styles = generateCss2([...new Set(allAtoms)]);
-    return [reset, ...styles].join("\n");
+    return [config.reset, ...styles].join("\n");
   };
   const invalidate = () => {
     for (const server of servers) {

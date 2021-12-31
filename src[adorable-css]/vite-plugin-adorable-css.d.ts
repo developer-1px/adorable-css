@@ -32,6 +32,7 @@ declare const parseAtoms: (code: string) => string[];
 
 interface Config {
     include: string[];
+    reset: string;
     rules: Rules;
     prefixRules: PrefixRules;
 }
