@@ -53,7 +53,7 @@ const addClassWidth = (node, addClass:AddClass) => {
   const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
   if (node === figma.currentPage.selection[0]) addClass("w", makeInt(width))
-  else if (parent?.layoutMode === "VERTICAL" && (layoutAlign === "STRETCH" || width === parent.width)) !everyChildrenHasStretchVbox(node.parent) && addClass("w", "fill")
+  else if (parent?.layoutMode === "VERTICAL" && layoutAlign === "STRETCH") !everyChildrenHasStretchVbox(node.parent) && addClass("w", "fill")
   else if (parent?.layoutMode === "HORIZONTAL" && layoutGrow) addClass("flex")
   else if (!layoutMode || layoutMode === "NONE") addClass("w", makeInt(width))
   else if (layoutMode === "HORIZONTAL" && primaryAxisSizingMode === "FIXED") addClass("w", makeInt(width))
@@ -455,6 +455,9 @@ const generate = async () => {
   const node = selection[0]
   console.log(node.type)
   console.log(node)
+
+  console.warn("!!!!! layoutGrow, layoutAlign", node.layoutGrow, node.layoutAlign)
+
 
   const record = {}
 

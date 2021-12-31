@@ -1294,7 +1294,7 @@ var addClassWidth = (node, addClass) => {
   const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
   if (node === figma.currentPage.selection[0])
     addClass("w", makeInt(width));
-  else if ((parent == null ? void 0 : parent.layoutMode) === "VERTICAL" && (layoutAlign === "STRETCH" || width === parent.width))
+  else if ((parent == null ? void 0 : parent.layoutMode) === "VERTICAL" && layoutAlign === "STRETCH")
     !everyChildrenHasStretchVbox(node.parent) && addClass("w", "fill");
   else if ((parent == null ? void 0 : parent.layoutMode) === "HORIZONTAL" && layoutGrow)
     addClass("flex");
@@ -1627,6 +1627,7 @@ var generate = async () => {
   const node = selection[0];
   console.log(node.type);
   console.log(node);
+  console.warn("!!!!! layoutGrow, layoutAlign", node.layoutGrow, node.layoutAlign);
   const record = {};
   traverse(node, (node2) => {
     var _a;
