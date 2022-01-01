@@ -1,18 +1,31 @@
-#Reference
+# Reference
 
 ```typescript
-export const reset = `* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}`
+export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
+*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
+html,body{height:100%;}
+img,picture,video,canvas,svg{display:block;max-width:100%;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,menu,dir{list-style:none;}
+`
 
 export const RULES:Rules = {
 
   // -- Color
-  c: (value:string) => `color:${makeColor(value)};`,
+  "c": (value:string) => `color:${makeColor(value)};`,
 
   // -- Background Color
-  bg: (value:string) => `background-color:${makeColor(value)};`, // @TODO:url형식이면, background-image만 넣는 것으로 하자.
+  "bg": (value:string) => {
+    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    return `background-color:${makeColor(value)};`
+  },
 
   // -- Typography
-  font: (value:string) => makeFont(value),
+  "font": (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
   "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
   "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
@@ -29,41 +42,41 @@ export const RULES:Rules = {
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
 
-  thin: () => `font-weight:100;`,
+  "thin": () => `font-weight:100;`,
   "extra-light": () => `font-weight:200;`,
-  light: () => `font-weight:300;`,
-  regular: () => `font-weight:400;`,
-  medium: () => `font-weight:500;`,
-  semibold: () => `font-weight:600;`,
-  bold: () => `font-weight:700;`,
+  "light": () => `font-weight:300;`,
+  "regular": () => `font-weight:400;`,
+  "medium": () => `font-weight:500;`,
+  "semibold": () => `font-weight:600;`,
+  "bold": () => `font-weight:700;`,
   "extra-bold": () => `font-weight:800;`,
-  heavy: () => `font-weight:900;`,
+  "heavy": () => `font-weight:900;`,
 
   // Font Weight Utility
-  thicker: (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
+  "thicker": (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
 
 
   // Font-Style
-  italic: () => `font-style:italic;`,
-  overline: () => `text-decoration:overline;`,
-  underline: () => `text-decoration:underline;`,
+  "italic": () => `font-style:italic;`,
+  "overline": () => `text-decoration:overline;`,
+  "underline": () => `text-decoration:underline;`,
   "line-through": () => `text-decoration:line-through;`,
   "strike": () => `text-decoration:line-through;`,
-  del: () => `text-decoration:line-through;`,
+  "del": () => `text-decoration:line-through;`,
 
 
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L)
   "sans-serif": () => `font-family:sans-serif;`,
-  serif: () => `font-family:serif;`,
-  monospace: () => `font-family:menlo,monospace;`,
-  cursive: () => `font-family:cursive;`,
-  fantasy: () => `font-family:fantasy;`,
+  "serif": () => `font-family:serif;`,
+  "monospace": () => `font-family:menlo,monospace;`,
+  "cursive": () => `font-family:cursive;`,
+  "fantasy": () => `font-family:fantasy;`,
   "system-ui": () => `font-family:system-ui;`,
 
   "small-caps": () => `font-variant:small-caps`,
-  lowercase: () => `text-transform:lowercase;`,
-  uppercase: () => `text-transform:uppercase;`,
-  capitalize: () => `text-transform:capitalize;`,
+  "lowercase": () => `text-transform:lowercase;`,
+  "uppercase": () => `text-transform:uppercase;`,
+  "capitalize": () => `text-transform:capitalize;`,
 
 
   // Text
@@ -85,7 +98,7 @@ export const RULES:Rules = {
   "content-box": () => `box-sizing:content-box`,
 
   // -- Box-Model
-  w: (value:string) => {
+  "w": (value:string) => {
     if (value.includes("~")) {
       const result = []
       const [min, max] = value.split("~")
@@ -96,7 +109,7 @@ export const RULES:Rules = {
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `width:${px(value)};`
   },
 
-  h: (value:string) => {
+  "h": (value:string) => {
     if (value.includes("~")) {
       const result = []
       const [min, max] = value.split("~")
@@ -107,63 +120,68 @@ export const RULES:Rules = {
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 
-  m: (value:string) => `margin:${makeSide(value)};`,
-  mt: (value:string) => `margin-top:${px(value)};`,
-  mr: (value:string) => `margin-right:${px(value)};`,
-  mb: (value:string) => `margin-bottom:${px(value)};`,
-  ml: (value:string) => `margin-left:${px(value)};`,
+  "m": (value:string) => `margin:${makeSide(value)};`,
+  "mt": (value:string) => `margin-top:${px(value)};`,
+  "mr": (value:string) => `margin-right:${px(value)};`,
+  "mb": (value:string) => `margin-bottom:${px(value)};`,
+  "ml": (value:string) => `margin-left:${px(value)};`,
 
-  p: (value:string) => `padding:${makeSide(value)};`,
-  pt: (value:string) => `padding-top:${px(value)};`,
-  pr: (value:string) => `padding-right:${px(value)};`,
-  pb: (value:string) => `padding-bottom:${px(value)};`,
-  pl: (value:string) => `padding-left:${px(value)};`,
+  "p": (value:string) => `padding:${makeSide(value)};`,
+  "pt": (value:string) => `padding-top:${px(value)};`,
+  "pr": (value:string) => `padding-right:${px(value)};`,
+  "pb": (value:string) => `padding-bottom:${px(value)};`,
+  "pl": (value:string) => `padding-left:${px(value)};`,
 
-  b: (value:string) => `border:${makeBorder(value)};`,
-  bt: (value:string) => `border-top:${makeBorder(value)};`,
-  br: (value:string) => `border-right:${makeBorder(value)};`,
-  bb: (value:string) => `border-bottom:${makeBorder(value)};`,
-  bl: (value:string) => `border-left:${makeBorder(value)};`,
+  "b": (value:string) => `border:${makeBorder(value)};`,
+  "bt": (value:string) => `border-top:${makeBorder(value)};`,
+  "br": (value:string) => `border-right:${makeBorder(value)};`,
+  "bb": (value:string) => `border-bottom:${makeBorder(value)};`,
+  "bl": (value:string) => `border-left:${makeBorder(value)};`,
 
-  bw: (value:string) => `border-width:${px(value)};`,
-  btw: (value:string) => `border-top-width:${px(value)};`,
-  brw: (value:string) => `border-right-width:${px(value)};`,
-  bbw: (value:string) => `border-bottom-width:${px(value)};`,
-  blw: (value:string) => `border-left-width:${px(value)};`,
+  "bw": (value:string) => `border-width:${px(value)};`,
+  "btw": (value:string) => `border-top-width:${px(value)};`,
+  "brw": (value:string) => `border-right-width:${px(value)};`,
+  "bbw": (value:string) => `border-bottom-width:${px(value)};`,
+  "blw": (value:string) => `border-left-width:${px(value)};`,
 
-  bs: (value:string) => `border-style:${cssvar(value)};`,
-  bts: (value:string) => `border-top-style:${cssvar(value)};`,
-  brs: (value:string) => `border-right-style:${cssvar(value)};`,
-  bbs: (value:string) => `border-bottom-style:${cssvar(value)};`,
-  bls: (value:string) => `border-left-style:${cssvar(value)};`,
+  "bs": (value:string) => `border-style:${cssvar(value)};`,
+  "bts": (value:string) => `border-top-style:${cssvar(value)};`,
+  "brs": (value:string) => `border-right-style:${cssvar(value)};`,
+  "bbs": (value:string) => `border-bottom-style:${cssvar(value)};`,
+  "bls": (value:string) => `border-left-style:${cssvar(value)};`,
 
-  bc: (value:string) => `border-color:${makeColor(value)};`,
-  btc: (value:string) => `border-top-color:${makeColor(value)};`,
-  brc: (value:string) => `border-right-color:${makeColor(value)};`,
-  bbc: (value:string) => `border-bottom-color:${makeColor(value)};`,
-  blc: (value:string) => `border-left-color:${makeColor(value)};`,
+  "bc": (value:string) => `border-color:${makeColor(value)};`,
+  "btc": (value:string) => `border-top-color:${makeColor(value)};`,
+  "brc": (value:string) => `border-right-color:${makeColor(value)};`,
+  "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
+  "blc": (value:string) => `border-left-color:${makeColor(value)};`,
 
   // @TODO:교육이 필요하다.
-  r: (value:string) => `border-radius:${makeSide(value)};`,
+  "r": (value:string) => `border-radius:${makeSide(value)};`,
 
-  rt: (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
-  rr: (value:string) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  rb: (value:string) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  rl: (value:string) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
+  "rt": (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
+  "rr": (value:string) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
+  "rb": (value:string) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
+  "rl": (value:string) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
 
-  rtl: (value:string) => `border-top-left-radius:${px(value)};`,
-  rtr: (value:string) => `border-top-right-radius:${px(value)};`,
-  rbr: (value:string) => `border-bottom-right-radius:${px(value)};`,
-  rbl: (value:string) => `border-bottom-left-radius:${px(value)};`,
+  "rtl": (value:string) => `border-top-left-radius:${px(value)};`,
+  "rtr": (value:string) => `border-top-right-radius:${px(value)};`,
+  "rbr": (value:string) => `border-bottom-right-radius:${px(value)};`,
+  "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
 
-  ring: (value:string) => {
+  "ring": (value:string) => {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
   "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
 
-  outline: (value:string) => `outline:1px solid ${makeColor(value)};`,
+  "outline": (value:string) => {
+    if (value === "-") return `outline:none;`
+    if (value === "none" || value === "unset" || value === "inherit" || value === "initial") return `outline:${value};`
+    return `outline:1px solid ${makeColor(value)};`
+  },
+
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
   // -- Background Image
@@ -176,8 +194,8 @@ export const RULES:Rules = {
   "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value:string) => `background-position:${value};`,
 
-  contain: () => `background-size:contain;background-position:center;object-fit:contain;`,
-  cover: () => `background-size:cover;background-position:center;object-fit:cover;`,
+  "contain": () => `background-size:contain;background-position:center;object-fit:contain;`,
+  "cover": () => `background-size:cover;background-position:center;object-fit:cover;`,
 
   // -- Display
   "block": () => "display:block;",
@@ -201,18 +219,18 @@ export const RULES:Rules = {
   "list-item": () => "display:list-item;",
 
   // -- Flexbox
-  hbox: (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  vbox: (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
-  pack: () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
+  "vbox": (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
 
-  gap: (value:string) => `gap:${makeSide(value)};`,
+  "gap": (value:string) => `gap:${makeSide(value)};`,
 
   // @NOTE: IE, safari<=13
-  hgap: (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
-  vgap: (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
   "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
 
   "space-between": () => `justify-content:space-between;`,
@@ -220,8 +238,8 @@ export const RULES:Rules = {
   "space-evenly": () => `justify-content:space-evenly;`,
 
   // flex
-  flex: (value = "1") => `flex:${makeValues(value)};`,
-  space: (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+  "flex": (value = "1") => `flex:${makeValues(value)};`,
+  "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
 
   "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
@@ -236,11 +254,11 @@ export const RULES:Rules = {
   /// -- Overflow
 
   // OverFlow:@TODO:스크롤바 보여지느냐 아니냐... 보통 auto를 쓴다. 스크롤 바는 생각할게 많네요!! (thank you Linda!)
-  overflow: (value:string) => `overflow:${value};`,
+  "overflow": (value:string) => `overflow:${value};`,
   "overflow-x": (value:string) => `overflow-x:${value};`,
   "overflow-y": (value:string) => `overflow-y:${value};`,
 
-  clip: () => `overflow:hidden;`,
+  "clip": () => `overflow:hidden;`,
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
@@ -274,30 +292,28 @@ export const RULES:Rules = {
   "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value:string) => `text-indent:${px(value)};`,
 
-
   // Scroll Snap -- TBD @TODO:
 
-
   // Visibility
-  none: () => `display:none;`,
-  opacity: (value:string) => `opacity:${cssvar(value)};`,
-  invisible: () => `visibility:hidden;`,
-  visible: () => `visibility:visible;`,
-  "gone": () => `position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "none": () => `display:none;`,
+  "opacity": (value:string) => `opacity:${cssvar(value)};`,
+  "invisible": () => `visibility:hidden;`,
+  "visible": () => `visibility:visible;`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
 
   // Position
-  layer: (value = "") => {
+  "layer": (value = "") => {
     const pos = {top: 0, right: 0, bottom: 0, left: 0}
     value.split("+").forEach(v => {
       switch (v) {
-        //@ts-ignore
-        case "top": {return (delete pos["bottom"])}
-        //@ts-ignore
-        case "right": {return (delete pos["left"])}
-        //@ts-ignore
-        case "bottom": {return (delete pos["top"])}
-        //@ts-ignore
-        case "left": {return (delete pos["right"])}
+        // @ts-ignore
+        case "top": {return (delete pos.bottom)}
+        // @ts-ignore
+        case "right": {return (delete pos.left)}
+        // @ts-ignore
+        case "bottom": {return (delete pos.top)}
+        // @ts-ignore
+        case "left": {return (delete pos.right)}
       }
     })
     return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0`).join(";")
@@ -314,58 +330,59 @@ export const RULES:Rules = {
   "static": () => `position:static;`,
 
   // Position
-  x: (value:string) => `left:${px(value)};`,
-  y: (value:string) => `top:${px(value)};`,
-  z: (value:string) => `z-index:${cssvar(value)};`,
-  top: (value:string) => `top:${px(value)};`,
-  left: (value:string) => `left:${px(value)};`,
-  right: (value:string) => `right:${px(value)};`,
-  bottom: (value:string) => `bottom:${px(value)};`,
+  "x": (value:string) => `left:${px(value)};`,
+  "y": (value:string) => `top:${px(value)};`,
+  "z": (value:string) => `z-index:${cssvar(value)};`,
+  "top": (value:string) => `top:${px(value)};`,
+  "left": (value:string) => `left:${px(value)};`,
+  "right": (value:string) => `right:${px(value)};`,
+  "bottom": (value:string) => `bottom:${px(value)};`,
 
   // Interactions
-  "user-select-none": () => "user-select:none;",
-  "user-select-all": () => "user-select:all;",
-  "user-select-auto": () => "user-select:auto;",
-  "user-select-text": () => "user-select:text;",
+  "user-select-none": () => "user-select:none;-webkit-user-select:none;",
+  "user-select-all": () => "user-select:all;-webkit-user-select:all;",
+  "user-select-auto": () => "user-select:auto;-webkit-user-select:auto;",
+  "user-select-text": () => "user-select:text;-webkit-user-select:text;",
+  "user-select": (value:string) => `user-select:${cssvar(value)};-webkit-user-select:${cssvar(value)};`,
 
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
 
-  pointer: () => `cursor:pointer;`,
-  grab: () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
-  grabbing: () => `cursor:grabbing;`,
-  cursor: (value:string) => `cursor:${value};`,
+  "pointer": () => `cursor:pointer;`,
+  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "cursor": (value:string) => `cursor:${value};`,
 
   // 에니메이션:transition(transform=100s/opacity=2s)
-  transition: (value:string) => `transition:${makeTransition(value)};`,
+  "transition": (value:string) => `transition:${makeTransition(value)};`,
 
   // @TODO:섞을수가 없네? mix transform
   // @TBD: translate(10,10)|rotateX(180deg)|scale(2) 이런식으로 |기호로 묶자!!
-  translate: (value:string) => `transform:translate(${makeCommaValues(value)});`,
-  translateX: (value:string) => `transform:translateX(${cssvar(value)});`,
-  translateY: (value:string) => `transform:translateY(${cssvar(value)});`,
-  translateZ: (value:string) => `transform:translateZ(${cssvar(value)});`,
-  translate3d: (value:string) => `transform:translate3d(${makeCommaValues(value)});`,
+  "translate": (value:string) => `transform:translate(${makeCommaValues(value)});`,
+  "translateX": (value:string) => `transform:translateX(${cssvar(value)});`,
+  "translateY": (value:string) => `transform:translateY(${cssvar(value)});`,
+  "translateZ": (value:string) => `transform:translateZ(${cssvar(value)});`,
+  "translate3d": (value:string) => `transform:translate3d(${makeCommaValues(value)});`,
 
-  rotate: (value:string) => `transform:rotate(${makeCommaValues(value)});`,
-  rotateX: (value:string) => `transform:rotateX(${cssvar(value)});`,
-  rotateY: (value:string) => `transform:rotateY(${cssvar(value)});`,
-  rotateZ: (value:string) => `transform:rotateZ(${cssvar(value)});`,
-  rotate3d: (value:string) => `transform:rotateZ(${makeCommaValues(value)});`,
+  "rotate": (value:string) => `transform:rotate(${makeCommaValues(value)});`,
+  "rotateX": (value:string) => `transform:rotateX(${cssvar(value)});`,
+  "rotateY": (value:string) => `transform:rotateY(${cssvar(value)});`,
+  "rotateZ": (value:string) => `transform:rotateZ(${cssvar(value)});`,
+  "rotate3d": (value:string) => `transform:rotateZ(${makeCommaValues(value)});`,
 
-  scale: (value:string) => `transform:scale(${makeCommaValues(value)});`,
-  scaleX: (value:string) => `transform:scaleX(${makeCommaValues(value)});`,
-  scaleY: (value:string) => `transform:scaleY(${makeCommaValues(value)});`,
-  scaleZ: (value:string) => `transform:scaleZ(${makeCommaValues(value)});`,
+  "scale": (value:string) => `transform:scale(${makeCommaValues(value)});`,
+  "scaleX": (value:string) => `transform:scaleX(${makeCommaValues(value)});`,
+  "scaleY": (value:string) => `transform:scaleY(${makeCommaValues(value)});`,
+  "scaleZ": (value:string) => `transform:scaleZ(${makeCommaValues(value)});`,
 
   // Util
-  ratio: (value:string) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
-  gpu: () => `transform:translateZ(0.1px);`,
+  "ratio": (value:string) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  content: (value:string) => `content:'${cssvar(value)}'`,
+  "content": (value:string) => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-layout-fixed": () => `table-layout:fixed;`,
@@ -396,7 +413,7 @@ export const RULES:Rules = {
   "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
 
   // triangle
-  triangle: (value:string) => {
+  "triangle": (value:string) => {
     const [direction, size, angle = 0] = value.split("/")
     const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
     const bdr = bd.slice(bd.indexOf(direction))
@@ -411,7 +428,7 @@ export const RULES:Rules = {
   },
 
   // elevation
-  elevation: (value:string) => {
+  "elevation": (value:string) => {
     const dp = +value
     if (!dp) {
       return `box-shadow: none`
@@ -423,7 +440,9 @@ export const RULES:Rules = {
     const dira = (24 - (Math.round(dp / 10))) / 100
 
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
-  }
+  },
+
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 }
 
 // Prefix
@@ -432,6 +451,7 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
   "active:": {selector: `html &:active, html &.\\:active`},
   "focus:": {selector: `html &:focus, html &.\\:focus`},
+  "focus-visible": {selector: `html &:focus-visible, html &.\\:focus-visible`},
   "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
   "checked:": {selector: `html &:checked, html &.\\:checked`},
   "read-only:": {selector: `html &:read-only, html &.\\:read-only`},
@@ -449,21 +469,18 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
 
   "placeholder:": {selector: `&::placeholder`},
 
-  "link:": {selector: `&:link`},
-  "visited:": {selector: `&:visited`},
-
-  "first:": {selector: `&:first-child`},
-  "first-child:": {selector: `&:first-child`},
-  "last:": {selector: `&:last-child`},
-  "last-child:": {selector: `&:last-child`},
   "odd:": {selector: `&:nth-child(2n+1)`},
   "even:": {selector: `&:nth-child(2n)`},
 
-  // @TBD:!!
-  // "before:": {selector: `&:before`},
-  // "after:": {selector: `&:after`},
-  // "nth-child(?):": {selector: `&:nth-child(?)`},
+  "first:": {selector: `&:first-child`},
+  "last:": {selector: `&:last-child`},
+
+  "after:": {selector: `&::after`},
+  "before:": {selector: `&::before`},
+
+  "selection::": {selector: `&::selection, & *::selection`},
 }
+
 
 // media query
 export const PREFIX_MEDIA_QUERY:PrefixRules = {
@@ -503,16 +520,6 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
 
   // dark:@TBD
   "dark:": {selector: `html.dark &`},
-
-  // device:@TBD
-  "device": {
-    // postCSS: ({media, ...props}) => {
-    //   media = media.replace(/(max|min)-width/g, (a, b) => {
-    //     return b + "-device-width"
-    //   })
-    //   return {media, ...props}
-    // }
-  },
 }
 
 // selector
@@ -520,5 +527,7 @@ export const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
   ".": (selector:string) => `&${selector}, ${selector} &`,
   ">>": (selector:string) => `& ${selector.slice(2, 0)}`,
   ">": (selector:string) => `&${selector}`,
-  "+": (selector:string) => `&${selector}`
+  "+": (selector:string) => `&${selector}`,
+  "[": (selector:string) => `&${selector}`,
+}
 ```

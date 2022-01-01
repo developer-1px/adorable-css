@@ -1,5 +1,5 @@
-import {generateCss} from "../../src[adorable-css]/src/atomizer"
-import {parseAtoms} from "../../src[adorable-css]/src/parser"
+import {generateCss} from "../../src[vite-plugin-adorable-css]/src/atomizer"
+import {parseAtoms} from "../../src[vite-plugin-adorable-css]/src/parser"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
 type AddClass = (prop, value?) => number

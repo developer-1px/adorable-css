@@ -1,0 +1,32 @@
+{
+  "name": "postcss-adorable-css",
+  "version": "0.0.4",
+  "description": "PostCSS Plugin for AdorableCSS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developer-1px/adorable-css"
+  },
+  "homepage": "https://developer-1px.github.io/adorable-css/",
+  "keywords": [
+    "css",
+    "AdorableCSS",
+    "postcss"
+  ],
+  "author": "teo.yu",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "npm publish"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js"
+    }
+  },
+  "devDependencies": {
+    "adorable-css": "^0.5.7",
+    "chokidar": "^3.5.2",
+    "postcss": "^8.4.5"
+  }
+}

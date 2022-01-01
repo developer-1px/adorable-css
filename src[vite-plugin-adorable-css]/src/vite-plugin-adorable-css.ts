@@ -153,5 +153,6 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 }
 
 export * from "./makeValue"
+export * from "./rules"
 export {parseAtoms} from "./parser"
 export {generateCss, createGenerateCss} from "./atomizer"

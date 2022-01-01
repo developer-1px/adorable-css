@@ -2720,6 +2720,11 @@ var require_micromatch = __commonJS({
 
 // src/vite-plugin-adorable-css.ts
 __export(exports, {
+  ALL_PROPERTIES: () => ALL_PROPERTIES,
+  PREFIX_MEDIA_QUERY: () => PREFIX_MEDIA_QUERY,
+  PREFIX_PSEUDO_CLASS: () => PREFIX_PSEUDO_CLASS,
+  RULES: () => RULES,
+  SELECTOR_PREFIX: () => SELECTOR_PREFIX,
   adorableCSS: () => adorableCSS,
   createGenerateCss: () => createGenerateCss,
   cssvar: () => cssvar,
@@ -2740,7 +2745,8 @@ __export(exports, {
   makeValues: () => makeValues,
   parseAtoms: () => parseAtoms,
   percentToEm: () => percentToEm,
-  px: () => px
+  px: () => px,
+  reset: () => reset
 });
 init_cjs_shims();
 
@@ -4085,6 +4091,11 @@ var adorableCSS = (config) => {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  ALL_PROPERTIES,
+  PREFIX_MEDIA_QUERY,
+  PREFIX_PSEUDO_CLASS,
+  RULES,
+  SELECTOR_PREFIX,
   adorableCSS,
   createGenerateCss,
   cssvar,
@@ -4105,7 +4116,8 @@ var adorableCSS = (config) => {
   makeValues,
   parseAtoms,
   percentToEm,
-  px
+  px,
+  reset
 });
 /*!
  * fill-range <https://github.com/jonschlinkert/fill-range>

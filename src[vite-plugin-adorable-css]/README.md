@@ -2,7 +2,7 @@
 
 > Rapid On-Demand Atomic CSS framework
 
-## Release Notes
+## Change Logs
 
 ### 0.5.7
 - :after :before content 기능 추가, class는 띄어쓰기를 못하므로 content에 공백이 있다면 css variable를 추천합니다.
