@@ -1,7 +1,9 @@
 <script lang="ts">
+import {KeyCode, KeyMod} from "monaco-editor"
 import type monaco from "monaco-editor"
 import {onMount} from "svelte"
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
+import theme from "./github.theme.json"
 
 export let value = ""
 
@@ -19,6 +21,8 @@ onMount(async () => {
     }
   }
 
+  console.warn("@@@", theme)
+
   Monaco = await import("monaco-editor")
   editor = Monaco.editor.create(element, {
     value,
@@ -26,16 +30,30 @@ onMount(async () => {
     automaticLayout: true,
     scrollBeyondLastLine: false,
     readOnly: false,
-    theme: "vs-dark",
+    theme: "vs",
     tabSize: 2,
+    fontSize: "13px",
+    overviewRulerLanes: 0,
+    wordWrap: "on",
     minimap: {
       enabled: false,
     },
   })
 
+  var myBinding = editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, function() {
+    editor.getAction("editor.action.formatDocument").run()
+    return
+  })
+
+  console.log("editor", editor)
+  console.log("myBinding", editor)
+  window.editor = editor
+
+
   editor.onDidChangeModelContent(event => {
     value = editor.getValue()
   })
+
 
   return () => {
     editor.dispose()

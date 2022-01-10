@@ -24,7 +24,7 @@ export const px = (value:string|number) => {
 
 export const percentToEm = (value:string) => {
   if (value.endsWith("%")) return +(value.slice(0, -1)) / 100 + "em"
-  return value
+  return px(value)
 }
 
 export const makeHEX = (value:string) => {

@@ -21,14 +21,12 @@ word-spacing(1.5)
 
 2. font-weight
 
-thin {font-weight:100;}
-extra-light {font-weight:200;}
+thin {font-weight:200;}
 light {font-weight:300;}
-regular {font-weight:400;}
+regular {font-weight:normal}
 medium {font-weight:500;}
 semibold {font-weight:600;}
-bold {font-weight:700;}
-extra-bold {font-weight:800;}
+bold {font-weight:bold}
 heavy {font-weight:900;}
 
 100 {font-weight:100;}
@@ -85,13 +83,11 @@ capitalize {text-transform:capitalize}
   <h1>Font Weight</h1>
 
   <div class="thin">thin</div>
-  <div class="extra-light">extra-light</div>
   <div class="light">light</div>
   <div class="regular">regular</div>
   <div class="medium">medium</div>
   <div class="semibold">semibold</div>
   <div class="bold">bold</div>
-  <div class="extra-bold">extra-bold</div>
   <div class="heavy">heavy</div>
   
   <br/>
@@ -138,7 +134,6 @@ capitalize {text-transform:capitalize}
   <div class="lowercase">lowercase</div>
   <div class="uppercase">uppercase</div>
   <div class="capitalize">capitalize</div>
-
 
 </div>
 

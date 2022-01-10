@@ -2,13 +2,11 @@ import {cssEscape} from "./cssEscape"
 import {makeValues} from "./makeValue"
 import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX} from "./rules"
 
-const stricmp = (a:string, b:string) => a.localeCompare(b)
-
 export type Rules = Record<string, (value?:string) => string>
 export type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
 export type PrefixRules = Record<string, PrefixProps>
 
-const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => stricmp(a, b) || b.length - a.length)
+const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => b.length - a.length)
 
 const PREFIX_RULES:PrefixRules = {
   ...PREFIX_PSEUDO_CLASS,
@@ -17,7 +15,8 @@ const PREFIX_RULES:PrefixRules = {
 
 const makeSelector = (prefix:string):PrefixProps|undefined => {
   const key = SELECTOR_PREFIX_KEYS.find(s => prefix.startsWith(s)) || ""
-  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix.slice(0, -1))
+  if (!key) return
+  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix)
   if (selector) return {selector}
 }
 
@@ -30,7 +29,10 @@ const delimiter = /(:{1,2}|$)/.source
 const re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g
 const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
 
-const makeDefaultPseudoClass = (input:string, type:":"|"::"):PrefixProps => ({selector: `&${type}${input.slice(0, -type.length).replace(/>>/g, " ")}`})
+const makeDefaultPseudoClass = (input:string, type:":"|"::"):PrefixProps => {
+  // return {selector: `&${type}${input.slice(0, -type.length).split(">>").map(cssEscape).join(" ")}`}
+  return {selector: `&${type}${input.slice(0, -type.length).split(">>").join(" ")}`}
+}
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   const makeRule = (r:string) => rules[r] ?? ((value:string) => (ALL_PROPERTIES[r] && value) ? `${r}:${makeValues(value)}` : "")
@@ -68,7 +70,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
         // Make Prefix
         if (type === ":" || type === "::") {
-          const prefixRule = makeSelector(input) ?? prefixRules[name + type] ?? makeDefaultPseudoClass(input, type)
+          const prefixRule = makeSelector(input.slice(0, -type.length)) ?? prefixRules[name + type] ?? makeDefaultPseudoClass(input, type)
 
           // selector
           $selector = $selector.map(s => (prefixRule?.selector?.split(",") ?? []).map((selector:string) => {
@@ -95,7 +97,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         }
       }
 
-      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : ""
+      const media = $mediaQuery.length ? "@media" + $mediaQuery.join(" and ") : ""
       const selectors = $selector.join(",")
       const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
 

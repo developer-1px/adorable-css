@@ -1,0 +1,35 @@
+{
+  "name": "webpack-adorable-css",
+  "version": "0.0.4",
+  "description": "Webpack Plugin for AdorableCSS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developer-1px/adorable-css"
+  },
+  "homepage": "https://developer-1px.github.io/adorable-css/",
+  "keywords": [
+    "css",
+    "AdorableCSS",
+    "webpack"
+  ],
+  "author": "teo.yu",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsup ./src/index.ts --watch --dts -d ./",
+    "build": "tsup ./src/index.ts --dts -d ./",
+    "deploy": "npm run build && npm publish"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js"
+    }
+  },
+  "devDependencies": {
+    "adorable-css": "^0.5.8",
+    "tsup": "^5.11.10",
+    "unplugin": "^0.3.0",
+    "webpack": "^3.5.2"
+  }
+}

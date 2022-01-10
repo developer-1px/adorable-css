@@ -1,22 +1,5 @@
-html, body {height: 100%; background: #1e1e1e; color: #fff;}
-
-body {
-  font-family: -apple-system, "Noto Sans CJK KR", "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-  line-height: 1.5
-}
-
-a {text-decoration: none}
-a:hover {text-decoration: underline}
-
-button {
-  border: none;
-  background: inherit;
-  cursor: pointer
-}
-
-.check-board {
-  background-color: #fff;
-  background-image: linear-gradient(45deg, #e8e8e8 25%, transparent 25%), linear-gradient(-45deg, #e8e8e8 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e8e8e8 75%), linear-gradient(-45deg, transparent 75%, #e8e8e8 75%);
-  background-size: 20px 20px;
-  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+:root {
+  font-family:-apple-system, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+  color:#222;
+  --primary:#fb3958;
 }

@@ -1,6 +1,8 @@
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -19,30 +21,40 @@ var __spreadValues = (a, b) => {
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
 var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[Object.keys(fn)[0]])(fn = 0)), res;
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
 };
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __reExport = (target, module2, copyDefault, desc) => {
+  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
+    for (let key of __getOwnPropNames(module2))
+      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
+        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+  }
+  return target;
+};
+var __toCommonJS = /* @__PURE__ */ ((cache) => {
+  return (module2, temp) => {
+    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
+  };
+})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
 
-// ../node_modules/tsup/assets/cjs_shims.js
-var importMetaUrlShim;
+// ../../../../../usr/local/lib/node_modules/tsup/assets/cjs_shims.js
 var init_cjs_shims = __esm({
-  "../node_modules/tsup/assets/cjs_shims.js"() {
-    importMetaUrlShim = typeof document === "undefined" ? new (require("url")).URL("file:" + __filename).href : document.currentScript && document.currentScript.src || new URL("main.js", document.baseURI).href;
+  "../../../../../usr/local/lib/node_modules/tsup/assets/cjs_shims.js"() {
   }
 });
 
-// ../node_modules/braces/lib/utils.js
+// node_modules/braces/lib/utils.js
 var require_utils = __commonJS({
-  "../node_modules/braces/lib/utils.js"(exports) {
-    init_cjs_shims();
+  "node_modules/braces/lib/utils.js"(exports) {
     "use strict";
+    init_cjs_shims();
     exports.isInteger = (num) => {
       if (typeof num === "number") {
         return Number.isInteger(num);
@@ -123,11 +135,11 @@ var require_utils = __commonJS({
   }
 });
 
-// ../node_modules/braces/lib/stringify.js
+// node_modules/braces/lib/stringify.js
 var require_stringify = __commonJS({
-  "../node_modules/braces/lib/stringify.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/lib/stringify.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var utils = require_utils();
     module2.exports = (ast, options = {}) => {
       let stringify = (node, parent = {}) => {
@@ -155,11 +167,11 @@ var require_stringify = __commonJS({
   }
 });
 
-// ../node_modules/is-number/index.js
+// node_modules/is-number/index.js
 var require_is_number = __commonJS({
-  "../node_modules/is-number/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/is-number/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     module2.exports = function(num) {
       if (typeof num === "number") {
         return num - num === 0;
@@ -172,11 +184,11 @@ var require_is_number = __commonJS({
   }
 });
 
-// ../node_modules/to-regex-range/index.js
+// node_modules/to-regex-range/index.js
 var require_to_regex_range = __commonJS({
-  "../node_modules/to-regex-range/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/to-regex-range/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var isNumber = require_is_number();
     var toRegexRange = (min, max, options) => {
       if (isNumber(min) === false) {
@@ -250,7 +262,7 @@ var require_to_regex_range = __commonJS({
       let nines = 1;
       let zeros = 1;
       let stop = countNines(min, nines);
-      let stops = new Set([max]);
+      let stops = /* @__PURE__ */ new Set([max]);
       while (min <= stop && stop <= max) {
         stops.add(stop);
         nines += 1;
@@ -385,11 +397,11 @@ var require_to_regex_range = __commonJS({
   }
 });
 
-// ../node_modules/fill-range/index.js
+// node_modules/fill-range/index.js
 var require_fill_range = __commonJS({
-  "../node_modules/fill-range/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/fill-range/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var util = require("util");
     var toRegexRange = require_to_regex_range();
     var isObject = (val) => val !== null && typeof val === "object" && !Array.isArray(val);
@@ -592,11 +604,11 @@ var require_fill_range = __commonJS({
   }
 });
 
-// ../node_modules/braces/lib/compile.js
+// node_modules/braces/lib/compile.js
 var require_compile = __commonJS({
-  "../node_modules/braces/lib/compile.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/lib/compile.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var fill = require_fill_range();
     var utils = require_utils();
     var compile = (ast, options = {}) => {
@@ -644,11 +656,11 @@ var require_compile = __commonJS({
   }
 });
 
-// ../node_modules/braces/lib/expand.js
+// node_modules/braces/lib/expand.js
 var require_expand = __commonJS({
-  "../node_modules/braces/lib/expand.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/lib/expand.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var fill = require_fill_range();
     var stringify = require_stringify();
     var utils = require_utils();
@@ -742,11 +754,11 @@ var require_expand = __commonJS({
   }
 });
 
-// ../node_modules/braces/lib/constants.js
+// node_modules/braces/lib/constants.js
 var require_constants = __commonJS({
-  "../node_modules/braces/lib/constants.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/lib/constants.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     module2.exports = {
       MAX_LENGTH: 1024 * 64,
       CHAR_0: "0",
@@ -797,11 +809,11 @@ var require_constants = __commonJS({
   }
 });
 
-// ../node_modules/braces/lib/parse.js
+// node_modules/braces/lib/parse.js
 var require_parse = __commonJS({
-  "../node_modules/braces/lib/parse.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/lib/parse.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var stringify = require_stringify();
     var {
       MAX_LENGTH,
@@ -1030,11 +1042,11 @@ var require_parse = __commonJS({
   }
 });
 
-// ../node_modules/braces/index.js
+// node_modules/braces/index.js
 var require_braces = __commonJS({
-  "../node_modules/braces/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/braces/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var stringify = require_stringify();
     var compile = require_compile();
     var expand = require_expand();
@@ -1094,11 +1106,11 @@ var require_braces = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/lib/constants.js
+// node_modules/picomatch/lib/constants.js
 var require_constants2 = __commonJS({
-  "../node_modules/picomatch/lib/constants.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/picomatch/lib/constants.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var path = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
@@ -1237,11 +1249,11 @@ var require_constants2 = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/lib/utils.js
+// node_modules/picomatch/lib/utils.js
 var require_utils2 = __commonJS({
-  "../node_modules/picomatch/lib/utils.js"(exports) {
-    init_cjs_shims();
+  "node_modules/picomatch/lib/utils.js"(exports) {
     "use strict";
+    init_cjs_shims();
     var path = require("path");
     var win32 = process.platform === "win32";
     var {
@@ -1301,11 +1313,11 @@ var require_utils2 = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/lib/scan.js
+// node_modules/picomatch/lib/scan.js
 var require_scan = __commonJS({
-  "../node_modules/picomatch/lib/scan.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/picomatch/lib/scan.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var utils = require_utils2();
     var {
       CHAR_ASTERISK,
@@ -1620,11 +1632,11 @@ var require_scan = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/lib/parse.js
+// node_modules/picomatch/lib/parse.js
 var require_parse2 = __commonJS({
-  "../node_modules/picomatch/lib/parse.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/picomatch/lib/parse.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var constants = require_constants2();
     var utils = require_utils2();
     var {
@@ -1800,7 +1812,8 @@ var require_parse2 = __commonJS({
             output = token.close = `)$))${extglobStar}`;
           }
           if (token.inner.includes("*") && (rest = remaining()) && /^\.[^\\/.]+$/.test(rest)) {
-            output = token.close = `)${rest})${extglobStar})`;
+            const expression = parse(rest, __spreadProps(__spreadValues({}, options), { fastpaths: false })).output;
+            output = token.close = `)${expression})${extglobStar})`;
           }
           if (token.prev.type === "bos") {
             state.negatedExtglob = true;
@@ -2401,11 +2414,11 @@ var require_parse2 = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/lib/picomatch.js
+// node_modules/picomatch/lib/picomatch.js
 var require_picomatch = __commonJS({
-  "../node_modules/picomatch/lib/picomatch.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/picomatch/lib/picomatch.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var path = require("path");
     var scan = require_scan();
     var parse = require_parse2();
@@ -2546,20 +2559,20 @@ var require_picomatch = __commonJS({
   }
 });
 
-// ../node_modules/picomatch/index.js
+// node_modules/picomatch/index.js
 var require_picomatch2 = __commonJS({
-  "../node_modules/picomatch/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/picomatch/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     module2.exports = require_picomatch();
   }
 });
 
-// ../node_modules/micromatch/index.js
+// node_modules/micromatch/index.js
 var require_micromatch = __commonJS({
-  "../node_modules/micromatch/index.js"(exports, module2) {
-    init_cjs_shims();
+  "node_modules/micromatch/index.js"(exports, module2) {
     "use strict";
+    init_cjs_shims();
     var util = require("util");
     var braces = require_braces();
     var picomatch = require_picomatch2();
@@ -2568,9 +2581,9 @@ var require_micromatch = __commonJS({
     var micromatch2 = (list, patterns, options) => {
       patterns = [].concat(patterns);
       list = [].concat(list);
-      let omit = new Set();
-      let keep = new Set();
-      let items = new Set();
+      let omit = /* @__PURE__ */ new Set();
+      let keep = /* @__PURE__ */ new Set();
+      let items = /* @__PURE__ */ new Set();
       let negatives = 0;
       let onResult = (state) => {
         items.add(state.output);
@@ -2614,7 +2627,7 @@ var require_micromatch = __commonJS({
     micromatch2.any = micromatch2.isMatch;
     micromatch2.not = (list, patterns, options = {}) => {
       patterns = [].concat(patterns).map(String);
-      let result = new Set();
+      let result = /* @__PURE__ */ new Set();
       let items = [];
       let onResult = (state) => {
         if (options.onResult)
@@ -2719,7 +2732,8 @@ var require_micromatch = __commonJS({
 });
 
 // src/vite-plugin-adorable-css.ts
-__export(exports, {
+var vite_plugin_adorable_css_exports = {};
+__export(vite_plugin_adorable_css_exports, {
   ALL_PROPERTIES: () => ALL_PROPERTIES,
   PREFIX_MEDIA_QUERY: () => PREFIX_MEDIA_QUERY,
   PREFIX_PSEUDO_CLASS: () => PREFIX_PSEUDO_CLASS,
@@ -2819,7 +2833,7 @@ var px = (value2) => {
 var percentToEm = (value2) => {
   if (value2.endsWith("%"))
     return +value2.slice(0, -1) / 100 + "em";
-  return value2;
+  return px(value2);
 };
 var makeHEX = (value2) => {
   const [rgb, a] = value2.split(".");
@@ -3505,8 +3519,7 @@ img,picture,video,canvas,svg{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-`;
+ol,ul,menu,dir{list-style:none;}`;
 var RULES = {
   "c": (value2) => `color:${makeColor(value2)};`,
   "bg": (value2) => {
@@ -3517,8 +3530,21 @@ var RULES = {
   "font": (value2) => makeFont(value2),
   "font-size": (value2) => `font-size:${px(value2)};`,
   "line-height": (value2) => `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`,
-  "letter-spacing": (value2) => `letter-spacing:${px(value2)};`,
+  "letter-spacing": (value2) => `letter-spacing:${percentToEm(value2)};`,
   "word-spacing": (value2) => `word-spacing:${px(value2)};`,
+  "sans-serif": () => `font-family:sans-serif;`,
+  "serif": () => `font-family:serif;`,
+  "monospace": (value2) => {
+    if (value2 === "number")
+      return `font-variant-numeric:tabular-nums;`;
+    return `font-family:menlo,monospace;`;
+  },
+  "cursive": () => `font-family:cursive;`,
+  "fantasy": () => `font-family:fantasy;`,
+  "system-ui": () => `font-family:system-ui;`,
+  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
+  "Roboto": () => `font-family:Roboto;`,
+  "Arial": () => `font-family:Arial;`,
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
   "300": () => `font-weight:300;`,
@@ -3528,14 +3554,12 @@ var RULES = {
   "700": () => `font-weight:700;`,
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
-  "thin": () => `font-weight:100;`,
-  "extra-light": () => `font-weight:200;`,
+  "thin": () => `font-weight:200;`,
   "light": () => `font-weight:300;`,
-  "regular": () => `font-weight:400;`,
+  "regular": () => `font-weight:normal;`,
   "medium": () => `font-weight:500;`,
   "semibold": () => `font-weight:600;`,
-  "bold": () => `font-weight:700;`,
-  "extra-bold": () => `font-weight:800;`,
+  "bold": () => `font-weight:bold;`,
   "heavy": () => `font-weight:900;`,
   "thicker": (value2 = "1") => `text-shadow:0 0 ${px(value2)} currentColor;`,
   "italic": () => `font-style:italic;`,
@@ -3544,13 +3568,10 @@ var RULES = {
   "line-through": () => `text-decoration:line-through;`,
   "strike": () => `text-decoration:line-through;`,
   "del": () => `text-decoration:line-through;`,
-  "sans-serif": () => `font-family:sans-serif;`,
-  "serif": () => `font-family:serif;`,
-  "monospace": () => `font-family:menlo,monospace;`,
-  "cursive": () => `font-family:cursive;`,
-  "fantasy": () => `font-family:fantasy;`,
-  "system-ui": () => `font-family:system-ui;`,
-  "small-caps": () => `font-variant:small-caps`,
+  "small-caps": () => `font-variant-caps:small-caps;`,
+  "all-small-caps": () => `font-variant-caps:all-small-caps;`,
+  "slashed-zero": () => `font-variant-numeric:slashed-zero;`,
+  "tabular-nums": () => `font-variant-numeric:tabular-nums;`,
   "lowercase": () => `text-transform:lowercase;`,
   "uppercase": () => `text-transform:uppercase;`,
   "capitalize": () => `text-transform:capitalize;`,
@@ -3558,9 +3579,17 @@ var RULES = {
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
+  "vertical-top": () => `vertical-align:top;`,
+  "vertical-middle": () => `vertical-align:middle;`,
+  "vertical-bottom": () => `vertical-align:bottom;`,
+  "sub": () => `vertical-align: sub;`,
+  "super": () => `vertical-align: super;`,
+  "text-top": () => `vertical-align: text-top;`,
+  "text-bottom": () => `vertical-align: text-bottom;`,
   "break-all": () => `word-break:break-all;`,
-  "break-word": () => `word-break:break-word;overflow-wrap:break-word;`,
+  "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
+  "hyphens": (value2 = "auto") => `hyphens: ${value2};`,
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
   "w": (value2) => {
@@ -3699,8 +3728,6 @@ var RULES = {
   "overscroll-y": (value2) => `overscroll-behavior-y:${value2};`,
   "no-bouncing": () => "",
   "no-overscroll": () => "",
-  "vertical-align": (value2) => `vertical-align:${value2}`,
-  "vertical-top": () => `vertical-align:top`,
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
@@ -3709,11 +3736,6 @@ var RULES = {
   "line-clamp": (value2) => `display:-webkit-box;-webkit-line-clamp:${value2};-webkit-box-orient:vertical;overflow:hidden;`,
   "max-lines": (value2) => `display:-webkit-box;-webkit-line-clamp:${value2};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value2) => `text-indent:${px(value2)};`,
-  "none": () => `display:none;`,
-  "opacity": (value2) => `opacity:${cssvar(value2)};`,
-  "invisible": () => `visibility:hidden;`,
-  "visible": () => `visibility:visible;`,
-  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
   "layer": (value2 = "") => {
     const pos = { top: 0, right: 0, bottom: 0, left: 0 };
     value2.split("+").forEach((v) => {
@@ -3750,6 +3772,15 @@ var RULES = {
   "left": (value2) => `left:${px(value2)};`,
   "right": (value2) => `right:${px(value2)};`,
   "bottom": (value2) => `bottom:${px(value2)};`,
+  "none": () => `display:none;`,
+  "opacity": (value2) => `opacity:${cssvar(value2)};`,
+  "invisible": () => `visibility:hidden;`,
+  "visible": () => `visibility:visible;`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "pointer": () => `cursor:pointer;`,
+  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "cursor": (value2) => `cursor:${value2};`,
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
   "user-select-all": () => "user-select:all;-webkit-user-select:all;",
   "user-select-auto": () => "user-select:auto;-webkit-user-select:auto;",
@@ -3757,10 +3788,6 @@ var RULES = {
   "user-select": (value2) => `user-select:${cssvar(value2)};-webkit-user-select:${cssvar(value2)};`,
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
-  "pointer": () => `cursor:pointer;`,
-  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
-  "grabbing": () => `cursor:grabbing;`,
-  "cursor": (value2) => `cursor:${value2};`,
   "transition": (value2) => `transition:${makeTransition(value2)};`,
   "translate": (value2) => `transform:translate(${makeCommaValues(value2)});`,
   "translateX": (value2) => `transform:translateX(${cssvar(value2)});`,
@@ -3783,6 +3810,7 @@ var RULES = {
   "content": (value2) => `content:${cssvar(value2)}`,
   "clip-path": (value2) => `clip-path:${cssvar(value2)};-webkit-clip-path:${cssvar(value2)};`,
   "table-layout-fixed": () => `table-layout:fixed;`,
+  "aspect-ratio": (value2) => `aspect-ratio:${cssvar(value2.replace(/:/g, "/"))}`,
   "float": (value2) => `float:${cssvar(value2)}`,
   "clear": (value2) => `clear:${cssvar(value2)}`,
   "blur": (value2) => `filter:blur(${px(value2)})`,
@@ -3824,8 +3852,7 @@ var RULES = {
     const diry = dp < 10 ? dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2 : dp - 4;
     const dira = (24 - Math.round(dp / 10)) / 100;
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`;
-  },
-  "aspect-ratio": (value2) => `aspect-ratio:${cssvar(value2.replace(/:/g, "/"))}`
+  }
 };
 var PREFIX_PSEUDO_CLASS = {
   "hover:": { media: `(hover:hover)`, selector: `&:hover, &.\\:hover` },
@@ -3883,19 +3910,20 @@ var PREFIX_MEDIA_QUERY = {
 };
 var SELECTOR_PREFIX = {
   ".": (selector) => `&${selector}, ${selector} &`,
-  ">>": (selector) => `& ${selector.slice(2, 0)}`,
+  "[": (selector) => `&${selector}, ${selector} &`,
+  ">>": (selector) => `& ${selector.slice(2)}`,
   ">": (selector) => `&${selector}`,
-  "+": (selector) => `&${selector}`,
-  "[": (selector) => `&${selector}`
+  "+": (selector) => `&${selector}`
 };
 
 // src/atomizer.ts
-var stricmp = (a, b) => a.localeCompare(b);
-var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => stricmp(a, b) || b.length - a.length);
+var SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => b.length - a.length);
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var makeSelector = (prefix) => {
   const key = SELECTOR_PREFIX_KEYS.find((s) => prefix.startsWith(s)) || "";
-  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix.slice(0, -1));
+  if (!key)
+    return;
+  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix);
   if (selector)
     return { selector };
 };
@@ -3904,7 +3932,9 @@ var value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source;
 var delimiter = /(:{1,2}|$)/.source;
 var re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g;
 var re_syntax = new RegExp(`${property}${value}${delimiter}`, "g");
-var makeDefaultPseudoClass = (input, type) => ({ selector: `&${type}${input.slice(0, -type.length).replace(/>>/g, " ")}` });
+var makeDefaultPseudoClass = (input, type) => {
+  return { selector: `&${type}${input.slice(0, -type.length).split(">>").join(" ")}` };
+};
 var generateAtomicCss = (rules, prefixRules) => {
   const makeRule = (r) => {
     var _a;
@@ -3934,7 +3964,7 @@ var generateAtomicCss = (rules, prefixRules) => {
         const [input, name, _value, type] = chunk;
         const value2 = _value && _value.slice(1, -1);
         if (type === ":" || type === "::") {
-          const prefixRule = (_b = (_a = makeSelector(input)) != null ? _a : prefixRules[name + type]) != null ? _b : makeDefaultPseudoClass(input, type);
+          const prefixRule = (_b = (_a = makeSelector(input.slice(0, -type.length))) != null ? _a : prefixRules[name + type]) != null ? _b : makeDefaultPseudoClass(input, type);
           $selector = $selector.map((s) => {
             var _a2, _b2;
             return ((_b2 = (_a2 = prefixRule == null ? void 0 : prefixRule.selector) == null ? void 0 : _a2.split(",")) != null ? _b2 : []).map((selector) => {
@@ -3956,7 +3986,7 @@ var generateAtomicCss = (rules, prefixRules) => {
           $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0;
         }
       }
-      const media = $mediaQuery.length ? "@media " + $mediaQuery.join(" and ") : "";
+      const media = $mediaQuery.length ? "@media" + $mediaQuery.join(" and ") : "";
       const selectors = $selector.join(",");
       const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}";
       return [media ? media + "{" + rule + "}" : rule, $priority];
@@ -4089,6 +4119,7 @@ var adorableCSS = (config) => {
     }
   }];
 };
+module.exports = __toCommonJS(vite_plugin_adorable_css_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ALL_PROPERTIES,
