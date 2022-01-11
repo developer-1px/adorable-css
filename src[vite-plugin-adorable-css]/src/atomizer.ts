@@ -1,110 +1,150 @@
 import {cssEscape} from "./cssEscape"
 import {makeValues} from "./makeValue"
-import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX} from "./rules"
+import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
 
 export type Rules = Record<string, (value?:string) => string>
-export type PrefixProps = { media?:string, selector?:string, postCSS?:Function }
+export type PrefixProps = { media?:string, selector?:string }
 export type PrefixRules = Record<string, PrefixProps>
-
-const SELECTOR_PREFIX_KEYS = Object.keys(SELECTOR_PREFIX).sort((a, b) => b.length - a.length)
 
 const PREFIX_RULES:PrefixRules = {
   ...PREFIX_PSEUDO_CLASS,
   ...PREFIX_MEDIA_QUERY,
 }
 
-const makeSelector = (prefix:string):PrefixProps|undefined => {
-  const key = SELECTOR_PREFIX_KEYS.find(s => prefix.startsWith(s)) || ""
-  if (!key) return
-  const selector = SELECTOR_PREFIX[key] && SELECTOR_PREFIX[key](prefix)
-  if (selector) return {selector}
+/// Tokenizer
+const lex:[string, RegExp][] = [
+  ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
+  ["(important)", /(!+)$/],
+  ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
+  ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
+  ["(indent)", /((?:\\.|[^'":[\](){}#])+)/],
+  ["(unknown)", /./]
+]
+
+const regex = new RegExp(lex.map(v => v[1].source).join("|"), "g")
+
+let tokens = []
+let token
+let index = 0
+
+const next = (id?:string) => {
+  if (id && token && token.id && token.id !== id) {
+    throw new Error("Unexpected token: " + token.id + " expected: " + id)
+  }
+
+  const t = token
+  token = tokens[index++]
+  return t
 }
 
+const tokenize = (script:string) => {
+  tokens = []
+  index = 0
 
-// Parse & Generate
-const property = /([^:(]+)/.source
-const value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))?/.source
-const delimiter = /(:{1,2}|$)/.source
+  script.replace(regex, (value, ...args) => {
+    const index:number = args[args.length - 2]
+    const type = lex[args.findIndex(v => v !== undefined)][0]
+    const id = type === "(operator)" ? value : type
+    tokens.push({type, id, value, index})
+    return value
+  })
 
-const re_value = /(\((?:[^)(]+|\((?:[^)(]+|\([^)(]*\))*\))*\))[!]*/g
-const re_syntax = new RegExp(`${property}${value}${delimiter}`, "g")
+  next()
+}
 
-const makeDefaultPseudoClass = (input:string, type:":"|"::"):PrefixProps => {
-  // return {selector: `&${type}${input.slice(0, -type.length).split(">>").map(cssEscape).join(" ")}`}
-  return {selector: `&${type}${input.slice(0, -type.length).split(">>").join(" ")}`}
+const expr = () => {
+  const args = []
+  const push = (v) => args.push(v)
+  const stack = []
+
+  while (token) {
+    if (token.id === "(" || token.id === "[" || token.id === "{") {
+      stack.push(token.id)
+    }
+    else if (token.id === ")" || token.id === "]" || token.id === "}") {
+      const prev = stack.pop()
+      if (prev === "(" && token.id === ")") {}
+      else if (prev === "[" && token.id === "]") {}
+      else if (prev === "{" && token.id === "}") {}
+      else throw new Error("Unexpected:" + token.id)
+    }
+    else if (stack.length === 0 && token.id === ":" || token.id === "::" || token.id === "(important)") {
+      break
+    }
+
+    push(next())
+  }
+
+  if (stack.length > 0) throw new Error("Unexpected end of input")
+  return args
 }
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
-  const makeRule = (r:string) => rules[r] ?? ((value:string) => (ALL_PROPERTIES[r] && value) ? `${r}:${makeValues(value)}` : "")
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
 
-  return (atom:string):[string, number]|undefined => {
+  return (script:string):[string, number]|undefined => {
 
     try {
-      // syntax validate
-      const prop = atom.replace(re_value, "").split(":").pop()
-      if (!rules[prop] && !ALL_PROPERTIES[prop]) {
-        return
-      }
+      tokenize(script)
+      const ast = []
 
-      // ...! -> !important
-      const isImportant = atom.endsWith("!")
-      const important = isImportant ? "!important;" : ";"
-      atom = isImportant ? atom.slice(0, -1) : atom
+      while (token) {
+        const e = expr()
+        const type = e[0].value
+        const ident = e.map(e => e.value).join("")
 
-      // prepare result
-      let $selector = [`.${cssEscape(atom + (isImportant ? "!" : ""))}`]
-      let $mediaQuery:string[] = []
-      let $postCSS:Function[] = []
-      let $declaration = ""
-      let $priority = 0
+        // selector
+        if (token && (token.id === ":" || token.id === "::")) {
+          const selector = ident;
+          const makeSelector = PREFIX_SELECTOR[type]
+          const makePseudo = prefixRules[ident + token.id]
 
-      // parse chunk
-      re_syntax.lastIndex = 0
-      for (; ;) {
-        const chunk = re_syntax.exec(atom)
-        if (!chunk) break
+          const rule = (() => {
+            if (makeSelector) return {selector: makeSelector(selector)}
+            if (makePseudo) return makePseudo
+            return {selector: `&${token.id}${selector}`}
+          })()
 
-        const [input, name, _value, type] = chunk
-        const value = _value && _value.slice(1, -1)
-
-        // Make Prefix
-        if (type === ":" || type === "::") {
-          const prefixRule = makeSelector(input.slice(0, -type.length)) ?? prefixRules[name + type] ?? makeDefaultPseudoClass(input, type)
-
-          // selector
-          $selector = $selector.map(s => (prefixRule?.selector?.split(",") ?? []).map((selector:string) => {
-            return selector.replace(/&/g, s).trim()
-          })).flat()
-
-          // media query
-          if (prefixRule.media) {
-            $mediaQuery = [...$mediaQuery, prefixRule.media]
-          }
-
-          if (prefixRule.postCSS) {
-            $postCSS = [...$postCSS, prefixRule.postCSS]
-          }
+          rule.selector = rule.selector.replace(/>>/g, " ")
+          ast.push(rule)
         }
 
-        // Make declaration
-        else {
-          $declaration = makeRule(name)(value).replace(/;/g, important).trim()
-          if (!$declaration) return
-          if ($declaration.includes("undefined")) return
+        // declaration
+        else if (!token || token.id === "(important)") {
+          const property = type
+          const value = ident.slice(type.length + 1, -1)
+          const rule = rules[property]
+          const priority = priorityTable[property + (value.includes("(") ? "(" : "")] || priorityTable[property] || 0
 
-          $priority = priorityTable[name + (input.includes("(") ? "(" : "")] || priorityTable[name] || 0
+          let declaration = (() => {
+            if (rule) return value === "" ? rule() : rule(value)
+            if (value && ALL_PROPERTIES[property]) return `${property}:${makeValues(value)}`
+            throw new Error("Not defined property: " + property)
+          })()
+
+          if (token && token.id === "(important)") {
+            declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a)
+          }
+
+          ast.push({declaration, priority})
+          break
         }
+
+        next()
       }
 
-      const media = $mediaQuery.length ? "@media" + $mediaQuery.join(" and ") : ""
-      const selectors = $selector.join(",")
-      const rule = $declaration.includes("&") ? $declaration.replace(/&/g, selectors) : selectors + "{" + $declaration + "}"
+      const atom = "." + cssEscape(script)
+      const mediaQuery = ast.map(a => a.media).filter(Boolean)
+      const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : ""
+      const selector = ast.map(a => a.selector).filter(Boolean).reduce((a, b) => b.replace(/&/g, a), atom)
+      const declaration = ast.map(a => a.declaration).pop()
+      const priority = ast.map(a => a.priority).pop()
+      const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
 
-      return [media ? media + "{" + rule + "}" : rule, $priority]
+      return [media ? media + "{" + rule + "}" : rule, priority]
     }
     catch (e) {
-
+      // console.error(e)
     }
   }
 }
@@ -114,7 +154,18 @@ const sortByRule = (a?:[string, number], b?:[string, number]) => a![1] - b![1]
 export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}) => {
   rules = {...RULES, ...rules}
   prefixRules = {...PREFIX_RULES, ...prefixRules}
-  return (classList:string[]) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map(a => a![0]).filter(Boolean)
+
+  return (classList:string[]) => classList
+    .map(generateAtomicCss(rules, prefixRules))
+    .filter(Boolean)
+    .sort(sortByRule)
+    .map(a => a[0])
 }
 
 export const generateCss = createGenerateCss()
+
+export const parseAtoms = (code:string):string[] => {
+  const atoms = new Set<string>()
+  code.split(/[\s"'`]/).forEach(atom => atoms.add(atom))
+  return [...atoms]
+}

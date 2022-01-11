@@ -1,7 +1,6 @@
 import type {Plugin, ViteDevServer} from "vite"
 
-import {parseAtoms} from "./parser"
-import {createGenerateCss, PrefixRules, Rules} from "./atomizer"
+import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
 import {reset} from "./rules"
 
 const micromatch = require("micromatch")
@@ -48,7 +47,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat()
     const styles = generateCss([...new Set(allAtoms)])
-    return [config.reset, ...styles].join("\n")
+    return config.reset + styles.join("\n")
   }
 
   const invalidate = () => {
@@ -154,5 +153,5 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 
 export * from "./makeValue"
 export * from "./rules"
-export {parseAtoms} from "./parser"
 export {generateCss, createGenerateCss} from "./atomizer"
+export {parseAtoms} from "./atomizer"

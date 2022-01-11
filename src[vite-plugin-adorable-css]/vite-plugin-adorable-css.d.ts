@@ -4,11 +4,11 @@ declare type Rules = Record<string, (value?: string) => string>;
 declare type PrefixProps = {
     media?: string;
     selector?: string;
-    postCSS?: Function;
 };
 declare type PrefixRules = Record<string, PrefixProps>;
 declare const createGenerateCss: (rules?: Rules, prefixRules?: PrefixRules) => (classList: string[]) => string[];
 declare const generateCss: (classList: string[]) => string[];
+declare const parseAtoms: (code: string) => string[];
 
 declare const makeNumber: (num: number) => string;
 declare const cssvar: (value: string | number) => string | number;
@@ -543,13 +543,11 @@ declare const ALL_PROPERTIES: {
     "z-index": number;
     zoom: number;
 };
-declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}\nhtml,body{height:100%;}\nimg,picture,video,canvas,svg{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}";
+declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}\nhtml,body{height:100%;}\nimg,picture,video,canvas,svg{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n";
 declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
-declare const SELECTOR_PREFIX: Record<string, (selector: string) => string>;
-
-declare const parseAtoms: (code: string) => string[];
+declare const PREFIX_SELECTOR: Record<string, (selector: string) => string>;
 
 interface Config {
     include: string[];
@@ -559,4 +557,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, RULES, SELECTOR_PREFIX, adorableCSS, createGenerateCss, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };
+export { ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };

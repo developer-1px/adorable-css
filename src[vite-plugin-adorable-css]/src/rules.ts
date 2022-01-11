@@ -13,7 +13,8 @@ img,picture,video,canvas,svg{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}`
+ol,ul,menu,dir{list-style:none;}
+`
 
 export const RULES:Rules = {
 
@@ -110,8 +111,7 @@ export const RULES:Rules = {
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
-  "hyphens": (value:string = "auto") => `hyphens: ${value};`,
-
+  "hyphens": (value = "auto") => `hyphens: ${value};`,
 
   // -- Box
 
@@ -318,17 +318,13 @@ export const RULES:Rules = {
     const pos = {top: 0, right: 0, bottom: 0, left: 0}
     value.split("+").forEach(v => {
       switch (v) {
-        // @ts-ignore
         case "top": {return (delete pos.bottom)}
-        // @ts-ignore
         case "right": {return (delete pos.left)}
-        // @ts-ignore
         case "bottom": {return (delete pos.top)}
-        // @ts-ignore
         case "left": {return (delete pos.right)}
       }
     })
-    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0`).join(";")
+    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0;`).join("")
   },
 
   "absolute": () => `position:absolute;`,
@@ -543,10 +539,12 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
 }
 
 // selector
-export const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
+export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
+  ">>": (selector:string) => `& ${selector.slice(2)}`,
   ".": (selector:string) => `&${selector}, ${selector} &`,
   "[": (selector:string) => `&${selector}, ${selector} &`,
-  ">>": (selector:string) => `& ${selector.slice(2)}`,
   ">": (selector:string) => `&${selector}`,
   "+": (selector:string) => `&${selector}`,
+  "~": (selector:string) => `&${selector}`,
+  "#": (selector:string) => `&${selector}`,
 }
