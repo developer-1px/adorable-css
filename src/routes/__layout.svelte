@@ -3,6 +3,8 @@ import "@adorable.css"
 import "../style.css"
 import UIVersion from "../screens/UIVersion.svelte"
 import {page} from "$app/stores"
+import {base, assets} from "$app/paths"
+
 
 const useActive = (el) => {
   page.subscribe(page => {
@@ -13,13 +15,13 @@ const useActive = (el) => {
 
 <div class="vbox">
   <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary)">
-    <a href="/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
+    <a href="{base}/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">
-      <a href="/tutorial" use:useActive>Tutorial</a>
-      <a href="/docs" use:useActive>Docs</a>
-      <a href="/changelogs" use:useActive>ChangeLog</a>
-      <a href="/reference" use:useActive>Reference</a>
+      <a href="{base}/tutorial" use:useActive>Tutorial</a>
+      <a href="{base}/docs" use:useActive>Docs</a>
+      <a href="{base}/changelogs" use:useActive>ChangeLog</a>
+      <a href="{base}/reference" use:useActive>Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>
       <a target="_blank" href="https://github.com/developer-1px/adorable-css/issues">기능 제안</a>
     </div>
@@ -46,4 +48,4 @@ const useActive = (el) => {
   <slot/>
 </div>
 
-<UIVersion version="0.0.9"/>
+<UIVersion version="0.1.0"/>

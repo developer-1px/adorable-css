@@ -12,7 +12,7 @@ const config = {
     mdsvex({extensions: [".md"]})
   ],
   kit: {
-    appDir: "adorableCSS",
+    appDir: "adorable-css",
     vite: {
       plugins: [adorableCSS()],
       server: {
