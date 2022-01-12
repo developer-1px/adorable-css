@@ -11,8 +11,6 @@ html .active\:color\(--primary\):active, html .active\:color\(--primary\).\:acti
 .\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
 .\39 00{font-weight:900;}
-@media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover, .\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}}
-.\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}
 .c\(\#ccc\){color:#ccc;}
 .group:hover .group-hover\:c\(--primary\), html .group.\:hover .group-hover\:c\(--primary\){color:var(--primary);}
 .c\(\#666\){color:#666;}
@@ -21,12 +19,13 @@ html .active\:color\(--primary\):active, html .active\:color\(--primary\).\:acti
 .placeholder\:c\(\#ccc\)::placeholder{color:#ccc;}
 .\.selected\:c\(\#fff\).selected, .selected .\.selected\:c\(\#fff\){color:#fff;}
 .\>\>a\:c\(\#4f80ff\) a{color:#4f80ff;}
+@media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover, .\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}}
+.\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}
 .c\(\#000\){color:#000;}
 @media(hover:hover){.hover\:c\(--primary\):hover, .hover\:c\(--primary\).\:hover{color:var(--primary);}}
 .\.selected\:c\(\#fff\)\!.selected, .selected .\.selected\:c\(\#fff\)\!{color:#fff!important;}
 .c\(\#999\){color:#999;}
 .\.selected\:c\(\#000\).selected, .selected .\.selected\:c\(\#000\){color:#000;}
-.bg\(\#fff\){background-color:#fff;}
 .odd\:bg\(\#f9f9f9\):nth-child(2n+1){background-color:#f9f9f9;}
 .bg\(\#f1f1f1\){background-color:#f1f1f1;}
 .bg\(\#333\){background-color:#333;}
@@ -35,19 +34,21 @@ html .active\:bg\(\#000\)\!:active, html .active\:bg\(\#000\)\!.\:active{backgro
 html .active\:bg\(\#000\):active, html .active\:bg\(\#000\).\:active{background-color:#000;}
 .nth-child\(3n\+1\)\:bg\(orange\):nth-child(3n+1){background-color:orange;}
 .\.selected\:bg\(\#000\).selected, .selected .\.selected\:bg\(\#000\){background-color:#000;}
+.bg\(\#fff\){background-color:#fff;}
 .bg\(\#f9f9f9\){background-color:#f9f9f9;}
 .\.selected\:bg\(--primary\).selected, .selected .\.selected\:bg\(--primary\){background-color:var(--primary);}
 .bg\(transparent\){background-color:transparent;}
-.font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em}
+.font\(3em\/-\/-1\.5\%\){font-size:3em;letter-spacing:-0.015em}
+@media(max-device-width:767.98px){html .mobile\:font\(2em\){font-size:2em}}
 .font\(100\/-\/-15\%\){font-size:100px;letter-spacing:-0.15em}
 .font\(30\){font-size:30px}
-.font\(50\/-\/-1\.5\%\){font-size:50px;letter-spacing:-0.015em}
 .font\(10\){font-size:10px}
 .font\(30\/-\/-1\.5\%\){font-size:30px;letter-spacing:-0.015em}
 .font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
 .font\(24\){font-size:24px}
 .font\(13\){font-size:13px}
 .font\(14\/1\.5\/-1\%\){font-size:14px;line-height:1.5;letter-spacing:-0.01em}
+.font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em}
 .font\(12\){font-size:12px}
 .monospace{font-family:menlo,monospace;}
 .monospace\(number\){font-variant-numeric:tabular-nums;}
@@ -58,7 +59,7 @@ html .active\:bg\(\#000\):active, html .active\:bg\(\#000\).\:active{background-
 .text-left{text-align:left;}
 .vertical-top{vertical-align:top;}
 .w\(\~480\){max-width:480px;}
-.w\(800\){width:800px;}
+.w\(\~800\){max-width:800px;}
 .w\(100\~200\){min-width:100px;max-width:200px;}
 .w\(240\){width:240px;}
 .w\(100\%\){width:100%;}
@@ -69,12 +70,11 @@ html .active\:bg\(\#000\):active, html .active\:bg\(\#000\).\:active{background-
 .m\(10\/0\){margin:10px 0;}
 .\>h1\:m\(20\)>h1{margin:20px;}
 .mt\(40\){margin-top:40px;}
-.p\(10\/20\){padding:10px 20px;}
 .p\(200\/32\){padding:200px 32px;}
-.p\(200\/80\){padding:200px 80px;}
 .p\(10\/10\){padding:10px 10px;}
 .p\(20\){padding:20px;}
 .p\(8\/12\){padding:8px 12px;}
+.p\(10\/20\){padding:10px 20px;}
 .p\(10\){padding:10px;}
 .pt\(12\){padding-top:12px;}
 .b\(\#000\.2\){border:solid 1px rgba(0,0,0,.2);}
@@ -89,19 +89,20 @@ html .active\:b\(\#000\.2\):active, html .active\:b\(\#000\.2\).\:active{border:
 .hbox{display:flex;flex-flow:row;align-items:center;}
 .hbox\(fill\){display:flex;flex-flow:row;align-items:center;align-items:stretch;}
 .hbox\(bottom\+right\){display:flex;flex-flow:row;align-items:flex-end;justify-content:flex-end;}
-.vbox{display:flex;flex-flow:column;align-items:stretch;}
+.vbox{display:flex;flex-flow:column;max-width:100%;align-items:stretch;}
 .pack{display:flex;align-items:center;justify-content:center;}
-.gap\(20\){gap:20px;}
 .gap\(40\){gap:40px;}
 .gap\(60\){gap:60px;}
 .gap\(6\){gap:6px;}
+.gap\(20\){gap:20px;}
 .space-between{justify-content:space-between;}
 .flex{flex:1;}
 .flex\(4\){flex:4;}
 .flex\(3\){flex:3;}
-[class*="hbox"]>.space\(40\) {width:40px;} [class*="vbox"]>.space\(40\) {height:40px;}
-.flex-wrap{flex-wrap:wrap;}
+[class*="hbox"]>.space\(2em\) {width:2em;} [class*="vbox"]>.space\(2em\) {height:2em;}
+.flex-wrap{flex-wrap:wrap;max-width:100%;}
 .clip{overflow:hidden;}
+.scroll-x{overflow-x:auto;overflow-y:hidden;}
 .scroll-y{overflow-x:hidden;overflow-y:auto;}
 .overscroll\(none\){overscroll-behavior:none;}
 .pre{white-space:pre-wrap;}
@@ -127,4 +128,4 @@ html .group:active .group-active\:rotate\(10deg\), html .group.\:active .group-a
 html .group:active .group-active\:rotate\(-10deg\), html .group.\:active .group-active\:rotate\(-10deg\){transform:rotate(-10deg);}
 html .active\:rotate\(5deg\):active, html .active\:rotate\(5deg\).\:active{transform:rotate(5deg);}
 @media(hover:hover){.hover\:scale\(1\.05\):hover, .hover\:scale\(1\.05\).\:hover{transform:scale(1.05);}}
-.after\:content\(--my-content\)::after{content:var(--my-content)}:root{font-family:-apple-system,Malgun Gothic,\b9d1\c740  \ace0\b515,Apple SD Gothic Neo,sans-serif;color:#222;--primary:#fb3958;--primary-bg:rgba(251,57,88,.02)}.markdown{max-width:768px;margin:auto;line-height:1.6;font-size:17px;letter-spacing:-.01em;word-wrap:break-all;color:#333}.markdown blockquote{background:var(--primary-bg);margin:1em 0;padding:.6em 1.2em .6em 1.4em;border-left:4px solid var(--primary)}.markdown hr{margin:2em 0;border-top:1px solid rgba(0,0,0,.1)}.markdown a{color:var(--primary)}.markdown a:hover{text-decoration:underline}.markdown h1,.markdown h2,.markdown h3,.markdown h4{font-size:3em;font-weight:700;margin-top:1em}.markdown h2{margin-top:1em;font-size:2em}.markdown h3{font-size:1.4em}.markdown h4{font-size:1em}.markdown p{margin:1em 0}.markdown ul,.markdown ol{list-style:disc;padding:0 1em;margin:1em 0}.markdown ol{list-style:number}.markdown pre{background:#f9f9f9;margin:1em 0;padding:1em;white-space:pre-wrap;font-family:monospace;font-size:.8em;text-align:left}.markdown code{background:#f5f5f5;padding:2px .4em;border-radius:.4em;font-family:monospace}.markdown pre code{background:none;padding:0}.markdown .attr-value,.markdown .string,.markdown .string-property{color:var(--primary)}.markdown .comment{color:#999}
+.after\:content\(--my-content\)::after{content:var(--my-content)}:root{font-family:-apple-system,Malgun Gothic,\b9d1\c740  \ace0\b515,Apple SD Gothic Neo,sans-serif;color:#222;--primary:#fb3958;--primary-bg:rgba(251, 57, 88, .02)}.markdown{width:768px;max-width:100%;margin:auto;line-height:1.6;font-size:18px;letter-spacing:-.01em;word-wrap:break-all;color:#333}.markdown blockquote{background:var(--primary-bg);margin:1em 0;padding:.2em 1.4em;border-left:4px solid var(--primary)}.markdown hr{margin:2em 0;border-top:1px solid rgba(0,0,0,.1)}.markdown a{color:var(--primary)}.markdown a:hover{text-decoration:underline}.markdown h1,.markdown h2,.markdown h3,.markdown h4{font-size:2.4em;font-weight:700;margin-top:1em}.markdown h2{margin-top:1em;font-size:2em}.markdown h3{font-size:1.6em}.markdown h4{font-size:1em}.markdown p{margin:1em 0}.markdown ul,.markdown ol{list-style:disc;padding:0 1em;margin:1em 0}.markdown ol{list-style:number}.markdown pre{background:#f9f9f9;margin:1em 0;padding:1em;border-radius:.6em;white-space:pre-wrap;font-family:monospace;font-size:.8em;text-align:left}.markdown code{background:#f6f8fa;padding:2px .4em;border-radius:.4em;font-family:monospace}.markdown pre code{background:none;padding:0}.markdown .attr-value,.markdown .string,.markdown .string-property{color:var(--primary)}.markdown .comment{color:#999}@media (max-width:768px){.markdown{font-size:16px}}

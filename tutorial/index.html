@@ -9,19 +9,19 @@
 
 		
 
-		<link rel="stylesheet" href="/adorable-css/_app/assets/start-61d1577b.css">
-		<link rel="stylesheet" href="/adorable-css/_app/assets/pages/__layout.svelte-10fe2144.css">
-		<link rel="modulepreload" href="/adorable-css/_app/start-4cf2d3d2.js">
-		<link rel="modulepreload" href="/adorable-css/_app/chunks/vendor-68cd0a27.js">
-		<link rel="modulepreload" href="/adorable-css/_app/chunks/paths-28a87002.js">
-		<link rel="modulepreload" href="/adorable-css/_app/pages/__layout.svelte-2cd81d80.js">
-		<link rel="modulepreload" href="/adorable-css/_app/pages/tutorial.svelte-7e9581f4.js">
+		<link rel="stylesheet" href="/_app/assets/start-61d1577b.css">
+		<link rel="stylesheet" href="/_app/assets/pages/__layout.svelte-3b540adb.css">
+		<link rel="modulepreload" href="/_app/start-c57efa6a.js">
+		<link rel="modulepreload" href="/_app/chunks/vendor-e0ae2598.js">
+		<link rel="modulepreload" href="/_app/chunks/paths-28a87002.js">
+		<link rel="modulepreload" href="/_app/pages/__layout.svelte-52d5122a.js">
+		<link rel="modulepreload" href="/_app/pages/tutorial.svelte-fbc28921.js">
 
 		<script type="module">
-			import { start } from "/adorable-css/_app/start-4cf2d3d2.js";
+			import { start } from "/_app/start-c57efa6a.js";
 			start({
 				target: document.querySelector("#svelte"),
-				paths: {"base":"/adorable-css","assets":"/adorable-css"},
+				paths: {"base":"","assets":""},
 				session: {},
 				route: true,
 				spa: false,
@@ -30,8 +30,8 @@
 					status: 200,
 					error: null,
 					nodes: [
-						import("/adorable-css/_app/pages/__layout.svelte-2cd81d80.js"),
-						import("/adorable-css/_app/pages/tutorial.svelte-7e9581f4.js")
+						import("/_app/pages/__layout.svelte-52d5122a.js"),
+						import("/_app/pages/tutorial.svelte-fbc28921.js")
 					],
 					url: new URL("http://prerender/tutorial"),
 					params: {}
@@ -56,12 +56,12 @@
 <div id="svelte">
 
 
-<div class="vbox"><div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary)"><a href="/adorable-css/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
+<div class="vbox"><div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary) scroll-x"><a href="/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
 
-    <div class="hbox gap(20)"><a href="/adorable-css/tutorial">Tutorial</a>
-      <a href="/adorable-css/docs">Docs</a>
-      <a href="/adorable-css/changelogs">ChangeLog</a>
-      <a href="/adorable-css/reference">Reference</a>
+    <div class="hbox gap(20)"><a href="/tutorial">Tutorial</a>
+      <a href="/docs">Docs</a>
+      <a href="/changelogs">ChangeLog</a>
+      <a href="/reference">Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>
       <a target="_blank" href="https://github.com/developer-1px/adorable-css/issues">기능 제안</a></div>
 
@@ -100,7 +100,7 @@ ol,ul,menu,dir{list-style:none;}
 .vertical-top{vertical-align:top;}
 .p\(50\){padding:50px;}
 .hbox{display:flex;flex-flow:row;align-items:center;}
-.vbox{display:flex;flex-flow:column;align-items:stretch;}
+.vbox{display:flex;flex-flow:column;max-width:100%;align-items:stretch;}
 .pack{display:flex;align-items:center;justify-content:center;}
 .gap\(20\){gap:20px;}
 .opacity\(0\.7\){opacity:0.7;}
