@@ -68,7 +68,7 @@ const expr = () => {
       else if (prev === "{" && token.id === "}") {}
       else throw new Error("Unexpected:" + token.id)
     }
-    else if (stack.length === 0 && token.id === ":" || token.id === "::" || token.id === "(important)") {
+    else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)")) {
       break
     }
 
@@ -95,7 +95,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
         // selector
         if (token && (token.id === ":" || token.id === "::")) {
-          const selector = ident;
+          const selector = ident
           const makeSelector = PREFIX_SELECTOR[type]
           const makePseudo = prefixRules[ident + token.id]
 
@@ -133,12 +133,17 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         next()
       }
 
-      const atom = "." + cssEscape(script)
       const mediaQuery = ast.map(a => a.media).filter(Boolean)
       const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : ""
-      const selector = ast.map(a => a.selector).filter(Boolean).reduce((a, b) => b.replace(/&/g, a), atom)
+
+      const atom = "." + cssEscape(script)
+      const selector = ast.map(a => a.selector).filter(Boolean).map(selector => selector.split(",")).reduce((prev, curr) => {
+        return prev.map(prev => curr.map(selector => selector.replace(/&/g, prev))).flat()
+      }, [atom]).join(",")
+
       const declaration = ast.map(a => a.declaration).pop()
       const priority = ast.map(a => a.priority).pop()
+
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
 
       return [media ? media + "{" + rule + "}" : rule, priority]

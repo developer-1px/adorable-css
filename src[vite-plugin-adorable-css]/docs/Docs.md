@@ -1,83 +1,6 @@
 # ฅ^•ﻌ•^ฅ <br/>AdorableCSS
 
-> Rapid On-Demand Atomic CSS framework
-
-## Try It Online
-![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
-
-- try it online [here](https://developer-1px.github.io/adorable-css/).
-
-> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
-
-#### Don't write your own css. Just write down in HTML.
-
-```tsx
-// Button.tsx
-export const Button = () =>
-  <button class="hbox pack bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
-  hover:bg(#555)
-  active:bg(#000)! active:b(#000.2)">click me</button>
-```
-
-#### ... and auto generated css code on realtime! 😎
-
-```css
-/* @adorable.css */
-*{margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
-.c\(\#fff\){color:#fff;}
-.bg\(\#333\){background-color:#333;}
-@media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
-html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
-.font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
-.bold{font-weight:700;}
-.p\(8\/12\){padding:8px 12px;}
-.b\(\#000\.2\){border:solid 1px rgba(0,0,0,.2);}
-html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:solid 1px rgba(0,0,0,.2);}
-.r\(6\){border-radius:6px;}
-.hbox{display:flex;flex-flow:row;align-items: center;}
-.pack{display:flex;align-items:center;justify-content:center;}
-.pointer{cursor:pointer;}
-.transition\(\.2s\){transition:all .2s;}
-```
-
----
-
-## Getting Started
-
-https://www.youtube.com/watch?v=55W1rlJ4ukc&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL
-
-```
-npm i -D adorable-css
-```
-
-```ts
-// vite.config.js
-...
-import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // <-
-
-export default defineConfig({
-  plugins: [adorableCSS(), ...] // <-
-})
-```
-
-```tsx
-// main.tsx
-
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import "@adorable.css" // <-
-import {App} from "./App"
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById("root")
-)
-```
-#### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
-
+> ⚡️ Rapid On-Demand Atomic CSS framework
 
 어떤 CSS가 좋은 CSS인지 모르겠나요?<br/>AdorableCSS를 이용해서 CSS 이름짓기와 좋은 구조에 대한 고민을 날려보세요!
 
@@ -169,7 +92,6 @@ ReactDOM.render(
 
 #### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
 
-
 ## Syntax
 
 ```html
@@ -179,7 +101,7 @@ property(value)
 
 property(value/value/...) 
   - 클래스는 띄어쓰기로 구분되므로 기존 css에서 띄어쓰기 구분자들은 '/'로 구분합니다.
-  ex) class="p(10/20) font(12/18/-1%) m(10/20/30/40)"
+  ex) class="p(10/20) m(10/20/30/40)"
 
 property
   - 값이 없는 프로퍼티는 ()를 사용하지 않습니다.
@@ -194,36 +116,34 @@ prefix:property(value)! or property(value)! or property!
   ex) class="active:bg(red)! b(0)! none! fixed!"
 ```
 
----
-
-## Docs (Basic)
+## Basic Properties
 
 ### Text
 
-### Typography
+### font-size / line-height / letter-spacing / word-spacing
 
-#### font-size / line-height / letter-spacing / word-spacing
+```font(20/1.4/-1%)``` ```font(20/1.4)``` ```font(20/-/-1%)``` 
 
-```font(20)``` ```font(20/1.4)``` ```font(20/1.4/-1%)```
+```font-size(30)```
 ```line-height(1.5)```
-```letter-spacing(...)```
-```word-spacing(...)```
+```letter-spacing(-1px)```
+```word-spacing(-1px)```
 
-#### font-family
+### font-family
 
-```Roboto``` ```serif``` ```cursive```
+```sans-serif``` ```serif``` ```cursive``` ```monospace```
 
-#### font-style
+### font-style
 
-```italic``` ```underline```
+```bold``` ```italic``` ```underline``` ```strike```
 
-#### font-weight
+### font-weight
 
 ```100``` ```200``` ```300``` ```400``` ```500``` ```600``` ```700``` ```800``` ```900```
 
 ```thin``` ```light``` ```medium``` ```regular``` ```bold``` ```heavy```
 
-#### text-align
+### text-align
 
 ```text-left``` ```text-center``` ```text-right``` ```text-justify```
 
@@ -235,7 +155,7 @@ prefix:property(value)! or property(value)! or property!
 
 ### fill
 
-```c(red)``` ```c(#f00)``` ```c(255,0,0)``` ```c(```
+```c(red)``` ```c(#f00)``` ```c(#f00.5)``` ```c(255,0,0)``` ```c(255,0,0,.3)``` ```c(100%,0,0)```
 
 ### stroke
 
@@ -247,43 +167,58 @@ prefix:property(value)! or property(value)! or property!
 
 ### Size
 ```w(30)``` ```w(~30)``` ```w(30~)``` ```w(20~30)```
+
 ```h(30)``` ```h(~30)``` ```h(30~)``` ```h(20~30)```
+
+### Radius
 ```r(10)``` ```r(100%)```
 
 ### Fill
 
-```bg(#B75959)```
-```bg(linear-gradient(...))```
+```bg(#B75959)``` ```bg(linear-gradient(#000,#fff))```
+
 ```cover``` ```contain```
 
 ### Stroke
 
 ```b(#000)``` ```b(1/#000)``` ```b(1/solid/#000)```
+
 ```bt(#000)``` ```br()``` ```bb()``` ```bl()```
+
 ```outline()```
 ```ring()```
 
 ### Effects
 
-```box-shadow(0/4px/4px/###.25)```
-```box-shadow(inset/0/4px/4px/###.25)```
+```box-shadow(0/4px/4px/#000.25)```
+
+```box-shadow(inset/0/4px/4px/#000.25)```
+
 ```blur(4px)```
+
 ```backdrop-blur(4px)```
 
 ### Clip content
 
-```clip```
-```overflow()```
+```clip``` ```overflow(hidden)```
+
 ```nowrap...```
 ```line-clamp(3)```
 
+### Scroll
+
+```scroll``` ```scroll-x``` ```scroll-y```
+
 ### Position
 
-```static``` ```relative``` ```absolute``` ```fixed``` ```sticky```
-```sticky-top``` ```sticky-right``` ```sticky-bottom``` ```sticky-left```
-```layer()```
-```top()``` ```right()``` ```bottom()``` ```left()```
-```x()``` ```y()```
+```static``` ```relative``` ```absolute``` ```fixed``` 
+
+```sticky``` ```sticky-top``` ```sticky-right``` ```sticky-bottom``` ```sticky-left```
+
+```layer()``` ```layer(top)``` ```layer(top+right)```
+
+```top()``` ```right()``` ```bottom()``` ```left()``` ```x()``` ```y()```
+
 ```z()```
 
 ---
@@ -334,7 +269,3 @@ a {text-decoration:none;}
 table {border-collapse:collapse;border-spacing:0;}
 ol, ul, menu, dir {list-style:none;}
 ```
-
-## Reference
-
-for full reference information [here](https://github.com/developer-1px/adorable-css/wiki/Reference).

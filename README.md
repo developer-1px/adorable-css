@@ -1,6 +1,4 @@
-# ฅ^•ﻌ•^ฅ 
-
-## ♥ AdorableCSS
+# ฅ^•ﻌ•^ฅ ♥ <br/>AdorableCSS
 > Rapid On-Demand Atomic CSS framework
 > AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
 

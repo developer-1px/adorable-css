@@ -1,17 +1,8 @@
 # Reference
 
-```typescript
-export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
-html,body{height:100%;}
-img,picture,video,canvas,svg{display:block;max-width:100%;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-`
+> 불칠절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
+```typescript
 export const RULES:Rules = {
 
   // -- Color
@@ -28,8 +19,24 @@ export const RULES:Rules = {
   "font": (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
   "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
-  "letter-spacing": (value:string) => `letter-spacing:${px(value)};`,
+  "letter-spacing": (value:string) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
+
+  // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L), Roboto, NotoSans와 같은것도 만들까?
+
+  // @TODO: font-family:var(--serif), serif; 이게 먹히나?
+  "sans-serif": () => `font-family:sans-serif;`,
+  "serif": () => `font-family:serif;`,
+  "monospace": (value) => {
+    if (value === "number") return `font-variant-numeric:tabular-nums;`
+    return `font-family:menlo,monospace;`
+  },
+  "cursive": () => `font-family:cursive;`,
+  "fantasy": () => `font-family:fantasy;`,
+  "system-ui": () => `font-family:system-ui;`,
+  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
+  "Roboto": () => `font-family:Roboto;`,
+  "Arial": () => `font-family:Arial;`,
 
   // Font Weight
   "100": () => `font-weight:100;`,
@@ -42,19 +49,19 @@ export const RULES:Rules = {
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
 
-  "thin": () => `font-weight:100;`,
-  "extra-light": () => `font-weight:200;`,
+  "thin": () => `font-weight:200;`,
   "light": () => `font-weight:300;`,
-  "regular": () => `font-weight:400;`,
+  "regular": () => `font-weight:normal;`,
   "medium": () => `font-weight:500;`,
   "semibold": () => `font-weight:600;`,
-  "bold": () => `font-weight:700;`,
-  "extra-bold": () => `font-weight:800;`,
+  "bold": () => `font-weight:bold;`,
   "heavy": () => `font-weight:900;`,
 
   // Font Weight Utility
   "thicker": (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
 
+  // @TODO
+  // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
 
   // Font-Style
   "italic": () => `font-style:italic;`,
@@ -64,40 +71,42 @@ export const RULES:Rules = {
   "strike": () => `text-decoration:line-through;`,
   "del": () => `text-decoration:line-through;`,
 
+  "small-caps": () => `font-variant-caps:small-caps;`,
+  "all-small-caps": () => `font-variant-caps:all-small-caps;`,
+  "slashed-zero": () => `font-variant-numeric:slashed-zero;`,
+  "tabular-nums": () => `font-variant-numeric:tabular-nums;`,
 
-  // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L)
-  "sans-serif": () => `font-family:sans-serif;`,
-  "serif": () => `font-family:serif;`,
-  "monospace": () => `font-family:menlo,monospace;`,
-  "cursive": () => `font-family:cursive;`,
-  "fantasy": () => `font-family:fantasy;`,
-  "system-ui": () => `font-family:system-ui;`,
-
-  "small-caps": () => `font-variant:small-caps`,
   "lowercase": () => `text-transform:lowercase;`,
   "uppercase": () => `text-transform:uppercase;`,
   "capitalize": () => `text-transform:capitalize;`,
 
-
-  // Text
+  // Text Align
   "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
 
+  "vertical-top": () => `vertical-align:top;`,
+  "vertical-middle": () => `vertical-align:middle;`,
+  "vertical-bottom": () => `vertical-align:bottom;`,
+  "sub": () => `vertical-align: sub;`,
+  "super": () => `vertical-align: super;`,
+  "text-top": () => `vertical-align: text-top;`,
+  "text-bottom": () => `vertical-align: text-bottom;`,
+
+  // Text Wrap
   "break-all": () => `word-break:break-all;`,
-  "break-word": () => `word-break:break-word;overflow-wrap:break-word;`,
+  "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
+  "hyphens": (value = "auto") => `hyphens: ${value};`,
 
-  // @TODO
-  // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
+  // -- Box
 
-
-  // -- Box-Sizing
+  // Box-Sizing
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
 
-  // -- Box-Model
+  // Box-Model
   "w": (value:string) => {
     if (value.includes("~")) {
       const result = []
@@ -275,9 +284,6 @@ export const RULES:Rules = {
   "no-bouncing": () => "",
   "no-overscroll": () => "",
 
-  "vertical-align": (value:string) => `vertical-align:${value}`,
-  "vertical-top": () => `vertical-align:top`,
-
   // OverFlow + Text
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
@@ -294,29 +300,18 @@ export const RULES:Rules = {
 
   // Scroll Snap -- TBD @TODO:
 
-  // Visibility
-  "none": () => `display:none;`,
-  "opacity": (value:string) => `opacity:${cssvar(value)};`,
-  "invisible": () => `visibility:hidden;`,
-  "visible": () => `visibility:visible;`,
-  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
-
   // Position
   "layer": (value = "") => {
     const pos = {top: 0, right: 0, bottom: 0, left: 0}
     value.split("+").forEach(v => {
       switch (v) {
-        // @ts-ignore
         case "top": {return (delete pos.bottom)}
-        // @ts-ignore
         case "right": {return (delete pos.left)}
-        // @ts-ignore
         case "bottom": {return (delete pos.top)}
-        // @ts-ignore
         case "left": {return (delete pos.right)}
       }
     })
-    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0`).join(";")
+    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0;`).join("")
   },
 
   "absolute": () => `position:absolute;`,
@@ -338,7 +333,20 @@ export const RULES:Rules = {
   "right": (value:string) => `right:${px(value)};`,
   "bottom": (value:string) => `bottom:${px(value)};`,
 
+  // Visibility
+  "none": () => `display:none;`,
+  "opacity": (value:string) => `opacity:${cssvar(value)};`,
+  "invisible": () => `visibility:hidden;`,
+  "visible": () => `visibility:visible;`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+
+
   // Interactions
+  "pointer": () => `cursor:pointer;`,
+  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "cursor": (value:string) => `cursor:${value};`,
+
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
   "user-select-all": () => "user-select:all;-webkit-user-select:all;",
   "user-select-auto": () => "user-select:auto;-webkit-user-select:auto;",
@@ -347,11 +355,6 @@ export const RULES:Rules = {
 
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
-
-  "pointer": () => `cursor:pointer;`,
-  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
-  "grabbing": () => `cursor:grabbing;`,
-  "cursor": (value:string) => `cursor:${value};`,
 
   // 에니메이션:transition(transform=100s/opacity=2s)
   "transition": (value:string) => `transition:${makeTransition(value)};`,
@@ -386,6 +389,8 @@ export const RULES:Rules = {
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-layout-fixed": () => `table-layout:fixed;`,
+
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 
   // Float & Clear
   "float": (value:string) => `float:${cssvar(value)}`,
@@ -441,8 +446,6 @@ export const RULES:Rules = {
 
     return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
   },
-
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 }
 
 // Prefix
@@ -523,11 +526,28 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
 }
 
 // selector
-export const SELECTOR_PREFIX:Record<string, (selector:string) => string> = {
+export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
+  ">>": (selector:string) => `& ${selector.slice(2)}`,
   ".": (selector:string) => `&${selector}, ${selector} &`,
-  ">>": (selector:string) => `& ${selector.slice(2, 0)}`,
+  "[": (selector:string) => `&${selector}, ${selector} &`,
   ">": (selector:string) => `&${selector}`,
   "+": (selector:string) => `&${selector}`,
-  "[": (selector:string) => `&${selector}`,
+  "~": (selector:string) => `&${selector}`,
+  "#": (selector:string) => `&${selector}`,
 }
+```
+
+
+## Reset CSS
+
+```css
+* {margin:0;padding:0;font:inherit;color:inherit;}
+*, :after, :before {box-sizing:border-box;flex-shrink:0;}
+:root {-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
+html, body {height:100%;}
+img, picture, video, canvas, svg {display:block;max-width:100%;}
+button {background:none;border:0;cursor:pointer;}
+a {text-decoration:none;}
+table {border-collapse:collapse;border-spacing:0;}
+ol, ul, menu, dir {list-style:none;}
 ```

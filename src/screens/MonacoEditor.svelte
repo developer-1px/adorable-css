@@ -1,62 +1,60 @@
 <script lang="ts">
-import {KeyCode, KeyMod} from "monaco-editor"
-import type monaco from "monaco-editor"
 import {onMount} from "svelte"
-import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker"
-import theme from "./github.theme.json"
+import githubTheme from "./github.theme.json"
 
 export let value = ""
 
+
 let element:HTMLDivElement = null
-let editor:monaco.editor.IStandaloneCodeEditor
-let Monaco
+let editor
 
-export const setValue = (value:string) => editor.setValue(value)
+export const setValue = (value) => {
+  editor && editor.setValue(value)
+}
 
-onMount(async () => {
-  // @ts-ignore
-  self.MonacoEnvironment = {
-    getWorker: function(_moduleId:any, label:string) {
-      return new htmlWorker()
-    }
-  }
 
-  console.warn("@@@", theme)
+onMount(() => {
 
-  Monaco = await import("monaco-editor")
-  editor = Monaco.editor.create(element, {
-    value,
-    language: "html",
-    automaticLayout: true,
-    scrollBeyondLastLine: false,
-    readOnly: false,
-    theme: "vs",
-    tabSize: 2,
-    fontSize: "13px",
-    overviewRulerLanes: 0,
-    wordWrap: "on",
-    minimap: {
-      enabled: false,
-    },
+  require.config({paths: {"vs": "https://unpkg.com/monaco-editor@latest/min/vs"}})
+  window.MonacoEnvironment = {getWorkerUrl: () => proxy}
+
+  let proxy = URL.createObjectURL(new Blob([`
+	self.MonacoEnvironment = {
+		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
+	};
+	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
+`], {type: "text/javascript"}))
+
+  require(["vs/editor/editor.main"], function() {
+    monaco.editor.defineTheme("adorableCSS", githubTheme)
+    editor = monaco.editor.create(element, {
+      value,
+      language: "html",
+      automaticLayout: true,
+      scrollBeyondLastLine: false,
+      readOnly: false,
+      theme: "adorableCSS",
+      tabSize: 2,
+      fontSize: "13px",
+      overviewRulerLanes: 0,
+      wordWrap: "on",
+      minimap: {
+        enabled: false,
+      },
+    })
+
+    editor.onDidChangeModelContent(event => {
+      value = editor.getValue()
+    })
+
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+      editor.getAction("editor.action.formatDocument").run()
+      return
+    })
   })
-
-  var myBinding = editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyS, function() {
-    editor.getAction("editor.action.formatDocument").run()
-    return
-  })
-
-  console.log("editor", editor)
-  console.log("myBinding", editor)
-  window.editor = editor
-
-
-  editor.onDidChangeModelContent(event => {
-    value = editor.getValue()
-  })
-
 
   return () => {
-    editor.dispose()
+    editor && editor.dispose()
   }
 })
 </script>

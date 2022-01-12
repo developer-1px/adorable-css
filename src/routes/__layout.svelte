@@ -2,19 +2,26 @@
 import "@adorable.css"
 import "../style.css"
 import UIVersion from "../screens/UIVersion.svelte"
+import {page} from "$app/stores"
+
+const useActive = (el) => {
+  page.subscribe(page => {
+    el.classList.toggle("active", location.origin + page.url.pathname === el.href)
+  })
+}
 </script>
 
 <div class="vbox">
-  <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary)">
+  <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary)">
     <a href="/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">
-      <div>Tutorial</div>
-      <div>Docs</div>
-      <a href="/examples">Examples</a>
-      <div>ChangeLog</div>
+      <a href="/tutorial" use:useActive>Tutorial</a>
+      <a href="/docs" use:useActive>Docs</a>
+      <a href="/changelogs" use:useActive>ChangeLog</a>
+      <a href="/reference" use:useActive>Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>
-      <a target="_blank" href="https://github.com/developer-1px/adorable-css/blob/master/src%5Badorable-css%5D/docs/Reference.md">Reference</a>
+      <a target="_blank" href="https://github.com/developer-1px/adorable-css/issues">기능 제안</a>
     </div>
 
     <div class="hbox gap(20)">
@@ -39,4 +46,4 @@ import UIVersion from "../screens/UIVersion.svelte"
   <slot/>
 </div>
 
-<UIVersion version="0.0.8"/>
+<UIVersion version="0.0.9"/>

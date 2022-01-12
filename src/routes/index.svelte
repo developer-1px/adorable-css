@@ -20,7 +20,7 @@
 
 
 <div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900 hover:scale(1.05) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
+  <h1 class="font(50/-/-1.5%) 900 hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
   <h1 class="font(50/-/-1.5%) 900">Naming things is hard.</h1>
   <h2>{`.inner-wrapper { position:relative; padding: 10px 20px }`}</h2>
   <p>.inner-wrapper? 서식을 위해 의미없는 이름을 짓기 위해서 고민하지마세요.</p>
@@ -100,7 +100,7 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
 
 <div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900">ᕙ(`▿´)ᕗ</h1>
+  <h1 class="font(50/-/-1.5%) 900 hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">ᕙ(`▿´)ᕗ</h1>
   <h1 class="font(50/-/-1.5%) 900">Write less do more!</h1>
   <h2>Isn't it 90s-vibe inline-style? No!</h2>
   <p>기존 inline-style css문법보다 훨씬 더 적은 코드로 더 많은 작업을 할 수 있습니다!</p>
