@@ -1,10 +1,11 @@
 {
   "name": "adorable-css-docs",
   "version": "0.0.1",
+  "homepage": "https://developer-1px.github.io/adorable-css",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "rm -rf build && svelte-kit build && touch .svelte-kit/static/build/.nojekyll",
-    "deploy": "npm run build && npx gh-pages -d build -t true",
+    "deploy": "gh-pages -d build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
