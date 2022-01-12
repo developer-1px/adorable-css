@@ -2,14 +2,15 @@
   font-family:-apple-system, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
   color:#222;
   --primary:#fb3958;
-  --primary-bg:rgba(251,57,88,.02);
+  --primary-bg:rgba(251, 57, 88, .02);
 }
 
 .markdown {
-  max-width:768px;
+  width:768px;
+  max-width:100%;
   margin:auto;
   line-height:1.6;
-  font-size:17px;
+  font-size:18px;
   letter-spacing:-0.01em;
   word-wrap:break-all;
   color:#333;
@@ -18,7 +19,7 @@
 .markdown blockquote {
   background:var(--primary-bg);
   margin:1em 0;
-  padding:.6em 1.2em;
+  padding:0.2em 1.4em;
   padding-left:1.4em;
   border-left:4px solid var(--primary)
 }
@@ -41,7 +42,7 @@
 .markdown h2,
 .markdown h3,
 .markdown h4 {
-  font-size:3em;
+  font-size:2.4em;
   font-weight:bold;
   margin-top:1em;
 }
@@ -52,7 +53,7 @@
 }
 
 .markdown h3 {
-  font-size:1.4em;
+  font-size:1.6em;
 }
 
 .markdown h4 {
@@ -78,6 +79,7 @@
   background:#f9f9f9;
   margin:1em 0;
   padding:1em;
+  border-radius:.6em;
   white-space:pre-wrap;
   font-family:monospace;
   font-size:0.8em;
@@ -85,7 +87,7 @@
 }
 
 .markdown code {
-  background:#f5f5f5;
+  background:#f6f8fa;
   padding:2px .4em;
   border-radius:.4em;
   font-family:monospace;
@@ -99,9 +101,15 @@
 .markdown .attr-value,
 .markdown .string,
 .markdown .string-property {
-  color: var(--primary)
+  color:var(--primary)
 }
 
 .markdown .comment {
-  color: #999;
+  color:#999;
+}
+
+@media (max-width:768px) {
+  .markdown {
+    font-size:16px;
+  }
 }

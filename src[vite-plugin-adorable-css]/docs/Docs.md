@@ -1,4 +1,6 @@
-# ฅ^•ﻌ•^ฅ <br/>AdorableCSS
+![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
+
+# AdorableCSS
 
 > ⚡️ Rapid On-Demand Atomic CSS framework
 
@@ -118,7 +120,13 @@ prefix:property(value)! or property(value)! or property!
 
 ## Basic Properties
 
-### Text
+---
+
+## Text
+
+### Color
+
+```c(red)``` ```c(#f00)``` ```c(#f00.5)``` ```c(255,0,0)``` ```c(255,0,0,.3)``` ```c(100%,0,0)```
 
 ### font-size / line-height / letter-spacing / word-spacing
 
@@ -127,6 +135,7 @@ prefix:property(value)! or property(value)! or property!
 ```font-size(30)```
 ```line-height(1.5)```
 ```letter-spacing(-1px)```
+
 ```word-spacing(-1px)```
 
 ### font-family
@@ -149,13 +158,11 @@ prefix:property(value)! or property(value)! or property!
 
 ### etc
 
-```lowercase``` ```uppercase```
+```lowercase``` ```uppercase``` ```small-caps```
 
 ```text-indent```
 
-### fill
-
-```c(red)``` ```c(#f00)``` ```c(#f00.5)``` ```c(255,0,0)``` ```c(255,0,0,.3)``` ```c(100%,0,0)```
+```monospace(number)```
 
 ### stroke
 
@@ -230,14 +237,22 @@ prefix:property(value)! or property(value)! or property!
 ```hbox``` ```vbox``` ```pack```
 
 ```hbox(top)``` ```hbox(top) pack``` ```hbox(top+right)```
+
 ```hbox``` ```pack``` ```hbox(right)```
+
 ```hbox(bottom)``` ```hbox(bottom) pack``` ```hbox(bottom+right)```
 
 ```hbox(fill)```
 
+<br/>
+
 ```vbox(top)``` ```vbox(top) pack``` ```vbox(top+right)```
+
 ```vbox(left)``` ```vbox pack``` ```vbox(right)```
+
 ```vbox(bottom)``` ```vbox(bottom) pack``` ```vbox(bottom+right)```
+
+<br/>
 
 ```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
 
@@ -250,8 +265,8 @@ prefix:property(value)! or property(value)! or property!
 ### Visibility
 
 ```none```
+```visible``` ```hidden```
 ```gone```
-```visible``` ```invisible```
 ```opacity(.4)```
 
 ---

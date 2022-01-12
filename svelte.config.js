@@ -12,7 +12,6 @@ const config = {
     mdsvex({extensions: [".md"]})
   ],
   kit: {
-    appDir: "adorable-css",
     vite: {
       plugins: [adorableCSS()],
       server: {
@@ -24,6 +23,12 @@ const config = {
     },
     adapter: adapter(),
     target: "#svelte"
+  }
+}
+
+if (process.env.NODE_ENV === "production") {
+  config.paths = {
+    base: "/adorable-css"
   }
 }
 

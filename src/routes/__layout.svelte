@@ -1,10 +1,9 @@
 <script lang="ts">
-import "@adorable.css"
-import "../style.css"
-import UIVersion from "../screens/UIVersion.svelte"
+import {base} from "$app/paths"
 import {page} from "$app/stores"
-import {base, assets} from "$app/paths"
-
+import "@adorable.css"
+import UIVersion from "../screens/UIVersion.svelte"
+import "../style.css"
 
 const useActive = (el) => {
   page.subscribe(page => {
@@ -14,7 +13,7 @@ const useActive = (el) => {
 </script>
 
 <div class="vbox">
-  <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary)">
+  <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary) scroll-x">
     <a href="{base}/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">

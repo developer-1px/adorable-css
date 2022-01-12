@@ -3678,7 +3678,7 @@ var RULES = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
   "hbox": (value) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "vbox": (value) => `display:flex;flex-flow:column;max-width:100%;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
@@ -3695,8 +3695,8 @@ var RULES = {
   "flex-grow": (value) => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value) => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value) => `flex-basis:${px(value)};`,
-  "flex-wrap": () => "flex-wrap:wrap;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
+  "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
+  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value) => `order:${cssvar(value)};`,
   "overflow": (value) => `overflow:${value};`,
@@ -3759,10 +3759,11 @@ var RULES = {
   "right": (value) => `right:${px(value)};`,
   "bottom": (value) => `bottom:${px(value)};`,
   "none": () => `display:none;`,
-  "opacity": (value) => `opacity:${cssvar(value)};`,
-  "invisible": () => `visibility:hidden;`,
   "visible": () => `visibility:visible;`,
+  "hidden": () => `visibility:hidden;`,
+  "invisible": () => `visibility:hidden;`,
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "opacity": (value) => `opacity:${cssvar(value)};`,
   "pointer": () => `cursor:pointer;`,
   "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
   "grabbing": () => `cursor:grabbing;`,
@@ -3952,7 +3953,7 @@ var expr = () => {
       } else if (prev === "{" && token.id === "}") {
       } else
         throw new Error("Unexpected:" + token.id);
-    } else if (stack.length === 0 && token.id === ":" || token.id === "::" || token.id === "(important)") {
+    } else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)")) {
       break;
     }
     push(next());
@@ -4004,10 +4005,12 @@ var generateAtomicCss = (rules, prefixRules) => {
         }
         next();
       }
-      const atom = "." + cssEscape(script);
       const mediaQuery = ast.map((a) => a.media).filter(Boolean);
       const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : "";
-      const selector = ast.map((a) => a.selector).filter(Boolean).reduce((a, b) => b.replace(/&/g, a), atom);
+      const atom = "." + cssEscape(script);
+      const selector = ast.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
+        return prev.map((prev2) => curr.map((selector2) => selector2.replace(/&/g, prev2))).flat();
+      }, [atom]).join(",");
       const declaration = ast.map((a) => a.declaration).pop();
       const priority = ast.map((a) => a.priority).pop();
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";

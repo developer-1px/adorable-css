@@ -1,4 +1,9 @@
-<div class="text-center vbox gap(40) pack p(200/32) max-h(60vh) odd:bg(#f9f9f9)">
+<script lang="ts">
+const slide = "text-center vbox pack p(200/32) max-h(60vh) odd:bg(#f9f9f9) clip"
+const h1 = "font(3em/-/-1.5%) 900 mobile:font(2em)"
+</script>
+
+<div class="{slide} gap(40)">
   <div class="hbox font(100/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
     <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
     <span>^•ﻌ•^</span>
@@ -11,17 +16,17 @@
   </div>
 </div>
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900">No more writing own your CSS.</h1>
+<div class="{slide}">
+  <h1 class="{h1}">No more writing own your CSS.</h1>
   <h2>We have created almost all the CSS we need. Just write down in your HTML(or JSX).</h2>
-  <div class="space(40)"/>
+  <div class="space(2em)"/>
   <img src="https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif"/>
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900 hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
-  <h1 class="font(50/-/-1.5%) 900">Naming things is hard.</h1>
+<div class="{slide}">
+  <h1 class="{h1} hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
+  <h1 class="{h1}">Naming things is hard.</h1>
   <h2>{`.inner-wrapper { position:relative; padding: 10px 20px }`}</h2>
   <p>.inner-wrapper? 서식을 위해 의미없는 이름을 짓기 위해서 고민하지마세요.</p>
   <br/>
@@ -30,7 +35,7 @@
   <br/>
   <h2>{`<div class="font(10) c(#ff0) bold text-center">`}</h2>
 
-  <div class="space(40)"/>
+  <div class="space(2em)"/>
   <figure class="vbox pack w(~480)">
     <img src="https://scontent-gmp1-1.xx.fbcdn.net/v/t1.6435-9/39195300_2020836437968637_7637633831582826496_n.png?_nc_cat=110&ccb=1-5&_nc_sid=730e14&_nc_ohc=3fcvE0Y6_gAAX-M9WGF&_nc_ht=scontent-gmp1-1.xx&oh=00_AT_aRNWH4m4O7fvAz6Ca-rakxorRvN2lTavg_QUFQa1qUQ&oe=62002767"/>
     <figcaption>https://www.facebook.com/Rmemes0/photos/there-are-only-two-hard-things-in-computer-science-cache-invalidation-and-naming/2020836434635304/</figcaption>
@@ -38,13 +43,13 @@
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
+<div class="{slide}">
   <div class="hbox(fill) flex-wrap gap(60)">
 
     <div class="vbox m(0/auto)">
       <h1 class="font(30/-/-1.5%) 900">When just write down in HTML or JSX</h1>
 
-      <code class="pre w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="pre text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`<button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
   hover:bg(#555)
   active:bg(#000)! active:b(#000.2)">
@@ -59,7 +64,7 @@
     <div class="vbox m(0/auto)">
       <h1 class="font(30/-/-1.5%) 900">... and auto generate CSS on realtime! (and build-time) 😎</h1>
 
-      <code class="pre w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="pre w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`/* @adorable.css */
 
 * {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
@@ -86,9 +91,9 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900">⚡️</h1>
-  <h1 class="font(50/-/-1.5%) 900">Fast Writing without switching!</h1>
+<div class="{slide}">
+  <h1 class="{h1}">⚡️</h1>
+  <h1 class="{h1}">Fast Writing without switching!</h1>
   <h2>이제 HTML과 CSS와 화면을 번갈아가면서 개발하지마세요.</h2>
   <br/>
   <div class="bg(#f1f1f1) r(8) p(20)">
@@ -99,16 +104,16 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900 hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">ᕙ(`▿´)ᕗ</h1>
-  <h1 class="font(50/-/-1.5%) 900">Write less do more!</h1>
+<div class="{slide}">
+  <h1 class="{h1} hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">ᕙ(`▿´)ᕗ</h1>
+  <h1 class="{h1}">Write less do more!</h1>
   <h2>Isn't it 90s-vibe inline-style? No!</h2>
   <p>기존 inline-style css문법보다 훨씬 더 적은 코드로 더 많은 작업을 할 수 있습니다!</p>
 
   <div class="vbox gap(40) mt(40)">
     <div>
       <h2 class="font(24) 700 m(10/0)">More extensible Syntax</h2>
-      <code class="block pre font(13) w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class="font(14/1.5/-1%)"/>
 <div class="w(100~200)"/>
 <div class="nowrap..."/>
@@ -128,7 +133,7 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Support Full Pesudo-class/element</h2>
-      <code class="block pre font(13) w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`<a class="hover:underline active:bg(#000)"/>
 <div class="nth-child(3n+1):bg(orange)"/>
 <input class="placeholder:c(#ccc)"/>
@@ -146,7 +151,7 @@ html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{bac
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Selector Support</h2>
-      <code class="block pre font(13) w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class=".selected:bg(#000) .selected:c(#fff)"/>
 <div class=">h1:m(20)"/>
 <input class=">>a:c(#4f80ff)"/>
@@ -162,7 +167,7 @@ html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{bac
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Media Query Support</h2>
-      <code class="block pre font(13) w(800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class=".selected:bg(#000) .selected:c(#fff)"/>
 <div class=">h1:m(20)"/>
 <input class=">>a:c(#4f80ff)"/>
@@ -178,19 +183,19 @@ html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{bac
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900">📦</h1>
-  <h1 class="font(50/-/-1.5%) 900">Portable and Compact</h1>
+<div class="{slide}">
+  <h1 class="{h1}">📦</h1>
+  <h1 class="{h1}">Portable and Compact</h1>
   <h2>코드를 옮기시나요? CSS를 따로 챙겨서 옮길 필요가 없습니다.<br/>그냥 복사-붙여넣기를 통해 리팩토링에서 자유로워지세요!</h2>
 </div>
 
 
-<div class="text-center vbox pack p(200/80) odd:bg(#f9f9f9)">
-  <h1 class="font(50/-/-1.5%) 900">No Semantic + No CSS = Great for handoff!</h1>
-  <h1 class="font(50/-/-1.5%) 900">🤝</h1>
+<div class="{slide}">
+  <h1 class="{h1}">No Semantic + No CSS = Great for handoff!</h1>
+  <h1 class="{h1}">🤝</h1>
   <h2>디자인 파일의 속성을 서식 그대로 HTML로 옮겨올 수가 있습니다.</h2>
   <h2>figma handshake plugin</h2>
 
-  <div class="space(40)"/>
+  <div class="space(2em)"/>
   <img src="https://camo.githubusercontent.com/c52ff55a6f6c7da295067d57b30035aa8d6c7f7e439f64e3e1713a1b98187e9e/68747470733a2f2f696d616765732e76656c6f672e696f2f696d616765732f74656f2f706f73742f35373963646237622d383831392d343930322d386639372d3036633334303062323032312f254531253834253932254531253835254141254531253834253836254531253835254137254531253836254142253230254531253834253830254531253835254235254531253834253835254531253835254139254531253836254138253230323032312d30392d3031253230254531253834253842254531253835254139254531253834253932254531253835254145253230332e31372e31372e6d6f762e676966"/>
 </div>

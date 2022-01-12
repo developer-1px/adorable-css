@@ -242,7 +242,7 @@ export const RULES:Rules = {
 
   // -- Flexbox
   "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "vbox": (value:string) => `display:flex;flex-flow:column;max-width:100%;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
@@ -267,8 +267,8 @@ export const RULES:Rules = {
   "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value:string) => `flex-basis:${px(value)};`,
 
-  "flex-wrap": () => "flex-wrap:wrap;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
+  "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
+  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
@@ -348,10 +348,11 @@ export const RULES:Rules = {
 
   // Visibility
   "none": () => `display:none;`,
-  "opacity": (value:string) => `opacity:${cssvar(value)};`,
-  "invisible": () => `visibility:hidden;`,
   "visible": () => `visibility:visible;`,
+  "hidden": () => `visibility:hidden;`,
+  "invisible": () => `visibility:hidden;`,
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "opacity": (value:string) => `opacity:${cssvar(value)};`,
 
 
   // Interactions
