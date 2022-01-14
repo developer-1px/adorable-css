@@ -263,8 +263,8 @@ export const RULES:Rules = {
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
 
-  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value:string) => `flex-basis:${px(value)};`,
 
   "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",

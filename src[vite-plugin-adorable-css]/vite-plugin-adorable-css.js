@@ -3692,8 +3692,8 @@ var RULES = {
   "space-evenly": () => `justify-content:space-evenly;`,
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
-  "flex-grow": (value) => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value) => `flex-shrink:${cssvar(value)};`,
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value) => `flex-basis:${px(value)};`,
   "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
   "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
@@ -3912,7 +3912,7 @@ var lex = [
   ["(important)", /(!+)$/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
-  ["(indent)", /((?:\\.|[^'":[\](){}#])+)/],
+  ["(indent)", /((?:\\.|[^!'":[\](){}#])+)/],
   ["(unknown)", /./]
 ];
 var regex = new RegExp(lex.map((v) => v[1].source).join("|"), "g");

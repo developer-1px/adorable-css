@@ -4,8 +4,9 @@
   "homepage": "https://developer-1px.github.io/adorable-css",
   "scripts": {
     "dev": "svelte-kit dev",
-    "build": "rm -rf build && svelte-kit build && touch ./build/.nojekyll",
+    "build": "rm -rf build && NODE_ENV=production svelte-kit build && touch ./build/.nojekyll",
     "deploy": "gh-pages -d build -t true",
+    "rebuild": "git commit --allow-empty -m \"Trigger rebuild\"",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",

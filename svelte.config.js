@@ -27,9 +27,7 @@ const config = {
 }
 
 if (process.env.NODE_ENV === "production") {
-  config.paths = {
-    base: "/adorable-css"
-  }
+  config.kit.paths = {base: "/adorable-css"}
 }
 
 export default config
