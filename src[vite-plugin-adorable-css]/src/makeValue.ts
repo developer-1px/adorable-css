@@ -72,6 +72,9 @@ export const makeFont = (value:string) => (value || "").split("/").map((value, i
   }
 }).filter(Boolean).join(";")
 
+
+export const makeFontFamily = (value:string) => `font-family:${value};font-family:var(--${value}, ${value});`
+
 // @TODO:
 export const makeBorder = (value:string) => {
   if (!value || value === "none" || value === "0" || value === "-") return "none"

@@ -1,5 +1,5 @@
 import {cssEscape} from "./cssEscape"
-import {makeValues} from "./makeValue"
+import {makeHEX, makeValues} from "./makeValue"
 import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
 
 export type Rules = Record<string, (value?:string) => string>
@@ -45,6 +45,7 @@ const tokenize = (script:string) => {
     const index:number = args[args.length - 2]
     const type = lex[args.findIndex(v => v !== undefined)][0]
     const id = type === "(operator)" ? value : type
+    value = type === "(hexcolor)" ? makeHEX(value) : value
     tokens.push({type, id, value, index})
     return value
   })
