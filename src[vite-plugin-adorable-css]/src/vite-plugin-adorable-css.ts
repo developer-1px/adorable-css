@@ -3,7 +3,7 @@ import type {Plugin, ViteDevServer} from "vite"
 import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
 import {reset} from "./rules"
 
-const micromatch = require("micromatch")
+import micromatch from "micromatch"
 
 interface Config {
   include:string[]
