@@ -1,6 +1,6 @@
 import {cssEscape} from "./cssEscape"
 import {makeHEX, makeValues} from "./makeValue"
-import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
+import {ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
 
 export type Rules = Record<string, (value?:string) => string>
 export type PrefixProps = { media?:string, selector?:string }
@@ -99,8 +99,10 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
           const selector = ident
           const makeSelector = PREFIX_SELECTOR[type]
           const makePseudo = prefixRules[ident + token.id]
+          const makeAtRule = AT_RULE[e.slice(0, 2).map(r => r.value).join("")]
 
           const rule = (() => {
+            if (makeAtRule) return makeAtRule(ident, e)
             if (makeSelector) return {selector: makeSelector(selector)}
             if (makePseudo) return makePseudo
             return {selector: `&${token.id}${selector}`}

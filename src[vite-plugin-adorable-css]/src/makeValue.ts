@@ -44,19 +44,19 @@ export const makeRGB = (value:string) => {
   return "rgb" + (a ? "a" : "") + "(" + [r, g, b, a].filter(Boolean).map(cssvar).join() + ")"
 }
 
-export const makeColor = (value:string = "transparent") => {
+export const makeColor = (value = "transparent") => {
   if (value === "-") return "transparent"
   if (value === "transparent") return "transparent"
   if (value.startsWith("--")) return `var(${value})`
 
-  // HEX #ff0, #ff0f00, HEXa #ff0.4, #ff00aa.4
-  if (value.charAt(0) === "#") return makeHEX(value)
+  // c(255,255,155) or c(100%,0,0)
+  if (value.split(",").every(v => +v === +v)) {
+    // HSL, HSLA (222,100%,50%)
+    if (value.includes("%")) return makeHLS(value)
 
-  // HSL, HSLA (222,100%,50%)
-  if (value.includes(",") && value.includes("%")) return makeHLS(value)
-
-  // RGB, RGBA
-  if (value.includes(",")) return makeRGB(value)
+    // RGB, RGBA
+    return makeRGB(value)
+  }
 
   return value
 }

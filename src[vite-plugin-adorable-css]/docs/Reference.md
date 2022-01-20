@@ -8,13 +8,6 @@ export const RULES:Rules = {
   // -- Color
   "c": (value:string) => `color:${makeColor(value)};`,
 
-  // -- Background Color
-  "bg": (value:string) => {
-    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
-    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
-    return `background-color:${makeColor(value)};`
-  },
-
   // -- Typography
   "font": (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
@@ -25,18 +18,18 @@ export const RULES:Rules = {
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L), Roboto, NotoSans와 같은것도 만들까?
 
   // @TODO: font-family:var(--serif), serif; 이게 먹히나?
-  "sans-serif": () => `font-family:sans-serif;`,
-  "serif": () => `font-family:serif;`,
+  "sans-serif": () => makeFontFamily("sans-serif"),
+  "serif": () => makeFontFamily("serif"),
+  "cursive": () => makeFontFamily("cursive"),
+  "fantasy": () => makeFontFamily("fantasy"),
+  "system-ui": () => makeFontFamily("system-ui"),
   "monospace": (value) => {
     if (value === "number") return `font-variant-numeric:tabular-nums;`
-    return `font-family:menlo,monospace;`
+    return makeFontFamily("monospace")
   },
-  "cursive": () => `font-family:cursive;`,
-  "fantasy": () => `font-family:fantasy;`,
-  "system-ui": () => `font-family:system-ui;`,
+
   "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
-  "Roboto": () => `font-family:Roboto;`,
-  "Arial": () => `font-family:Arial;`,
+  "Roboto": () => makeFontFamily("Roboto"),
 
   // Font Weight
   "100": () => `font-weight:100;`,
@@ -193,7 +186,12 @@ export const RULES:Rules = {
 
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
 
-  // -- Background Image
+  // -- Background
+  "bg": (value:string) => {
+    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    return `background-color:${makeColor(value)};`
+  },
 
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
@@ -203,8 +201,8 @@ export const RULES:Rules = {
   "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value:string) => `background-position:${value};`,
 
-  "contain": () => `background-size:contain;background-position:center;object-fit:contain;`,
-  "cover": () => `background-size:cover;background-position:center;object-fit:cover;`,
+  "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
+  "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
 
   // -- Display
   "block": () => "display:block;",
@@ -229,7 +227,7 @@ export const RULES:Rules = {
 
   // -- Flexbox
   "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value:string) => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "vbox": (value:string) => `display:flex;flex-flow:column;max-width:100%;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
@@ -250,12 +248,12 @@ export const RULES:Rules = {
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
 
-  "flex-grow": (value:string) => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value:string) => `flex-shrink:${cssvar(value)};`,
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value:string) => `flex-basis:${px(value)};`,
 
-  "flex-wrap": () => "flex-wrap:wrap;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;",
+  "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
+  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
@@ -335,10 +333,11 @@ export const RULES:Rules = {
 
   // Visibility
   "none": () => `display:none;`,
-  "opacity": (value:string) => `opacity:${cssvar(value)};`,
-  "invisible": () => `visibility:hidden;`,
   "visible": () => `visibility:visible;`,
+  "hidden": () => `visibility:hidden;`,
+  "invisible": () => `visibility:hidden;`,
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "opacity": (value:string) => `opacity:${cssvar(value)};`,
 
 
   // Interactions
