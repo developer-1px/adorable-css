@@ -1,9 +1,11 @@
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -37,6 +39,9 @@ var __reExport = (target, module2, copyDefault, desc) => {
         __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
   return target;
+};
+var __toESM = (module2, isNodeMode) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
 var __toCommonJS = /* @__PURE__ */ ((cache) => {
   return (module2, temp) => {
@@ -2735,6 +2740,7 @@ var require_micromatch = __commonJS({
 var vite_plugin_adorable_css_exports = {};
 __export(vite_plugin_adorable_css_exports, {
   ALL_PROPERTIES: () => ALL_PROPERTIES,
+  AT_RULE: () => AT_RULE,
   PREFIX_MEDIA_QUERY: () => PREFIX_MEDIA_QUERY,
   PREFIX_PSEUDO_CLASS: () => PREFIX_PSEUDO_CLASS,
   PREFIX_SELECTOR: () => PREFIX_SELECTOR,
@@ -2747,6 +2753,7 @@ __export(vite_plugin_adorable_css_exports, {
   makeColor: () => makeColor,
   makeCommaValues: () => makeCommaValues,
   makeFont: () => makeFont,
+  makeFontFamily: () => makeFontFamily,
   makeHBox: () => makeHBox,
   makeHEX: () => makeHEX,
   makeHLS: () => makeHLS,
@@ -2843,12 +2850,11 @@ var makeColor = (value = "transparent") => {
     return "transparent";
   if (value.startsWith("--"))
     return `var(${value})`;
-  if (value.charAt(0) === "#")
-    return makeHEX(value);
-  if (value.includes(",") && value.includes("%"))
-    return makeHLS(value);
-  if (value.includes(","))
+  if (value.split(",").every((v) => +v === +v)) {
+    if (value.includes("%"))
+      return makeHLS(value);
     return makeRGB(value);
+  }
   return value;
 };
 var makeFont = (value) => (value || "").split("/").map((value2, index2) => {
@@ -2868,6 +2874,7 @@ var makeFont = (value) => (value || "").split("/").map((value2, index2) => {
     }
   }
 }).filter(Boolean).join(";");
+var makeFontFamily = (value) => `font-family:${value};font-family:var(--${value}, ${value});`;
 var makeBorder = (value) => {
   if (!value || value === "none" || value === "0" || value === "-")
     return "none";
@@ -3508,29 +3515,23 @@ ol,ul,menu,dir{list-style:none;}
 `;
 var RULES = {
   "c": (value) => `color:${makeColor(value)};`,
-  "bg": (value) => {
-    if (value.startsWith("linear-gradient"))
-      return `background:${value.replace(/\//g, " ")};`;
-    return `background-color:${makeColor(value)};`;
-  },
   "font": (value) => makeFont(value),
   "font-size": (value) => `font-size:${px(value)};`,
   "line-height": (value) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
   "letter-spacing": (value) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value) => `word-spacing:${px(value)};`,
-  "sans-serif": () => `font-family:sans-serif;`,
-  "serif": () => `font-family:serif;`,
+  "sans-serif": () => makeFontFamily("sans-serif"),
+  "serif": () => makeFontFamily("serif"),
+  "cursive": () => makeFontFamily("cursive"),
+  "fantasy": () => makeFontFamily("fantasy"),
+  "system-ui": () => makeFontFamily("system-ui"),
   "monospace": (value) => {
     if (value === "number")
       return `font-variant-numeric:tabular-nums;`;
-    return `font-family:menlo,monospace;`;
+    return makeFontFamily("monospace");
   },
-  "cursive": () => `font-family:cursive;`,
-  "fantasy": () => `font-family:fantasy;`,
-  "system-ui": () => `font-family:system-ui;`,
   "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
-  "Roboto": () => `font-family:Roboto;`,
-  "Arial": () => `font-family:Arial;`,
+  "Roboto": () => makeFontFamily("Roboto"),
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
   "300": () => `font-weight:300;`,
@@ -3650,14 +3651,19 @@ var RULES = {
     return `outline:1px solid ${makeColor(value)};`;
   },
   "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
+  "bg": (value) => {
+    if (value.startsWith("linear-gradient"))
+      return `background:${value.replace(/\//g, " ")};`;
+    return `background-color:${makeColor(value)};`;
+  },
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
   "bg-fixed": () => `background-attachment:fixed;`,
   "bg-scroll": () => `background-attachment:scroll;`,
   "bg-position": (value) => `background-position:${value};`,
-  "contain": () => `background-size:contain;background-position:center;object-fit:contain;`,
-  "cover": () => `background-size:cover;background-position:center;object-fit:cover;`,
+  "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
+  "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
   "block": () => "display:block;",
   "inline-block": () => "display:inline-block;",
   "inline": () => "display:inline;",
@@ -3895,6 +3901,25 @@ var PREFIX_MEDIA_QUERY = {
   "speech:": { media: `speech`, selector: `html &` },
   "dark:": { selector: `html.dark &` }
 };
+var AT_RULE = {
+  "@w": (ident, tokens2) => {
+    var _a, _b;
+    if (((_a = tokens2[2]) == null ? void 0 : _a.value) !== "(" || ((_b = tokens2[tokens2.length - 1]) == null ? void 0 : _b.value) !== ")") {
+      throw Error("invalid syntax!");
+    }
+    const value = tokens2.slice(3, -1).map((t) => t.value).join("");
+    if (!value.includes("~")) {
+      throw Error("invalid syntax! required '~'.");
+    }
+    let [min, max] = value.split("~");
+    if (min)
+      min = `(min-width:${px(+min)})`;
+    if (max)
+      max = `(max-width:${px(+max - 0.02)})`;
+    const rule = [min, max].filter(Boolean).join(" and ");
+    return { media: ` only screen and ${rule}`, selector: `html &` };
+  }
+};
 var PREFIX_SELECTOR = {
   ">>": (selector) => `& ${selector.slice(2)}`,
   ".": (selector) => `&${selector}, ${selector} &`,
@@ -3934,6 +3959,7 @@ var tokenize = (script) => {
     const index2 = args[args.length - 2];
     const type = lex[args.findIndex((v) => v !== void 0)][0];
     const id = type === "(operator)" ? value : type;
+    value = type === "(hexcolor)" ? makeHEX(value) : value;
     tokens.push({ type, id, value, index: index2 });
     return value;
   });
@@ -3976,7 +4002,10 @@ var generateAtomicCss = (rules, prefixRules) => {
           const selector2 = ident;
           const makeSelector = PREFIX_SELECTOR[type];
           const makePseudo = prefixRules[ident + token.id];
+          const makeAtRule = AT_RULE[e.slice(0, 2).map((r) => r.value).join("")];
           const rule2 = (() => {
+            if (makeAtRule)
+              return makeAtRule(ident, e);
             if (makeSelector)
               return { selector: makeSelector(selector2) };
             if (makePseudo)
@@ -4033,7 +4062,7 @@ var parseAtoms = (code) => {
 };
 
 // src/vite-plugin-adorable-css.ts
-var micromatch = require_micromatch();
+var import_micromatch = __toESM(require_micromatch());
 var ADORABLE_CSS = "@adorable.css";
 var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`;
@@ -4057,7 +4086,7 @@ var adorableCSS = (config) => {
     if (id.startsWith(configRoot)) {
       id = id.slice(configRoot.length);
     }
-    return ((_a = config.include) != null ? _a : []).some((glob) => micromatch.isMatch(id, glob));
+    return ((_a = config.include) != null ? _a : []).some((glob) => import_micromatch.default.isMatch(id, glob));
   };
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat();
@@ -4153,6 +4182,7 @@ module.exports = __toCommonJS(vite_plugin_adorable_css_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ALL_PROPERTIES,
+  AT_RULE,
   PREFIX_MEDIA_QUERY,
   PREFIX_PSEUDO_CLASS,
   PREFIX_SELECTOR,
@@ -4165,6 +4195,7 @@ module.exports = __toCommonJS(vite_plugin_adorable_css_exports);
   makeColor,
   makeCommaValues,
   makeFont,
+  makeFontFamily,
   makeHBox,
   makeHEX,
   makeHLS,

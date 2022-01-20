@@ -19,6 +19,7 @@ declare const makeHLS: (value: string) => string;
 declare const makeRGB: (value: string) => string;
 declare const makeColor: (value?: string) => string;
 declare const makeFont: (value: string) => string;
+declare const makeFontFamily: (value: string) => string;
 declare const makeBorder: (value: string) => string;
 declare const makeValues: (value: string, project?: (value: string | number) => string | number) => string;
 declare const makeCommaValues: (value: string, project?: (a: string) => string | number) => string;
@@ -547,6 +548,15 @@ declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:aft
 declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
+declare const AT_RULE: {
+    "@w": (ident: string, tokens: Array<{
+        type: string;
+        value: string;
+    }>) => {
+        media: string;
+        selector: string;
+    };
+};
 declare const PREFIX_SELECTOR: Record<string, (selector: string) => string>;
 
 interface Config {
@@ -557,4 +567,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };

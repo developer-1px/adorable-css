@@ -524,15 +524,25 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   "dark:": {selector: `html.dark &`},
 }
 
-// selector
-export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
-  ">>": (selector:string) => `& ${selector.slice(2)}`,
-  ".": (selector:string) => `&${selector}, ${selector} &`,
-  "[": (selector:string) => `&${selector}, ${selector} &`,
-  ">": (selector:string) => `&${selector}`,
-  "+": (selector:string) => `&${selector}`,
-  "~": (selector:string) => `&${selector}`,
-  "#": (selector:string) => `&${selector}`,
+export const AT_RULE = {
+  "@w": (ident:string, tokens:Array<{ type:string, value:string }>) => {
+    if (tokens[2]?.value !== "(" || tokens[tokens.length - 1]?.value !== ")") {
+      throw Error("invalid syntax!")
+    }
+
+    const value = tokens.slice(3, -1).map(t => t.value).join("")
+    if (!value.includes("~")) {
+      throw Error("invalid syntax! required '~'.")
+    }
+
+    let [min, max] = value.split("~")
+
+    if (min) min = `(min-width:${px(+min)})`
+    if (max) max = `(max-width:${px(+max - 0.02)})`
+    const rule = [min, max].filter(Boolean).join(" and ")
+
+    return {media: ` only screen and ${rule}`, selector: `html &`}
+  }
 }
 ```
 
