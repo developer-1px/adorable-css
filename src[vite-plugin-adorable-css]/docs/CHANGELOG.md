@@ -1,3 +1,6 @@
+## 0.6.3
+- 🐛️ hidden(구 invisible) vs visible 이 동시에 있을때는 visible이 우선순위가 더 높도록 수정하였습니다.
+
 ## 0.6.2
 - ✨️ #000.2 와 같은 HEXa 포맷을 구문 전체에서 지원합니다.
 - ⚡️ cover, contain에 background-repeat: no-repeat 추가 되었습니다.

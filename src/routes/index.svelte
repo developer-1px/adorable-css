@@ -44,9 +44,9 @@ const h1 = "font(3em/-/-1.5%) 900 mobile:font(2em)"
 
 
 <div class="{slide}">
-  <div class="hbox(fill) flex-wrap gap(60)">
+  <div class="hbox(top+center) flex-wrap gap(60)">
 
-    <div class="vbox m(0/auto)">
+    <div class="vbox(center)">
       <h1 class="font(30/-/-1.5%) 900">When just write down in HTML or JSX</h1>
 
       <code class="pre text-left bg(#f1f1f1) p(20) r(8) monospace">
@@ -61,7 +61,7 @@ const h1 = "font(3em/-/-1.5%) 900 mobile:font(2em)"
 
     </div>
 
-    <div class="vbox m(0/auto)">
+    <div class="vbox(center)">
       <h1 class="font(30/-/-1.5%) 900">... and auto generate CSS on realtime! (and build-time) 😎</h1>
 
       <code class="pre w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">

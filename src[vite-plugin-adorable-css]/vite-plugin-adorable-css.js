@@ -3504,10 +3504,10 @@ var ALL_PROPERTIES = {
   "zoom": 1
 };
 var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
+*,:after,:before{box-sizing:border-box;flex-shrink:0}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;word-break:word-break;tab-size:4}
 html,body{height:100%;}
-img,picture,video,canvas,svg{display:block;max-width:100%;}
+img,picture,video,canvas,svg{display:block}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -3684,7 +3684,7 @@ var RULES = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
   "hbox": (value) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value) => `display:flex;flex-flow:column;max-width:100%;${makeVBox(value)}`,
+  "vbox": (value) => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
@@ -3765,11 +3765,11 @@ var RULES = {
   "right": (value) => `right:${px(value)};`,
   "bottom": (value) => `bottom:${px(value)};`,
   "none": () => `display:none;`,
-  "visible": () => `visibility:visible;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
   "opacity": (value) => `opacity:${cssvar(value)};`,
+  "visible": () => `visibility:visible;`,
   "pointer": () => `cursor:pointer;`,
   "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
   "grabbing": () => `cursor:grabbing;`,
