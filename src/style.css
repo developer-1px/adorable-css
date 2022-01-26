@@ -1,5 +1,5 @@
 :root {
-  font-family:-apple-system, "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+  font-family: system-ui, sans-serif;
   color:#222;
   --primary:#fb3958;
   --primary-bg:rgba(251, 57, 88, .02);

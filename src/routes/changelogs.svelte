@@ -4,6 +4,4 @@ import Changelog from "../../src[vite-plugin-adorable-css]/docs/CHANGELOG.md"
 
 <div class="markdown p(20)">
   <Changelog/>
-
-
 </div>

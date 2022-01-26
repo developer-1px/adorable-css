@@ -14,9 +14,10 @@ const useActive = (el) => {
 
 <div class="vbox">
   <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary) scroll-x">
-    <a href="{base}/" class="pack font(20/-/-10%) pointer">^•ﻌ•^ฅ</a>
+    <a href="{base}/" class="pack font(20/-/-10%) pointer AppleSD">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">
+      <a href="{base}/guide" use:useActive>Guide</a>
       <a href="{base}/tutorial" use:useActive>Tutorial</a>
       <a href="{base}/docs" use:useActive>Docs</a>
       <a href="{base}/changelogs" use:useActive>ChangeLog</a>

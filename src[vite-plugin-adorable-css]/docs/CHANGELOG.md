@@ -1,3 +1,9 @@
+## 0.6.4
+- 🐛️ ~sm, ~md 기능 안되던 버그 수정
+- 🐛️ :root `{ ... word-break:break-word ... }` 추가 해서 text로 인해 flex-box가 커지는 기능 방지
+- ✨️ flex-wrap에 `& > {max-width:100%;max-height:100%;}`를 주어 overflow 방지 기능 추가
+- ✨️ reset에 min-width:0 추가
+
 ## 0.6.3
 - 🐛️ hidden(구 invisible) vs visible 이 동시에 있을때는 visible이 우선순위가 더 높도록 수정하였습니다.
 

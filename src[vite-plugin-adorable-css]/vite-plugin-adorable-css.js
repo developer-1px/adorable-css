@@ -2774,219 +2774,7 @@ init_cjs_shims();
 // src/atomizer.ts
 init_cjs_shims();
 
-// src/cssEscape.ts
-init_cjs_shims();
-var cssEscape = (string) => {
-  const length = string.length;
-  const firstCodeUnit = string.charCodeAt(0);
-  let index2 = -1;
-  let codeUnit;
-  let result = "";
-  while (++index2 < length) {
-    codeUnit = string.charCodeAt(index2);
-    if (codeUnit == 0) {
-      result += "\uFFFD";
-      continue;
-    }
-    if (codeUnit >= 1 && codeUnit <= 31 || codeUnit == 127 || index2 == 0 && codeUnit >= 48 && codeUnit <= 57 || index2 == 1 && codeUnit >= 48 && codeUnit <= 57 && firstCodeUnit == 45) {
-      result += "\\" + codeUnit.toString(16) + " ";
-      continue;
-    }
-    if (index2 == 0 && length == 1 && codeUnit == 45) {
-      result += "\\" + string.charAt(index2);
-      continue;
-    }
-    if (codeUnit >= 128 || codeUnit == 45 || codeUnit == 95 || codeUnit >= 48 && codeUnit <= 57 || codeUnit >= 65 && codeUnit <= 90 || codeUnit >= 97 && codeUnit <= 122) {
-      result += string.charAt(index2);
-      continue;
-    }
-    result += "\\" + string.charAt(index2);
-  }
-  return result;
-};
-
-// src/makeValue.ts
-init_cjs_shims();
-var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
-var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
-var px = (value) => {
-  if (value === 0 || value === "0")
-    return 0;
-  if (String(value).startsWith("--"))
-    return cssvar("" + value);
-  const [n, m] = String(value).split("/");
-  if (+n > 0 && +m > 0)
-    return makeNumber(+n / +m * 100) + "%";
-  if (/.[-+*\/]/.test(String(value))) {
-    return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")";
-  }
-  return +value === +value ? value + "px" : value;
-};
-var percentToEm = (value) => {
-  if (value.endsWith("%"))
-    return +value.slice(0, -1) / 100 + "em";
-  return px(value);
-};
-var makeHEX = (value) => {
-  const [rgb, a] = value.split(".");
-  if (a && rgb.length === 4)
-    return "rgba(" + rgb.slice(1).split("").map((value2) => parseInt(value2 + value2, 16)).join(",") + ",." + a + ")";
-  if (a)
-    return "rgba(" + [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)].map((value2) => parseInt(value2, 16)).join(",") + ",." + a + ")";
-  return value;
-};
-var makeHLS = (value) => {
-  const [h, s, l, a] = value.split(",");
-  return "hsl" + (a ? "a" : "") + "(" + [h, s, l, a].filter(Boolean).map(cssvar).join() + ")";
-};
-var makeRGB = (value) => {
-  const [r, g, b, a] = value.split(",");
-  return "rgb" + (a ? "a" : "") + "(" + [r, g, b, a].filter(Boolean).map(cssvar).join() + ")";
-};
-var makeColor = (value = "transparent") => {
-  if (value === "-")
-    return "transparent";
-  if (value === "transparent")
-    return "transparent";
-  if (value.startsWith("--"))
-    return `var(${value})`;
-  if (value.split(",").every((v) => +v === +v)) {
-    if (value.includes("%"))
-      return makeHLS(value);
-    return makeRGB(value);
-  }
-  return value;
-};
-var makeFont = (value) => (value || "").split("/").map((value2, index2) => {
-  if (value2 === "-")
-    return;
-  if (String(value2).startsWith("--"))
-    return `var(${value2})`;
-  switch (index2) {
-    case 0: {
-      return `font-size:${px(value2)}`;
-    }
-    case 1: {
-      return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`;
-    }
-    case 2: {
-      return `letter-spacing:${px(percentToEm(value2))}`;
-    }
-  }
-}).filter(Boolean).join(";");
-var makeFontFamily = (value) => `font-family:${value};font-family:var(--${value}, ${value});`;
-var makeBorder = (value) => {
-  if (!value || value === "none" || value === "0" || value === "-")
-    return "none";
-  const borderStyles = ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"];
-  let hasWidth = false;
-  let hasStyle = false;
-  const values = value.split("/").map((value2) => {
-    if (parseInt(value2) > 0) {
-      hasWidth = true;
-      return value2.includes(",") ? makeColor(value2) : px(value2);
-    }
-    if (borderStyles.includes(value2)) {
-      hasStyle = true;
-      return value2;
-    }
-    return makeColor(value2);
-  });
-  if (!hasWidth)
-    values.unshift("1px");
-  if (!hasStyle)
-    values.unshift("solid");
-  return values.join(" ");
-};
-var makeValues = (value, project = cssvar) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split("/").map(project).join(" ");
-};
-var makeCommaValues = (value, project = (a) => a) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split(",").map(project).join(",");
-};
-var makeSide = (value) => makeValues(value, px);
-var makeRatio = (value) => {
-  const [w, h] = value.split(":");
-  return (+h / +w * 100).toFixed(2) + "%";
-};
-var makeHBox = (value = "") => {
-  const values = value.split("+");
-  const result = values.map((v) => {
-    switch (v) {
-      case "top": {
-        return "align-items:flex-start;";
-      }
-      case "bottom": {
-        return "align-items:flex-end;";
-      }
-      case "fill": {
-        return "align-items:stretch;";
-      }
-      case "stretch": {
-        return "align-items:stretch;";
-      }
-      case "center": {
-        return "justify-content:center;";
-      }
-      case "left": {
-        return values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "right": {
-        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "reverse": {
-        return "flex-direction:row-reverse;";
-      }
-    }
-  });
-  if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
-    result.unshift("align-items:center;");
-  }
-  return result.join("");
-};
-var makeVBox = (value = "") => {
-  const values = value.split("+");
-  const result = values.map((v) => {
-    switch (v) {
-      case "left": {
-        return "align-items:flex-start;";
-      }
-      case "center": {
-        return "align-items:center;";
-      }
-      case "right": {
-        return "align-items:flex-end;";
-      }
-      case "top": {
-        return values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "middle": {
-        return "justify-content:center;";
-      }
-      case "bottom": {
-        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "reverse": {
-        return "flex-direction:column-reverse;";
-      }
-    }
-  });
-  if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
-    result.unshift("align-items:stretch;");
-  }
-  return result.join("");
-};
-var makeTransition = (value) => {
-  if (!value.includes("="))
-    return `all ${value}`;
-  return value.split("/").map((item) => item.replace("=", " ")).join(",");
-};
-
-// src/rules.ts
+// src/const.ts
 init_cjs_shims();
 var ALL_PROPERTIES = {
   "--*": 1,
@@ -3503,11 +3291,226 @@ var ALL_PROPERTIES = {
   "z-index": 1,
   "zoom": 1
 };
+
+// src/cssEscape.ts
+init_cjs_shims();
+var cssEscape = (string) => {
+  const length = string.length;
+  const firstCodeUnit = string.charCodeAt(0);
+  let index2 = -1;
+  let codeUnit;
+  let result = "";
+  while (++index2 < length) {
+    codeUnit = string.charCodeAt(index2);
+    if (codeUnit == 0) {
+      result += "\uFFFD";
+      continue;
+    }
+    if (codeUnit >= 1 && codeUnit <= 31 || codeUnit == 127 || index2 == 0 && codeUnit >= 48 && codeUnit <= 57 || index2 == 1 && codeUnit >= 48 && codeUnit <= 57 && firstCodeUnit == 45) {
+      result += "\\" + codeUnit.toString(16) + " ";
+      continue;
+    }
+    if (index2 == 0 && length == 1 && codeUnit == 45) {
+      result += "\\" + string.charAt(index2);
+      continue;
+    }
+    if (codeUnit >= 128 || codeUnit == 45 || codeUnit == 95 || codeUnit >= 48 && codeUnit <= 57 || codeUnit >= 65 && codeUnit <= 90 || codeUnit >= 97 && codeUnit <= 122) {
+      result += string.charAt(index2);
+      continue;
+    }
+    result += "\\" + string.charAt(index2);
+  }
+  return result;
+};
+
+// src/makeValue.ts
+init_cjs_shims();
+var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
+var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
+var px = (value) => {
+  if (value === 0 || value === "0")
+    return 0;
+  if (String(value).startsWith("--"))
+    return cssvar("" + value);
+  const [n, m] = String(value).split("/");
+  if (+n > 0 && +m > 0)
+    return makeNumber(+n / +m * 100) + "%";
+  if (/.[-+*\/]/.test(String(value))) {
+    return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")";
+  }
+  return +value === +value ? value + "px" : value;
+};
+var percentToEm = (value) => {
+  if (value.endsWith("%"))
+    return +value.slice(0, -1) / 100 + "em";
+  return px(value);
+};
+var makeHEX = (value) => {
+  const [rgb, a] = value.split(".");
+  if (a && rgb.length === 4)
+    return "rgba(" + rgb.slice(1).split("").map((value2) => parseInt(value2 + value2, 16)).join(",") + ",." + a + ")";
+  if (a)
+    return "rgba(" + [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)].map((value2) => parseInt(value2, 16)).join(",") + ",." + a + ")";
+  return value;
+};
+var makeHLS = (value) => {
+  const [h, s, l, a] = value.split(",");
+  return "hsl" + (a ? "a" : "") + "(" + [h, s, l, a].filter(Boolean).map(cssvar).join() + ")";
+};
+var makeRGB = (value) => {
+  const [r, g, b, a] = value.split(",");
+  return "rgb" + (a ? "a" : "") + "(" + [r, g, b, a].filter(Boolean).map(cssvar).join() + ")";
+};
+var makeColor = (value = "transparent") => {
+  if (value === "-")
+    return "transparent";
+  if (value === "transparent")
+    return "transparent";
+  if (value.startsWith("--"))
+    return `var(${value})`;
+  if (value.split(",").every((v) => +v === +v)) {
+    if (value.includes("%"))
+      return makeHLS(value);
+    return makeRGB(value);
+  }
+  return value;
+};
+var makeFont = (value) => (value || "").split("/").map((value2, index2) => {
+  if (value2 === "-")
+    return;
+  if (String(value2).startsWith("--"))
+    return `var(${value2})`;
+  switch (index2) {
+    case 0: {
+      return `font-size:${px(value2)}`;
+    }
+    case 1: {
+      return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`;
+    }
+    case 2: {
+      return `letter-spacing:${px(percentToEm(value2))}`;
+    }
+  }
+}).filter(Boolean).join(";");
+var makeFontFamily = (value) => `font-family:${value};font-family:var(--${value}, ${value});`;
+var makeBorder = (value) => {
+  if (!value || value === "none" || value === "0" || value === "-")
+    return "none";
+  const borderStyles = ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"];
+  let hasWidth = false;
+  let hasStyle = false;
+  const values = value.split("/").map((value2) => {
+    if (parseInt(value2) > 0) {
+      hasWidth = true;
+      return value2.includes(",") ? makeColor(value2) : px(value2);
+    }
+    if (borderStyles.includes(value2)) {
+      hasStyle = true;
+      return value2;
+    }
+    return makeColor(value2);
+  });
+  if (!hasWidth)
+    values.unshift("1px");
+  if (!hasStyle)
+    values.unshift("solid");
+  return values.join(" ");
+};
+var makeValues = (value, project = cssvar) => {
+  if (String(value).startsWith("--"))
+    return `var(${value})`;
+  return value && value.split("/").map(project).join(" ");
+};
+var makeCommaValues = (value, project = (a) => a) => {
+  if (String(value).startsWith("--"))
+    return `var(${value})`;
+  return value && value.split(",").map(project).join(",");
+};
+var makeSide = (value) => makeValues(value, px);
+var makeRatio = (value) => {
+  const [w, h] = value.split(":");
+  return (+h / +w * 100).toFixed(2) + "%";
+};
+var makeHBox = (value = "") => {
+  const values = value.split("+");
+  const result = values.map((v) => {
+    switch (v) {
+      case "top": {
+        return "align-items:flex-start;";
+      }
+      case "bottom": {
+        return "align-items:flex-end;";
+      }
+      case "fill": {
+        return "align-items:stretch;";
+      }
+      case "stretch": {
+        return "align-items:stretch;";
+      }
+      case "center": {
+        return "justify-content:center;";
+      }
+      case "left": {
+        return values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "right": {
+        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "reverse": {
+        return "flex-direction:row-reverse;";
+      }
+    }
+  });
+  if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
+    result.unshift("align-items:center;");
+  }
+  return result.join("");
+};
+var makeVBox = (value = "") => {
+  const values = value.split("+");
+  const result = values.map((v) => {
+    switch (v) {
+      case "left": {
+        return "align-items:flex-start;";
+      }
+      case "center": {
+        return "align-items:center;";
+      }
+      case "right": {
+        return "align-items:flex-end;";
+      }
+      case "top": {
+        return values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "middle": {
+        return "justify-content:center;";
+      }
+      case "bottom": {
+        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "reverse": {
+        return "flex-direction:column-reverse;";
+      }
+    }
+  });
+  if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
+    result.unshift("align-items:stretch;");
+  }
+  return result.join("");
+};
+var makeTransition = (value) => {
+  if (!value.includes("="))
+    return `all ${value}`;
+  return value.split("/").map((item) => item.replace("=", " ")).join(",");
+};
+
+// src/rules.ts
+init_cjs_shims();
 var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;word-break:word-break;tab-size:4}
+*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:4}
 html,body{height:100%;}
-img,picture,video,canvas,svg{display:block}
+img,picture,video,canvas,svg{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -3577,6 +3580,47 @@ var RULES = {
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
   "hyphens": (value = "auto") => `hyphens: ${value};`,
+  "block": () => "display:block;",
+  "inline-block": () => "display:inline-block;",
+  "inline": () => "display:inline;",
+  "inline-flex": () => "display:inline-flex;",
+  "table": () => "display:table;",
+  "inline-table": () => "display:inline-table;",
+  "table-caption": () => "display:table-caption;",
+  "table-cell": () => "display:table-cell;",
+  "table-column": () => "display:table-column;",
+  "table-column-group": () => "display:table-column-group;",
+  "table-footer-group": () => "display:table-footer-group;",
+  "table-header-group": () => "display:table-header-group;",
+  "table-row-group": () => "display:table-row-group;",
+  "table-row": () => "display:table-row;",
+  "flow-root": () => "display:flow-root;",
+  "grid": () => "display:grid;",
+  "inline-grid": () => "display:inline-grid;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
+  "hbox": (value) => `display:flex;flex-flow:row;${makeHBox(value)};`,
+  "vbox": (value) => `display:flex;flex-flow:column;${makeVBox(value)};`,
+  "pack": () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox(": () => ``,
+  "vbox(": () => ``,
+  "gap": (value) => `gap:${makeSide(value)};`,
+  "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
+  "vgap": (value) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value) => `&>*+* {margin-bottom:${px(value)};}`,
+  "space-between": () => `justify-content:space-between;`,
+  "space-around": () => `justify-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;`,
+  "flex": (value = "1") => `flex:${makeValues(value)};`,
+  "space": (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "flex-basis": (value) => `flex-basis:${px(value)};`,
+  "flex-wrap": () => "&{flex-wrap:wrap;}&>*{max-width:100%;max-height:100%;}",
+  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
+  "flex-nowrap": () => "flex-wrap:nowrap;",
+  "order": (value) => `order:${cssvar(value)};`,
   "border-box": () => `box-sizing:border-box`,
   "content-box": () => `box-sizing:content-box`,
   "w": (value) => {
@@ -3664,47 +3708,6 @@ var RULES = {
   "bg-position": (value) => `background-position:${value};`,
   "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
   "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
-  "block": () => "display:block;",
-  "inline-block": () => "display:inline-block;",
-  "inline": () => "display:inline;",
-  "inline-flex": () => "display:inline-flex;",
-  "table": () => "display:table;",
-  "inline-table": () => "display:inline-table;",
-  "table-caption": () => "display:table-caption;",
-  "table-cell": () => "display:table-cell;",
-  "table-column": () => "display:table-column;",
-  "table-column-group": () => "display:table-column-group;",
-  "table-footer-group": () => "display:table-footer-group;",
-  "table-header-group": () => "display:table-header-group;",
-  "table-row-group": () => "display:table-row-group;",
-  "table-row": () => "display:table-row;",
-  "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
-  "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
-  "hbox": (value) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value) => `display:flex;flex-flow:column;${makeVBox(value)}`,
-  "pack": () => `display:flex;align-items:center;justify-content:center;`,
-  "hbox(": () => ``,
-  "vbox(": () => ``,
-  "gap": (value) => `gap:${makeSide(value)};`,
-  "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
-  "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
-  "vgap": (value) => `&>*+* {margin-top:${px(value)};}`,
-  "vgap-reverse": (value) => `&>*+* {margin-bottom:${px(value)};}`,
-  "space-between": () => `justify-content:space-between;`,
-  "space-around": () => `justify-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;`,
-  "flex": (value = "1") => `flex:${makeValues(value)};`,
-  "space": (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
-  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
-  "flex-basis": (value) => `flex-basis:${px(value)};`,
-  "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
-  "flex-nowrap": () => "flex-wrap:nowrap;",
-  "order": (value) => `order:${cssvar(value)};`,
   "overflow": (value) => `overflow:${value};`,
   "overflow-x": (value) => `overflow-x:${value};`,
   "overflow-y": (value) => `overflow-y:${value};`,
@@ -3888,7 +3891,7 @@ var PREFIX_MEDIA_QUERY = {
   "~lg:": { media: `(max-width:1023.98px)`, selector: `html &` },
   "~xl:": { media: `(max-width:1279.98px)`, selector: `html &` },
   "mobile:": { media: `(max-device-width:767.98px)`, selector: `html &` },
-  "tablet:": { media: `(min-device-width:768px) and (max-width:1023.98px)`, selector: `html &` },
+  "tablet:": { media: `(min-device-width:768px) and (max-device-width:1023.98px)`, selector: `html &` },
   "desktop:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "!mobile:": { media: `(min-device-width:768px)`, selector: `html &` },
   "!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
@@ -4003,13 +4006,17 @@ var generateAtomicCss = (rules, prefixRules) => {
           const makeSelector = PREFIX_SELECTOR[type];
           const makePseudo = prefixRules[ident + token.id];
           const makeAtRule = AT_RULE[e.slice(0, 2).map((r) => r.value).join("")];
+          console.warn("e", e, ident);
+          console.warn("makeSelector", makeSelector);
+          console.warn("makePseudo", makePseudo);
+          console.warn("makeAtRule", makeAtRule);
           const rule2 = (() => {
             if (makeAtRule)
               return makeAtRule(ident, e);
-            if (makeSelector)
-              return { selector: makeSelector(selector2) };
             if (makePseudo)
               return makePseudo;
+            if (makeSelector)
+              return { selector: makeSelector(selector2) };
             return { selector: `&${token.id}${selector2}` };
           })();
           rule2.selector = rule2.selector.replace(/>>/g, " ");
@@ -4057,7 +4064,7 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
 var generateCss = createGenerateCss();
 var parseAtoms = (code) => {
   const atoms = /* @__PURE__ */ new Set();
-  code.split(/[\s"'`]/).forEach((atom) => atoms.add(atom));
+  code.split(/\sclass:([^\s=>]+)[\s=>]|={|[\s"'`]/).forEach((atom) => atoms.add(atom));
   return [...atoms];
 };
 

@@ -1,11 +1,12 @@
 <script lang="ts">
 
 import {onMount} from "svelte"
+import {ALL_PROPERTIES} from "../../src[vite-plugin-adorable-css]/src/const"
 import {cssEscape} from "../../src[vite-plugin-adorable-css]/src/cssEscape"
 import {makeValues} from "../../src[vite-plugin-adorable-css]/src/makeValue"
 
 /// Tokenizer
-import {ALL_PROPERTIES, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "../../src[vite-plugin-adorable-css]/src/rules"
+import {PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "../../src[vite-plugin-adorable-css]/src/rules"
 
 const lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],

@@ -1,6 +1,7 @@
+import {ALL_PROPERTIES} from "./const"
 import {cssEscape} from "./cssEscape"
 import {makeHEX, makeValues} from "./makeValue"
-import {ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
+import {AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
 
 export type Rules = Record<string, (value?:string) => string>
 export type PrefixProps = { media?:string, selector?:string }
@@ -94,6 +95,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         const type = e[0].value
         const ident = e.map(e => e.value).join("")
 
+
+
         // selector
         if (token && (token.id === ":" || token.id === "::")) {
           const selector = ident
@@ -103,8 +106,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
           const rule = (() => {
             if (makeAtRule) return makeAtRule(ident, e)
-            if (makeSelector) return {selector: makeSelector(selector)}
             if (makePseudo) return makePseudo
+            if (makeSelector) return {selector: makeSelector(selector)}
             return {selector: `&${token.id}${selector}`}
           })()
 
@@ -174,6 +177,6 @@ export const generateCss = createGenerateCss()
 
 export const parseAtoms = (code:string):string[] => {
   const atoms = new Set<string>()
-  code.split(/[\s"'`]/).forEach(atom => atoms.add(atom))
+  code.split(/\sclass:([^\s=>]+)[\s=>]|={|[\s"'`]/).forEach(atom => atoms.add(atom))
   return [...atoms]
 }

@@ -3,6 +3,17 @@
 > 불칠절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
 ```typescript
+export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
+*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
+html,body{height:100%;}
+img,picture,video,canvas,svg{display:block;max-width:100%;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,menu,dir{list-style:none;}
+`
+
 export const RULES:Rules = {
 
   // -- Color
@@ -92,6 +103,59 @@ export const RULES:Rules = {
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
   "hyphens": (value = "auto") => `hyphens: ${value};`,
+
+  // -- Display
+  "block": () => "display:block;",
+  "inline-block": () => "display:inline-block;",
+  "inline": () => "display:inline;",
+  "inline-flex": () => "display:inline-flex;",
+  "table": () => "display:table;",
+  "inline-table": () => "display:inline-table;",
+  "table-caption": () => "display:table-caption;",
+  "table-cell": () => "display:table-cell;",
+  "table-column": () => "display:table-column;",
+  "table-column-group": () => "display:table-column-group;",
+  "table-footer-group": () => "display:table-footer-group;",
+  "table-header-group": () => "display:table-header-group;",
+  "table-row-group": () => "display:table-row-group;",
+  "table-row": () => "display:table-row;",
+  "flow-root": () => "display:flow-root;",
+  "grid": () => "display:grid;",
+  "inline-grid": () => "display:inline-grid;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
+
+  // -- Flexbox
+  "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)};`,
+  "vbox": (value:string) => `display:flex;flex-flow:column;${makeVBox(value)};`,
+  "pack": () => `display:flex;align-items:center;justify-content:center;`,
+  "hbox(": () => ``,
+  "vbox(": () => ``,
+
+  "gap": (value:string) => `gap:${makeSide(value)};`,
+
+  // @NOTE: IE, safari<=13
+  "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
+  "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
+
+  "space-between": () => `justify-content:space-between;`,
+  "space-around": () => `justify-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;`,
+
+  // flex
+  "flex": (value = "1") => `flex:${makeValues(value)};`,
+  "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
+
+  "flex-wrap": () => "&{flex-wrap:wrap;}&>*{max-width:100%;max-height:100%;}",
+  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
+  "flex-nowrap": () => "flex-wrap:nowrap;",
+  "order": (value:string) => `order:${cssvar(value)};`,
 
   // -- Box
 
@@ -204,60 +268,6 @@ export const RULES:Rules = {
   "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
   "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
 
-  // -- Display
-  "block": () => "display:block;",
-  "inline-block": () => "display:inline-block;",
-  "inline": () => "display:inline;",
-  "inline-flex": () => "display:inline-flex;",
-  "table": () => "display:table;",
-  "inline-table": () => "display:inline-table;",
-  "table-caption": () => "display:table-caption;",
-  "table-cell": () => "display:table-cell;",
-  "table-column": () => "display:table-column;",
-  "table-column-group": () => "display:table-column-group;",
-  "table-footer-group": () => "display:table-footer-group;",
-  "table-header-group": () => "display:table-header-group;",
-  "table-row-group": () => "display:table-row-group;",
-  "table-row": () => "display:table-row;",
-  "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
-  "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
-
-  // -- Flexbox
-  "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value:string) => `display:flex;flex-flow:column;max-width:100%;${makeVBox(value)}`,
-  "pack": () => `display:flex;align-items:center;justify-content:center;`,
-  "hbox(": () => ``,
-  "vbox(": () => ``,
-
-  "gap": (value:string) => `gap:${makeSide(value)};`,
-
-  // @NOTE: IE, safari<=13
-  "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
-  "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
-  "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
-  "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
-
-  "space-between": () => `justify-content:space-between;`,
-  "space-around": () => `justify-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;`,
-
-  // flex
-  "flex": (value = "1") => `flex:${makeValues(value)};`,
-  "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
-
-  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
-  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
-
-  "flex-wrap": () => "flex-wrap:wrap;max-width:100%;",
-  "flex-wrap-reverse": () => "flex-wrap:wrap-reverse;max-width:100%;",
-  "flex-nowrap": () => "flex-wrap:nowrap;",
-  "order": (value:string) => `order:${cssvar(value)};`,
-
-
   /// -- Overflow
 
   // OverFlow:@TODO:스크롤바 보여지느냐 아니냐... 보통 auto를 쓴다. 스크롤 바는 생각할게 많네요!! (thank you Linda!)
@@ -333,11 +343,11 @@ export const RULES:Rules = {
 
   // Visibility
   "none": () => `display:none;`,
-  "visible": () => `visibility:visible;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
+  "visible": () => `visibility:visible;`,
 
 
   // Interactions
@@ -502,7 +512,7 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   "~xl:": {media: `(max-width:1279.98px)`, selector: `html &`},
 
   "mobile:": {media: `(max-device-width:767.98px)`, selector: `html &`},
-  "tablet:": {media: `(min-device-width:768px) and (max-width:1023.98px)`, selector: `html &`},
+  "tablet:": {media: `(min-device-width:768px) and (max-device-width:1023.98px)`, selector: `html &`},
   "desktop:": {media: `(min-device-width:1024px)`, selector: `html &`},
   "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
   "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
@@ -544,19 +554,15 @@ export const AT_RULE = {
     return {media: ` only screen and ${rule}`, selector: `html &`}
   }
 }
-```
 
-
-## Reset CSS
-
-```css
-* {margin:0;padding:0;font:inherit;color:inherit;}
-*, :after, :before {box-sizing:border-box;flex-shrink:0;}
-:root {-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
-html, body {height:100%;}
-img, picture, video, canvas, svg {display:block;max-width:100%;}
-button {background:none;border:0;cursor:pointer;}
-a {text-decoration:none;}
-table {border-collapse:collapse;border-spacing:0;}
-ol, ul, menu, dir {list-style:none;}
+// selector
+export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
+  ">>": (selector:string) => `& ${selector.slice(2)}`,
+  ".": (selector:string) => `&${selector}, ${selector} &`,
+  "[": (selector:string) => `&${selector}, ${selector} &`,
+  ">": (selector:string) => `&${selector}`,
+  "+": (selector:string) => `&${selector}`,
+  "~": (selector:string) => `&${selector}`,
+  "#": (selector:string) => `&${selector}`,
+}
 ```
