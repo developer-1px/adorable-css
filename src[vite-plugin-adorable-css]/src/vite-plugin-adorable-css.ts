@@ -4,12 +4,15 @@ import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
 import {reset} from "./rules"
 
 import micromatch from "micromatch"
+import {readFileSync} from 'fs'
+import {join} from 'path'
 
 interface Config {
   include:string[]
   reset:string
   rules:Rules
   prefixRules:PrefixRules
+  preLoads:string[]
 }
 
 const ADORABLE_CSS = "@adorable.css"
@@ -21,7 +24,8 @@ const CONFIG:Config = {
   include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
   reset,
   rules: {},
-  prefixRules: {}
+  prefixRules: {},
+  preLoads: []
 }
 
 export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
@@ -97,6 +101,16 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
           debounceInvalidate()
         }
         return next()
+      })
+    },
+
+    buildStart: () => {
+      const {preLoads} = config
+      preLoads.forEach((currentPath) => {
+        const path = join(configRoot, currentPath)
+        const file = readFileSync(path, 'utf-8')
+
+        entry[path] = parseAtoms(file)
       })
     },
 
