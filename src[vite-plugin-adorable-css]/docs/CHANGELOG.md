@@ -1,3 +1,8 @@
+## 0.6.5
+- ✨ .index 파일의 경우 vite의 transform 목록에 포함되어 있지 않아 adorable.css 를 자동생성하지 못하는 문제 수정 #32
+config에 `preLoads`의 옵션을 이용해서 (default: `[/*/**.html]`) 모든 html파일을 미리 watch 목록에 올리도록 기능 추가함.
+
+
 ## 0.6.4
 - 🐛️ ~sm, ~md 기능 안되던 버그 수정
 - 🐛️ :root `{ ... word-break:break-word ... }` 추가 해서 text로 인해 flex-box가 커지는 기능 방지
