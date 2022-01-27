@@ -2,10 +2,10 @@ import type {Plugin, ViteDevServer} from "vite"
 
 import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
 import {reset} from "./rules"
+import {promises as fs} from "fs"
 
 import micromatch from "micromatch"
-import {readFileSync} from 'fs'
-import {join} from 'path'
+const chokidar = require("chokidar")
 
 interface Config {
   include:string[]
@@ -21,11 +21,11 @@ const BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`
 const DEBOUNCE_TIMEOUT = 250
 
 const CONFIG:Config = {
+  preLoads: ["**/*.html"],
   include: ["**/*.{svelte,tsx,jsx,vue,mdx,svx,html}"],
   reset,
   rules: {},
   prefixRules: {},
-  preLoads: []
 }
 
 export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
@@ -97,7 +97,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 
       servers.push(_server)
       _server.middlewares.use((req, res, next) => {
-        if (!isHMR && req.url && checkTargetFile(req.url)) {
+        if (!isHMR && req.url && (checkTargetFile(req.url))) {
           debounceInvalidate()
         }
         return next()
@@ -106,11 +106,29 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 
     buildStart: () => {
       const {preLoads} = config
-      preLoads.forEach((currentPath) => {
-        const path = join(configRoot, currentPath)
-        const file = readFileSync(path, 'utf-8')
 
-        entry[path] = parseAtoms(file)
+      const watcher = chokidar.watch(preLoads, {
+        ignored: (path) => path.includes("node_modules")
+      })
+
+      watcher.on("change", async (path) => {
+        entry[path] = parseAtoms(await fs.readFile(path, "utf-8"))
+        debounceInvalidate()
+      })
+
+      watcher.on("ready", async () => {
+        const watchedPaths = watcher.getWatched()
+        // console.log("--- ready --")
+        // console.log("watchedPaths", watchedPaths)
+
+        await Promise.all(Object.entries(watchedPaths)
+          .map(([path, files]) => (files as string[])
+            .map(file => path + "/" + file)
+            .map(filepath => fs.readFile(filepath, "utf-8")
+              .then(data => entry[filepath] = parseAtoms(data))))
+          .flat(1))
+
+        debounceInvalidate()
       })
     },
 
