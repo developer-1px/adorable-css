@@ -12,6 +12,7 @@ declare const parseAtoms: (code: string) => string[];
 
 declare const makeNumber: (num: number) => string;
 declare const cssvar: (value: string | number) => string | number;
+declare const cssString: (value: string | number) => string;
 declare const px: (value: string | number) => string | number;
 declare const percentToEm: (value: string) => string | number;
 declare const makeHEX: (value: string) => string;
@@ -569,4 +570,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };

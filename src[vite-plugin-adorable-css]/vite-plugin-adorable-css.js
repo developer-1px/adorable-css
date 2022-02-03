@@ -7729,6 +7729,7 @@ __export(vite_plugin_adorable_css_exports, {
   RULES: () => RULES,
   adorableCSS: () => adorableCSS,
   createGenerateCss: () => createGenerateCss,
+  cssString: () => cssString,
   cssvar: () => cssvar,
   generateCss: () => generateCss,
   makeBorder: () => makeBorder,
@@ -8309,6 +8310,7 @@ var cssEscape = (string) => {
 init_cjs_shims();
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
+var cssString = (value) => String(value).startsWith("--") ? `var(${value})` : `"${value}"`;
 var px = (value) => {
   if (value === 0 || value === "0")
     return 0;
@@ -8350,9 +8352,10 @@ var makeColor = (value = "transparent") => {
     return "transparent";
   if (value.startsWith("--"))
     return `var(${value})`;
-  if (value.split(",").every((v) => +v === +v)) {
-    if (value.includes("%"))
+  if (value.split(",").every((v) => parseFloat(v) >= 0)) {
+    if (value.includes("%")) {
       return makeHLS(value);
+    }
     return makeRGB(value);
   }
   return value;
@@ -8785,9 +8788,10 @@ var RULES = {
   "gpu": () => `transform:translateZ(0.1px);`,
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value) => `-webkit-app-region:${value};`,
-  "content": (value) => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
   "table-layout-fixed": () => `table-layout:fixed;`,
+  "table-layout-auto": () => `table-layout:auto;`,
   "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
   "float": (value) => `float:${cssvar(value)}`,
   "clear": (value) => `clear:${cssvar(value)}`,
@@ -9041,8 +9045,25 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
 };
 var generateCss = createGenerateCss();
 var parseAtoms = (code) => {
+  let lastIndex = -1;
   const atoms = /* @__PURE__ */ new Set();
-  code.split(/\sclass:([^\s=>]+)[\s=>]|={|[\s"'`]/).forEach((atom) => atoms.add(atom));
+  code.replace(/["'`]|\s+/g, (a, index2, s) => {
+    let token2 = s.slice(lastIndex + a.length, index2);
+    const prev = s.charAt(index2 - 1);
+    if (prev === "(" || prev === "\\") {
+      return a;
+    }
+    const next2 = s.charAt(index2 + 1);
+    if (next2 === ")") {
+      return a;
+    }
+    if (token2.startsWith("class:")) {
+      token2 = token2.slice("class:".length).split("=")[0];
+    }
+    atoms.add(token2);
+    lastIndex = index2;
+    return a;
+  });
   return [...atoms];
 };
 
@@ -9192,6 +9213,7 @@ module.exports = __toCommonJS(vite_plugin_adorable_css_exports);
   RULES,
   adorableCSS,
   createGenerateCss,
+  cssString,
   cssvar,
   generateCss,
   makeBorder,

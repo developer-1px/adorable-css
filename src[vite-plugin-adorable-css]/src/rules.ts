@@ -1,5 +1,5 @@
 import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
+import {cssString, cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
@@ -392,10 +392,11 @@ export const RULES:Rules = {
   // etc
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  "content": (value:string) => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-layout-fixed": () => `table-layout:fixed;`,
+  "table-layout-auto": () => `table-layout:auto;`,
 
   "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 

@@ -1,3 +1,8 @@
+## 0.6.6
+- 🐛 hsl컬러 지정안되는 현상을 수정하였습니다.
+- 🐛 after:content('...')가 동작하지 않던 현상을 수정하였습니다.  
+- ✨ after:content 만 입력할 경우 content:'' 의 default값으로 적용하도록 수정하였습니다.
+
 ## 0.6.5
 - ✨ .index 파일의 경우 vite의 transform 목록에 포함되어 있지 않아 adorable.css 를 자동생성하지 못하는 문제 수정 #32
 config에 `preLoads`의 옵션을 이용해서 (default: `[/*/**.html]`) 모든 html파일을 미리 watch 목록에 올리도록 기능 추가함.

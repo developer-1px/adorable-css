@@ -88,13 +88,13 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
     try {
       tokenize(script)
+
       const ast = []
 
       while (token) {
         const e = expr()
         const type = e[0].value
         const ident = e.map(e => e.value).join("")
-
 
 
         // selector
@@ -176,7 +176,27 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
 export const generateCss = createGenerateCss()
 
 export const parseAtoms = (code:string):string[] => {
+  let lastIndex = -1
   const atoms = new Set<string>()
-  code.split(/\sclass:([^\s=>]+)[\s=>]|={|[\s"'`]/).forEach(atom => atoms.add(atom))
+
+  code.replace(/["'`]|\s+/g, (a, index, s) => {
+    let token = s.slice(lastIndex + a.length, index)
+    const prev = s.charAt(index - 1)
+    if (prev === "(" || prev === "\\") {
+      return a
+    }
+    const next = s.charAt(index + 1)
+    if (next === ")") {
+      return a
+    }
+    if (token.startsWith("class:")) {
+      token = token.slice("class:".length).split("=")[0]
+    }
+    atoms.add(token)
+    lastIndex = index
+    return a
+  })
+
+  // console.log("atoms", atoms)
   return [...atoms]
 }

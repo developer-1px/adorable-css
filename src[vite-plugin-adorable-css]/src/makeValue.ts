@@ -2,6 +2,8 @@ export const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/
 
 export const cssvar = (value:string|number) => String(value).startsWith("--") ? `var(${value})` : value
 
+export const cssString = (value:string|number) => String(value).startsWith("--") ? `var(${value})` : `"${value}"`
+
 // <length> default: px
 export const px = (value:string|number) => {
   if (value === 0 || value === "0") return 0
@@ -50,10 +52,11 @@ export const makeColor = (value = "transparent") => {
   if (value.startsWith("--")) return `var(${value})`
 
   // c(255,255,155) or c(100%,0,0)
-  if (value.split(",").every(v => +v === +v)) {
+  if (value.split(",").every(v => parseFloat(v) >= 0)) {
     // HSL, HSLA (222,100%,50%)
-    if (value.includes("%")) return makeHLS(value)
-
+    if (value.includes("%")) {
+      return makeHLS(value)
+    }
     // RGB, RGBA
     return makeRGB(value)
   }
