@@ -1,6 +1,6 @@
 {
   ".svelte-kit/build/runtime/internal/start.js": {
-    "file": "start-03810307.js",
+    "file": "start-a05ebeba.js",
     "src": ".svelte-kit/build/runtime/internal/start.js",
     "isEntry": true,
     "imports": [
@@ -14,6 +14,7 @@
       "src/routes/changelogs.svelte",
       "src/routes/reference.svelte",
       "src/routes/tutorial.svelte",
+      "src/routes/guide.svelte",
       "src/routes/docs.svelte"
     ],
     "css": [
@@ -21,7 +22,7 @@
     ]
   },
   "src/routes/__layout.svelte": {
-    "file": "pages/__layout.svelte-6a03e660.js",
+    "file": "pages/__layout.svelte-b6f81c56.js",
     "src": "src/routes/__layout.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -30,7 +31,7 @@
       "_paths-28a87002.js"
     ],
     "css": [
-      "assets/pages/__layout.svelte-3b540adb.css"
+      "assets/pages/__layout.svelte-8ae24613.css"
     ]
   },
   ".svelte-kit/build/components/error.svelte": {
@@ -43,7 +44,7 @@
     ]
   },
   "src/routes/index.svelte": {
-    "file": "pages/index.svelte-0e2a952a.js",
+    "file": "pages/index.svelte-bcd3b606.js",
     "src": "src/routes/index.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -52,7 +53,7 @@
     ]
   },
   "src/routes/changelogs.svelte": {
-    "file": "pages/changelogs.svelte-31b01dcf.js",
+    "file": "pages/changelogs.svelte-1a52bbe2.js",
     "src": "src/routes/changelogs.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -61,7 +62,7 @@
     ]
   },
   "src/routes/reference.svelte": {
-    "file": "pages/reference.svelte-da35e169.js",
+    "file": "pages/reference.svelte-f2f00781.js",
     "src": "src/routes/reference.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
@@ -70,8 +71,17 @@
     ]
   },
   "src/routes/tutorial.svelte": {
-    "file": "pages/tutorial.svelte-a168f71f.js",
+    "file": "pages/tutorial.svelte-ceae5e2e.js",
     "src": "src/routes/tutorial.svelte",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_vendor-e0ae2598.js"
+    ]
+  },
+  "src/routes/guide.svelte": {
+    "file": "pages/guide.svelte-6827d544.js",
+    "src": "src/routes/guide.svelte",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
