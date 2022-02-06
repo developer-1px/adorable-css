@@ -176,11 +176,11 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
 export const generateCss = createGenerateCss()
 
 export const parseAtoms = (code:string):string[] => {
-  let lastIndex = -1
+  let lastIndex = 0
   const atoms = new Set<string>()
 
   code.replace(/["'`]|\s+/g, (a, index, s) => {
-    let token = s.slice(lastIndex + a.length, index)
+    let token = s.slice(lastIndex, index)
     const prev = s.charAt(index - 1)
     if (prev === "(" || prev === "\\") {
       return a
@@ -193,7 +193,7 @@ export const parseAtoms = (code:string):string[] => {
       token = token.slice("class:".length).split("=")[0]
     }
     atoms.add(token)
-    lastIndex = index
+    lastIndex = index + a.length
     return a
   })
 

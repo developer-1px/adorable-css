@@ -9045,10 +9045,10 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
 };
 var generateCss = createGenerateCss();
 var parseAtoms = (code) => {
-  let lastIndex = -1;
+  let lastIndex = 0;
   const atoms = /* @__PURE__ */ new Set();
   code.replace(/["'`]|\s+/g, (a, index2, s) => {
-    let token2 = s.slice(lastIndex + a.length, index2);
+    let token2 = s.slice(lastIndex, index2);
     const prev = s.charAt(index2 - 1);
     if (prev === "(" || prev === "\\") {
       return a;
@@ -9061,7 +9061,7 @@ var parseAtoms = (code) => {
       token2 = token2.slice("class:".length).split("=")[0];
     }
     atoms.add(token2);
-    lastIndex = index2;
+    lastIndex = index2 + a.length;
     return a;
   });
   return [...atoms];
@@ -9070,7 +9070,7 @@ var parseAtoms = (code) => {
 // src/vite-plugin-adorable-css.ts
 var import_fs = __toESM(require("fs"));
 var import_micromatch = __toESM(require_micromatch());
-var chokidar = require_chokidar();
+var import_chokidar = __toESM(require_chokidar());
 var ADORABLE_CSS = "@adorable.css";
 var VIRTUAL_PATH = "/" + ADORABLE_CSS;
 var BUILD_PLACEHOLDER = `#--adorable-css--{top:1}`;
@@ -9141,7 +9141,7 @@ var adorableCSS = (config) => {
     },
     buildStart: () => {
       const { preLoads } = config;
-      const watcher = chokidar.watch(preLoads, {
+      const watcher = import_chokidar.default.watch(preLoads, {
         ignored: (path) => path.includes("node_modules")
       });
       watcher.on("change", async (path) => {

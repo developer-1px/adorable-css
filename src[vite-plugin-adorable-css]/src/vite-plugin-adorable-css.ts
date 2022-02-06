@@ -5,7 +5,7 @@ import {reset} from "./rules"
 import {promises as fs} from "fs"
 
 import micromatch from "micromatch"
-const chokidar = require("chokidar")
+import chokidar from "chokidar"
 
 interface Config {
   include:string[]
