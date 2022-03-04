@@ -1,3 +1,8 @@
+## 0.6.8
+- ✨ bg(url(...)) background-image:url(...)
+- ✨ bg(http...), bg(./), bg(/...) background-image:url(...)
+- 🐛 transition(none)이 되지 않던 버그를 수정했습니다.
+
 ## 0.6.7
 - 🐛 class에서 줄바꿈시 오류 수정
 

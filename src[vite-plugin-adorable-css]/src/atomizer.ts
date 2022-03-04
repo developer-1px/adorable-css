@@ -178,20 +178,27 @@ export const generateCss = createGenerateCss()
 export const parseAtoms = (code:string):string[] => {
   let lastIndex = 0
   const atoms = new Set<string>()
+  const delimiter = /["'`]|\s+/g
 
-  code.replace(/["'`]|\s+/g, (a, index, s) => {
+  //
+  code.replace(delimiter, (a, index, s) => {
     let token = s.slice(lastIndex, index)
+
     const prev = s.charAt(index - 1)
     if (prev === "(" || prev === "\\") {
       return a
     }
+
     const next = s.charAt(index + 1)
     if (next === ")") {
       return a
     }
+
+    // @Note: svelte class:prop 지원
     if (token.startsWith("class:")) {
       token = token.slice("class:".length).split("=")[0]
     }
+
     atoms.add(token)
     lastIndex = index + a.length
     return a

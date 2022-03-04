@@ -220,7 +220,7 @@ export const RULES:Rules = {
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value:string) => `border-left-color:${makeColor(value)};`,
 
-  // @TODO:교육이 필요하다.
+  // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
 
   "rt": (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
@@ -250,8 +250,14 @@ export const RULES:Rules = {
 
   // -- Background
   "bg": (value:string) => {
-    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
     if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    if (value.startsWith("radial-gradient")) return `background:${value.replace(/\//g, " ")};`
+
+    // background-image-url
+    if (value.startsWith("url")) return `background-image:${value};`
+    if (/^(http|[./])/.test(value)) return `background-image:url(${value});`
+
+    if (value === "transparent") return `background-color:transparent;`
     return `background-color:${makeColor(value)};`
   },
 

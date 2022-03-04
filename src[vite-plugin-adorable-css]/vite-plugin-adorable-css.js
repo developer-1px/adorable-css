@@ -8484,6 +8484,8 @@ var makeVBox = (value = "") => {
   return result.join("");
 };
 var makeTransition = (value) => {
+  if (!/\d/.test(value))
+    return value;
   if (!value.includes("="))
     return `all ${value}`;
   return value.split("/").map((item) => item.replace("=", " ")).join(",");
@@ -8683,6 +8685,14 @@ var RULES = {
   "bg": (value) => {
     if (value.startsWith("linear-gradient"))
       return `background:${value.replace(/\//g, " ")};`;
+    if (value.startsWith("radial-gradient"))
+      return `background:${value.replace(/\//g, " ")};`;
+    if (value.startsWith("url"))
+      return `background-image:${value};`;
+    if (/^(http|[./])/.test(value))
+      return `background-image:url(${value});`;
+    if (value === "transparent")
+      return `background-color:transparent;`;
     return `background-color:${makeColor(value)};`;
   },
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
@@ -9047,7 +9057,8 @@ var generateCss = createGenerateCss();
 var parseAtoms = (code) => {
   let lastIndex = 0;
   const atoms = /* @__PURE__ */ new Set();
-  code.replace(/["'`]|\s+/g, (a, index2, s) => {
+  const delimiter = /["'`]|\s+/g;
+  code.replace(delimiter, (a, index2, s) => {
     let token2 = s.slice(lastIndex, index2);
     const prev = s.charAt(index2 - 1);
     if (prev === "(" || prev === "\\") {

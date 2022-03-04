@@ -5,6 +5,7 @@ import MonacoEditor from "../screens/MonacoEditor.svelte"
 import {TURORIAL_0_Hello} from "../tutorials/0. Hello Adorable"
 import {TURORIAL_1_COLORS} from "../tutorials/1. Colors"
 import {TURORIAL_10_MEDIA_QUERY} from "../tutorials/10. Media Query"
+import {TURORIAL_11_Grid} from "../tutorials/11. Layout - Grid"
 import {TURORIAL_2_TYPOGRAPHY} from "../tutorials/2. Typography"
 import {TURORIAL_3_BOX_MODEL} from "../tutorials/3. Box Model"
 import {TURORIAL_4_OVERFLOW} from "../tutorials/4. Overflow"
@@ -29,6 +30,7 @@ const tutorials = [
   ["8. Pseudo Class", TURORIAL_8_PREFIX2],
   ["9. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
   ["10. Media Query min/max-width", TURORIAL_10_MEDIA_QUERY],
+  ["11. Grid (beta)", TURORIAL_11_Grid],
   ["계속 작업 중입니다...", ""]
 ]
 

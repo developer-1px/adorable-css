@@ -18,8 +18,8 @@ const useActive = (el) => {
 
     <div class="hbox gap(20)">
       <a href="{base}/guide" use:useActive>Guide</a>
-      <a href="{base}/tutorial" use:useActive>Tutorial</a>
       <a href="{base}/docs" use:useActive>Docs</a>
+      <a href="{base}/tutorial" use:useActive>Tutorial</a>
       <a href="{base}/changelogs" use:useActive>ChangeLog</a>
       <a href="{base}/reference" use:useActive>Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>

@@ -169,6 +169,7 @@ export const makeVBox = (value = "") => {
 }
 
 export const makeTransition = (value:string) => {
+  if (!/\d/.test(value)) return value
   if (!value.includes("=")) return `all ${value}`
   return value.split("/").map(item => item.replace("=", " ")).join(",")
 }
