@@ -17,7 +17,7 @@ import {TURORIAL_8_PREFIX2} from "../tutorials/8. Prefix2"
 import {TURORIAL_9_PSEUDO_ELEMENT} from "../tutorials/9. Pseudo Element"
 
 let element:HTMLElement
-let value = TURORIAL_11_Selector
+let value = TURORIAL_0_Hello
 
 const tutorials = [
   ["Hello AdorableCSS!", TURORIAL_0_Hello],
