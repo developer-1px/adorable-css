@@ -16,6 +16,8 @@ https://caniuse.com/flexbox-gap
 
 @NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
 
+특정 간격을 변경하고 싶다면 subbox를 써보세요!
+
 
 1-2
 배치를 변경해보자)
@@ -83,6 +85,21 @@ vbox
     <div class="w(48) h(48) bg(orange) pack">o</div>
     <div class="w(48) h(48) bg(orange) pack">x</div>
   </div>  
+
+
+  <h2>hbox + gap + subbox</h2>
+
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+
+    <div class="subbox gap(50)">
+      <div class="w(48) h(48) bg(orange) pack">b</div>    
+      <div class="w(48) h(48) bg(orange) pack">o</div>
+    </div>
+
+    <div class="w(48) h(48) bg(orange) pack">x</div>
+  </div>  
+
 
 
   <h2>hbox(top)</h2>  

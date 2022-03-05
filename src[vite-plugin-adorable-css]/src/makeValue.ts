@@ -6,6 +6,7 @@ export const cssString = (value:string|number) => String(value).startsWith("--")
 
 // <length> default: px
 export const px = (value:string|number) => {
+  if (value === undefined || value === null) throw new Error("px: value is undefined")
   if (value === 0 || value === "0") return 0
 
   // --css-var
@@ -16,7 +17,7 @@ export const px = (value:string|number) => {
   if (+n > 0 && +m > 0) return makeNumber(+n / +m * 100) + "%"
 
   // calc
-  if (/.[-+*\/]/.test(String(value))) {
+  if (/.[-+*/]/.test(String(value))) {
     return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")"
   }
 
@@ -64,16 +65,20 @@ export const makeColor = (value = "transparent") => {
   return value
 }
 
-export const makeFont = (value:string) => (value || "").split("/").map((value, index) => {
-  if (value === "-") return
-  if (String(value).startsWith("--")) return `var(${value})`
+export const makeFont = (value:string) => {
+  if (!value) throw new Error("makeFont: value is undefined")
 
-  switch (index) {
-    case 0: {return `font-size:${px(value)}`}
-    case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
-    case 2: {return `letter-spacing:${px(percentToEm(value))}`}
-  }
-}).filter(Boolean).join(";")
+  return (value || "").split("/").map((value, index) => {
+    if (value === "-") return
+    if (String(value).startsWith("--")) return `var(${value})`
+
+    switch (index) {
+      case 0: {return `font-size:${px(value)}`}
+      case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
+      case 2: {return `letter-spacing:${px(percentToEm(value))}`}
+    }
+  }).filter(Boolean).join(";")
+}
 
 
 export const makeFontFamily = (value:string) => `font-family:${value};font-family:var(--${value}, ${value});`
@@ -130,19 +135,19 @@ export const makeHBox = (value = "") => {
       case "bottom": {return "align-items:flex-end;"}
       case "fill": {return "align-items:stretch;"}
       case "stretch": {return "align-items:stretch;"}
-      case "center": {return "justify-content:center;"}
       case "left": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "right": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "reverse": {return "flex-direction:row-reverse;"}
+      case "center": {return "justify-content:center;" || "align-items:center;"}
     }
+    return ""
   })
 
-  if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
-    // @ts-ignore
+  if (!result.find(r => r.startsWith("align-items:"))) {
     result.unshift("align-items:center;")
   }
 
-  return result.join("")
+  return [...new Set(result)].join("")
 }
 
 export const makeVBox = (value = "") => {
@@ -153,19 +158,20 @@ export const makeVBox = (value = "") => {
       case "left": {return "align-items:flex-start;"}
       case "center": {return "align-items:center;"}
       case "right": {return "align-items:flex-end;"}
+      case "fill": {return "align-items:stretch;"}
       case "top": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "middle": {return "justify-content:center;"}
       case "bottom": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "reverse": {return "flex-direction:column-reverse;"}
     }
+    return ""
   })
 
-  if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
-    // @ts-ignore
+  if (!result.find(r => r.startsWith("align-items:"))) {
     result.unshift("align-items:stretch;")
   }
 
-  return result.join("")
+  return [...new Set(result)].join("")
 }
 
 export const makeTransition = (value:string) => {

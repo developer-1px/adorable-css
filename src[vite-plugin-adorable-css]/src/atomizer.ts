@@ -12,13 +12,35 @@ const PREFIX_RULES:PrefixRules = {
   ...PREFIX_MEDIA_QUERY,
 }
 
+/// parseAtoms
+export const parseAtoms = (code:string):string[] => {
+  let lastIndex = 0
+  const atoms = new Set<string>()
+  const delimiter = /["'`]|\s+/g
+
+  code.replace(delimiter, (a, index, s) => {
+    let token = s.slice(lastIndex, index)
+
+    // @Note: svelte class:prop 지원
+    if (token.startsWith("class:")) {
+      token = token.slice("class:".length).split("=")[0]
+    }
+
+    atoms.add(token)
+    lastIndex = index + a.length
+    return a
+  })
+
+  return [...atoms]
+}
+
 /// Tokenizer
 const lex:[string, RegExp][] = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
-  ["(important)", /(!+)$/],
+  ["(important)", /(!+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
-  ["(indent)", /((?:\\.|[^!'":[\](){}#])+)/],
+  ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
   ["(unknown)", /./]
 ]
 
@@ -54,6 +76,7 @@ const tokenize = (script:string) => {
   next()
 }
 
+// Parser: prop + ()[]{}
 const expr = () => {
   const args = []
   const push = (v) => args.push(v)
@@ -70,7 +93,7 @@ const expr = () => {
       else if (prev === "{" && token.id === "}") {}
       else throw new Error("Unexpected:" + token.id)
     }
-    else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)")) {
+    else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)" || token.id === "+")) {
       break
     }
 
@@ -80,6 +103,44 @@ const expr = () => {
   if (stack.length > 0) throw new Error("Unexpected end of input")
   return args
 }
+
+
+// Prefix
+// .classSelector(expr):
+// PseudoClass(expr):
+// PseudoElement(expr)::
+// @AtRule(expr):
+
+const parsePrefix = (prefixRules:PrefixRules, e) => {
+  const type = e[0].value
+  const selector = e.map(e => e.value).join("")
+
+  // 1. Selector인가?
+  const makeSelector = PREFIX_SELECTOR[type]
+  if (makeSelector) {
+    return {selector: makeSelector(selector).replace(/>>/g, " ")}
+  }
+
+  // 2. @at-rule인가?
+  const value = e.slice(0, 2).map(r => r.value).join("")
+  const makeAtRule = AT_RULE[value]
+  if (makeAtRule) {
+    return makeAtRule(selector, e)
+  }
+
+  // 3. Pseudo Class, Pseudo Element 인가?
+  const makePseudo = prefixRules[selector + token.id]
+  if (makePseudo) {
+    return makePseudo
+  }
+
+  if (/^[-a-z]+$/.test(type)) {
+    return {selector: `&${token.id}${selector}`}
+  }
+
+  throw new Error("Invalid Prefix Syntax:" + token.id)
+}
+
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
@@ -93,40 +154,34 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
       while (token) {
         const e = expr()
-        const type = e[0].value
-        const ident = e.map(e => e.value).join("")
 
+        // validate prop(value) format
+        if (e[0].id === "(ident)" && e[1] && (e[1].id !== "(" || e[e.length - 1].id !== ")")) {
+          throw new Error("Invalid Syntax!")
+        }
 
         // selector
         if (token && (token.id === ":" || token.id === "::")) {
-          const selector = ident
-          const makeSelector = PREFIX_SELECTOR[type]
-          const makePseudo = prefixRules[ident + token.id]
-          const makeAtRule = AT_RULE[e.slice(0, 2).map(r => r.value).join("")]
-
-          const rule = (() => {
-            if (makeAtRule) return makeAtRule(ident, e)
-            if (makePseudo) return makePseudo
-            if (makeSelector) return {selector: makeSelector(selector)}
-            return {selector: `&${token.id}${selector}`}
-          })()
-
-          rule.selector = rule.selector.replace(/>>/g, " ")
+          const rule = parsePrefix(prefixRules, e)
           ast.push(rule)
         }
 
-        // declaration
+        // @FIXME: declaration
         else if (!token || token.id === "(important)") {
-          const property = type
-          const value = ident.slice(type.length + 1, -1)
+          const property = e[0].value
+          const value = e.slice(2, -1).map(r => r.value).join("")
           const rule = rules[property]
-          const priority = priorityTable[property + (value.includes("(") ? "(" : "")] || priorityTable[property] || 0
+          const priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0
 
           let declaration = (() => {
             if (rule) return value === "" ? rule() : rule(value)
-            if (value && ALL_PROPERTIES[property]) return `${property}:${makeValues(value)}`
+            if (value && ALL_PROPERTIES[property]) return `${property}:${makeValues(value)};`
             throw new Error("Not defined property: " + property)
           })()
+
+          if (declaration.search("undefined") >= 0) {
+            throw new Error("Not defined property: " + property)
+          }
 
           if (token && token.id === "(important)") {
             declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a)
@@ -134,6 +189,12 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
           ast.push({declaration, priority})
           break
+        }
+        else if (token.id === "+") {
+          // @TODO:
+        }
+        else {
+          throw new Error("something wrong! " + script)
         }
 
         next()
@@ -160,6 +221,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   }
 }
 
+
+//
 const sortByRule = (a?:[string, number], b?:[string, number]) => a![1] - b![1]
 
 export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}) => {
@@ -174,36 +237,3 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
 }
 
 export const generateCss = createGenerateCss()
-
-export const parseAtoms = (code:string):string[] => {
-  let lastIndex = 0
-  const atoms = new Set<string>()
-  const delimiter = /["'`]|\s+/g
-
-  //
-  code.replace(delimiter, (a, index, s) => {
-    let token = s.slice(lastIndex, index)
-
-    const prev = s.charAt(index - 1)
-    if (prev === "(" || prev === "\\") {
-      return a
-    }
-
-    const next = s.charAt(index + 1)
-    if (next === ")") {
-      return a
-    }
-
-    // @Note: svelte class:prop 지원
-    if (token.startsWith("class:")) {
-      token = token.slice("class:".length).split("=")[0]
-    }
-
-    atoms.add(token)
-    lastIndex = index + a.length
-    return a
-  })
-
-  // console.log("atoms", atoms)
-  return [...atoms]
-}

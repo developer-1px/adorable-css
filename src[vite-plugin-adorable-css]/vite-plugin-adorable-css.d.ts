@@ -6,9 +6,9 @@ declare type PrefixProps = {
     selector?: string;
 };
 declare type PrefixRules = Record<string, PrefixProps>;
+declare const parseAtoms: (code: string) => string[];
 declare const createGenerateCss: (rules?: Rules, prefixRules?: PrefixRules) => (classList: string[]) => string[];
 declare const generateCss: (classList: string[]) => string[];
-declare const parseAtoms: (code: string) => string[];
 
 declare const makeNumber: (num: number) => string;
 declare const cssvar: (value: string | number) => string | number;

@@ -8312,6 +8312,8 @@ var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
 var cssString = (value) => String(value).startsWith("--") ? `var(${value})` : `"${value}"`;
 var px = (value) => {
+  if (value === void 0 || value === null)
+    throw new Error("px: value is undefined");
   if (value === 0 || value === "0")
     return 0;
   if (String(value).startsWith("--"))
@@ -8319,7 +8321,7 @@ var px = (value) => {
   const [n, m] = String(value).split("/");
   if (+n > 0 && +m > 0)
     return makeNumber(+n / +m * 100) + "%";
-  if (/.[-+*\/]/.test(String(value))) {
+  if (/.[-+*/]/.test(String(value))) {
     return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")";
   }
   return +value === +value ? value + "px" : value;
@@ -8360,23 +8362,27 @@ var makeColor = (value = "transparent") => {
   }
   return value;
 };
-var makeFont = (value) => (value || "").split("/").map((value2, index2) => {
-  if (value2 === "-")
-    return;
-  if (String(value2).startsWith("--"))
-    return `var(${value2})`;
-  switch (index2) {
-    case 0: {
-      return `font-size:${px(value2)}`;
+var makeFont = (value) => {
+  if (!value)
+    throw new Error("makeFont: value is undefined");
+  return (value || "").split("/").map((value2, index2) => {
+    if (value2 === "-")
+      return;
+    if (String(value2).startsWith("--"))
+      return `var(${value2})`;
+    switch (index2) {
+      case 0: {
+        return `font-size:${px(value2)}`;
+      }
+      case 1: {
+        return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`;
+      }
+      case 2: {
+        return `letter-spacing:${px(percentToEm(value2))}`;
+      }
     }
-    case 1: {
-      return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`;
-    }
-    case 2: {
-      return `letter-spacing:${px(percentToEm(value2))}`;
-    }
-  }
-}).filter(Boolean).join(";");
+  }).filter(Boolean).join(";");
+};
 var makeFontFamily = (value) => `font-family:${value};font-family:var(--${value}, ${value});`;
 var makeBorder = (value) => {
   if (!value || value === "none" || value === "0" || value === "-")
@@ -8432,9 +8438,6 @@ var makeHBox = (value = "") => {
       case "stretch": {
         return "align-items:stretch;";
       }
-      case "center": {
-        return "justify-content:center;";
-      }
       case "left": {
         return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
@@ -8444,12 +8447,16 @@ var makeHBox = (value = "") => {
       case "reverse": {
         return "flex-direction:row-reverse;";
       }
+      case "center": {
+        return "justify-content:center;";
+      }
     }
+    return "";
   });
-  if (!values.includes("top") && !values.includes("bottom") && !values.includes("full")) {
+  if (!result.find((r) => r.startsWith("align-items:"))) {
     result.unshift("align-items:center;");
   }
-  return result.join("");
+  return [...new Set(result)].join("");
 };
 var makeVBox = (value = "") => {
   const values = value.split("+");
@@ -8464,6 +8471,9 @@ var makeVBox = (value = "") => {
       case "right": {
         return "align-items:flex-end;";
       }
+      case "fill": {
+        return "align-items:stretch;";
+      }
       case "top": {
         return values.includes("reverse") ? "justify-content:flex-end;" : "";
       }
@@ -8477,11 +8487,12 @@ var makeVBox = (value = "") => {
         return "flex-direction:column-reverse;";
       }
     }
+    return "";
   });
-  if (!values.includes("left") && !values.includes("center") && !values.includes("right")) {
+  if (!result.find((r) => r.startsWith("align-items:"))) {
     result.unshift("align-items:stretch;");
   }
-  return result.join("");
+  return [...new Set(result)].join("");
 };
 var makeTransition = (value) => {
   if (!/\d/.test(value))
@@ -8586,11 +8597,12 @@ var RULES = {
   "inline-grid": () => "display:inline-grid;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
-  "hbox": (value) => `display:flex;flex-flow:row;${makeHBox(value)};`,
-  "vbox": (value) => `display:flex;flex-flow:column;${makeVBox(value)};`,
+  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
+  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
+  "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
   "gap": (value) => `gap:${makeSide(value)};`,
   "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
@@ -8681,7 +8693,7 @@ var RULES = {
       return `outline:${value};`;
     return `outline:1px solid ${makeColor(value)};`;
   },
-  "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
+  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
   "bg": (value) => {
     if (value.startsWith("linear-gradient"))
       return `background:${value.replace(/\//g, " ")};`;
@@ -8710,9 +8722,9 @@ var RULES = {
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;} &.scroll {overflow:scroll;} &.scroll-x {overflow-x:scroll;} &.scroll-y {overflow-y:scroll;}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar {display:none;}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal {display:none;}`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
   "overscroll": (value) => `overscroll-behavior:${value};`,
   "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
   "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
@@ -8765,11 +8777,11 @@ var RULES = {
   "none": () => `display:none;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
-  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);`,
   "opacity": (value) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
   "pointer": () => `cursor:pointer;`,
-  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
   "grabbing": () => `cursor:grabbing;`,
   "cursor": (value) => `cursor:${value};`,
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
@@ -8794,7 +8806,7 @@ var RULES = {
   "scaleX": (value) => `transform:scaleX(${makeCommaValues(value)});`,
   "scaleY": (value) => `transform:scaleY(${makeCommaValues(value)});`,
   "scaleZ": (value) => `transform:scaleZ(${makeCommaValues(value)});`,
-  "ratio": (value) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "gpu": () => `transform:translateZ(0.1px);`,
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value) => `-webkit-app-region:${value};`,
@@ -8803,8 +8815,8 @@ var RULES = {
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
   "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
-  "float": (value) => `float:${cssvar(value)}`,
-  "clear": (value) => `clear:${cssvar(value)}`,
+  "float": (value) => `float:${cssvar(value)};`,
+  "clear": (value) => `clear:${cssvar(value)};`,
   "blur": (value) => `filter:blur(${px(value)})`,
   "brightness": (value) => `filter:brightness(${cssvar(value)})`,
   "contrast": (value) => `filter:contrast(${cssvar(value)})`,
@@ -8837,33 +8849,33 @@ var RULES = {
   "elevation": (value) => {
     const dp = +value;
     if (!dp) {
-      return `box-shadow: none`;
+      return `box-shadow:none;`;
     }
     const blur = dp == 1 ? 3 : dp * 2;
     const amba = (dp + 10 + dp / 9.38) / 100;
     const diry = dp < 10 ? dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2 : dp - 4;
     const dira = (24 - Math.round(dp / 10)) / 100;
-    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`;
+    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`;
   }
 };
 var PREFIX_PSEUDO_CLASS = {
-  "hover:": { media: `(hover:hover)`, selector: `&:hover, &.\\:hover` },
-  "active:": { selector: `html &:active, html &.\\:active` },
-  "focus:": { selector: `html &:focus, html &.\\:focus` },
-  "focus-visible": { selector: `html &:focus-visible, html &.\\:focus-visible` },
-  "focus-within:": { selector: `html &:focus-within, html &.\\:focus-within` },
-  "checked:": { selector: `html &:checked, html &.\\:checked` },
-  "read-only:": { selector: `html &:read-only, html &.\\:read-only` },
-  "enabled:": { selector: `html &:enabled, html &.\\:enabled` },
-  "disabled:": { selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]` },
-  "group-hover:": { selector: `.group:hover &, html .group.\\:hover &` },
-  "group-active:": { selector: `html .group:active &, html .group.\\:active &` },
-  "group-focus:": { selector: `html .group:focus &, html .group.\\:focus &` },
-  "group-focus-within:": { selector: `html .group:focus-within &, html .group\\:focus-within` },
-  "group-checked:": { selector: `html .group:checked &, html .group.\\:checked &` },
-  "group-read-only:": { selector: `html .group:read-only &, html .group.\\:read-only &` },
-  "group-enabled:": { selector: `html .group:enabled &, html .group.\\:enabled &` },
-  "group-disabled:": { selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &` },
+  "hover:": { media: `(hover:hover)`, selector: `&:hover,&.\\:hover` },
+  "active:": { selector: `html &:active,html &.\\:active` },
+  "focus:": { selector: `html &:focus,html &.\\:focus` },
+  "focus-visible": { selector: `html &:focus-visible,html &.\\:focus-visible` },
+  "focus-within:": { selector: `html &:focus-within,html &.\\:focus-within` },
+  "checked:": { selector: `html &:checked,html &.\\:checked` },
+  "read-only:": { selector: `html &:read-only,html &.\\:read-only` },
+  "enabled:": { selector: `html &:enabled,html &.\\:enabled` },
+  "disabled:": { selector: `html body &:disabled,html body &.\\:disabled,html body &[disabled]` },
+  "group-hover:": { selector: `.group:hover &,html .group.\\:hover &` },
+  "group-active:": { selector: `html .group:active &,html .group.\\:active &` },
+  "group-focus:": { selector: `html .group:focus &,html .group.\\:focus &` },
+  "group-focus-within:": { selector: `html .group:focus-within &,html .group\\:focus-within` },
+  "group-checked:": { selector: `html .group:checked &,html .group.\\:checked &` },
+  "group-read-only:": { selector: `html .group:read-only &,html .group.\\:read-only &` },
+  "group-enabled:": { selector: `html .group:enabled &,html .group.\\:enabled &` },
+  "group-disabled:": { selector: `html body .group:disabled &,html body .group[disabled] &,html body .group.disabled &` },
   "placeholder:": { selector: `&::placeholder` },
   "odd:": { selector: `&:nth-child(2n+1)` },
   "even:": { selector: `&:nth-child(2n)` },
@@ -8871,7 +8883,7 @@ var PREFIX_PSEUDO_CLASS = {
   "last:": { selector: `&:last-child` },
   "after:": { selector: `&::after` },
   "before:": { selector: `&::before` },
-  "selection::": { selector: `&::selection, & *::selection` }
+  "selection::": { selector: `&::selection,& *::selection` }
 };
 var PREFIX_MEDIA_QUERY = {
   "sm:": { media: `(min-width:480px)`, selector: `html &` },
@@ -8921,8 +8933,8 @@ var AT_RULE = {
 };
 var PREFIX_SELECTOR = {
   ">>": (selector) => `& ${selector.slice(2)}`,
-  ".": (selector) => `&${selector}, ${selector} &`,
-  "[": (selector) => `&${selector}, ${selector} &`,
+  ".": (selector) => `&${selector},${selector} &`,
+  "[": (selector) => `&${selector},${selector} &`,
   ">": (selector) => `&${selector}`,
   "+": (selector) => `&${selector}`,
   "~": (selector) => `&${selector}`,
@@ -8931,12 +8943,27 @@ var PREFIX_SELECTOR = {
 
 // src/atomizer.ts
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
+var parseAtoms = (code) => {
+  let lastIndex = 0;
+  const atoms = /* @__PURE__ */ new Set();
+  const delimiter = /["'`]|\s+/g;
+  code.replace(delimiter, (a, index2, s) => {
+    let token2 = s.slice(lastIndex, index2);
+    if (token2.startsWith("class:")) {
+      token2 = token2.slice("class:".length).split("=")[0];
+    }
+    atoms.add(token2);
+    lastIndex = index2 + a.length;
+    return a;
+  });
+  return [...atoms];
+};
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
-  ["(important)", /(!+)$/],
+  ["(important)", /(!+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
-  ["(indent)", /((?:\\.|[^!'":[\](){}#])+)/],
+  ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
   ["(unknown)", /./]
 ];
 var regex = new RegExp(lex.map((v) => v[1].source).join("|"), "g");
@@ -8978,7 +9005,7 @@ var expr = () => {
       } else if (prev === "{" && token.id === "}") {
       } else
         throw new Error("Unexpected:" + token.id);
-    } else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)")) {
+    } else if (stack.length === 0 && (token.id === ":" || token.id === "::" || token.id === "(important)" || token.id === "+")) {
       break;
     }
     push(next());
@@ -8986,6 +9013,27 @@ var expr = () => {
   if (stack.length > 0)
     throw new Error("Unexpected end of input");
   return args;
+};
+var parsePrefix = (prefixRules, e) => {
+  const type = e[0].value;
+  const selector = e.map((e2) => e2.value).join("");
+  const makeSelector = PREFIX_SELECTOR[type];
+  if (makeSelector) {
+    return { selector: makeSelector(selector).replace(/>>/g, " ") };
+  }
+  const value = e.slice(0, 2).map((r) => r.value).join("");
+  const makeAtRule = AT_RULE[value];
+  if (makeAtRule) {
+    return makeAtRule(selector, e);
+  }
+  const makePseudo = prefixRules[selector + token.id];
+  if (makePseudo) {
+    return makePseudo;
+  }
+  if (/^[-a-z]+$/.test(type)) {
+    return { selector: `&${token.id}${selector}` };
+  }
+  throw new Error("Invalid Prefix Syntax:" + token.id);
 };
 var generateAtomicCss = (rules, prefixRules) => {
   const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index2) => [key, index2]));
@@ -8995,41 +9043,35 @@ var generateAtomicCss = (rules, prefixRules) => {
       const ast = [];
       while (token) {
         const e = expr();
-        const type = e[0].value;
-        const ident = e.map((e2) => e2.value).join("");
+        if (e[0].id === "(ident)" && e[1] && (e[1].id !== "(" || e[e.length - 1].id !== ")")) {
+          throw new Error("Invalid Syntax!");
+        }
         if (token && (token.id === ":" || token.id === "::")) {
-          const selector2 = ident;
-          const makeSelector = PREFIX_SELECTOR[type];
-          const makePseudo = prefixRules[ident + token.id];
-          const makeAtRule = AT_RULE[e.slice(0, 2).map((r) => r.value).join("")];
-          const rule2 = (() => {
-            if (makeAtRule)
-              return makeAtRule(ident, e);
-            if (makePseudo)
-              return makePseudo;
-            if (makeSelector)
-              return { selector: makeSelector(selector2) };
-            return { selector: `&${token.id}${selector2}` };
-          })();
-          rule2.selector = rule2.selector.replace(/>>/g, " ");
+          const rule2 = parsePrefix(prefixRules, e);
           ast.push(rule2);
         } else if (!token || token.id === "(important)") {
-          const property = type;
-          const value = ident.slice(type.length + 1, -1);
+          const property = e[0].value;
+          const value = e.slice(2, -1).map((r) => r.value).join("");
           const rule2 = rules[property];
-          const priority2 = priorityTable[property + (value.includes("(") ? "(" : "")] || priorityTable[property] || 0;
+          const priority2 = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
           let declaration2 = (() => {
             if (rule2)
               return value === "" ? rule2() : rule2(value);
             if (value && ALL_PROPERTIES[property])
-              return `${property}:${makeValues(value)}`;
+              return `${property}:${makeValues(value)};`;
             throw new Error("Not defined property: " + property);
           })();
+          if (declaration2.search("undefined") >= 0) {
+            throw new Error("Not defined property: " + property);
+          }
           if (token && token.id === "(important)") {
             declaration2 = declaration2.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
           }
           ast.push({ declaration: declaration2, priority: priority2 });
           break;
+        } else if (token.id === "+") {
+        } else {
+          throw new Error("something wrong! " + script);
         }
         next();
       }
@@ -9054,29 +9096,6 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
   return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();
-var parseAtoms = (code) => {
-  let lastIndex = 0;
-  const atoms = /* @__PURE__ */ new Set();
-  const delimiter = /["'`]|\s+/g;
-  code.replace(delimiter, (a, index2, s) => {
-    let token2 = s.slice(lastIndex, index2);
-    const prev = s.charAt(index2 - 1);
-    if (prev === "(" || prev === "\\") {
-      return a;
-    }
-    const next2 = s.charAt(index2 + 1);
-    if (next2 === ")") {
-      return a;
-    }
-    if (token2.startsWith("class:")) {
-      token2 = token2.slice("class:".length).split("=")[0];
-    }
-    atoms.add(token2);
-    lastIndex = index2 + a.length;
-    return a;
-  });
-  return [...atoms];
-};
 
 // src/vite-plugin-adorable-css.ts
 var import_fs = __toESM(require("fs"));
