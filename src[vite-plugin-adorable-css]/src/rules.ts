@@ -1,5 +1,5 @@
-import {PrefixRules,Rules} from "./atomizer"
-import {cssString,cssvar,makeBorder,makeColor,makeCommaValues,makeFont,makeFontFamily,makeHBox,makeNumber,makeRatio,makeSide,makeTransition,makeValues,makeVBox,percentToEm,px} from "./makeValue"
+import {PrefixRules, Rules} from "./atomizer"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
@@ -432,7 +432,7 @@ export const RULES:Rules = {
   "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
   "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
 
-  // triangle
+  // @TODO: triangle
   "triangle": (value:string) => {
     const [direction,size,angle = 0] = value.split("/")
     const bd = ["top","right","bottom","left","top","right","bottom","left"]

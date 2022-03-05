@@ -3,6 +3,9 @@
 > 불칠절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
 ```typescript
+import {PrefixRules, Rules} from "./atomizer"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
+
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
@@ -26,9 +29,9 @@ export const RULES:Rules = {
   "letter-spacing": (value:string) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
-  // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L), Roboto, NotoSans와 같은것도 만들까?
+  // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
 
-  // @TODO: font-family:var(--serif), serif; 이게 먹히나?
+  // @TODO: font-family:var(--serif),serif; 이게 먹히나?
   "sans-serif": () => makeFontFamily("sans-serif"),
   "serif": () => makeFontFamily("serif"),
   "cursive": () => makeFontFamily("cursive"),
@@ -126,15 +129,16 @@ export const RULES:Rules = {
   "list-item": () => "display:list-item;",
 
   // -- Flexbox
-  "hbox": (value:string) => `display:flex;flex-flow:row;${makeHBox(value)};`,
-  "vbox": (value:string) => `display:flex;flex-flow:column;${makeVBox(value)};`,
+  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
+  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
+  "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
 
   "gap": (value:string) => `gap:${makeSide(value)};`,
 
-  // @NOTE: IE, safari<=13
+  // @NOTE: IE,safari<=13
   "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
   "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
@@ -167,7 +171,7 @@ export const RULES:Rules = {
   "w": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min, max] = value.split("~")
+      const [min,max] = value.split("~")
       min && result.push(`min-width:${px(min)};`)
       max && result.push(`max-width:${px(max)};`)
       return result.join("")
@@ -178,7 +182,7 @@ export const RULES:Rules = {
   "h": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min, max] = value.split("~")
+      const [min,max] = value.split("~")
       min && result.push(`min-height:${px(min)};`)
       max && result.push(`max-height:${px(max)};`)
       return result.join("")
@@ -222,7 +226,7 @@ export const RULES:Rules = {
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value:string) => `border-left-color:${makeColor(value)};`,
 
-  // @TODO:교육이 필요하다.
+  // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
 
   "rt": (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
@@ -236,7 +240,7 @@ export const RULES:Rules = {
   "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
 
   "ring": (value:string) => {
-    const [color, size = 1] = value.split("/")
+    const [color,size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
@@ -248,12 +252,18 @@ export const RULES:Rules = {
     return `outline:1px solid ${makeColor(value)};`
   },
 
-  "guide": (value = "#4f80ff") => `&, & > * { outline:1px solid ${makeColor(value)};}`,
+  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
 
   // -- Background
   "bg": (value:string) => {
-    // @TODO:url형식이면, background-image만 넣는 것으로 하자.
-    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g," ")};`
+    if (value.startsWith("radial-gradient")) return `background:${value.replace(/\//g," ")};`
+
+    // background-image-url
+    if (value.startsWith("url")) return `background-image:${value};`
+    if (/^(http|[./])/.test(value)) return `background-image:url(${value});`
+
+    if (value === "transparent") return `background-color:transparent;`
     return `background-color:${makeColor(value)};`
   },
 
@@ -279,9 +289,9 @@ export const RULES:Rules = {
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;} &.scroll {overflow:scroll;} &.scroll-x {overflow-x:scroll;} &.scroll-y {overflow-y:scroll;}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar {display:none;}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal {display:none;}`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
 
   // @TODO:- TBD
   "overscroll": (value:string) => `overscroll-behavior:${value};`,
@@ -310,7 +320,7 @@ export const RULES:Rules = {
 
   // Position
   "layer": (value = "") => {
-    const pos = {top: 0, right: 0, bottom: 0, left: 0}
+    const pos = {top: 0,right: 0,bottom: 0,left: 0}
     value.split("+").forEach(v => {
       switch (v) {
         case "top": {return (delete pos.bottom)}
@@ -345,14 +355,14 @@ export const RULES:Rules = {
   "none": () => `display:none;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
-  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);`,
+  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);`,
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
 
 
   // Interactions
   "pointer": () => `cursor:pointer;`,
-  "grab": () => `&{cursor:grab;} &:active{cursor:grabbing;}`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
   "grabbing": () => `cursor:grabbing;`,
   "cursor": (value:string) => `cursor:${value};`,
 
@@ -388,22 +398,23 @@ export const RULES:Rules = {
   "scaleZ": (value:string) => `transform:scaleZ(${makeCommaValues(value)});`,
 
   // Util
-  "ratio": (value:string) => `& {position:relative;} &:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};} & > * {position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "ratio": (value:string) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
   "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  "content": (value:string) => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-layout-fixed": () => `table-layout:fixed;`,
+  "table-layout-auto": () => `table-layout:auto;`,
 
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g,"/"))}`,
 
   // Float & Clear
-  "float": (value:string) => `float:${cssvar(value)}`,
-  "clear": (value:string) => `clear:${cssvar(value)}`,
+  "float": (value:string) => `float:${cssvar(value)};`,
+  "clear": (value:string) => `clear:${cssvar(value)};`,
 
   // Filter
   "blur": (value:string) => `filter:blur(${px(value)})`,
@@ -426,10 +437,10 @@ export const RULES:Rules = {
   "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
   "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
 
-  // triangle
+  // @TODO: triangle
   "triangle": (value:string) => {
-    const [direction, size, angle = 0] = value.split("/")
-    const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
+    const [direction,size,angle = 0] = value.split("/")
+    const bd = ["top","right","bottom","left","top","right","bottom","left"]
     const bdr = bd.slice(bd.indexOf(direction))
     const height = 0.5
 
@@ -445,7 +456,7 @@ export const RULES:Rules = {
   "elevation": (value:string) => {
     const dp = +value
     if (!dp) {
-      return `box-shadow: none`
+      return `box-shadow:none;`
     }
 
     const blur = (dp == 1 ? 3 : dp * 2)
@@ -453,31 +464,31 @@ export const RULES:Rules = {
     const diry = (dp < 10 ? (dp % 2 == 0 ? dp - ((dp / 2) - 1) : (dp - ((dp - 1) / 2))) : dp - 4)
     const dira = (24 - (Math.round(dp / 10))) / 100
 
-    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0, 0, 0, ${amba}), 0px ${px(diry)} ${px(blur)} rgba(0, 0, 0, ${dira})`
+    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`
   },
 }
 
 // Prefix
 // pseudo class
 export const PREFIX_PSEUDO_CLASS:PrefixRules = {
-  "hover:": {media: `(hover:hover)`, selector: `&:hover, &.\\:hover`},
-  "active:": {selector: `html &:active, html &.\\:active`},
-  "focus:": {selector: `html &:focus, html &.\\:focus`},
-  "focus-visible": {selector: `html &:focus-visible, html &.\\:focus-visible`},
-  "focus-within:": {selector: `html &:focus-within, html &.\\:focus-within`},
-  "checked:": {selector: `html &:checked, html &.\\:checked`},
-  "read-only:": {selector: `html &:read-only, html &.\\:read-only`},
-  "enabled:": {selector: `html &:enabled, html &.\\:enabled`},
-  "disabled:": {selector: `html body &:disabled, html body &.\\:disabled, html body &[disabled]`},
+  "hover:": {media: `(hover:hover)`,selector: `&:hover,&.\\:hover`},
+  "active:": {selector: `html &:active,html &.\\:active`},
+  "focus:": {selector: `html &:focus,html &.\\:focus`},
+  "focus-visible": {selector: `html &:focus-visible,html &.\\:focus-visible`},
+  "focus-within:": {selector: `html &:focus-within,html &.\\:focus-within`},
+  "checked:": {selector: `html &:checked,html &.\\:checked`},
+  "read-only:": {selector: `html &:read-only,html &.\\:read-only`},
+  "enabled:": {selector: `html &:enabled,html &.\\:enabled`},
+  "disabled:": {selector: `html body &:disabled,html body &.\\:disabled,html body &[disabled]`},
 
-  "group-hover:": {selector: `.group:hover &, html .group.\\:hover &`},
-  "group-active:": {selector: `html .group:active &, html .group.\\:active &`},
-  "group-focus:": {selector: `html .group:focus &, html .group.\\:focus &`},
-  "group-focus-within:": {selector: `html .group:focus-within &, html .group\\:focus-within`},
-  "group-checked:": {selector: `html .group:checked &, html .group.\\:checked &`},
-  "group-read-only:": {selector: `html .group:read-only &, html .group.\\:read-only &`},
-  "group-enabled:": {selector: `html .group:enabled &, html .group.\\:enabled &`},
-  "group-disabled:": {selector: `html body .group:disabled &, html body .group[disabled] &, html body .group.disabled &`},
+  "group-hover:": {selector: `.group:hover &,html .group.\\:hover &`},
+  "group-active:": {selector: `html .group:active &,html .group.\\:active &`},
+  "group-focus:": {selector: `html .group:focus &,html .group.\\:focus &`},
+  "group-focus-within:": {selector: `html .group:focus-within &,html .group\\:focus-within`},
+  "group-checked:": {selector: `html .group:checked &,html .group.\\:checked &`},
+  "group-read-only:": {selector: `html .group:read-only &,html .group.\\:read-only &`},
+  "group-enabled:": {selector: `html .group:enabled &,html .group.\\:enabled &`},
+  "group-disabled:": {selector: `html body .group:disabled &,html body .group[disabled] &,html body .group.disabled &`},
 
   "placeholder:": {selector: `&::placeholder`},
 
@@ -490,76 +501,76 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
   "after:": {selector: `&::after`},
   "before:": {selector: `&::before`},
 
-  "selection::": {selector: `&::selection, & *::selection`},
+  "selection::": {selector: `&::selection,& *::selection`},
 }
 
 
 // media query
 export const PREFIX_MEDIA_QUERY:PrefixRules = {
-  "sm:": {media: `(min-width:480px)`, selector: `html &`},
-  "md:": {media: `(min-width:768px)`, selector: `html &`},
-  "lg:": {media: `(min-width:1024px)`, selector: `html &`},
-  "xl:": {media: `(min-width:1280px)`, selector: `html &`},
+  "sm:": {media: `(min-width:480px)`,selector: `html &`},
+  "md:": {media: `(min-width:768px)`,selector: `html &`},
+  "lg:": {media: `(min-width:1024px)`,selector: `html &`},
+  "xl:": {media: `(min-width:1280px)`,selector: `html &`},
 
-  "sm~:": {media: `(min-width:480px)`, selector: `html &`},
-  "md~:": {media: `(min-width:768px)`, selector: `html &`},
-  "lg~:": {media: `(min-width:1024px)`, selector: `html &`},
-  "xl~:": {media: `(min-width:1280px)`, selector: `html &`},
+  "sm~:": {media: `(min-width:480px)`,selector: `html &`},
+  "md~:": {media: `(min-width:768px)`,selector: `html &`},
+  "lg~:": {media: `(min-width:1024px)`,selector: `html &`},
+  "xl~:": {media: `(min-width:1280px)`,selector: `html &`},
 
-  "~sm:": {media: `(max-width:479.98px)`, selector: `html &`},
-  "~md:": {media: `(max-width:767.98px)`, selector: `html &`},
-  "~lg:": {media: `(max-width:1023.98px)`, selector: `html &`},
-  "~xl:": {media: `(max-width:1279.98px)`, selector: `html &`},
+  "~sm:": {media: `(max-width:479.98px)`,selector: `html &`},
+  "~md:": {media: `(max-width:767.98px)`,selector: `html &`},
+  "~lg:": {media: `(max-width:1023.98px)`,selector: `html &`},
+  "~xl:": {media: `(max-width:1279.98px)`,selector: `html &`},
 
-  "mobile:": {media: `(max-device-width:767.98px)`, selector: `html &`},
-  "tablet:": {media: `(min-device-width:768px) and (max-device-width:1023.98px)`, selector: `html &`},
-  "desktop:": {media: `(min-device-width:1024px)`, selector: `html &`},
-  "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
-  "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
+  "mobile:": {media: `(max-device-width:767.98px)`,selector: `html &`},
+  "tablet:": {media: `(min-device-width:768px) and (max-device-width:1023.98px)`,selector: `html &`},
+  "desktop:": {media: `(min-device-width:1024px)`,selector: `html &`},
+  "!mobile:": {media: `(min-device-width:768px)`,selector: `html &`},
+  "!desktop:": {media: `(max-device-width:1023.98px)`,selector: `html &`},
 
-  // "touch:": {media: `(hover:none)`, selector: `html &`},
-  // "!touch:": {media: `(hover:hover)`, selector: `html &`},
+  // "touch:": {media: `(hover:none)`,selector: `html &`},
+  // "!touch:": {media: `(hover:hover)`,selector: `html &`},
 
-  "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
-  "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},
+  "touch:": {media: `(max-device-width:1023.98px)`,selector: `html &`},
+  "!touch:": {media: `(min-device-width:1024px)`,selector: `html &`},
 
-  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
-  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
+  "portrait:": {media: `(orientation:portrait)`,selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`,selector: `html &`},
 
-  "print:": {media: `print`, selector: `html &`},
-  "screen:": {media: `screen`, selector: `html &`},
-  "speech:": {media: `speech`, selector: `html &`},
+  "print:": {media: `print`,selector: `html &`},
+  "screen:": {media: `screen`,selector: `html &`},
+  "speech:": {media: `speech`,selector: `html &`},
 
   // dark:@TBD
   "dark:": {selector: `html.dark &`},
 }
 
 export const AT_RULE = {
-  "@w": (ident:string, tokens:Array<{ type:string, value:string }>) => {
+  "@w": (ident:string,tokens:Array<{ type:string,value:string }>) => {
     if (tokens[2]?.value !== "(" || tokens[tokens.length - 1]?.value !== ")") {
       throw Error("invalid syntax!")
     }
 
-    const value = tokens.slice(3, -1).map(t => t.value).join("")
+    const value = tokens.slice(3,-1).map(t => t.value).join("")
     if (!value.includes("~")) {
       throw Error("invalid syntax! required '~'.")
     }
 
-    let [min, max] = value.split("~")
+    let [min,max] = value.split("~")
 
     if (min) min = `(min-width:${px(+min)})`
     if (max) max = `(max-width:${px(+max - 0.02)})`
-    const rule = [min, max].filter(Boolean).join(" and ")
+    const rule = [min,max].filter(Boolean).join(" and ")
 
-    return {media: ` only screen and ${rule}`, selector: `html &`}
+    return {media: ` only screen and ${rule}`,selector: `html &`}
   }
 }
 
 // selector
-export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
+export const PREFIX_SELECTOR:Record<string,(selector:string) => string> = {
   ">>": (selector:string) => `& ${selector.slice(2)}`,
-  ".": (selector:string) => `&${selector}, ${selector} &`,
-  "[": (selector:string) => `&${selector}, ${selector} &`,
+  ".": (selector:string) => `&${selector},${selector} &`,
+  "[": (selector:string) => `&${selector},${selector} &`,
   ">": (selector:string) => `&${selector}`,
   "+": (selector:string) => `&${selector}`,
   "~": (selector:string) => `&${selector}`,

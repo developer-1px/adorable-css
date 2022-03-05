@@ -8947,6 +8947,7 @@ var parseAtoms = (code) => {
   let lastIndex = 0;
   const atoms = /* @__PURE__ */ new Set();
   const delimiter = /["'`]|\s+/g;
+  code += " ";
   code.replace(delimiter, (a, index2, s) => {
     let token2 = s.slice(lastIndex, index2);
     if (token2.startsWith("class:")) {
@@ -8956,7 +8957,7 @@ var parseAtoms = (code) => {
     lastIndex = index2 + a.length;
     return a;
   });
-  return [...atoms];
+  return [...atoms].filter(Boolean);
 };
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
@@ -9036,7 +9037,7 @@ var parsePrefix = (prefixRules, e) => {
   throw new Error("Invalid Prefix Syntax:" + token.id);
 };
 var generateAtomicCss = (rules, prefixRules) => {
-  const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index2) => [key, index2]));
+  const priorityTable = Object.fromEntries(Object.keys(rules).map((key, index2) => [key, index2 + 1]));
   return (script) => {
     try {
       tokenize(script);
@@ -9049,11 +9050,11 @@ var generateAtomicCss = (rules, prefixRules) => {
         if (token && (token.id === ":" || token.id === "::")) {
           const rule2 = parsePrefix(prefixRules, e);
           ast.push(rule2);
-        } else if (!token || token.id === "(important)") {
+        } else if (!token || token.id === "(important)" || token.id === "+") {
           const property = e[0].value;
           const value = e.slice(2, -1).map((r) => r.value).join("");
           const rule2 = rules[property];
-          const priority2 = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
+          let priority2 = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
           let declaration2 = (() => {
             if (rule2)
               return value === "" ? rule2() : rule2(value);
@@ -9066,12 +9067,9 @@ var generateAtomicCss = (rules, prefixRules) => {
           }
           if (token && token.id === "(important)") {
             declaration2 = declaration2.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
+            priority2 = 9999 + token.value.length;
           }
           ast.push({ declaration: declaration2, priority: priority2 });
-          break;
-        } else if (token.id === "+") {
-        } else {
-          throw new Error("something wrong! " + script);
         }
         next();
       }
@@ -9081,8 +9079,8 @@ var generateAtomicCss = (rules, prefixRules) => {
       const selector = ast.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
         return prev.map((prev2) => curr.map((selector2) => selector2.replace(/&/g, prev2))).flat();
       }, [atom]).join(",");
-      const declaration = ast.map((a) => a.declaration).pop();
-      const priority = ast.map((a) => a.priority).pop();
+      const declaration = ast.map((a) => a.declaration).filter(Boolean).join("");
+      let priority = ast.map((a) => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0);
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
       return [media ? media + "{" + rule + "}" : rule, priority];
     } catch (e) {

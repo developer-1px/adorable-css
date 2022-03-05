@@ -5,7 +5,8 @@ import MonacoEditor from "../screens/MonacoEditor.svelte"
 import {TURORIAL_0_Hello} from "../tutorials/0. Hello Adorable"
 import {TURORIAL_1_COLORS} from "../tutorials/1. Colors"
 import {TURORIAL_10_MEDIA_QUERY} from "../tutorials/10. Media Query"
-import {TURORIAL_11_Grid} from "../tutorials/11. Layout - Grid"
+import {TURORIAL_11_Selector} from "../tutorials/11. Selector"
+import {TURORIAL_12_Important} from "../tutorials/12. Important"
 import {TURORIAL_2_TYPOGRAPHY} from "../tutorials/2. Typography"
 import {TURORIAL_3_BOX_MODEL} from "../tutorials/3. Box Model"
 import {TURORIAL_4_OVERFLOW} from "../tutorials/4. Overflow"
@@ -16,10 +17,10 @@ import {TURORIAL_8_PREFIX2} from "../tutorials/8. Prefix2"
 import {TURORIAL_9_PSEUDO_ELEMENT} from "../tutorials/9. Pseudo Element"
 
 let element:HTMLElement
-let value = TURORIAL_0_Hello
+let value = TURORIAL_11_Selector
 
 const tutorials = [
-  ["0. Hello AdorableCSS!", TURORIAL_0_Hello],
+  ["Hello AdorableCSS!", TURORIAL_0_Hello],
   ["1. Colors", TURORIAL_1_COLORS],
   ["2. Typography", TURORIAL_2_TYPOGRAPHY],
   ["3. Box Model", TURORIAL_3_BOX_MODEL],
@@ -29,8 +30,9 @@ const tutorials = [
   ["7. Hover, Active", TURORIAL_7_PREFIX],
   ["8. Pseudo Class", TURORIAL_8_PREFIX2],
   ["9. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
-  ["10. Media Query min/max-width", TURORIAL_10_MEDIA_QUERY],
-  ["11. Grid (beta)", TURORIAL_11_Grid],
+  ["10. Media Query", TURORIAL_10_MEDIA_QUERY],
+  ["11. Selector", TURORIAL_11_Selector],
+  ["12. Important!", TURORIAL_12_Important],
   ["계속 작업 중입니다...", ""]
 ]
 

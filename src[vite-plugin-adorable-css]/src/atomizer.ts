@@ -18,6 +18,7 @@ export const parseAtoms = (code:string):string[] => {
   const atoms = new Set<string>()
   const delimiter = /["'`]|\s+/g
 
+  code += " "
   code.replace(delimiter, (a, index, s) => {
     let token = s.slice(lastIndex, index)
 
@@ -31,7 +32,7 @@ export const parseAtoms = (code:string):string[] => {
     return a
   })
 
-  return [...atoms]
+  return [...atoms].filter(Boolean)
 }
 
 /// Tokenizer
@@ -143,7 +144,7 @@ const parsePrefix = (prefixRules:PrefixRules, e) => {
 
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
-  const priorityTable = Object.fromEntries(Object.entries(rules).map(([key, value], index) => [key, index]))
+  const priorityTable = Object.fromEntries(Object.keys(rules).map((key, index) => [key, index + 1]))
 
   return (script:string):[string, number]|undefined => {
 
@@ -167,11 +168,11 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         }
 
         // @FIXME: declaration
-        else if (!token || token.id === "(important)") {
+        else if (!token || token.id === "(important)" || token.id === "+") {
           const property = e[0].value
           const value = e.slice(2, -1).map(r => r.value).join("")
           const rule = rules[property]
-          const priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0
+          let priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0
 
           let declaration = (() => {
             if (rule) return value === "" ? rule() : rule(value)
@@ -183,18 +184,13 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
             throw new Error("Not defined property: " + property)
           }
 
+          // (important)에 따라서 priority 를 바꿔준다.
           if (token && token.id === "(important)") {
             declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a)
+            priority = 9999 + token.value.length
           }
 
           ast.push({declaration, priority})
-          break
-        }
-        else if (token.id === "+") {
-          // @TODO:
-        }
-        else {
-          throw new Error("something wrong! " + script)
         }
 
         next()
@@ -208,8 +204,8 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         return prev.map(prev => curr.map(selector => selector.replace(/&/g, prev))).flat()
       }, [atom]).join(",")
 
-      const declaration = ast.map(a => a.declaration).pop()
-      const priority = ast.map(a => a.priority).pop()
+      const declaration = ast.map(a => a.declaration).filter(Boolean).join("")
+      let priority = ast.map(a => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0)
 
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
 
