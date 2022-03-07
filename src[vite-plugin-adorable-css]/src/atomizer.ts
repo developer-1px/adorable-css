@@ -38,7 +38,7 @@ export const parseAtoms = (code:string):string[] => {
 /// Tokenizer
 const lex:[string, RegExp][] = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
-  ["(important)", /(!+)/],
+  ["(important)", /(!+$|!+\+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
   ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
@@ -157,7 +157,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         const e = expr()
 
         // validate prop(value) format
-        if (e[0].id === "(ident)" && e[1] && (e[1].id !== "(" || e[e.length - 1].id !== ")")) {
+        if (e.find(e => e.id === "(") && e[e.length - 1].id !== ")") {
           throw new Error("Invalid Syntax!")
         }
 
@@ -205,6 +205,10 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
       }, [atom]).join(",")
 
       const declaration = ast.map(a => a.declaration).filter(Boolean).join("")
+      if (!declaration) {
+        throw new Error("no declaration")
+      }
+
       let priority = ast.map(a => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0)
 
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"

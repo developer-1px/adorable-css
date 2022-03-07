@@ -8961,7 +8961,7 @@ var parseAtoms = (code) => {
 };
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
-  ["(important)", /(!+)/],
+  ["(important)", /(!+$|!+\+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
   ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
@@ -9044,7 +9044,7 @@ var generateAtomicCss = (rules, prefixRules) => {
       const ast = [];
       while (token) {
         const e = expr();
-        if (e[0].id === "(ident)" && e[1] && (e[1].id !== "(" || e[e.length - 1].id !== ")")) {
+        if (e.find((e2) => e2.id === "(") && e[e.length - 1].id !== ")") {
           throw new Error("Invalid Syntax!");
         }
         if (token && (token.id === ":" || token.id === "::")) {
@@ -9080,6 +9080,9 @@ var generateAtomicCss = (rules, prefixRules) => {
         return prev.map((prev2) => curr.map((selector2) => selector2.replace(/&/g, prev2))).flat();
       }, [atom]).join(",");
       const declaration = ast.map((a) => a.declaration).filter(Boolean).join("");
+      if (!declaration) {
+        throw new Error("no declaration");
+      }
       let priority = ast.map((a) => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0);
       const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
       return [media ? media + "{" + rule + "}" : rule, priority];
