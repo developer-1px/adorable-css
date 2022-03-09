@@ -8593,7 +8593,14 @@ var RULES = {
   "table-row-group": () => "display:table-row-group;",
   "table-row": () => "display:table-row;",
   "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
+  "grid": (value) => {
+    const css = ["display:grid;"];
+    if (+value === +value)
+      css.push(`grid-template-columns:repeat(1fr,${value});`);
+    else if (value)
+      css.push(`grid-template-columns:${value};`);
+    return css.join("");
+  },
   "inline-grid": () => "display:inline-grid;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
@@ -8603,7 +8610,7 @@ var RULES = {
   "hbox(": () => ``,
   "vbox(": () => ``,
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
-  "gap": (value) => `gap:${makeSide(value)};`,
+  "gap": (value) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
   "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
   "vgap": (value) => `&>*+* {margin-top:${px(value)};}`,
