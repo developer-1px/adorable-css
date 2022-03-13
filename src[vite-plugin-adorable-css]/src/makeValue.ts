@@ -132,13 +132,14 @@ export const makeHBox = (value = "") => {
   const result = values.map(v => {
     switch (v) {
       case "top": {return "align-items:flex-start;"}
+      case "middle": {return "align-items:center;"}
       case "bottom": {return "align-items:flex-end;"}
       case "fill": {return "align-items:stretch;"}
       case "stretch": {return "align-items:stretch;"}
       case "left": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "right": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
       case "reverse": {return "flex-direction:row-reverse;"}
-      case "center": {return "justify-content:center;" || "align-items:center;"}
+      case "center": {return "justify-content:center;"}
     }
     return ""
   })
