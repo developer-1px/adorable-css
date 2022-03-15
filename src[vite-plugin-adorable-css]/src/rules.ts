@@ -120,7 +120,7 @@ export const RULES:Rules = {
   "flow-root": () => "display:flow-root;",
   "grid": (value) => {
     const css = ["display:grid;"]
-    if (+value === +value) css.push(`grid-template-columns:repeat(1fr,${value});`)
+    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
     else if (value) css.push(`grid-template-columns:${value};`)
     return css.join("")
   },

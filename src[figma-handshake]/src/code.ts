@@ -166,9 +166,10 @@ const everyChildrenHasStretchVbox = (node) => node.children?.every(c => c.layout
 
 const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
   const {addClass, cls} = createClassBuilder([])
+  const selection = figma.currentPage.selection
 
   // Constraints
-  if (node.parent?.type === "FRAME" && node.parent?.layoutMode === "NONE") {
+  if (node !== selection[0] && node.parent?.type === "FRAME" && node.parent?.layoutMode === "NONE") {
     addClass("absolute")
 
     //"MIN" | "CENTER" | "MAX" | "STRETCH" | "SCALE"

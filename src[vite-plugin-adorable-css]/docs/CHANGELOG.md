@@ -1,5 +1,5 @@
-## 0.7.2
-- ✨ grid(5) 기능이 추가 되었습니다. = grid-template-columns:repeat(1fr,5);
+## 0.7.3
+- ✨ grid(5) 기능이 추가 되었습니다. = grid-template-columns:repeat(5,1fr);
 - ✨ grid(1fr,1f,1f) = grid-template-columns:1fr,1f,1f 
 - grid의 값은 가장 많이 쓰이는 grid-template-columns을 사용하도록 문법을 작성하였습니다.
 
