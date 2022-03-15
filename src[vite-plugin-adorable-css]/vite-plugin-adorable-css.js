@@ -8429,6 +8429,9 @@ var makeHBox = (value = "") => {
       case "top": {
         return "align-items:flex-start;";
       }
+      case "middle": {
+        return "align-items:center;";
+      }
       case "bottom": {
         return "align-items:flex-end;";
       }
