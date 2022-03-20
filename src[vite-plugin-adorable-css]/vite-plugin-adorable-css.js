@@ -8519,6 +8519,7 @@ ol,ul,menu,dir{list-style:none;}
 `;
 var RULES = {
   "c": (value) => `color:${makeColor(value)};`,
+  "color": (value) => RULES.c(value),
   "font": (value) => makeFont(value),
   "font-size": (value) => `font-size:${px(value)};`,
   "line-height": (value) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
@@ -8596,6 +8597,8 @@ var RULES = {
   "table-row-group": () => "display:table-row-group;",
   "table-row": () => "display:table-row;",
   "flow-root": () => "display:flow-root;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
   "grid": (value) => {
     const css = ["display:grid;"];
     if (+value === +value)
@@ -8605,8 +8608,6 @@ var RULES = {
     return css.join("");
   },
   "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
   "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
@@ -8974,7 +8975,7 @@ var lex = [
   ["(important)", /(!+$|!+\+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
-  ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
+  ["(ident)", /((?:\\.|[^!'":+[\](){}#])+)/],
   ["(unknown)", /./]
 ];
 var regex = new RegExp(lex.map((v) => v[1].source).join("|"), "g");
@@ -9061,6 +9062,7 @@ var generateAtomicCss = (rules, prefixRules) => {
           const rule2 = parsePrefix(prefixRules, e);
           ast.push(rule2);
         } else if (!token || token.id === "(important)" || token.id === "+") {
+          console.log(e);
           const property = e[0].value;
           const value = e.slice(2, -1).map((r) => r.value).join("");
           const rule2 = rules[property];

@@ -41,7 +41,7 @@ const lex:[string, RegExp][] = [
   ["(important)", /(!+$|!+\+)/],
   ["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
   ["(operator)", /(::|>>|[-+~|*/%!#@?:;.,<>=[\](){}])/],
-  ["(ident)", /((?:\\.|[^!'":[\](){}#])+)/],
+  ["(ident)", /((?:\\.|[^!'":+[\](){}#])+)/],
   ["(unknown)", /./]
 ]
 
@@ -169,6 +169,9 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
         // @FIXME: declaration
         else if (!token || token.id === "(important)" || token.id === "+") {
+
+          console.log(e)
+
           const property = e[0].value
           const value = e.slice(2, -1).map(r => r.value).join("")
           const rule = rules[property]

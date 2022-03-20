@@ -1,3 +1,6 @@
+## 0.7.4
+- 🐛 hover:mt(10)+bold는 동작하나 hover:bold+mt(10)이 동작하지 않던 버그 수정
+
 ## 0.7.3
 - ✨ grid(5) 기능이 추가 되었습니다. = grid-template-columns:repeat(5,1fr);
 - ✨ grid(1fr,1f,1f) = grid-template-columns:1fr,1f,1f 

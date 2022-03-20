@@ -16,6 +16,7 @@ export const RULES:Rules = {
 
   // -- Color
   "c": (value:string) => `color:${makeColor(value)};`,
+  "color": (value:string) => RULES.c(value),
 
   // -- Typography
   "font": (value:string) => makeFont(value),
@@ -61,9 +62,6 @@ export const RULES:Rules = {
 
   // Font Weight Utility
   "thicker": (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
-
-  // @TODO
-  // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
 
   // Font-Style
   "italic": () => `font-style:italic;`,
@@ -118,6 +116,10 @@ export const RULES:Rules = {
   "table-row-group": () => "display:table-row-group;",
   "table-row": () => "display:table-row;",
   "flow-root": () => "display:flow-root;",
+  "contents": () => "display:contents;",
+  "list-item": () => "display:list-item;",
+
+  // @TODO: -- GRID
   "grid": (value) => {
     const css = ["display:grid;"]
     if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
@@ -125,8 +127,6 @@ export const RULES:Rules = {
     return css.join("")
   },
   "inline-grid": () => "display:inline-grid;",
-  "contents": () => "display:contents;",
-  "list-item": () => "display:list-item;",
 
   // -- Flexbox
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
@@ -160,6 +160,8 @@ export const RULES:Rules = {
   "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
+
+  // "self": (value:string) => `order:${cssvar(value)};`,
 
   // -- Box
 

@@ -3,9 +3,6 @@
 > 불칠절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
 ```typescript
-import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
-
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
@@ -67,9 +64,6 @@ export const RULES:Rules = {
   // Font Weight Utility
   "thicker": (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
 
-  // @TODO
-  // "text-shadow":(value:string) => `text-shadow:${makeSide(value)};`,
-
   // Font-Style
   "italic": () => `font-style:italic;`,
   "overline": () => `text-decoration:overline;`,
@@ -123,10 +117,17 @@ export const RULES:Rules = {
   "table-row-group": () => "display:table-row-group;",
   "table-row": () => "display:table-row;",
   "flow-root": () => "display:flow-root;",
-  "grid": () => "display:grid;",
-  "inline-grid": () => "display:inline-grid;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
+
+  // @TODO: -- GRID
+  "grid": (value) => {
+    const css = ["display:grid;"]
+    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
+    else if (value) css.push(`grid-template-columns:${value};`)
+    return css.join("")
+  },
+  "inline-grid": () => "display:inline-grid;",
 
   // -- Flexbox
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
@@ -136,7 +137,7 @@ export const RULES:Rules = {
   "vbox(": () => ``,
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
 
-  "gap": (value:string) => `gap:${makeSide(value)};`,
+  "gap": (value:string) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
 
   // @NOTE: IE,safari<=13
   "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
@@ -161,6 +162,8 @@ export const RULES:Rules = {
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
+  // "self": (value:string) => `order:${cssvar(value)};`,
+
   // -- Box
 
   // Box-Sizing
@@ -171,7 +174,7 @@ export const RULES:Rules = {
   "w": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min,max] = value.split("~")
+      const [min, max] = value.split("~")
       min && result.push(`min-width:${px(min)};`)
       max && result.push(`max-width:${px(max)};`)
       return result.join("")
@@ -182,7 +185,7 @@ export const RULES:Rules = {
   "h": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min,max] = value.split("~")
+      const [min, max] = value.split("~")
       min && result.push(`min-height:${px(min)};`)
       max && result.push(`max-height:${px(max)};`)
       return result.join("")
@@ -240,7 +243,7 @@ export const RULES:Rules = {
   "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
 
   "ring": (value:string) => {
-    const [color,size = 1] = value.split("/")
+    const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
@@ -256,8 +259,8 @@ export const RULES:Rules = {
 
   // -- Background
   "bg": (value:string) => {
-    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g," ")};`
-    if (value.startsWith("radial-gradient")) return `background:${value.replace(/\//g," ")};`
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};`
+    if (value.startsWith("radial-gradient")) return `background:${value.replace(/\//g, " ")};`
 
     // background-image-url
     if (value.startsWith("url")) return `background-image:${value};`
@@ -320,7 +323,7 @@ export const RULES:Rules = {
 
   // Position
   "layer": (value = "") => {
-    const pos = {top: 0,right: 0,bottom: 0,left: 0}
+    const pos = {top: 0, right: 0, bottom: 0, left: 0}
     value.split("+").forEach(v => {
       switch (v) {
         case "top": {return (delete pos.bottom)}
@@ -410,7 +413,7 @@ export const RULES:Rules = {
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
 
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g,"/"))}`,
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
 
   // Float & Clear
   "float": (value:string) => `float:${cssvar(value)};`,
@@ -439,8 +442,8 @@ export const RULES:Rules = {
 
   // @TODO: triangle
   "triangle": (value:string) => {
-    const [direction,size,angle = 0] = value.split("/")
-    const bd = ["top","right","bottom","left","top","right","bottom","left"]
+    const [direction, size, angle = 0] = value.split("/")
+    const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
     const bdr = bd.slice(bd.indexOf(direction))
     const height = 0.5
 
@@ -471,7 +474,7 @@ export const RULES:Rules = {
 // Prefix
 // pseudo class
 export const PREFIX_PSEUDO_CLASS:PrefixRules = {
-  "hover:": {media: `(hover:hover)`,selector: `&:hover,&.\\:hover`},
+  "hover:": {media: `(hover:hover)`, selector: `&:hover,&.\\:hover`},
   "active:": {selector: `html &:active,html &.\\:active`},
   "focus:": {selector: `html &:focus,html &.\\:focus`},
   "focus-visible": {selector: `html &:focus-visible,html &.\\:focus-visible`},
@@ -507,67 +510,67 @@ export const PREFIX_PSEUDO_CLASS:PrefixRules = {
 
 // media query
 export const PREFIX_MEDIA_QUERY:PrefixRules = {
-  "sm:": {media: `(min-width:480px)`,selector: `html &`},
-  "md:": {media: `(min-width:768px)`,selector: `html &`},
-  "lg:": {media: `(min-width:1024px)`,selector: `html &`},
-  "xl:": {media: `(min-width:1280px)`,selector: `html &`},
+  "sm:": {media: `(min-width:480px)`, selector: `html &`},
+  "md:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl:": {media: `(min-width:1280px)`, selector: `html &`},
 
-  "sm~:": {media: `(min-width:480px)`,selector: `html &`},
-  "md~:": {media: `(min-width:768px)`,selector: `html &`},
-  "lg~:": {media: `(min-width:1024px)`,selector: `html &`},
-  "xl~:": {media: `(min-width:1280px)`,selector: `html &`},
+  "sm~:": {media: `(min-width:480px)`, selector: `html &`},
+  "md~:": {media: `(min-width:768px)`, selector: `html &`},
+  "lg~:": {media: `(min-width:1024px)`, selector: `html &`},
+  "xl~:": {media: `(min-width:1280px)`, selector: `html &`},
 
-  "~sm:": {media: `(max-width:479.98px)`,selector: `html &`},
-  "~md:": {media: `(max-width:767.98px)`,selector: `html &`},
-  "~lg:": {media: `(max-width:1023.98px)`,selector: `html &`},
-  "~xl:": {media: `(max-width:1279.98px)`,selector: `html &`},
+  "~sm:": {media: `(max-width:479.98px)`, selector: `html &`},
+  "~md:": {media: `(max-width:767.98px)`, selector: `html &`},
+  "~lg:": {media: `(max-width:1023.98px)`, selector: `html &`},
+  "~xl:": {media: `(max-width:1279.98px)`, selector: `html &`},
 
-  "mobile:": {media: `(max-device-width:767.98px)`,selector: `html &`},
-  "tablet:": {media: `(min-device-width:768px) and (max-device-width:1023.98px)`,selector: `html &`},
-  "desktop:": {media: `(min-device-width:1024px)`,selector: `html &`},
-  "!mobile:": {media: `(min-device-width:768px)`,selector: `html &`},
-  "!desktop:": {media: `(max-device-width:1023.98px)`,selector: `html &`},
+  "mobile:": {media: `(max-device-width:767.98px)`, selector: `html &`},
+  "tablet:": {media: `(min-device-width:768px) and (max-device-width:1023.98px)`, selector: `html &`},
+  "desktop:": {media: `(min-device-width:1024px)`, selector: `html &`},
+  "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
+  "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
 
   // "touch:": {media: `(hover:none)`,selector: `html &`},
   // "!touch:": {media: `(hover:hover)`,selector: `html &`},
 
-  "touch:": {media: `(max-device-width:1023.98px)`,selector: `html &`},
-  "!touch:": {media: `(min-device-width:1024px)`,selector: `html &`},
+  "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
+  "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},
 
-  "portrait:": {media: `(orientation:portrait)`,selector: `html &`},
-  "landscape:": {media: `(orientation:landscape)`,selector: `html &`},
+  "portrait:": {media: `(orientation:portrait)`, selector: `html &`},
+  "landscape:": {media: `(orientation:landscape)`, selector: `html &`},
 
-  "print:": {media: `print`,selector: `html &`},
-  "screen:": {media: `screen`,selector: `html &`},
-  "speech:": {media: `speech`,selector: `html &`},
+  "print:": {media: `print`, selector: `html &`},
+  "screen:": {media: `screen`, selector: `html &`},
+  "speech:": {media: `speech`, selector: `html &`},
 
   // dark:@TBD
   "dark:": {selector: `html.dark &`},
 }
 
 export const AT_RULE = {
-  "@w": (ident:string,tokens:Array<{ type:string,value:string }>) => {
+  "@w": (ident:string, tokens:Array<{ type:string, value:string }>) => {
     if (tokens[2]?.value !== "(" || tokens[tokens.length - 1]?.value !== ")") {
       throw Error("invalid syntax!")
     }
 
-    const value = tokens.slice(3,-1).map(t => t.value).join("")
+    const value = tokens.slice(3, -1).map(t => t.value).join("")
     if (!value.includes("~")) {
       throw Error("invalid syntax! required '~'.")
     }
 
-    let [min,max] = value.split("~")
+    let [min, max] = value.split("~")
 
     if (min) min = `(min-width:${px(+min)})`
     if (max) max = `(max-width:${px(+max - 0.02)})`
-    const rule = [min,max].filter(Boolean).join(" and ")
+    const rule = [min, max].filter(Boolean).join(" and ")
 
-    return {media: ` only screen and ${rule}`,selector: `html &`}
+    return {media: ` only screen and ${rule}`, selector: `html &`}
   }
 }
 
 // selector
-export const PREFIX_SELECTOR:Record<string,(selector:string) => string> = {
+export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
   ">>": (selector:string) => `& ${selector.slice(2)}`,
   ".": (selector:string) => `&${selector},${selector} &`,
   "[": (selector:string) => `&${selector},${selector} &`,

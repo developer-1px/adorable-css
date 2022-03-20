@@ -129,16 +129,7 @@ vbox
     <div class="p(10) h(50) bg(orange) pack">(bottom+right)</div>
   </div>
 
-  <h2>h(fill)</h2>  
-  <div class="hbox gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">b</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) h(24) bg(orange) pack">x</div>
-    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
-  </div>
-
-  <h2>hbox(fill)</h2>  
+  <h2>hbox(fill) = hbox(stretch)</h2>  
   <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
     <div class="w(48) bg(orange) pack">h</div>
     <div class="w(48) h(100) bg(orange) pack">크기를 지정하면<br/>컨텐츠 크기</div>
@@ -147,17 +138,20 @@ vbox
     <div class="p(10) bg(orange) pack">(fill)</div>
   </div>
 
+  <h2>h(fill) = h(stretch) = align-self:stretch</h2>  
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(100) bg(orange) pack">b</div>
+    <div class="p(10) bg(orange) pack">o</div>
+    <div class="w(48) h(24) bg(orange) pack">x</div>
+    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
+  </div>
 
   <h2>pack</h2>  
   <div class="hbox pack b(orange) p(10) h(100)">
     <div class="p(10) bg(orange) pack">pack</div>
   </div>
   
-  <div class="hbox(top) pack gap(10) b(orange) p(10) w(200) h(200)">
-    <div class="p(10) bg(orange) pack">hbox(top)</div>
-    <div class="p(10) bg(orange) pack">pack</div>
-  </div>
-
   <h2>space-beetween / space-around / space-evenly</h2>  
 
   <div class="hbox space-between b(orange) w(300)">

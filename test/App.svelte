@@ -1,7 +1,7 @@
 <script>
 import {generateCss, parseAtoms} from "../src[vite-plugin-adorable-css]/src/atomizer"
 
-const value = `!touch:c(red)!+bg(green)!!!`
+const value = `>h1:bold+mt(20)`
 
 console.log(parseAtoms(value))
 
