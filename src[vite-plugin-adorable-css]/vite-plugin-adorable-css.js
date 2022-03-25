@@ -9062,7 +9062,6 @@ var generateAtomicCss = (rules, prefixRules) => {
           const rule2 = parsePrefix(prefixRules, e);
           ast.push(rule2);
         } else if (!token || token.id === "(important)" || token.id === "+") {
-          console.log(e);
           const property = e[0].value;
           const value = e.slice(2, -1).map((r) => r.value).join("");
           const rule2 = rules[property];
