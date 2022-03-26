@@ -7718,9 +7718,9 @@ var require_micromatch = __commonJS({
   }
 });
 
-// src/vite-plugin-adorable-css.ts
-var vite_plugin_adorable_css_exports = {};
-__export(vite_plugin_adorable_css_exports, {
+// src/vite.ts
+var vite_exports = {};
+__export(vite_exports, {
   ALL_PROPERTIES: () => ALL_PROPERTIES,
   AT_RULE: () => AT_RULE,
   PREFIX_MEDIA_QUERY: () => PREFIX_MEDIA_QUERY,
@@ -7752,6 +7752,9 @@ __export(vite_plugin_adorable_css_exports, {
   px: () => px,
   reset: () => reset
 });
+init_cjs_shims();
+
+// src/vite-plugin-adorable-css.ts
 init_cjs_shims();
 var import_chokidar = __toESM(require_chokidar());
 var import_fs = __toESM(require("fs"));
@@ -9270,7 +9273,7 @@ var adorableCSS = (config) => {
     }
   }];
 };
-module.exports = __toCommonJS(vite_plugin_adorable_css_exports);
+module.exports = __toCommonJS(vite_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ALL_PROPERTIES,

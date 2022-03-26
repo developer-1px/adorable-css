@@ -1,11 +1,9 @@
-import type {Plugin, ViteDevServer} from "vite"
-
-import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
-import {reset} from "./rules"
+import chokidar from "chokidar"
 import {promises as fs} from "fs"
 
 import micromatch from "micromatch"
-import chokidar from "chokidar"
+import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
+import {reset} from "./rules"
 
 interface Config {
   include:string[]
@@ -28,7 +26,7 @@ const CONFIG:Config = {
   prefixRules: {},
 }
 
-export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
+export const adorableCSS = (config?:Partial<Config>) => {
   config = {...CONFIG, ...config}
 
   let isHMR = false
@@ -36,7 +34,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
 
   let configRoot = ""
 
-  const servers:ViteDevServer[] = []
+  const servers = []
   const entry:Record<string, string[]> = Object.create(null)
 
   const generateCss = createGenerateCss(config.rules, config.prefixRules)
@@ -83,8 +81,6 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     timer = setTimeout(invalidate, DEBOUNCE_TIMEOUT)
   }
 
-
-  // @ts-ignore
   return [{
     name: `${ADORABLE_CSS}:dev`,
     apply: "serve",
@@ -148,7 +144,6 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
       timestamp = Date.now()
     },
 
-    // @ts-ignore
     async handleHotUpdate({file, read}) {
       if (!checkTargetFile(file)) return
       isHMR = true
@@ -171,7 +166,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
       return undefined
     },
 
-    generateBundle(options, bundle) {
+    generateBundle(options, bundle:Record<string, { fileName:string, type:string, source:string }>) {
       const adorableCSS = makeStyle()
       for (const chunk of Object.values(bundle)) {
         if (!chunk.fileName.endsWith(".css")) continue

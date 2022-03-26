@@ -5,7 +5,7 @@ export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
 html,body{height:100%;}
-img,picture,video,canvas,svg{display:block;max-width:100%;}
+img,picture,video,canvas{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -17,6 +17,8 @@ export const RULES:Rules = {
   // -- Color
   "c": (value:string) => `color:${makeColor(value)};`,
   "color": (value:string) => RULES.c(value),
+  "caret": (value:string) => `caret-color:${makeColor(value)};`,
+  "caret-current": () => `color:currentColor`,
 
   // -- Typography
   "font": (value:string) => makeFont(value),
@@ -27,7 +29,8 @@ export const RULES:Rules = {
 
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
 
-  // @TODO: font-family:var(--serif),serif; 이게 먹히나?
+  // @TODO:font-family:var(--serif),serif; 이게 먹히나?
+  "sans": () => makeFontFamily("sans-serif"),
   "sans-serif": () => makeFontFamily("sans-serif"),
   "serif": () => makeFontFamily("serif"),
   "cursive": () => makeFontFamily("cursive"),
@@ -89,16 +92,16 @@ export const RULES:Rules = {
   "vertical-top": () => `vertical-align:top;`,
   "vertical-middle": () => `vertical-align:middle;`,
   "vertical-bottom": () => `vertical-align:bottom;`,
-  "sub": () => `vertical-align: sub;`,
-  "super": () => `vertical-align: super;`,
-  "text-top": () => `vertical-align: text-top;`,
-  "text-bottom": () => `vertical-align: text-bottom;`,
+  "sub": () => `vertical-align:sub;`,
+  "super": () => `vertical-align:super;`,
+  "text-top": () => `vertical-align:text-top;`,
+  "text-bottom": () => `vertical-align:text-bottom;`,
 
   // Text Wrap
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
-  "hyphens": (value = "auto") => `hyphens: ${value};`,
+  "hyphens": (value = "auto") => `hyphens:${value};`,
 
   // -- Display
   "block": () => "display:block;",
@@ -119,7 +122,7 @@ export const RULES:Rules = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
 
-  // @TODO: -- GRID
+  // @TODO:-- GRID TBD
   "grid": (value) => {
     const css = ["display:grid;"]
     if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
@@ -138,7 +141,7 @@ export const RULES:Rules = {
 
   "gap": (value:string) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
 
-  // @NOTE: IE,safari<=13
+  // @NOTE:IE,safari<=13
   "hgap": (value:string) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value:string) => `&>*+* {margin-right:${px(value)};}`,
   "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
@@ -161,7 +164,7 @@ export const RULES:Rules = {
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
-  // "self": (value:string) => `order:${cssvar(value)};`,
+  // "self":(value:string) => `order:${cssvar(value)};`,
 
   // -- Box
 
@@ -282,18 +285,48 @@ export const RULES:Rules = {
 
   /// -- Overflow
 
-  // OverFlow:@TODO:스크롤바 보여지느냐 아니냐... 보통 auto를 쓴다. 스크롤 바는 생각할게 많네요!! (thank you Linda!)
+  // OverFlow
   "overflow": (value:string) => `overflow:${value};`,
   "overflow-x": (value:string) => `overflow-x:${value};`,
   "overflow-y": (value:string) => `overflow-y:${value};`,
-
   "clip": () => `overflow:hidden;`,
+
+  // Scroll
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
   "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
   "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
   "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
+
+  // Scroll Snap
+  "scroll-m": (value:string) => `scroll-margin:${makeSide(value)};`,
+  "scroll-mt": (value:string) => `scroll-margin-top:${px(value)};`,
+  "scroll-mr": (value:string) => `scroll-margin-right:${px(value)};`,
+  "scroll-mb": (value:string) => `scroll-margin-bottom:${px(value)};`,
+  "scroll-ml": (value:string) => `scroll-margin-left:${px(value)};`,
+
+  "scroll-p": (value:string) => `scroll-padding:${makeSide(value)};`,
+  "scroll-pt": (value:string) => `scroll-padding-top:${px(value)};`,
+  "scroll-pr": (value:string) => `scroll-padding-right:${px(value)};`,
+  "scroll-pb": (value:string) => `scroll-padding-bottom:${px(value)};`,
+  "scroll-pl": (value:string) => `scroll-padding-left:${px(value)};`,
+
+  "snap": (value:string) => `scroll-snap-align:${cssvar(value)};`,
+  "snap-start": () => `scroll-snap-align:start;`,
+  "snap-end": () => `scroll-snap-align:end;`,
+  "snap-center": () => `scroll-snap-align:center;`,
+  "snap-align-none": () => `scroll-snap-align:none;`,
+
+  "snap-none": () => `scroll-snap-type:none;`,
+  "snap-x": () => `scroll-snap-type:x var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-y": () => `scroll-snap-type:y var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-both": () => `scroll-snap-type:both var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
+  "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
+
+  "snap-normal": () => `scroll-snap-stop: normal;`,
+  "snap-always": () => `scroll-snap-stop: always;`,
 
   // @TODO:- TBD
   "overscroll": (value:string) => `overscroll-behavior:${value};`,
@@ -317,8 +350,6 @@ export const RULES:Rules = {
   "line-clamp": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value:string) => `text-indent:${px(value)};`,
-
-  // Scroll Snap -- TBD @TODO:
 
   // Position
   "layer": (value = "") => {
@@ -381,7 +412,7 @@ export const RULES:Rules = {
   "transition": (value:string) => `transition:${makeTransition(value)};`,
 
   // @TODO:섞을수가 없네? mix transform
-  // @TBD: translate(10,10)|rotateX(180deg)|scale(2) 이런식으로 |기호로 묶자!!
+  // @TBD:translate(10,10)|rotateX(180deg)|scale(2) 이런식으로 |기호로 묶자!!
   "translate": (value:string) => `transform:translate(${makeCommaValues(value)});`,
   "translateX": (value:string) => `transform:translateX(${cssvar(value)});`,
   "translateY": (value:string) => `transform:translateY(${cssvar(value)});`,
@@ -439,7 +470,7 @@ export const RULES:Rules = {
   "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
   "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
 
-  // @TODO: triangle
+  // @TODO:triangle
   "triangle": (value:string) => {
     const [direction, size, angle = 0] = value.split("/")
     const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
@@ -466,7 +497,7 @@ export const RULES:Rules = {
     const diry = (dp < 10 ? (dp % 2 == 0 ? dp - ((dp / 2) - 1) : (dp - ((dp - 1) / 2))) : dp - 4)
     const dira = (24 - (Math.round(dp / 10))) / 100
 
-    return `box-shadow: 0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`
+    return `box-shadow:0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`
   },
 }
 
@@ -530,8 +561,8 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   "!mobile:": {media: `(min-device-width:768px)`, selector: `html &`},
   "!desktop:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
 
-  // "touch:": {media: `(hover:none)`,selector: `html &`},
-  // "!touch:": {media: `(hover:hover)`,selector: `html &`},
+  // "touch:":{media:`(hover:none)`,selector:`html &`},
+  // "!touch:":{media:`(hover:hover)`,selector:`html &`},
 
   "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
   "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},

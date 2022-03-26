@@ -1,5 +1,3 @@
-import { Plugin } from 'vite';
-
 declare type Rules = Record<string, (value?: string) => string>;
 declare type PrefixProps = {
     media?: string;
@@ -30,7 +28,7 @@ declare const makeHBox: (value?: string) => string;
 declare const makeVBox: (value?: string) => string;
 declare const makeTransition: (value: string) => string;
 
-declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}\nhtml,body{height:100%;}\nimg,picture,video,canvas,svg{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n";
+declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}\nhtml,body{height:100%;}\nimg,picture,video,canvas{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n";
 declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
@@ -568,6 +566,33 @@ interface Config {
     prefixRules: PrefixRules;
     preLoads: string[];
 }
-declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
+declare const adorableCSS: (config?: Partial<Config>) => ({
+    name: string;
+    apply: string;
+    enforce: string;
+    configureServer: (_server: any) => void;
+    buildStart: () => void;
+    resolveId: (id: string) => string;
+    load: (id: string) => string;
+    transform(code: any, id: any): any;
+    handleHotUpdate({ file, read }: {
+        file: any;
+        read: any;
+    }): Promise<void>;
+} | {
+    name: string;
+    apply: string;
+    enforce: string;
+    resolveId: (id: string) => string;
+    load: (id: string) => string;
+    transform(code: any, id: any): any;
+    generateBundle(options: any, bundle: Record<string, {
+        fileName: string;
+        type: string;
+        source: string;
+    }>): void;
+    configureServer?: undefined;
+    buildStart?: undefined;
+})[];
 
 export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };

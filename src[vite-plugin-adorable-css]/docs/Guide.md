@@ -10,19 +10,20 @@ npm i -D adorable-css
 
 ```ts
 // vite.config.js
-import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // <-
+import {adorableCSS} from "adorable-css/vite" // <-
 
 export default defineConfig({
-  plugins: [adorableCSS(), ...] // <-
+  plugins: [adorableCSS(), ...] // <- plugin을 맨 처음에 등록합니다.
 })
 ```
 
 ```tsx
 // main.tsx
+import "@adorable.css" // <- virtual css를 import 합니다.
+
 import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
-import "@adorable.css" // <-
 import {App} from "./App"
 
 ReactDOM.render(

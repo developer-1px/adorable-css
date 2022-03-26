@@ -1,3 +1,47 @@
+## 0.7.7
+- ♻️ vite plugin import path를 간결하게 수정하였습니다. (기존 호환은 당분간 유지합니다! 1.0 정식 버전이 나오면 기존 vite-plugin-adorable-css 이름은 삭제할 예정입니다.)
+
+```ts
+// vite.config.js
+import {adorableCSS} from "adorable-css/vite" // <-
+
+export default defineConfig({
+  plugins: [adorableCSS(), ...] // <- plugin을 맨 처음에 등록합니다.
+})
+```
+- scroll-snap 관련 기능을 추가하였습니다.
+```ts
+{
+  // Scroll Snap
+  "scroll-m": (value:string) => `scroll-margin:${makeSide(value)};`,
+  "scroll-mt": (value:string) => `scroll-margin-top:${px(value)};`,
+  "scroll-mr": (value:string) => `scroll-margin-right:${px(value)};`,
+  "scroll-mb": (value:string) => `scroll-margin-bottom:${px(value)};`,
+  "scroll-ml": (value:string) => `scroll-margin-left:${px(value)};`,
+
+  "scroll-p": (value:string) => `scroll-padding:${makeSide(value)};`,
+  "scroll-pt": (value:string) => `scroll-padding-top:${px(value)};`,
+  "scroll-pr": (value:string) => `scroll-padding-right:${px(value)};`,
+  "scroll-pb": (value:string) => `scroll-padding-bottom:${px(value)};`,
+  "scroll-pl": (value:string) => `scroll-padding-left:${px(value)};`,
+
+  "snap-start": () => `scroll-snap-align:start;`,
+  "snap-end": () => `scroll-snap-align:end;`,
+  "snap-center": () => `scroll-snap-align:center;`,
+  "snap-none": () => `scroll-snap-align:none;`,
+
+  "no-snap": () => `scroll-snap-type:none;`,
+  "snap-x": () => `scroll-snap-type:x var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-y": () => `scroll-snap-type:y var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-both": () => `scroll-snap-type:both var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
+  "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
+
+  "snap-normal": () => `scroll-snap-stop: normal;`,
+  "snap-always": () => `scroll-snap-stop: always;`,
+}
+```
+
 ## 0.7.5
 - 🐛 hover:mt(10)+bold는 동작하나 hover:bold+mt(10)이 동작하지 않던 버그 수정
 

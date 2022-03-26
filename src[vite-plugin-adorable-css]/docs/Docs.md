@@ -60,39 +60,6 @@ CSS는 빌드타임에 최적화되어 필요한 양만큼만 생성이 됩니�
 
 ---
 
-## Getting Started
-
-```sh
-npm i -D adorable-css
-```
-
-```ts
-// vite.config.js
-import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // <-
-
-export default defineConfig({
-  plugins: [adorableCSS(), ...] // <-
-})
-```
-
-```tsx
-// main.tsx
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import "@adorable.css" // <-
-import {App} from "./App"
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById("root")
-)
-```
-
-#### @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
-
 ## Syntax
 
 ```html
