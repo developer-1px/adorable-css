@@ -51,6 +51,22 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
 ## Getting Started
 
+### CDN(beta): Just-in-time + css-in-js
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  ...
+  <script src="https://unpkg.com/adorable-css"></script>
+</head>
+</html>
+```
+다른 CSS 프레임워크 없이 script만 넣어보세요. css-in-js 방식으로 실시간으로 AdorableCSS의 스펙을 지원합니다.
+
+
+### Vite: HMR + Build Time
+
 https://www.youtube.com/watch?v=55W1rlJ4ukc&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL
 
 ```

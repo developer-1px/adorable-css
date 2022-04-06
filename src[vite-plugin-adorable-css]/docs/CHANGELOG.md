@@ -1,3 +1,53 @@
+## 0.8.4
+✨ Vite가 없어도 CDN 방식으로 AdorableCSS를 사용할 수 있는 방법이 추가 되었습니다. (beta 주의!) angular나 webpack, vanilla HTML에서도 AdorableCSS를 사용해보세요! 
+
+🔥 경고! 아직은 검증이 더 필요하기에 production용으로는 가급적 사용하지 마세요. IE11 주의!
+
+### CDN(beta): Just-in-time + css-in-js
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  ...
+  <script src="https://unpkg.com/adorable-css"></script>
+</head>
+</html>
+```
+다른 CSS 프레임워크 없이 script만 넣어보세요. css-in-js 방식으로 실시간으로 AdorableCSS의 스펙을 지원합니다.
+
+
+## 0.7.8
+- cursor 단축 표현이 일부 추가되었습니다.
+
+```js
+{
+  "col-resize": () => `cursor: col-resize;`,
+  "crosshair": () => `cursor: crosshair;`,
+  "e-resize": () => `cursor: e-resize;`,
+  "ew-resize": () => `cursor: ew-resize;`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
+  "grabbing": () => `cursor: grabbing;`,
+  "n-resize": () => `cursor: n-resize;`,
+  "ne-resize": () => `cursor: ne-resize;`,
+  "nesw-resize": () => `cursor: nesw-resize;`,
+  "ns-resize": () => `cursor: ns-resize;`,
+  "nw-resize": () => `cursor: nw-resize;`,
+  "nwse-resize": () => `cursor: nwse-resize;`,
+  "not-allowed": () => `cursor: not-allowed;`,
+  "pointer": () => `cursor: pointer;`,
+  "progress": () => `cursor: progress;`,
+  "row-resize": () => `cursor: row-resize;`,
+  "s-resize": () => `cursor: s-resize;`,
+  "se-resize": () => `cursor: se-resize;`,
+  "sw-resize": () => `cursor: sw-resize;`,
+  "w-resize": () => `cursor: w-resize;`,
+  "zoom-in": () => `cursor: zoom-in;`,
+  "zoom-out": () => `cursor: zoom-out;`,
+  "cursor": (value:string) => `cursor:${value};`,
+}
+```
+
 ## 0.7.7
 - ♻️ vite plugin import path를 간결하게 수정하였습니다. (기존 호환은 당분간 유지합니다! 1.0 정식 버전이 나오면 기존 vite-plugin-adorable-css 이름은 삭제할 예정입니다.)
 

@@ -129,6 +129,12 @@ export const RULES:Rules = {
     else if (value) css.push(`grid-template-columns:${value};`)
     return css.join("")
   },
+  "grid-cols": (value) => {
+    const css = ["display:grid;"]
+    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
+    else if (value) css.push(`grid-template-columns:${value};`)
+    return css.join("")
+  },
   "inline-grid": () => "display:inline-grid;",
 
   // -- Flexbox
@@ -392,11 +398,29 @@ export const RULES:Rules = {
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
 
-
   // Interactions
-  "pointer": () => `cursor:pointer;`,
+  "col-resize": () => `cursor: col-resize;`,
+  "crosshair": () => `cursor: crosshair;`,
+  "e-resize": () => `cursor: e-resize;`,
+  "ew-resize": () => `cursor: ew-resize;`,
   "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
-  "grabbing": () => `cursor:grabbing;`,
+  "grabbing": () => `cursor: grabbing;`,
+  "n-resize": () => `cursor: n-resize;`,
+  "ne-resize": () => `cursor: ne-resize;`,
+  "nesw-resize": () => `cursor: nesw-resize;`,
+  "ns-resize": () => `cursor: ns-resize;`,
+  "nw-resize": () => `cursor: nw-resize;`,
+  "nwse-resize": () => `cursor: nwse-resize;`,
+  "not-allowed": () => `cursor: not-allowed;`,
+  "pointer": () => `cursor: pointer;`,
+  "progress": () => `cursor: progress;`,
+  "row-resize": () => `cursor: row-resize;`,
+  "s-resize": () => `cursor: s-resize;`,
+  "se-resize": () => `cursor: se-resize;`,
+  "sw-resize": () => `cursor: sw-resize;`,
+  "w-resize": () => `cursor: w-resize;`,
+  "zoom-in": () => `cursor: zoom-in;`,
+  "zoom-out": () => `cursor: zoom-out;`,
   "cursor": (value:string) => `cursor:${value};`,
 
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
