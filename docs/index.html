@@ -11,14 +11,14 @@
 
 		<link rel="stylesheet" href="/adorable-css/_app/assets/start-61d1577b.css">
 		<link rel="stylesheet" href="/adorable-css/_app/assets/pages/__layout.svelte-8ae24613.css">
-		<link rel="modulepreload" href="/adorable-css/_app/start-962df23b.js">
+		<link rel="modulepreload" href="/adorable-css/_app/start-1b6e4f91.js">
 		<link rel="modulepreload" href="/adorable-css/_app/chunks/vendor-e0ae2598.js">
 		<link rel="modulepreload" href="/adorable-css/_app/chunks/paths-28a87002.js">
 		<link rel="modulepreload" href="/adorable-css/_app/pages/__layout.svelte-b2b888c8.js">
-		<link rel="modulepreload" href="/adorable-css/_app/pages/docs.svelte-72172c65.js">
+		<link rel="modulepreload" href="/adorable-css/_app/pages/docs.svelte-a252aa3f.js">
 
 		<script type="module">
-			import { start } from "/adorable-css/_app/start-962df23b.js";
+			import { start } from "/adorable-css/_app/start-1b6e4f91.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
@@ -31,7 +31,7 @@
 					error: null,
 					nodes: [
 						import("/adorable-css/_app/pages/__layout.svelte-b2b888c8.js"),
-						import("/adorable-css/_app/pages/docs.svelte-72172c65.js")
+						import("/adorable-css/_app/pages/docs.svelte-a252aa3f.js")
 					],
 					url: new URL("http://prerender/docs"),
 					params: {}
@@ -103,28 +103,6 @@
 <li>변경사항을 추적해서 실시간으로 CSS를 생성해서 최적의 코드를 만들어냅니다.</li>
 <li>Learning-Curve를 고려하여 문법을 간결하고 직관적이면서도 세련되게 다듬었습니다.</li></ol></blockquote>
 <hr>
-<h2>Getting Started</h2>
-<pre class="language-sh"><!-- HTML_TAG_START --><code class="language-sh">npm i -D adorable-css</code><!-- HTML_TAG_END --></pre>
-<pre class="language-ts"><!-- HTML_TAG_START --><code class="language-ts"><span class="token comment">// vite.config.js</span>
-<span class="token keyword">import</span> <span class="token punctuation">&#123;</span>adorableCSS<span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"adorable-css/vite-plugin-adorable-css"</span> <span class="token comment">// &lt;-</span>
-
-<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token function">defineConfig</span><span class="token punctuation">(</span><span class="token punctuation">&#123;</span>
-  plugins<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token function">adorableCSS</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">...</span><span class="token punctuation">]</span> <span class="token comment">// &lt;-</span>
-<span class="token punctuation">&#125;</span><span class="token punctuation">)</span></code><!-- HTML_TAG_END --></pre>
-<pre class="language-tsx"><!-- HTML_TAG_START --><code class="language-tsx"><span class="token comment">// main.tsx</span>
-<span class="token keyword">import</span> React <span class="token keyword">from</span> <span class="token string">"react"</span>
-<span class="token keyword">import</span> ReactDOM <span class="token keyword">from</span> <span class="token string">"react-dom"</span>
-<span class="token keyword">import</span> <span class="token string">"./index.css"</span>
-<span class="token keyword">import</span> <span class="token string">"@adorable.css"</span> <span class="token comment">// &lt;-</span>
-<span class="token keyword">import</span> <span class="token punctuation">&#123;</span>App<span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"./App"</span>
-
-ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token plain-text">
-    </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">App</span></span><span class="token punctuation">/></span></span><span class="token plain-text">
-  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">React.StrictMode</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>
-  document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">"root"</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span></code><!-- HTML_TAG_END --></pre>
-<h4>@NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.</h4>
 <h2>Syntax</h2>
 <pre class="language-html"><!-- HTML_TAG_START --><code class="language-html">property(value) 
   - 가장 기본적인 형태로 프로퍼티(값)의 형태를 가집니다.
