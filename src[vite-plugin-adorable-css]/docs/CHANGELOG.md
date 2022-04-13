@@ -1,3 +1,15 @@
+## 0.8.5
+✨ &:last-child>span 과 같이 & 기능이 추가 되었습니다.
+
+```
+<div class="flex &:last-child>span:c(red)">
+  <span>{index + 1}</span>
+</div>
+```
+
+✨ &.selected, &[disabled] 기능도 함께 출시가 되었습니다.
+
+
 ## 0.8.4
 ✨ Vite가 없어도 CDN 방식으로 AdorableCSS를 사용할 수 있는 방법이 추가 되었습니다. (beta 주의!) angular나 webpack, vanilla HTML에서도 AdorableCSS를 사용해보세요! 
 

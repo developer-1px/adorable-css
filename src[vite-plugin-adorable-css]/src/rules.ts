@@ -626,6 +626,9 @@ export const AT_RULE = {
 // selector
 export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
   ">>": (selector:string) => `& ${selector.slice(2)}`,
+  "&:": (selector:string) => `${selector}`,
+  "&.": (selector:string) => `${selector}`,
+  "&[": (selector:string) => `${selector}`,
   ".": (selector:string) => `&${selector},${selector} &`,
   "[": (selector:string) => `&${selector},${selector} &`,
   ">": (selector:string) => `&${selector}`,
