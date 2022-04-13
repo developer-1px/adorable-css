@@ -326,8 +326,11 @@ export const RULES:Rules = {
 
   "snap-none": () => `scroll-snap-type:none;`,
   "snap-x": () => `scroll-snap-type:x var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-x-proximity": () => `scroll-snap-type:x proximity;`,
   "snap-y": () => `scroll-snap-type:y var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-y-proximity": () => `scroll-snap-type:y proximity;`,
   "snap-both": () => `scroll-snap-type:both var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-both-proximity": () => `scroll-snap-type:both proximity;`,
   "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
 

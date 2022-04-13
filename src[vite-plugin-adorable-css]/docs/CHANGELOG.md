@@ -1,3 +1,6 @@
+## 0.8.6
+✨ snap-x-proximity, snap-y-proximity, snap-both-proximity를 추가하였습니다.
+
 ## 0.8.5
 ✨ &:last-child>span 과 같이 & 기능이 추가 되었습니다.
 
