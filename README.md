@@ -62,7 +62,7 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 </head>
 </html>
 ```
-다른 CSS 프레임워크 없이 script만 넣어보세요. CSS-in-JS 방식인 AdorableCSS은 실시간으로 스펙을 지원합니다.
+다른 CSS 프레임워크 없이 script만 넣어보세요. CSS-in-JS 방식을 통해 실시간으로 AdorableCSS의 스펙을 지원합니다.
 
 
 ### Vite: HMR + Build Time
