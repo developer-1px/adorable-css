@@ -1,3 +1,10 @@
+# 공지
+- import path를 변경하였습니다.
+```ts
+// import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // 더이상 지원하지 않음. 
+import {adorableCSS} from "adorable-css/vite"
+```
+
 ![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
 
 # AdorableCSS
