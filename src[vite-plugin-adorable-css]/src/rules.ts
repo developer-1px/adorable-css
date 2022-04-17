@@ -182,22 +182,45 @@ export const RULES:Rules = {
   "w": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min, max] = value.split("~")
+
+      const values = value.split("~")
+      if (values.length <= 2) {
+        const [min, max] = values
+        min && result.push(`min-width:${px(min)};`)
+        max && result.push(`max-width:${px(max)};`)
+        return result.join("")
+      }
+
+      const [min, width, max] = values
       min && result.push(`min-width:${px(min)};`)
+      result.push(`width:${px(width)};`)
       max && result.push(`max-width:${px(max)};`)
       return result.join("")
     }
+
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `width:${px(value)};`
   },
 
   "h": (value:string) => {
     if (value.includes("~")) {
       const result = []
-      const [min, max] = value.split("~")
+
+      const values = value.split("~")
+      if (values.length <= 2) {
+        const [min, max] = value.split("~")
+        min && result.push(`min-height:${px(min)};`)
+        max && result.push(`max-height:${px(max)};`)
+        return result.join("")
+      }
+
+      // h(10~20~30)
+      const [min, height, max] = values
       min && result.push(`min-height:${px(min)};`)
+      result.push(`height:${px(height)};`)
       max && result.push(`max-height:${px(max)};`)
       return result.join("")
     }
+
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 

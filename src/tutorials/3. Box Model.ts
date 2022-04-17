@@ -9,7 +9,7 @@ w(~32) { max-width: 32px }
 w(32~) { min-width: 32px }
 w(32~63) { min-width: 32px; max-width: 32px }
 w(1/5) { width:20% }
-w(100%-20px) { width: calc(100% - 20px) }
+w(100%-20px) { width: calc(100% - 20px) } // 주의: calc에서는 px를 생략할 수 없습니다!
 
 - margin / padding / border / border-radius + (top / right / bottom / left)
 : m/p/b/r + t/r/b/l 이런식의 조합방식을 사용합니다.
@@ -36,7 +36,7 @@ content-box { box-sizing: content-box }
 
 <div class="w(64) h(64) bg(orange) p(10) m(10)">64 x 64</div>
 
-<div class="w(~128) h(128~) b(orange) bg(#fff) p(24) m(20)">max-width<br/>min-height</div>
+<div class="w(50%) w(~320) b(orange) bg(#fff) p(10)">w(50%) w(~320) = width:100%; max-width: 320px</div>
 
 <div class="w(128) h(128) r(20) bg(red) p(20)">128 x 128 r(20)</div>
 
