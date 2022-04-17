@@ -1,5 +1,5 @@
 <script>
-import Reference from "../../src[vite-plugin-adorable-css]/docs/Reference.md"
+import Reference from "../../packages/vite/docs/Reference.md"
 </script>
 
 <div class="markdown p(20)">

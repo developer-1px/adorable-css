@@ -2,7 +2,7 @@
 import adapter from "@sveltejs/adapter-static"
 import {mdsvex} from "mdsvex"
 import preprocess from "svelte-preprocess"
-import {adorableCSS} from "./src[vite-plugin-adorable-css]/vite.js"
+import {adorableCSS} from "./packages/vite/dist/vite/index.js"
 
 const config = {
   extensions: [".svelte", ".svx", ".md"],

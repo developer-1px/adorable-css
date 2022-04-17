@@ -1,5 +1,5 @@
-import {generateCss} from "./atomizer"
-import {reset} from "./rules"
+import {generateCss} from "./core/atomizer"
+import {reset} from "./core/rules"
 
 if (typeof document !== "undefined") {
   const styleSheet = document.createElement("style")

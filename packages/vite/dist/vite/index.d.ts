@@ -1,3 +1,5 @@
+import { Plugin } from 'vite';
+
 declare type Rules = Record<string, (value?: string) => string>;
 declare type PrefixProps = {
     media?: string;
@@ -566,33 +568,6 @@ interface Config {
     prefixRules: PrefixRules;
     preLoads: string[];
 }
-declare const adorableCSS: (config?: Partial<Config>) => ({
-    name: string;
-    apply: string;
-    enforce: string;
-    configureServer: (_server: any) => void;
-    buildStart: () => void;
-    resolveId: (id: string) => string;
-    load: (id: string) => string;
-    transform(code: any, id: any): any;
-    handleHotUpdate({ file, read }: {
-        file: any;
-        read: any;
-    }): Promise<void>;
-} | {
-    name: string;
-    apply: string;
-    enforce: string;
-    resolveId: (id: string) => string;
-    load: (id: string) => string;
-    transform(code: any, id: any): any;
-    generateBundle(options: any, bundle: Record<string, {
-        fileName: string;
-        type: string;
-        source: string;
-    }>): void;
-    configureServer?: undefined;
-    buildStart?: undefined;
-})[];
+declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset };

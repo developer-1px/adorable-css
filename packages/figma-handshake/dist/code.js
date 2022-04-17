@@ -15,7 +15,7 @@ var __spreadValues = (a, b) => {
   return a;
 };
 
-// src/const.ts
+// ../src[vite-plugin-adorable-css]/src/const.ts
 var ALL_PROPERTIES = {
   "--*": 1,
   "-ms-accelerator": 1,
@@ -532,7 +532,7 @@ var ALL_PROPERTIES = {
   "zoom": 1
 };
 
-// src/cssEscape.ts
+// ../src[vite-plugin-adorable-css]/src/cssEscape.ts
 var cssEscape = (string) => {
   const length = string.length;
   const firstCodeUnit = string.charCodeAt(0);
@@ -562,7 +562,7 @@ var cssEscape = (string) => {
   return result;
 };
 
-// src/makeValue.ts
+// ../src[vite-plugin-adorable-css]/src/makeValue.ts
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
 var px = (value) => {
@@ -759,17 +759,7 @@ var makeTransition = (value) => {
   return value.split("/").map((item) => item.replace("=", " ")).join(",");
 };
 
-// src/rules.ts
-var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
-html,body{height:100%;}
-img,picture,video,canvas{display:block;max-width:100%;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-`;
+// ../src[vite-plugin-adorable-css]/src/rules.ts
 var RULES = {
   "c": (value) => `color:${makeColor(value)};`,
   "color": (value) => RULES.c(value),
@@ -1280,8 +1270,24 @@ var PREFIX_SELECTOR = {
   "#": (selector) => `&${selector}`
 };
 
-// src/atomizer.ts
+// ../src[vite-plugin-adorable-css]/src/atomizer.ts
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
+var parseAtoms = (code) => {
+  let lastIndex = 0;
+  const atoms = /* @__PURE__ */ new Set();
+  const delimiter = /["'`]|\s+/g;
+  code += " ";
+  code.replace(delimiter, (a, index2, s) => {
+    let token2 = s.slice(lastIndex, index2);
+    if (token2.startsWith("class:")) {
+      token2 = token2.slice("class:".length).split("=")[0];
+    }
+    atoms.add(token2);
+    lastIndex = index2 + a.length;
+    return a;
+  });
+  return [...atoms].filter(Boolean);
+};
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
   ["(important)", /(!+$|!+\+)/],
@@ -1421,29 +1427,442 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
 };
 var generateCss = createGenerateCss();
 
-// src/index.ts
-if (typeof document !== "undefined") {
-  const styleSheet = document.createElement("style");
-  styleSheet.innerHTML = "body {display:none!important}";
-  document.documentElement.querySelector("head").appendChild(styleSheet);
-  const classList = /* @__PURE__ */ new Set();
-  const generateStyleSheet = () => styleSheet.innerHTML = reset + generateCss([...classList]).join("\n");
-  const registerObserver = () => {
-    if (!document.body)
-      return;
-    const observer = new MutationObserver(() => init());
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true, attributeOldValue: true, attributeFilter: ["class"] });
+// src/util.ts
+var pad = (s) => s.length === 1 ? "0" + s : s;
+var hex = (num) => pad(Math.round(num * 255).toString(16));
+var makeInt = (num) => makeNumber2(Math.round(num));
+var makeNumber2 = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
+var makeHexColor = (r, g, b) => {
+  let hexColor = [r, g, b].map(hex);
+  if (hexColor.every((h) => h[0] === h[1]))
+    hexColor = hexColor.map((h) => h[0]);
+  return hexColor.join("");
+};
+var makeColor2 = ({ r, g, b }, opacity = 1) => `#${makeHexColor(r, g, b)}${opacity === 1 ? "" : makeNumber2(opacity)}`;
+var fourSideValues = (t, r, b, l) => {
+  if (t === r && r === b && b === l)
+    return [t];
+  if (t === b && r === l)
+    return [t, r];
+  if (t !== b && r === l)
+    return [t, r, b];
+  return [t, r, b, l];
+};
+var makeFourSideValues = (t, r, b, l) => fourSideValues(t, r, b, l).join("/");
+var stripZero = (value) => value.startsWith("0.") ? value.slice(1) : value.startsWith("-0.") ? "-" + value.slice(2) : value;
+var unitValue = ({ value, unit }) => {
+  value = stripZero("" + makeNumber2(value));
+  switch (unit) {
+    case "PERCENT":
+      return value + "%";
+  }
+  return value;
+};
+var ab2str = (buf) => String.fromCharCode.apply(null, new Uint16Array(buf));
+var capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+// src/code.ts
+var isReact = false;
+var CLASS_NAME = isReact ? "className" : "class";
+var COMMENT_START = isReact ? "{/*" : "<!--";
+var COMMENT_END = isReact ? "*/}" : "-->";
+figma.showUI(__html__, {
+  width: 300,
+  height: 300
+});
+var createClassBuilder = (cls) => {
+  const addClass = (prop, value) => cls.push(`${prop}${value ? "(" + value + ")" : ""}`);
+  return { addClass, cls };
+};
+var generateChild = async (depth, children, callback) => {
+  const contents = await Promise.all((children || []).map((params) => generateCode(params, depth + 1)));
+  const content = contents.join("");
+  return callback(content);
+};
+var wrapInstance = (node, code) => {
+  var _a;
+  const mainComponent = node.mainComponent;
+  const mainComponentSet = ((_a = mainComponent.parent) == null ? void 0 : _a.type) === "COMPONENT_SET" ? mainComponent.parent : mainComponent;
+  const name = capitalize(mainComponentSet.name.trim().replace(/\s*\/\s*/g, "_").replace(/-|\s+/g, "_").replace(/\s+/g, "_"));
+  return `
+${COMMENT_START} <${name}/> ${COMMENT_END}
+${code}
+${COMMENT_START} </${name}> ${COMMENT_END}
+`;
+};
+var generateGroup = async (node, depth) => await generateChild(depth, node.children, (content) => content);
+var generateComponentSet = async (node, depth) => {
+  const child = await generateChild(depth, node.children, (content) => content);
+  return `<div ${CLASS_NAME}="vbox gap(20)">${child}</div>`;
+};
+var generateInstance = async (node, depth) => {
+  const code = await generateFrame(node, depth);
+  return wrapInstance(node, code);
+};
+var addClassWidth = (node, addClass) => {
+  const { parent, layoutGrow, layoutAlign } = node;
+  const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
+  if (node === figma.currentPage.selection[0])
+    addClass("w", makeInt(width));
+  else if ((parent == null ? void 0 : parent.layoutMode) === "VERTICAL" && layoutAlign === "STRETCH")
+    !everyChildrenHasStretchVbox(node.parent) && addClass("w", "fill");
+  else if ((parent == null ? void 0 : parent.layoutMode) === "HORIZONTAL" && layoutGrow)
+    addClass("flex");
+  else if (!layoutMode || layoutMode === "NONE")
+    addClass("w", makeInt(width));
+  else if (layoutMode === "HORIZONTAL" && primaryAxisSizingMode === "FIXED")
+    addClass("w", makeInt(width));
+  else if (layoutMode === "VERTICAL" && counterAxisSizingMode === "FIXED")
+    addClass("w", makeInt(width));
+};
+var addClassHeight = (node, addClass) => {
+  const { layoutGrow, layoutAlign } = node;
+  const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
+  if (node === figma.currentPage.selection[0])
+    addClass("h", makeInt(height));
+  else if (node.parent && node.parent.layoutMode === "HORIZONTAL" && layoutAlign === "STRETCH")
+    addClass("h", "fill");
+  else if (node.parent && node.parent.layoutMode === "VERTICAL" && layoutGrow)
+    addClass("flex");
+  else if (!layoutMode || layoutMode === "NONE")
+    addClass("h", makeInt(height));
+  else if (layoutMode === "HORIZONTAL" && counterAxisSizingMode === "FIXED")
+    addClass("h", makeInt(height));
+  else if (layoutMode === "VERTICAL" && primaryAxisSizingMode === "FIXED")
+    addClass("h", makeInt(height));
+};
+var addClassBorder = (node, addClass) => {
+  try {
+    const { strokes, strokeAlign, strokeWeight } = node;
+    const border = strokes.filter((stroke) => stroke.visible)[0];
+    if (border && border.color && strokeWeight > 0) {
+      if (strokeAlign === "OUTSIDE") {
+        addClass("ring", [strokeWeight > 1 ? strokeWeight : null, makeColor2(border.color, border.opacity)].filter(Boolean).join("/"));
+      } else {
+        addClass("b", `${makeColor2(border.color, border.opacity)}`);
+        if (strokeWeight > 1) {
+          addClass("bw", node.strokeWeight);
+        }
+      }
+    }
+  } catch (e) {
+  }
+};
+var addClassBorderRadius = (node, addClass) => {
+  try {
+    if (node.type === "ELLIPSE")
+      addClass("r", "100%");
+    const { topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius } = node;
+    if (topLeftRadius > 0 || topRightRadius > 0 || bottomRightRadius > 0 || bottomLeftRadius > 0) {
+      const size = Math.max(node.width, node.height);
+      if (topLeftRadius > size && topRightRadius > size && bottomRightRadius > size && bottomLeftRadius > size) {
+        addClass(`r(100%)`);
+      } else {
+        addClass(`r(${makeFourSideValues(topLeftRadius, topRightRadius, bottomRightRadius, bottomLeftRadius)})`);
+      }
+    }
+  } catch (e) {
+  }
+};
+var addEffectStyle = (node, addClass) => {
+  if (node.effectStyleId) {
+    const style = figma.getStyleById(node.effectStyleId);
+    addClass(style.name.toLowerCase());
+  }
+};
+var makeGradientLinear = (paint) => {
+  const { gradientTransform, gradientStops } = paint;
+  if (!gradientTransform || !gradientStops) {
+    return "";
+  }
+  let gradientTransformData = {
+    m00: 1,
+    m01: 0,
+    m02: 0,
+    m10: 0,
+    m11: 1,
+    m12: 0
   };
-  const init = () => {
-    classList.clear();
-    Array.from(document.querySelectorAll("*[class]")).forEach((el) => Array.from(el.classList).forEach((value) => classList.add(value)));
-    generateStyleSheet();
+  const delta = gradientTransform[0][0] * gradientTransform[1][1] - gradientTransform[0][1] * gradientTransform[1][0];
+  if (delta !== 0) {
+    const deltaVal = 1 / delta;
+    gradientTransformData = {
+      m00: gradientTransform[1][1] * deltaVal,
+      m01: -gradientTransform[0][1] * deltaVal,
+      m02: (gradientTransform[0][1] * gradientTransform[1][2] - gradientTransform[1][1] * gradientTransform[0][2]) * deltaVal,
+      m10: -gradientTransform[1][0] * deltaVal,
+      m11: gradientTransform[0][0] * deltaVal,
+      m12: (gradientTransform[1][0] * gradientTransform[0][2] - gradientTransform[0][0] * gradientTransform[1][2]) * deltaVal
+    };
+  }
+  const rotationTruthy = gradientTransformData.m00 * gradientTransformData.m11 - gradientTransformData.m01 * gradientTransformData.m10 > 0 ? 1 : -1;
+  const data = gradientTransformData;
+  const param = { x: 0, y: 1 };
+  const rotationData = {
+    x: data.m00 * param.x + data.m01 * param.y,
+    y: data.m10 * param.x + data.m11 * param.y
   };
-  const bootstrap = () => {
-    init();
-    registerObserver();
-    document.removeEventListener("readystatechange", bootstrap);
-  };
-  bootstrap();
-  document.addEventListener("readystatechange", bootstrap);
-}
+  const rad = makeNumber2(Math.atan2(rotationData.y * rotationTruthy, rotationData.x * rotationTruthy) / Math.PI * 180);
+  const gradientColors = gradientStops.map((gradient) => `${makeColor2(gradient.color)}/${makeNumber2(gradient.position * 100)}%`);
+  return `linear-gradient(${rad}deg,${gradientColors})`;
+};
+var everyChildrenHasStretchVbox = (node) => {
+  var _a;
+  return (_a = node.children) == null ? void 0 : _a.every((c) => c.layoutAlign === "STRETCH" || c.width === node.width);
+};
+var generateFrame = async (node, depth) => {
+  var _a, _b, _c;
+  const { addClass, cls } = createClassBuilder([]);
+  const selection = figma.currentPage.selection;
+  if (node !== selection[0] && ((_a = node.parent) == null ? void 0 : _a.type) === "FRAME" && ((_b = node.parent) == null ? void 0 : _b.layoutMode) === "NONE") {
+    addClass("absolute");
+    switch (node.constraints.vertical) {
+      case "MIN":
+        addClass(`top(${node.y})`);
+        break;
+      case "MAX":
+        addClass(`bottom(${node.parent.height - node.y - node.height})`);
+        break;
+    }
+    switch (node.constraints.horizontal) {
+      case "MIN":
+        addClass(`left(${node.x})`);
+        break;
+      case "MAX":
+        addClass(`right(${node.parent.width - node.x - node.width})`);
+        break;
+    }
+  }
+  const numChildren = (_c = node.children) == null ? void 0 : _c.filter((child) => child.visible).length;
+  const hasChildren = numChildren > 0;
+  const hasMoreChildren = numChildren > 1;
+  const { layoutGrow, layoutAlign } = node;
+  const { layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height } = node;
+  if (hasChildren) {
+    if (layoutMode === "HORIZONTAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1)
+          addClass("hbox");
+        addClass("pack");
+      } else {
+        const value = [];
+        if (counterAxisSizingMode === "AUTO" && layoutAlign === "INHERIT") {
+          if (primaryAxisAlignItems === "MAX")
+            value.push("right");
+        } else {
+          if (counterAxisAlignItems === "MIN")
+            value.push("top");
+          else if (counterAxisAlignItems === "MAX")
+            value.push("bottom");
+          if (primaryAxisAlignItems === "MAX")
+            value.push("right");
+        }
+        addClass("hbox", value.join("+"));
+        if (primaryAxisAlignItems === "CENTER")
+          addClass("pack");
+      }
+    } else if (layoutMode === "VERTICAL") {
+      if (primaryAxisAlignItems === "CENTER" && counterAxisAlignItems === "CENTER") {
+        if (numChildren > 1)
+          addClass("vbox");
+        addClass("pack");
+      } else {
+        const value = [];
+        if (everyChildrenHasStretchVbox(node)) {
+        } else if (counterAxisAlignItems === "CENTER")
+          value.push("center");
+        else if (counterAxisAlignItems === "MAX")
+          value.push("right");
+        if (primaryAxisAlignItems === "CENTER")
+          value.push("middle");
+        if (primaryAxisAlignItems === "MAX")
+          value.push("bottom");
+        addClass("vbox", value.join("+"));
+      }
+    } else {
+      addClass("relative");
+    }
+    if (hasMoreChildren) {
+      if (layoutMode !== "NONE") {
+        if (primaryAxisAlignItems === "SPACE_BETWEEN")
+          addClass("space-between");
+        const { itemSpacing } = node;
+        if (hasChildren && itemSpacing > 0 && itemSpacing < width) {
+          layoutMode === "HORIZONTAL" ? addClass("hgap", itemSpacing) : addClass("vgap", itemSpacing);
+        }
+      }
+    }
+    if (layoutMode !== "NONE") {
+      const { paddingTop, paddingRight, paddingBottom, paddingLeft } = node;
+      if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0)
+        addClass("p", makeFourSideValues(paddingTop, paddingRight, paddingBottom, paddingLeft));
+    }
+  }
+  addClassWidth(node, addClass);
+  addClassHeight(node, addClass);
+  try {
+    const bg = node.fills.filter((fill) => fill.visible)[0];
+    if ((bg == null ? void 0 : bg.type) === "SOLID") {
+      addClass("bg", makeColor2(bg.color, bg.opacity));
+    } else if ((bg == null ? void 0 : bg.type) === "GRADIENT_LINEAR") {
+      addClass("bg", makeGradientLinear(bg));
+    }
+  } catch (e) {
+  }
+  addClassBorderRadius(node, addClass);
+  addClassBorder(node, addClass);
+  addEffectStyle(node, addClass);
+  if (node.opacity !== 1)
+    addClass("opacity", makeNumber2(node.opacity));
+  if (hasChildren && node.clipsContent)
+    addClass("clip");
+  const className = cls.join(" ");
+  return await generateChild(depth, node.children, (content) => `<div ${CLASS_NAME}="${className}">
+${content}</div>`);
+};
+var generateShape = async (node) => {
+  var _a;
+  const cls = [];
+  const { addClass } = createClassBuilder(cls);
+  const hasChildren = ((_a = node.children) == null ? void 0 : _a.filter((child) => child.visible).length) > 1;
+  addClassWidth(node, addClass);
+  addClassHeight(node, addClass);
+  addClassBorderRadius(node, addClass);
+  const bg = node.fills.filter((fill) => fill.visible)[0];
+  if ((bg == null ? void 0 : bg.type) === "SOLID") {
+    addClass("bg", makeColor2(bg.color, bg.opacity));
+  }
+  addClassBorder(node, addClass);
+  addEffectStyle(node, addClass);
+  const className = cls.join(" ");
+  return `<div ${CLASS_NAME}="${className}"></div>`;
+};
+var generateText = async (node) => {
+  var _a, _b, _c, _d, _e, _f;
+  const cls = [];
+  const { addClass } = createClassBuilder(cls);
+  const { layoutGrow } = node;
+  if (layoutGrow === 1)
+    addClass("flex");
+  const { textAutoResize, width, height } = node;
+  switch (textAutoResize) {
+    case "WIDTH_AND_HEIGHT":
+      break;
+    case "HEIGHT":
+      addClass("w", makeInt(width));
+      break;
+    case "NONE":
+      addClass("w", makeInt(width));
+      addClass("h", makeInt(height));
+      break;
+  }
+  const font = [node.fontSize];
+  if (((_a = node.lineHeight) == null ? void 0 : _a.value) && ((_b = node.lineHeight) == null ? void 0 : _b.unit) !== "AUTO") {
+    font.push(unitValue(node.lineHeight));
+  }
+  if ((_c = node.letterSpacing) == null ? void 0 : _c.value) {
+    if (font.length === 1)
+      font.push("-");
+    font.push(unitValue(node.letterSpacing));
+  }
+  addClass("font", font.filter(Boolean).map((v) => v.toString()).join("/"));
+  if ((_d = node.fontName) == null ? void 0 : _d.style) {
+    switch ((_e = node.fontName) == null ? void 0 : _e.style.toLowerCase()) {
+      case "regular":
+        break;
+      case "black": {
+        addClass("bolder");
+        break;
+      }
+      default: {
+        addClass((_f = node.fontName) == null ? void 0 : _f.style.toLowerCase());
+      }
+    }
+  }
+  const fill = node.fills[0];
+  if ((fill == null ? void 0 : fill.visible) && (fill == null ? void 0 : fill.type) === "SOLID") {
+    addClass("c", makeColor2(fill.color, fill.opacity));
+  }
+  if (node.opacity !== 1)
+    addClass("opacity", makeNumber2(node.opacity));
+  switch (node.textAlignHorizontal) {
+    case "CENTER": {
+      addClass("text-center");
+      break;
+    }
+    case "RIGHT": {
+      addClass("text-right");
+      break;
+    }
+    case "JUSTIFIED": {
+      addClass("text-justify");
+      break;
+    }
+  }
+  const className = cls.join(" ");
+  return `<div ${CLASS_NAME}="${className}">${node.characters}</div>`;
+};
+var isSVG = (node) => {
+  var _a;
+  return node.type === "GROUP" && ((_a = node.children) == null ? void 0 : _a.every((node2) => node2.type === "VECTOR" || node2.type === "BOOLEAN_OPERATION"));
+};
+var generateCode = async (node, depth = 0) => {
+  if (node.visible === false)
+    return "";
+  let code = "";
+  if (node.exportSettings.length > 0 || node.type === "INSTANCE" && node.mainComponent.exportSettings.length > 0 || isSVG(node)) {
+    try {
+      const svgCodeArrayBuffer = await node.exportAsync({ format: "SVG", svgIdAttribute: false });
+      const svgCode = ab2str(svgCodeArrayBuffer);
+      code = node.type === "INSTANCE" ? wrapInstance(node, svgCode) : svgCode;
+    } catch (e) {
+    }
+  } else if (node.type === "GROUP")
+    code = await generateGroup(node, depth);
+  else if (node.type === "INSTANCE")
+    code = await generateInstance(node, depth);
+  else if (node.type === "COMPONENT" || node.type === "FRAME")
+    code = await generateFrame(node, depth);
+  else if (node.type === "RECTANGLE" || node.type === "ELLIPSE" || node.type === "LINE")
+    code = await generateShape(node);
+  else if (node.type === "TEXT")
+    code = await generateText(node);
+  else if (node.type === "COMPONENT_SET")
+    code = await generateComponentSet(node, depth);
+  return Array(depth).fill("  ").join("") + code + "\n";
+};
+var generate = async () => {
+  const selection = figma.currentPage.selection;
+  if (!selection.length)
+    return;
+  const node = selection[0];
+  console.log(node.type);
+  console.log(node);
+  console.warn("!!!!! layoutGrow, layoutAlign", node.layoutGrow, node.layoutAlign);
+  const record = {};
+  traverse(node, (node2) => {
+    var _a;
+    if (node2.type === "INSTANCE") {
+      const mainComponent = node2.mainComponent;
+      const mainComponentSet = ((_a = mainComponent.parent) == null ? void 0 : _a.type) === "COMPONENT_SET" ? mainComponent.parent : mainComponent;
+      record[node2.mainComponent.id] = mainComponentSet.name;
+    }
+  });
+  console.log(record);
+  const code = await generateCode(node, 0);
+  figma.showUI(__html__, {
+    width: Math.min(1440, (Math.floor(node.width) || 0) + 40 + 40 + 240),
+    height: Math.min(1024, (Math.floor(node.height) || 0) + 40 + 40)
+  });
+  const css = generateCss(parseAtoms(code)).join("\n");
+  figma.ui.postMessage({ code, css });
+};
+var traverse = (node, callback) => {
+  callback(node);
+  if (node.children && node.children.length) {
+    node.children.forEach((child) => traverse(child, callback));
+  }
+};
+generate();
+figma.on("selectionchange", generate);
+figma.on("currentpagechange", generate);

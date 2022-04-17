@@ -1,13 +1,19 @@
-## 0.8.7
-✨ w(10~50%~100)나, h(~100~100%) 등 value와 minmax를 한번에 쓸 수 있도록 기능을 추가하였습니다.
+## 0.9.6
+- 🐛 typescript에서 package type 에러가 나던 현상을 수정하였습니다.
+- ♻️ import {adorableCSS} from "adorable-css/vite" // <- import path를 하나로 통일했습니다.
 
-📝 (단, 해당 기능은 인지적 측면에서 직관적이지는 않으므로 Best Practice의 형태는 w(100%) w(32~300) 처럼 value와 minmax를 분리해서 쓰기를 권장합니다.)
+## 0.8.8
+- 🐛 chokidar 윈도우 버그 때문에 기능 삭제. vite plugin 타입 에러가 나는 부분을 수정하였습니다.
+
+## 0.8.7
+- ✨ w(10~50%~100)나, h(~100~100%) 등 value와 minmax를 한번에 쓸 수 있도록 기능을 추가하였습니다.
+- 📝 (단, 해당 기능은 인지적 측면에서 직관적이지는 않으므로 Best Practice의 형태는 w(100%) w(32~300) 처럼 value와 minmax를 분리해서 쓰기를 권장합니다.)
 
 ## 0.8.6
-✨ snap-x-proximity, snap-y-proximity, snap-both-proximity를 추가하였습니다.
+- ✨ snap-x-proximity, snap-y-proximity, snap-both-proximity를 추가하였습니다.
 
 ## 0.8.5
-✨ &:last-child>span 과 같이 & 기능이 추가 되었습니다.
+- ✨ &:last-child>span 과 같이 & 기능을 추가하였습니다.
 
 ```
 <div class="flex &:last-child>span:c(red)">

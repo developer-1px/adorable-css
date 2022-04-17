@@ -1,9 +1,11 @@
-import chokidar from "chokidar"
-import {promises as fs} from "fs"
+// import chokidar from "chokidar"
+// import {promises as fs} from "fs"
+
+import type {Plugin} from "vite"
 
 import micromatch from "micromatch"
-import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "./atomizer"
-import {reset} from "./rules"
+import {createGenerateCss, parseAtoms, PrefixRules, Rules} from "../core/atomizer"
+import {reset} from "../core/rules"
 
 interface Config {
   include:string[]
@@ -26,7 +28,7 @@ const CONFIG:Config = {
   prefixRules: {},
 }
 
-export const adorableCSS = (config?:Partial<Config>) => {
+export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
   config = {...CONFIG, ...config}
 
   let isHMR = false
@@ -101,31 +103,31 @@ export const adorableCSS = (config?:Partial<Config>) => {
     },
 
     buildStart: () => {
-      const {preLoads} = config
-
-      const watcher = chokidar.watch(preLoads, {
-        ignored: (path) => path.includes("node_modules")
-      })
-
-      watcher.on("change", async (path) => {
-        entry[path] = parseAtoms(await fs.readFile(path, "utf-8"))
-        debounceInvalidate()
-      })
-
-      watcher.on("ready", async () => {
-        const watchedPaths = watcher.getWatched()
-        // console.log("--- ready --")
-        // console.log("watchedPaths", watchedPaths)
-
-        await Promise.all(Object.entries(watchedPaths)
-          .map(([path, files]) => (files as string[])
-            .map(file => path + "/" + file)
-            .map(filepath => fs.readFile(filepath, "utf-8")
-              .then(data => entry[filepath] = parseAtoms(data))))
-          .flat(1))
-
-        debounceInvalidate()
-      })
+      // const {preLoads} = config
+      //
+      // const watcher = chokidar.watch(preLoads, {
+      //   ignored: (path) => path.includes("node_modules")
+      // })
+      //
+      // watcher.on("change", async (path) => {
+      //   entry[path] = parseAtoms(await fs.readFile(path, "utf-8"))
+      //   debounceInvalidate()
+      // })
+      //
+      // watcher.on("ready", async () => {
+      //   const watchedPaths = watcher.getWatched()
+      //   // console.log("--- ready --")
+      //   // console.log("watchedPaths", watchedPaths)
+      //
+      //   await Promise.all(Object.entries(watchedPaths)
+      //     .map(([path, files]) => (files as string[])
+      //       .map(file => path + "/" + file)
+      //       .map(filepath => fs.readFile(filepath, "utf-8")
+      //         .then(data => entry[filepath] = parseAtoms(data))))
+      //     .flat(1))
+      //
+      //   debounceInvalidate()
+      // })
     },
 
     resolveId: (id:string) => (id === ADORABLE_CSS || id === VIRTUAL_PATH) ? VIRTUAL_PATH : undefined,
@@ -166,6 +168,8 @@ export const adorableCSS = (config?:Partial<Config>) => {
       return undefined
     },
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     generateBundle(options, bundle:Record<string, { fileName:string, type:string, source:string }>) {
       const adorableCSS = makeStyle()
       for (const chunk of Object.values(bundle)) {
@@ -178,8 +182,7 @@ export const adorableCSS = (config?:Partial<Config>) => {
   }]
 }
 
-export * from "./makeValue"
-export * from "./rules"
-export {generateCss, createGenerateCss} from "./atomizer"
-export {parseAtoms} from "./atomizer"
-export {ALL_PROPERTIES} from "./const"
+export * from "../core/makeValue"
+export * from "../core/rules"
+export * from "../core/atomizer"
+export * from "../core/const"

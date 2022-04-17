@@ -1,5 +1,5 @@
 <script>
-import Changelog from "../../src[vite-plugin-adorable-css]/docs/CHANGELOG.md"
+import Changelog from "../../packages/vite/docs/CHANGELOG.md"
 </script>
 
 <div class="markdown p(20)">

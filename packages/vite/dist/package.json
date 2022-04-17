@@ -1,0 +1,27 @@
+{
+  "name": "adorable-css",
+  "version": "0.9.6",
+  "description": "Rapid On-Demand Atomic CSS generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developer-1px/adorable-css"
+  },
+  "homepage": "https://developer-1px.github.io/adorable-css/",
+  "keywords": [
+    "css",
+    "functional css",
+    "atomic css",
+    "utility first",
+    "ondemand",
+    "figma",
+    "handoff",
+    "vite"
+  ],
+  "author": "teo.yu",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsup ./src/vite/index.ts ./src/index.ts --watch --dts -d ./dist",
+    "build": "rm -rf ./dist && tsup ./src/vite/index.ts ./src/index.ts --dts -d ./dist --minify",
+    "deploy": "npm run build && cp package.json ./dist/package.json && cd dist && npm publish"
+  }
+}

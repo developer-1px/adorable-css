@@ -1,4 +1,4 @@
-import {generateCss, parseAtoms} from "../../src[vite-plugin-adorable-css]/src/atomizer"
+import {generateCss, parseAtoms} from "../../vite/src/atomizer"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
 type AddClass = (prop, value?) => number

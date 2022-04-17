@@ -1,6 +1,6 @@
 <script lang="ts">
-import {generateCss, parseAtoms} from "../../src[vite-plugin-adorable-css]/src/atomizer"
-import {reset} from "../../src[vite-plugin-adorable-css]/src/rules"
+import {generateCss, parseAtoms} from "../../packages/vite/src/core/atomizer"
+import {reset} from "../../packages/vite/src/core/rules"
 import MonacoEditor from "../screens/MonacoEditor.svelte"
 import {TURORIAL_0_Hello} from "../tutorials/0. Hello Adorable"
 import {TURORIAL_1_COLORS} from "../tutorials/1. Colors"

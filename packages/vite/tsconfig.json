@@ -6,4 +6,5 @@
     "allowSyntheticDefaultImports": true,
     "strict": false
   },
+  "externals": ["vite"]
 }
