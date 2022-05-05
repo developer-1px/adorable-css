@@ -11,14 +11,14 @@
 
 		<link rel="stylesheet" href="/adorable-css/_app/assets/start-61d1577b.css">
 		<link rel="stylesheet" href="/adorable-css/_app/assets/pages/__layout.svelte-8ae24613.css">
-		<link rel="modulepreload" href="/adorable-css/_app/start-095d5578.js">
+		<link rel="modulepreload" href="/adorable-css/_app/start-80a2e02f.js">
 		<link rel="modulepreload" href="/adorable-css/_app/chunks/vendor-e0ae2598.js">
 		<link rel="modulepreload" href="/adorable-css/_app/chunks/paths-28a87002.js">
 		<link rel="modulepreload" href="/adorable-css/_app/pages/__layout.svelte-b2b888c8.js">
-		<link rel="modulepreload" href="/adorable-css/_app/pages/docs.svelte-a252aa3f.js">
+		<link rel="modulepreload" href="/adorable-css/_app/pages/docs.svelte-392ce983.js">
 
 		<script type="module">
-			import { start } from "/adorable-css/_app/start-095d5578.js";
+			import { start } from "/adorable-css/_app/start-80a2e02f.js";
 			start({
 				target: document.querySelector("#svelte"),
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
@@ -31,7 +31,7 @@
 					error: null,
 					nodes: [
 						import("/adorable-css/_app/pages/__layout.svelte-b2b888c8.js"),
-						import("/adorable-css/_app/pages/docs.svelte-a252aa3f.js")
+						import("/adorable-css/_app/pages/docs.svelte-392ce983.js")
 					],
 					url: new URL("http://prerender/docs"),
 					params: {}
@@ -175,29 +175,29 @@ prefix:property(value)! or property(value)! or property!
 <code>line-clamp(3)</code></p>
 <h3>Scroll</h3>
 <p><code>scroll</code> <code>scroll-x</code> <code>scroll-y</code></p>
+<hr>
+<h2>Layout</h2>
+<h3>Flexbox</h3>
+<p><code>hbox</code> <code>vbox</code> <code>pack</code></p>
+<h3>hbox</h3>
+<p><code>hbox(top)</code> <code>hbox(top+center)</code> <code>hbox(top+right)</code></p>
+<p><code>hbox(left)</code> <code>pack</code> <code>hbox(right)</code></p>
+<p><code>hbox(bottom)</code> <code>hbox(bottom+center)</code> <code>hbox(bottom+right)</code></p>
+<p><code>hbox(fill)</code></p>
+<h3>vbox</h3>
+<p><code>vbox(top)</code> <code>vbox(top+center)</code> <code>vbox(top+right)</code></p>
+<p><code>vbox(left)</code> <code>vbox pack</code> <code>vbox(right)</code></p>
+<p><code>vbox(bottom+left)</code> <code>vbox(bottom+center)</code> <code>vbox(bottom+right)</code></p>
+<h3>Autolayout (direaction, gap, padding)</h3>
+<p><code>p(10)</code> <code>p(10/20)</code> <code>p(10/20/30)</code> <code>p(10/20/30/40)</code></p>
+<p><code>gap(10)</code> <code>gap(10/20)</code></p>
+<p><code>flex</code> <code>flex(1)</code> <code>flex(2)</code></p>
 <h3>Position</h3>
 <p><code>static</code> <code>relative</code> <code>absolute</code> <code>fixed</code></p>
 <p><code>sticky</code> <code>sticky-top</code> <code>sticky-right</code> <code>sticky-bottom</code> <code>sticky-left</code></p>
 <p><code>layer()</code> <code>layer(top)</code> <code>layer(top+right)</code></p>
 <p><code>top()</code> <code>right()</code> <code>bottom()</code> <code>left()</code> <code>x()</code> <code>y()</code></p>
 <p><code>z()</code></p>
-<hr>
-<h2>Layout</h2>
-<h3>Flexbox</h3>
-<p><code>hbox</code> <code>vbox</code> <code>pack</code></p>
-<p><code>hbox(top)</code> <code>hbox(top) pack</code> <code>hbox(top+right)</code></p>
-<p><code>hbox</code> <code>pack</code> <code>hbox(right)</code></p>
-<p><code>hbox(bottom)</code> <code>hbox(bottom) pack</code> <code>hbox(bottom+right)</code></p>
-<p><code>hbox(fill)</code></p>
-<br>
-<p><code>vbox(top)</code> <code>vbox(top) pack</code> <code>vbox(top+right)</code></p>
-<p><code>vbox(left)</code> <code>vbox pack</code> <code>vbox(right)</code></p>
-<p><code>vbox(bottom)</code> <code>vbox(bottom) pack</code> <code>vbox(bottom+right)</code></p>
-<br>
-<p><code>p(10)</code> <code>p(10/20)</code> <code>p(10/20/30)</code> <code>p(10/20/30/40)</code></p>
-<p><code>gap(10)</code> <code>gap(10/20)</code></p>
-<p><code>flex</code> <code>flex(1)</code> <code>flex(2)</code></p>
-<p><code>flex-shrink</code> <code>flex-shrink(0)</code></p>
 <h3>Visibility</h3>
 <p><code>none</code>
 <code>visible</code> <code>hidden</code>
