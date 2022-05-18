@@ -13,6 +13,7 @@ const PREFIX_RULES:PrefixRules = {
 }
 
 /// parseAtoms
+// @TODO: lex를 이용해서 validate와 parse를 같이 하는 방식으로 업데이트하자!
 export const parseAtoms = (code:string):string[] => {
   let lastIndex = 0
   const atoms = new Set<string>()
@@ -21,6 +22,8 @@ export const parseAtoms = (code:string):string[] => {
   code += " "
   code.replace(delimiter, (a, index, s) => {
     let token = s.slice(lastIndex, index)
+    if (code[index - 1] === "(") return a
+    if (code[index + 1] === ")") return a
 
     // @Note: svelte class:prop 지원
     if (token.startsWith("class:")) {

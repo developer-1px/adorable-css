@@ -301,13 +301,20 @@ export const RULES:Rules = {
     return `background-color:${makeColor(value)};`
   },
 
+  "bg-image": (value:string) => {
+    if (value.startsWith("url")) return `background-image:${value};`
+    return `background-image:url(${value});`
+  },
+  "background-image": (value:string) => RULES["bg-image"](value),
+
+  "bg-position": (value:string) => `background-position:${value};`,
+
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
   "bg-fixed": () => `background-attachment:fixed;`,
   "bg-scroll": () => `background-attachment:scroll;`,
-  "bg-position": (value:string) => `background-position:${value};`,
 
   "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
   "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,

@@ -182,6 +182,40 @@ prefix:property(value)! or property(value)! or property!
 
 ```scroll``` ```scroll-x``` ```scroll-y```
 
+---
+
+## Layout
+
+### Flexbox
+
+```hbox``` ```vbox``` ```pack```
+
+### hbox
+
+```hbox(top)``` ```hbox(top+center)``` ```hbox(top+right)```
+
+```hbox(left)``` ```pack``` ```hbox(right)```
+
+```hbox(bottom)``` ```hbox(bottom+center)``` ```hbox(bottom+right)```
+
+```hbox(fill)```
+
+### vbox
+
+```vbox(top)``` ```vbox(top+center)``` ```vbox(top+right)```
+
+```vbox(left)``` ```vbox pack``` ```vbox(right)```
+
+```vbox(bottom+left)``` ```vbox(bottom+center)``` ```vbox(bottom+right)```
+
+### Autolayout (direaction, gap, padding)
+
+```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
+
+```gap(10)``` ```gap(10/20)```
+
+```flex``` ```flex(1)``` ```flex(2)```
+
 ### Position
 
 ```static``` ```relative``` ```absolute``` ```fixed``` 
@@ -193,40 +227,6 @@ prefix:property(value)! or property(value)! or property!
 ```top()``` ```right()``` ```bottom()``` ```left()``` ```x()``` ```y()```
 
 ```z()```
-
----
-
-## Layout
-
-### Flexbox
-
-```hbox``` ```vbox``` ```pack```
-
-```hbox(top)``` ```hbox(top) pack``` ```hbox(top+right)```
-
-```hbox``` ```pack``` ```hbox(right)```
-
-```hbox(bottom)``` ```hbox(bottom) pack``` ```hbox(bottom+right)```
-
-```hbox(fill)```
-
-<br/>
-
-```vbox(top)``` ```vbox(top) pack``` ```vbox(top+right)```
-
-```vbox(left)``` ```vbox pack``` ```vbox(right)```
-
-```vbox(bottom)``` ```vbox(bottom) pack``` ```vbox(bottom+right)```
-
-<br/>
-
-```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
-
-```gap(10)``` ```gap(10/20)```
-
-```flex``` ```flex(1)``` ```flex(2)```
-
-```flex-shrink``` ```flex-shrink(0)```
 
 ### Visibility
 

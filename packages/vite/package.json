@@ -1,6 +1,6 @@
 {
   "name": "adorable-css",
-  "version": "0.9.6",
+  "version": "1.0.6",
   "description": "Rapid On-Demand Atomic CSS generator",
   "repository": {
     "type": "git",
@@ -20,8 +20,20 @@
   "author": "teo.yu",
   "license": "MIT",
   "scripts": {
-    "dev": "tsup ./src/vite/index.ts ./src/index.ts --watch --dts -d ./dist",
-    "build": "rm -rf ./dist && tsup ./src/vite/index.ts ./src/index.ts --dts -d ./dist --minify",
+    "dev": "npm run build -- --watch src",
+    "build": "rm -rf ./dist && tsup ./src/vite/index.ts ./src/index.ts --dts -d ./dist",
     "deploy": "npm run build && cp package.json ./dist/package.json && cd dist && npm publish"
+  },
+  "exports": {
+    ".": {
+      "require": "./index.js",
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./vite": {
+      "require": "./vite/index.js",
+      "import": "./vite/index.js",
+      "types": "./vite/index.d.ts"
+    }
   }
 }

@@ -1,6 +1,14 @@
+## 1.0.4
+- 🐛 after:content('|') 와 같이 따옴표가 포함된 값이 제대로 적용되지 않던 현상을 수정하였습니다.
+
+## 1.0.3
+- 🐛 background-image가 url을 함께 사용했을때 제대로 동작하지 않던 현상을 수정하였습니다.
+- ✨ background-image에서 url을 쓰지 않아도 동작하도록 수정하였습니다.
+- ✨ background-image를 bg-image로 축약해서 쓸 수 있도록 수정하였습니다.
+
 ## 0.9.6
 - 🐛 typescript에서 package type 에러가 나던 현상을 수정하였습니다.
-- ♻️ import {adorableCSS} from "adorable-css/vite" // <- import path를 하나로 통일했습니다.
+- ♻️ `import {adorableCSS} from "adorable-css/vite" // import path를 하나로 통일했습니다.`
 
 ## 0.8.8
 - 🐛 chokidar 윈도우 버그 때문에 기능 삭제. vite plugin 타입 에러가 나는 부분을 수정하였습니다.
