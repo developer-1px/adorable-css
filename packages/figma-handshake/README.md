@@ -13,7 +13,7 @@
 1. 모든 요소들은 Frame과 Text을 이용해서 구조적으로 작성을 합니다. Rectangle과 Circle을 이용해서 겹쳐서 그리지 않습니다.
 2. Circle의 경우 Frame의 border-radius를 이용해서 그립니다.
 3. 레이아웃은 가급적 Autolayout을 이용하여 작업합니다.
-4. 겹치는 Overlay를 표현해야하는 경우 Frame을 겹쳐둔뒤 선택해서 Frame Selection(option + cmd + G) 을 사용해줍니다. (Group Selection를 사용하지 않습니다. Group Selection를 사용할 경우 Constraints 기능을 쓸 수 가 없습니다.)
+4. 겹치는 Overlay를 표현해야하는 경우 Frame을 겹쳐둔뒤 선택해서 Frame Selection(Mac : cmd + option + G, Window : Ctrl + Alt + G) 을 사용해줍니다. (Group Selection를 사용하지 않습니다. Group Selection를 사용할 경우 Constraints 기능을 쓸 수 가 없습니다.)
 
 
 # Handoff figma plug-in for Designer & Markup
@@ -75,7 +75,7 @@ Design -> Code로 만드는 과정을 자동으로 할 경우 개발친화적인
 
 1) 플러그인을 실행하면 좌측에는 웹 프리뷰 / 우측에서는 개발용 코드가 나오는 방식입니다.
 
-2) 플러그인 새로고침 단축키는 cmd + option + p 입니다.
+2) 플러그인 새로고침 단축키는 Mac(cmd + option + P), Window(Ctrl + Alt + P) 입니다.
 (피그마 플러그인 특성상 수치를 바꾼다고 자동으로 업데이트가 되진 않는데 방법을 연구 중이긴 합니다.)
 
 
