@@ -26,14 +26,14 @@
   },
   "exports": {
     ".": {
-      "require": "./index.js",
-      "import": "./index.js",
-      "types": "./index.d.ts"
+      "require": "./dist/index.js",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./vite": {
-      "require": "./vite/index.js",
-      "import": "./vite/index.js",
-      "types": "./vite/index.d.ts"
+      "require": "./dist/vite/index.js",
+      "import": "./dist/vite/index.js",
+      "types": "./dist/vite/index.d.ts"
     }
   }
 }
