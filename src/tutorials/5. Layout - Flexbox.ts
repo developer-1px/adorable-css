@@ -47,7 +47,10 @@ hbox(fill+reverse+left)
 2
 pack / space-between
 pack은 모든 컨텐츠를 가운데로 배치합니다.
-버튼이나 모달 팝업 등등 여러곳에서 자주 사용합니다. 자식 컨텐츠는 여러개가 있을 경우 같이 가운데에 배치됩니다. (세로로 하고 싶다면 vbox)
+버튼이나 모달 팝업 등등 여러곳에서 자주 사용합니다. 자식 컨텐츠는 여러개가 있을 경우 같이 가운데에 배치됩니다.
+
+vpack / space-between
+vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로 배치합니다.
 
 3
 space-between space-around / space-evenly
@@ -150,6 +153,14 @@ vbox
   <h2>pack</h2>  
   <div class="hbox pack b(orange) p(10) h(100)">
     <div class="p(10) bg(orange) pack">pack</div>
+  </div>
+
+  <h2>vpack</h2>  
+  <div class="vpack b(orange) p(10) h(100)">
+    <div class="vpack p(10) bg(orange)">
+      <div>vpack</div>
+      <div>column</div>
+    </div>
   </div>
   
   <h2>space-beetween / space-around / space-evenly</h2>  
