@@ -133,6 +133,7 @@ export const RULES:Rules = {
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
   "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
+  "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
   "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
