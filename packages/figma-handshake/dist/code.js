@@ -865,6 +865,7 @@ var RULES = {
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
   "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
+  "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
