@@ -63,7 +63,7 @@ capitalize {text-transform:capitalize}
 -->
 
 
-<div class="bg(#fff) p(20) >h1:font(20) >h1:bb(#ccc) >h1:m(40/0/20)" style="--css-var: green">
+<div class="bg(#fff) p(20) >h1:font(20)+bb(#ccc)+m(40/0/20)" style="--css-var: green">
 
   <h1>Font</h1>
   

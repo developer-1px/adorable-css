@@ -15,27 +15,27 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "next",
-    "@sveltejs/adapter-static": "^1.0.0-next.24",
+    "@sveltejs/adapter-static": "^1.0.0-next.34",
     "@sveltejs/kit": "next",
     "@sveltejs/svelte-repl": "^0.4.1",
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.37",
-    "@typescript-eslint/eslint-plugin": "^5.12.1",
-    "@typescript-eslint/parser": "^5.12.1",
-    "eslint": "^8.9.0",
-    "eslint-plugin-svelte3": "^3.4.1",
-    "gh-pages": "^3.2.3",
-    "mdsvex": "^0.10.5",
-    "micromatch": "^4.0.4",
-    "monaco-editor": "^0.32.1",
-    "svelte": "^3.46.4",
-    "svelte-check": "^2.4.5",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.49",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "eslint": "^8.18.0",
+    "eslint-plugin-svelte3": "^4.0.0",
+    "gh-pages": "^4.0.0",
+    "mdsvex": "^0.10.6",
+    "micromatch": "^4.0.5",
+    "monaco-editor": "^0.33.0",
+    "svelte": "^3.48.0",
+    "svelte-check": "^2.8.0",
     "svelte-html-repl": "^1.0.2",
-    "svelte-preprocess": "^4.10.4",
-    "tslib": "^2.3.1",
-    "typescript": "^4.5.5"
+    "svelte-preprocess": "^4.10.7",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
   },
   "type": "module",
   "dependencies": {
-    "vite": "^2.8.4"
+    "vite": "^2.9.13"
   }
 }

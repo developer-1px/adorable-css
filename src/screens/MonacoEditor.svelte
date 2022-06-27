@@ -4,7 +4,6 @@ import githubTheme from "./github.theme.json"
 
 export let value = ""
 
-
 let element:HTMLDivElement = null
 let editor
 
