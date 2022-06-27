@@ -2639,9 +2639,9 @@ var require_micromatch = __commonJS({
           options.onResult(state);
         items.push(state.output);
       };
-      let matches = micromatch2(list, patterns, __spreadProps(__spreadValues({}, options), { onResult }));
+      let matches = new Set(micromatch2(list, patterns, __spreadProps(__spreadValues({}, options), { onResult })));
       for (let item of items) {
-        if (!matches.includes(item)) {
+        if (!matches.has(item)) {
           result.add(item);
         }
       }
@@ -3748,13 +3748,7 @@ var RULES = {
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
   "box-shadow": (value) => `box-shadow:${makeValues(value)}`,
-  "outline": (value) => {
-    if (value === "-")
-      return `outline:none;`;
-    if (value === "none" || value === "unset" || value === "inherit" || value === "initial")
-      return `outline:${value};`;
-    return `outline:1px solid ${makeColor(value)};`;
-  },
+  "outline": (value) => `outline:${makeBorder(value)};`,
   "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
   "bg": (value) => {
     if (value.startsWith("linear-gradient"))
@@ -3933,7 +3927,7 @@ var RULES = {
   "blur": (value) => `filter:blur(${px(value)})`,
   "brightness": (value) => `filter:brightness(${cssvar(value)})`,
   "contrast": (value) => `filter:contrast(${cssvar(value)})`,
-  "drop-shadow": (value) => `filter:drop-shadow(${cssvar(value)})`,
+  "drop-shadow": (value) => `filter:drop-shadow(${makeValues(value, px)})`,
   "grayscale": (value) => `filter:grayscale(${cssvar(value)})`,
   "hue-rotate": (value) => `filter:hue-rotate(${cssvar(value)})`,
   "invert": (value) => `filter:invert(${cssvar(value)})`,
@@ -3942,7 +3936,7 @@ var RULES = {
   "backdrop-blur": (value) => `backdrop-filter:blur(${px(value)})`,
   "backdrop-brightness": (value) => `backdrop-filter:brightness(${cssvar(value)})`,
   "backdrop-contrast": (value) => `backdrop-filter:contrast(${cssvar(value)})`,
-  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${cssvar(value)})`,
+  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${makeValues(value, px)})`,
   "backdrop-grayscale": (value) => `backdrop-filter:grayscale(${cssvar(value)})`,
   "backdrop-hue-rotate": (value) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
   "backdrop-invert": (value) => `backdrop-filter:invert(${cssvar(value)})`,
