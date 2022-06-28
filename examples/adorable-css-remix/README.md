@@ -7,4 +7,4 @@ From your terminal:
 ```sh
 npm run dev
 ```
-![caption](preview.webm)
+![preview](preview.gif)
