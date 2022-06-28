@@ -1,9 +1,11 @@
 /** @type {import("@sveltejs/kit").Config} */
 import adapter from "@sveltejs/adapter-static"
 import {mdsvex} from "mdsvex"
+import {resolve} from "path"
 import preprocess from "svelte-preprocess"
 import {adorableCSS} from "./packages/vite/dist/vite/index.js"
 
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
   extensions: [".svelte", ".svx", ".md"],
   preprocess: [
@@ -11,17 +13,21 @@ const config = {
     mdsvex({extensions: [".md"]})
   ],
   kit: {
+    adapter: adapter(),
     vite: {
-      plugins: [adorableCSS()],
       server: {
         fs: {
           // Allow serving files from one level up to the project root
           strict: false
         }
-      }
+      },
+      plugins: [adorableCSS()],
+      resolve: {
+        alias: {
+          "src": resolve("src"),
+        },
+      },
     },
-    adapter: adapter(),
-    target: "#svelte"
   }
 }
 
