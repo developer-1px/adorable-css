@@ -17,6 +17,8 @@
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
+    "@types/clean-css": "^4.2.5",
+    "@types/glob": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "eslint": "^8.18.0",
@@ -33,6 +35,10 @@
   },
   "type": "module",
   "dependencies": {
+    "cac": "^6.7.12",
+    "chokidar": "^3.5.3",
+    "clean-css": "^5.3.0",
+    "glob": "^8.0.3",
     "vite": "^2.9.13"
   }
 }
