@@ -32,7 +32,7 @@
     "svelte-preprocess": "^4.10.7",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
-    "adorable-css": "file:./packages/vite"
+    "adorable-css": "file:./packages/vite/dist"
   },
   "type": "module",
   "dependencies": {

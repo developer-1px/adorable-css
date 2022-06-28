@@ -3,7 +3,7 @@ import adapter from "@sveltejs/adapter-static"
 import {mdsvex} from "mdsvex"
 import {resolve} from "path"
 import preprocess from "svelte-preprocess"
-import {adorableCSS} from "adorable-css"
+import {adorableCSS} from "adorable-css/vite"
 
 /** @type {import("@sveltejs/kit").Config} */
 const config = {
