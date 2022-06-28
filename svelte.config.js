@@ -5,7 +5,7 @@ import {resolve} from "path"
 import preprocess from "svelte-preprocess"
 import {adorableCSS} from "./packages/vite/dist/vite/index.js"
 
-/** @type {import('@sveltejs/kit').Config} */
+/** @type {import("@sveltejs/kit").Config} */
 const config = {
   extensions: [".svelte", ".svx", ".md"],
   preprocess: [
@@ -14,6 +14,9 @@ const config = {
   ],
   kit: {
     adapter: adapter(),
+    prerender: {
+      default: true
+    },
     vite: {
       server: {
         fs: {

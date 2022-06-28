@@ -27,7 +27,7 @@ const useActive = (el) => {
     </div>
 
     <div class="hbox gap(20)">
-      <a class="pack" href="https://www.youtube.com/watch?v=O-eonCeumw8&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=2" target="_blank" aria-label="youtube">
+      <a class="pack" href="https://www.youtube.com/watch?v=RUJTkFR1jko&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=7" target="_blank" aria-label="youtube">
         <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
              width="32" height="32"
              viewBox="0 0 48 48"
