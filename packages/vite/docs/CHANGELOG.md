@@ -1,3 +1,7 @@
+## 1.1.2
+- ✨ adoarbleCSS cli 기능 업데이트 (PR 너무 너무 감사합니다!! ❤️)
+- https://github.com/dudlf/adorable-css-cli
+
 ## 1.1.0
 - 🐛 outline(1/red), drop-shadow(30px/10px/4px/#4444dd)가 제대로 동작하지 않던 버그 수정
 
