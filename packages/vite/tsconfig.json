@@ -6,5 +6,12 @@
     "allowSyntheticDefaultImports": true,
     "strict": false
   },
-  "externals": ["vite"]
+  "externals": ["vite"],
+  // ts-node로 cli.ts를 바로 실행할 수 있도록 하는 설정
+  "ts-node": {
+    "compilerOptions": {
+      "esModuleInterop": true,
+      "module": "commonjs"
+    }
+  }
 }

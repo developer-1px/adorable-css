@@ -71,6 +71,30 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 ```
 다른 CSS 프레임워크 없이 script만 넣어보세요. CSS-in-JS 방식을 통해 실시간으로 AdorableCSS의 스펙을 지원합니다.
 
+### CLI(beta): Build Time + Watch mode
+[Remix + adorable css example](./examples/adorable-css-remix/)
+
+```
+npm i -D adorable-css
+```
+
+```
+Usage:
+  $ adorable-css [root]
+
+Commands:
+  [root]  build for production
+
+For more info, run any command with the `--help` flag:
+  $ adorable-css --help
+
+Options:
+  -o, --out <dir>  [string] output Directory (default: adorable.css)
+  -w, --watch      [boolean] rebuilds when modules have changed on disk (default: false)
+  -m, --minify     [boolean] minify output css (default: false)
+  -v, --verbose    [boolean] verbose build output (default: false)
+  --no-reset       [boolean] exclude reset css from output (default: true)
+```
 
 ### Vite: HMR + Build Time
 
