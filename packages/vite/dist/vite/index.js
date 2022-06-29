@@ -1,30 +1,9 @@
 var __create = Object.create;
 var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -32,34 +11,21 @@ var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
-var __reExport = (target, module2, copyDefault, desc) => {
-  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
-    for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && (copyDefault || key !== "default"))
-        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
-  return target;
+  return to;
 };
-var __toESM = (module2, isNodeMode) => {
-  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
-};
-var __toCommonJS = /* @__PURE__ */ ((cache) => {
-  return (module2, temp) => {
-    return cache && cache.get(module2) || (temp = __reExport(__markAsModule({}), module2, 1), cache && cache.set(module2, temp), temp);
-  };
-})(typeof WeakMap !== "undefined" ? /* @__PURE__ */ new WeakMap() : 0);
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// ../../../../../../usr/local/lib/node_modules/tsup/assets/cjs_shims.js
-var init_cjs_shims = __esm({
-  "../../../../../../usr/local/lib/node_modules/tsup/assets/cjs_shims.js"() {
-  }
-});
-
-// ../../node_modules/braces/lib/utils.js
+// node_modules/braces/lib/utils.js
 var require_utils = __commonJS({
-  "../../node_modules/braces/lib/utils.js"(exports) {
+  "node_modules/braces/lib/utils.js"(exports) {
     "use strict";
-    init_cjs_shims();
     exports.isInteger = (num) => {
       if (typeof num === "number") {
         return Number.isInteger(num);
@@ -140,11 +106,10 @@ var require_utils = __commonJS({
   }
 });
 
-// ../../node_modules/braces/lib/stringify.js
+// node_modules/braces/lib/stringify.js
 var require_stringify = __commonJS({
-  "../../node_modules/braces/lib/stringify.js"(exports, module2) {
+  "node_modules/braces/lib/stringify.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var utils = require_utils();
     module2.exports = (ast, options = {}) => {
       let stringify = (node, parent = {}) => {
@@ -172,11 +137,10 @@ var require_stringify = __commonJS({
   }
 });
 
-// ../../node_modules/is-number/index.js
+// node_modules/is-number/index.js
 var require_is_number = __commonJS({
-  "../../node_modules/is-number/index.js"(exports, module2) {
+  "node_modules/is-number/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     module2.exports = function(num) {
       if (typeof num === "number") {
         return num - num === 0;
@@ -189,11 +153,10 @@ var require_is_number = __commonJS({
   }
 });
 
-// ../../node_modules/to-regex-range/index.js
+// node_modules/to-regex-range/index.js
 var require_to_regex_range = __commonJS({
-  "../../node_modules/to-regex-range/index.js"(exports, module2) {
+  "node_modules/to-regex-range/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var isNumber = require_is_number();
     var toRegexRange = (min, max, options) => {
       if (isNumber(min) === false) {
@@ -205,7 +168,7 @@ var require_to_regex_range = __commonJS({
       if (isNumber(max) === false) {
         throw new TypeError("toRegexRange: expected the second argument to be a number.");
       }
-      let opts = __spreadValues({ relaxZeros: true }, options);
+      let opts = { relaxZeros: true, ...options };
       if (typeof opts.strictZeros === "boolean") {
         opts.relaxZeros = opts.strictZeros === false;
       }
@@ -402,11 +365,10 @@ var require_to_regex_range = __commonJS({
   }
 });
 
-// ../../node_modules/fill-range/index.js
+// node_modules/fill-range/index.js
 var require_fill_range = __commonJS({
-  "../../node_modules/fill-range/index.js"(exports, module2) {
+  "node_modules/fill-range/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var util = require("util");
     var toRegexRange = require_to_regex_range();
     var isObject = (val) => val !== null && typeof val === "object" && !Array.isArray(val);
@@ -481,7 +443,7 @@ var require_fill_range = __commonJS({
     };
     var toRange = (a, b, isNumbers, options) => {
       if (isNumbers) {
-        return toRegexRange(a, b, __spreadValues({ wrap: false }, options));
+        return toRegexRange(a, b, { wrap: false, ...options });
       }
       let start = String.fromCharCode(a);
       if (a === b)
@@ -549,7 +511,7 @@ var require_fill_range = __commonJS({
         index2++;
       }
       if (options.toRegex === true) {
-        return step > 1 ? toSequence(parts, options) : toRegex(range, null, __spreadValues({ wrap: false }, options));
+        return step > 1 ? toSequence(parts, options) : toRegex(range, null, { wrap: false, ...options });
       }
       return range;
     };
@@ -591,7 +553,7 @@ var require_fill_range = __commonJS({
       if (isObject(step)) {
         return fill(start, end, 0, step);
       }
-      let opts = __spreadValues({}, options);
+      let opts = { ...options };
       if (opts.capture === true)
         opts.wrap = true;
       step = step || opts.step || 1;
@@ -609,11 +571,10 @@ var require_fill_range = __commonJS({
   }
 });
 
-// ../../node_modules/braces/lib/compile.js
+// node_modules/braces/lib/compile.js
 var require_compile = __commonJS({
-  "../../node_modules/braces/lib/compile.js"(exports, module2) {
+  "node_modules/braces/lib/compile.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var fill = require_fill_range();
     var utils = require_utils();
     var compile = (ast, options = {}) => {
@@ -643,7 +604,7 @@ var require_compile = __commonJS({
         }
         if (node.nodes && node.ranges > 0) {
           let args = utils.reduce(node.nodes);
-          let range = fill(...args, __spreadProps(__spreadValues({}, options), { wrap: false, toRegex: true }));
+          let range = fill(...args, { ...options, wrap: false, toRegex: true });
           if (range.length !== 0) {
             return args.length > 1 && range.length > 1 ? `(${range})` : range;
           }
@@ -661,11 +622,10 @@ var require_compile = __commonJS({
   }
 });
 
-// ../../node_modules/braces/lib/expand.js
+// node_modules/braces/lib/expand.js
 var require_expand = __commonJS({
-  "../../node_modules/braces/lib/expand.js"(exports, module2) {
+  "node_modules/braces/lib/expand.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var fill = require_fill_range();
     var stringify = require_stringify();
     var utils = require_utils();
@@ -759,11 +719,10 @@ var require_expand = __commonJS({
   }
 });
 
-// ../../node_modules/braces/lib/constants.js
+// node_modules/braces/lib/constants.js
 var require_constants = __commonJS({
-  "../../node_modules/braces/lib/constants.js"(exports, module2) {
+  "node_modules/braces/lib/constants.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     module2.exports = {
       MAX_LENGTH: 1024 * 64,
       CHAR_0: "0",
@@ -814,11 +773,10 @@ var require_constants = __commonJS({
   }
 });
 
-// ../../node_modules/braces/lib/parse.js
+// node_modules/braces/lib/parse.js
 var require_parse = __commonJS({
-  "../../node_modules/braces/lib/parse.js"(exports, module2) {
+  "node_modules/braces/lib/parse.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var stringify = require_stringify();
     var {
       MAX_LENGTH,
@@ -1047,11 +1005,10 @@ var require_parse = __commonJS({
   }
 });
 
-// ../../node_modules/braces/index.js
+// node_modules/braces/index.js
 var require_braces = __commonJS({
-  "../../node_modules/braces/index.js"(exports, module2) {
+  "node_modules/braces/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var stringify = require_stringify();
     var compile = require_compile();
     var expand = require_expand();
@@ -1111,11 +1068,10 @@ var require_braces = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/lib/constants.js
+// node_modules/picomatch/lib/constants.js
 var require_constants2 = __commonJS({
-  "../../node_modules/picomatch/lib/constants.js"(exports, module2) {
+  "node_modules/picomatch/lib/constants.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var path = require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
@@ -1151,7 +1107,8 @@ var require_constants2 = __commonJS({
       STAR,
       START_ANCHOR
     };
-    var WINDOWS_CHARS = __spreadProps(__spreadValues({}, POSIX_CHARS), {
+    var WINDOWS_CHARS = {
+      ...POSIX_CHARS,
       SLASH_LITERAL: `[${WIN_SLASH}]`,
       QMARK: WIN_NO_SLASH,
       STAR: `${WIN_NO_SLASH}*?`,
@@ -1163,7 +1120,7 @@ var require_constants2 = __commonJS({
       QMARK_NO_DOT: `[^.${WIN_SLASH}]`,
       START_ANCHOR: `(?:^|[${WIN_SLASH}])`,
       END_ANCHOR: `(?:[${WIN_SLASH}]|$)`
-    });
+    };
     var POSIX_REGEX_SOURCE = {
       alnum: "a-zA-Z0-9",
       alpha: "a-zA-Z",
@@ -1254,11 +1211,10 @@ var require_constants2 = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/lib/utils.js
+// node_modules/picomatch/lib/utils.js
 var require_utils2 = __commonJS({
-  "../../node_modules/picomatch/lib/utils.js"(exports) {
+  "node_modules/picomatch/lib/utils.js"(exports) {
     "use strict";
-    init_cjs_shims();
     var path = require("path");
     var win32 = process.platform === "win32";
     var {
@@ -1318,11 +1274,10 @@ var require_utils2 = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/lib/scan.js
+// node_modules/picomatch/lib/scan.js
 var require_scan = __commonJS({
-  "../../node_modules/picomatch/lib/scan.js"(exports, module2) {
+  "node_modules/picomatch/lib/scan.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var utils = require_utils2();
     var {
       CHAR_ASTERISK,
@@ -1637,11 +1592,10 @@ var require_scan = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/lib/parse.js
+// node_modules/picomatch/lib/parse.js
 var require_parse2 = __commonJS({
-  "../../node_modules/picomatch/lib/parse.js"(exports, module2) {
+  "node_modules/picomatch/lib/parse.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var constants = require_constants2();
     var utils = require_utils2();
     var {
@@ -1672,7 +1626,7 @@ var require_parse2 = __commonJS({
         throw new TypeError("Expected a string");
       }
       input = REPLACEMENTS[input] || input;
-      const opts = __spreadValues({}, options);
+      const opts = { ...options };
       const max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
       let len = input.length;
       if (len > max) {
@@ -1795,7 +1749,7 @@ var require_parse2 = __commonJS({
         prev = tok;
       };
       const extglobOpen = (type, value2) => {
-        const token2 = __spreadProps(__spreadValues({}, EXTGLOB_CHARS[value2]), { conditions: 1, inner: "" });
+        const token2 = { ...EXTGLOB_CHARS[value2], conditions: 1, inner: "" };
         token2.prev = prev;
         token2.parens = state.parens;
         token2.output = state.output;
@@ -1817,7 +1771,7 @@ var require_parse2 = __commonJS({
             output = token2.close = `)$))${extglobStar}`;
           }
           if (token2.inner.includes("*") && (rest = remaining()) && /^\.[^\\/.]+$/.test(rest)) {
-            const expression = parse(rest, __spreadProps(__spreadValues({}, options), { fastpaths: false })).output;
+            const expression = parse(rest, { ...options, fastpaths: false }).output;
             output = token2.close = `)${expression})${extglobStar})`;
           }
           if (token2.prev.type === "bos") {
@@ -2347,7 +2301,7 @@ var require_parse2 = __commonJS({
       return state;
     };
     parse.fastpaths = (input, options) => {
-      const opts = __spreadValues({}, options);
+      const opts = { ...options };
       const max = typeof opts.maxLength === "number" ? Math.min(MAX_LENGTH, opts.maxLength) : MAX_LENGTH;
       const len = input.length;
       if (len > max) {
@@ -2419,11 +2373,10 @@ var require_parse2 = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/lib/picomatch.js
+// node_modules/picomatch/lib/picomatch.js
 var require_picomatch = __commonJS({
-  "../../node_modules/picomatch/lib/picomatch.js"(exports, module2) {
+  "node_modules/picomatch/lib/picomatch.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var path = require("path");
     var scan = require_scan();
     var parse = require_parse2();
@@ -2454,7 +2407,7 @@ var require_picomatch = __commonJS({
       delete regex2.state;
       let isIgnored = () => false;
       if (opts.ignore) {
-        const ignoreOpts = __spreadProps(__spreadValues({}, options), { ignore: null, onMatch: null, onResult: null });
+        const ignoreOpts = { ...options, ignore: null, onMatch: null, onResult: null };
         isIgnored = picomatch(opts.ignore, ignoreOpts, returnState);
       }
       const matcher = (input, returnObject = false) => {
@@ -2516,7 +2469,7 @@ var require_picomatch = __commonJS({
     picomatch.parse = (pattern, options) => {
       if (Array.isArray(pattern))
         return pattern.map((p) => picomatch.parse(p, options));
-      return parse(pattern, __spreadProps(__spreadValues({}, options), { fastpaths: false }));
+      return parse(pattern, { ...options, fastpaths: false });
     };
     picomatch.scan = (input, options) => scan(input, options);
     picomatch.compileRe = (state, options, returnOutput = false, returnState = false) => {
@@ -2564,20 +2517,18 @@ var require_picomatch = __commonJS({
   }
 });
 
-// ../../node_modules/picomatch/index.js
+// node_modules/picomatch/index.js
 var require_picomatch2 = __commonJS({
-  "../../node_modules/picomatch/index.js"(exports, module2) {
+  "node_modules/picomatch/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     module2.exports = require_picomatch();
   }
 });
 
-// ../../node_modules/micromatch/index.js
+// node_modules/micromatch/index.js
 var require_micromatch = __commonJS({
-  "../../node_modules/micromatch/index.js"(exports, module2) {
+  "node_modules/micromatch/index.js"(exports, module2) {
     "use strict";
-    init_cjs_shims();
     var util = require("util");
     var braces = require_braces();
     var picomatch = require_picomatch2();
@@ -2597,7 +2548,7 @@ var require_micromatch = __commonJS({
         }
       };
       for (let i = 0; i < patterns.length; i++) {
-        let isMatch = picomatch(String(patterns[i]), __spreadProps(__spreadValues({}, options), { onResult }), true);
+        let isMatch = picomatch(String(patterns[i]), { ...options, onResult }, true);
         let negated = isMatch.state.negated || isMatch.state.negatedExtglob;
         if (negated)
           negatives++;
@@ -2639,7 +2590,7 @@ var require_micromatch = __commonJS({
           options.onResult(state);
         items.push(state.output);
       };
-      let matches = new Set(micromatch2(list, patterns, __spreadProps(__spreadValues({}, options), { onResult })));
+      let matches = new Set(micromatch2(list, patterns, { ...options, onResult }));
       for (let item of items) {
         if (!matches.has(item)) {
           result.add(item);
@@ -2662,7 +2613,7 @@ var require_micromatch = __commonJS({
           return true;
         }
       }
-      return micromatch2.isMatch(str, pattern, __spreadProps(__spreadValues({}, options), { contains: true }));
+      return micromatch2.isMatch(str, pattern, { ...options, contains: true });
     };
     micromatch2.matchKeys = (obj, patterns, options) => {
       if (!utils.isObject(obj)) {
@@ -2702,7 +2653,7 @@ var require_micromatch = __commonJS({
     };
     micromatch2.capture = (glob, input, options) => {
       let posix = utils.isWindows(options);
-      let regex2 = picomatch.makeRe(String(glob), __spreadProps(__spreadValues({}, options), { capture: true }));
+      let regex2 = picomatch.makeRe(String(glob), { ...options, capture: true });
       let match = regex2.exec(posix ? utils.toPosixSlashes(input) : input);
       if (match) {
         return match.slice(1).map((v) => v === void 0 ? "" : v);
@@ -2730,7 +2681,7 @@ var require_micromatch = __commonJS({
     micromatch2.braceExpand = (pattern, options) => {
       if (typeof pattern !== "string")
         throw new TypeError("Expected a string");
-      return micromatch2.braces(pattern, __spreadProps(__spreadValues({}, options), { expand: true }));
+      return micromatch2.braces(pattern, { ...options, expand: true });
     };
     module2.exports = micromatch2;
   }
@@ -2770,17 +2721,12 @@ __export(vite_exports, {
   px: () => px,
   reset: () => reset
 });
-init_cjs_shims();
+module.exports = __toCommonJS(vite_exports);
 
 // src/vite/vite-plugin-adorable-css.ts
-init_cjs_shims();
 var import_micromatch = __toESM(require_micromatch());
 
-// src/core/atomizer.ts
-init_cjs_shims();
-
 // src/core/const.ts
-init_cjs_shims();
 var ALL_PROPERTIES = {
   "--*": 1,
   "-ms-accelerator": 1,
@@ -3298,7 +3244,6 @@ var ALL_PROPERTIES = {
 };
 
 // src/core/cssEscape.ts
-init_cjs_shims();
 var cssEscape = (string) => {
   const length = string.length;
   const firstCodeUnit = string.charCodeAt(0);
@@ -3329,7 +3274,6 @@ var cssEscape = (string) => {
 };
 
 // src/core/makeValue.ts
-init_cjs_shims();
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
 var cssString = (value) => String(value).startsWith("--") ? `var(${value})` : `"${value}"`;
@@ -3528,7 +3472,6 @@ var makeTransition = (value) => {
 };
 
 // src/core/rules.ts
-init_cjs_shims();
 var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
@@ -4052,7 +3995,10 @@ var PREFIX_SELECTOR = {
 };
 
 // src/core/atomizer.ts
-var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
+var PREFIX_RULES = {
+  ...PREFIX_PSEUDO_CLASS,
+  ...PREFIX_MEDIA_QUERY
+};
 var parseAtoms = (code) => {
   let lastIndex = 0;
   const atoms = /* @__PURE__ */ new Set();
@@ -4067,11 +4013,13 @@ var parseAtoms = (code) => {
     if (token2.startsWith("class:")) {
       token2 = token2.slice("class:".length).split("=")[0];
     }
-    atoms.add(token2);
+    if (token2) {
+      atoms.add(token2);
+    }
     lastIndex = index2 + a.length;
     return a;
   });
-  return [...atoms].filter(Boolean);
+  return [...atoms];
 };
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
@@ -4206,8 +4154,8 @@ var generateAtomicCss = (rules, prefixRules) => {
 };
 var sortByRule = (a, b) => a[1] - b[1];
 var createGenerateCss = (rules = {}, prefixRules = {}) => {
-  rules = __spreadValues(__spreadValues({}, RULES), rules);
-  prefixRules = __spreadValues(__spreadValues({}, PREFIX_RULES), prefixRules);
+  rules = { ...RULES, ...rules };
+  prefixRules = { ...PREFIX_RULES, ...prefixRules };
   return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();
@@ -4225,19 +4173,18 @@ var CONFIG = {
   prefixRules: {}
 };
 var adorableCSS = (config) => {
-  config = __spreadValues(__spreadValues({}, CONFIG), config);
+  config = { ...CONFIG, ...config };
   let isHMR = false;
   let timestamp = Date.now();
   let configRoot = "";
   const servers = [];
-  const entry = Object.create(null);
+  const entry = /* @__PURE__ */ Object.create(null);
   const generateCss2 = createGenerateCss(config.rules, config.prefixRules);
   const checkTargetFile = (id) => {
-    var _a;
     if (id.startsWith(configRoot)) {
       id = id.slice(configRoot.length);
     }
-    return ((_a = config.include) != null ? _a : []).some((glob) => import_micromatch.default.isMatch(id, glob));
+    return (config.include ?? []).some((glob) => import_micromatch.default.isMatch(id, glob));
   };
   const makeStyle = () => {
     const allAtoms = Object.values(entry).flat();
@@ -4331,7 +4278,6 @@ var adorableCSS = (config) => {
     }
   }];
 };
-module.exports = __toCommonJS(vite_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ALL_PROPERTIES,

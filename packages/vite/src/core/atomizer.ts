@@ -22,20 +22,25 @@ export const parseAtoms = (code:string):string[] => {
   code += " "
   code.replace(delimiter, (a, index, s) => {
     let token = s.slice(lastIndex, index)
+
+    // @NOTE: content('aa') 용도
     if (code[index - 1] === "(") return a
     if (code[index + 1] === ")") return a
 
-    // @Note: svelte class:prop 지원
+    // @NOTE: svelte class:prop 지원
     if (token.startsWith("class:")) {
       token = token.slice("class:".length).split("=")[0]
     }
 
-    atoms.add(token)
+    if (token) {
+      atoms.add(token)
+    }
+
     lastIndex = index + a.length
     return a
   })
 
-  return [...atoms].filter(Boolean)
+  return [...atoms]
 }
 
 /// Tokenizer

@@ -28,6 +28,7 @@ const config = {
       resolve: {
         alias: {
           "src": resolve("src"),
+          "packages": resolve("packages"),
         },
       },
     },
