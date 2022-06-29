@@ -11,16 +11,18 @@ cli
   .option('-o, --out <dir>', '[string] output Directory', {
     default: 'adorable.css',
   })
-  .option('-w, --watch', '[boolean] rebuilds when modules have changed on disk', {
+  .option('-w, --watch', 'rebuilds when modules have changed on disk', {
     default: false,
   })
-  .option('-m, --minify', '[boolean] minify output css', {
+  .option('-m, --minify', 'minify output css', {
     default: false,
   })
-  .option('-v, --verbose', '[boolean] verbose build output', {
+  .option('-v, --verbose', 'verbose build output', {
     default: false,
   })
-  .option('--no-reset', '[boolean] exclude reset css from output') // 접미사 no-가 붙은 옵션은 기본값 true 자돌 설정
+  // --no-reset 옵션이 --reset 옵션을 무시하는 역할이지, flag 역할이 아니었음...
+  // 의도대로 동작하긴 하는데, --help 설정에서 default 값 표현이 반대로 되버림
+  .option('--no-reset', 'exclude reset css from output')
   .action(build)
 
 cli.help()
