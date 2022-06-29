@@ -27,7 +27,7 @@
     "build": "rm -rf ./dist && npm run build:vite && npm run build:cli",
     "build:vite": "tsup ./src/vite/index.ts ./src/index.ts --dts -d ./dist",
     "build:cli": "tsup ./src/node/cli.ts --dts -d ./dist/node",
-    "deploy": "npm run build && cp package.json ./dist/package.json && cd dist && npm publish"
+    "deploy": "npm run build && cp package.json ./dist/package.json && cp -r bin dist && cd dist && npm publish"
   },
   "exports": {
     ".": {
