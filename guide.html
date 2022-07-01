@@ -7,12 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
-	<link rel="stylesheet" href="/adorable-css/_app/immutable/assets/pages/__layout.svelte-c7928644.css">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/start-2cbc2cb0.js">
+	<link rel="stylesheet" href="/adorable-css/_app/immutable/assets/pages/__layout.svelte-28bffa62.css">
+	<link rel="modulepreload" href="/adorable-css/_app/immutable/start-942b6ee2.js">
 	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-92455e0d.js">
 	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/paths-396f020f.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/pages/__layout.svelte-2d901cb4.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/pages/guide.svelte-377b3d02.js">
+	<link rel="modulepreload" href="/adorable-css/_app/immutable/pages/__layout.svelte-8feab574.js">
+	<link rel="modulepreload" href="/adorable-css/_app/immutable/pages/guide.svelte-25abbe07.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -49,6 +49,17 @@
   <div class="markdown p(20)"><h1>AdorableCSS</h1>
 <blockquote><p>⚡️ Rapid On-Demand Atomic CSS framework</p></blockquote>
 <h2>Getting Started</h2>
+<h3>CDN</h3>
+<ul><li>⛱ vite, webpack, postcss등 다른 복잡한 설정 없이 그냥 script 한줄만 추가하면 adorableCSS를 사용할 수 있습니다.</li>
+<li>⚡️ adorableCSS를 간편하게 쓰는 방법! body 맨 아래 <code>&lt;script src=&quot;https://unpkg.com/adorable-css&quot;&gt;&lt;/script&gt;</code>만 추가해보세요.</li>
+<li>런타임 방식으로 css in js 방식을 통해서 동적으로 style을 생성하여 적용해줍니다.</li>
+<li>(지금 개발자 도구를 열어서 아무 엘리먼트나 class=“bg(red)” 를 한번 추가해보세요.)</li></ul>
+<pre class="language-html"><!-- HTML_TAG_START --><code class="language-html">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>https://unpkg.com/adorable-css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code><!-- HTML_TAG_END --></pre>
+<h3>Vite(Recommanded)</h3>
+<ul><li>run-time이 아니라 Build-time에서 최종 css를 만들어냅니다. (zero run-time)</li>
+<li>최종적으로 만들어진 css를 통해서 런타임 비용을 더 줄일 수 있고 css의 캐싱 기능을 더 활용할 수 있습니다.</li></ul>
 <pre class="language-sh"><!-- HTML_TAG_START --><code class="language-sh">npm i -D adorable-css</code><!-- HTML_TAG_END --></pre>
 <pre class="language-ts"><!-- HTML_TAG_START --><code class="language-ts"><span class="token comment">// vite.config.js</span>
 <span class="token keyword">import</span> <span class="token punctuation">&#123;</span>adorableCSS<span class="token punctuation">&#125;</span> <span class="token keyword">from</span> <span class="token string">"adorable-css/vite"</span> <span class="token comment">// &lt;-</span>
@@ -75,10 +86,10 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
 <div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 0.1.3</div>
 
 
-		<script type="module" data-sveltekit-hydrate="shyktu">
-		import { start } from "/adorable-css/_app/immutable/start-2cbc2cb0.js";
+		<script type="module" data-sveltekit-hydrate="1cj3y3i">
+		import { start } from "/adorable-css/_app/immutable/start-942b6ee2.js";
 		start({
-			target: document.querySelector('[data-sveltekit-hydrate="shyktu"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="1cj3y3i"]').parentNode,
 			paths: {"base":"/adorable-css","assets":"/adorable-css"},
 			session: {},
 			route: true,
@@ -93,5 +104,6 @@ ReactDOM<span class="token punctuation">.</span><span class="token function">ren
 			}
 		});
 	</script></div>
+<script src="https://unpkg.com/adorable-css"></script>
 </body>
 </html>
