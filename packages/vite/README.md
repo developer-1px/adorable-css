@@ -1,15 +1,9 @@
-# 공지
-- import path를 변경하였습니다.
-```ts
-// import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // 더이상 지원하지 않음. 
-import {adorableCSS} from "adorable-css/vite"
-```
-
-![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
-
 # AdorableCSS
 > Rapid On-Demand Atomic CSS framework
 > AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
+
+![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
+
 
 ## Try It Online
 - Try it online [here](https://developer-1px.github.io/adorable-css/).
@@ -58,30 +52,42 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 
 ## Getting Started
 
-### [Recommanded] Vite: HMR + Build Time
+### CDN
+- ⛱ vite, webpack, postcss등 다른 복잡한 설정 없이 그냥 script 한줄만 추가하면 adorableCSS를 사용할 수 있습니다.
+- ⚡️ adorableCSS를 간편하게 쓰는 방법! body 맨 아래 `<script src="https://unpkg.com/adorable-css"></script>`만 추가해보세요.
+- 런타임 방식으로 css in js 방식을 통해서 동적으로 style을 생성하여 적용해줍니다.
+- (지금 개발자 도구를 열어서 아무 엘리먼트나 class="bg(red)" 를 한번 추가해보세요.)
 
-https://www.youtube.com/watch?v=55W1rlJ4ukc&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL
-
+```html
+  <script src="https://unpkg.com/adorable-css"></script>
+</body>
+</html>
 ```
+
+
+### Vite(Recommanded)
+- run-time이 아니라 Build-time에서 최종 css를 만들어냅니다. (zero run-time)
+- 최종적으로 만들어진 css를 통해서 런타임 비용을 더 줄일 수 있고 css의 캐싱 기능을 더 활용할 수 있습니다.
+
+```sh
 npm i -D adorable-css
 ```
 
 ```ts
 // vite.config.js
-...
-import {adorableCSS} from "adorable-css/vite-plugin-adorable-css" // <-
+import {adorableCSS} from "adorable-css/vite" // <-
 
 export default defineConfig({
-  plugins: [adorableCSS(), ...] // <-
+  plugins: [adorableCSS(), ...] // <- plugin을 맨 처음에 등록합니다.
 })
 ```
 
 ```tsx
 // main.tsx
+import "@adorable.css" // <- virtual css를 import 합니다.
 
 import React from "react"
 import ReactDOM from "react-dom"
-import "@adorable.css" // <-
 import "./index.css"
 import {App} from "./App"
 
@@ -92,21 +98,8 @@ ReactDOM.render(
   document.getElementById("root")
 )
 ```
-> @NOTE: React뿐만 아니라 Svelte, Vue를 포함해 vite기반의 모든 프레임워크를 지원합니다.
 
-
-### CDN(beta): Just-in-time + css-in-js
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-  ...
-  <script src="https://unpkg.com/adorable-css"></script>
-</head>
-</html>
-```
-다른 CSS 프레임워크 없이 script만 넣어보세요. CSS-in-JS 방식을 통해 실시간으로 AdorableCSS의 스펙을 지원합니다.
+#### React, Svelte, Vue ... Almost Web framework support with Vite.
 
 
 ### CLI(beta): Build Time + Watch mode
