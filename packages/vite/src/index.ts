@@ -12,13 +12,15 @@ if (typeof document !== "undefined") {
   const registerObserver = () => {
     if (!document.body) return
     const observer = new MutationObserver(() => init())
-    observer.observe(document.body, {attributes: true, childList: true, subtree: true, attributeOldValue: true, attributeFilter: ["class"]})
+    observer.observe(document.body, {attributes: true, childList: true, subtree: true, attributeFilter: ["class"]})
   }
 
   const init = () => {
-    classList.clear()
+    const prevLength = classList.size
     Array.from(document.querySelectorAll("*[class]")).forEach(el => Array.from(el.classList).forEach(value => classList.add(value)))
-    generateStyleSheet()
+    if (prevLength !== classList.size) {
+      generateStyleSheet()
+    }
   }
 
   const bootstrap = () => {

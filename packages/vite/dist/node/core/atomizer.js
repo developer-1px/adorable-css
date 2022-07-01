@@ -1,3 +1,30 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/core/atomizer.ts
+var atomizer_exports = {};
+__export(atomizer_exports, {
+  createGenerateCss: () => createGenerateCss,
+  generateCss: () => generateCss,
+  parseAtoms: () => parseAtoms
+});
+module.exports = __toCommonJS(atomizer_exports);
+
 // src/core/const.ts
 var ALL_PROPERTIES = {
   "--*": 1,
@@ -743,16 +770,6 @@ var makeTransition = (value) => {
 };
 
 // src/core/rules.ts
-var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
-html,body{height:100%;}
-img,picture,video,canvas{display:block;max-width:100%;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-`;
 var RULES = {
   "c": (value) => `color:${makeColor(value)};`,
   "color": (value) => RULES.c(value),
@@ -1270,6 +1287,28 @@ var PREFIX_RULES = {
   ...PREFIX_PSEUDO_CLASS,
   ...PREFIX_MEDIA_QUERY
 };
+var parseAtoms = (code) => {
+  let lastIndex = 0;
+  const atoms = /* @__PURE__ */ new Set();
+  const delimiter = /["'`]|\s+/g;
+  code += " ";
+  code.replace(delimiter, (a, index2, s) => {
+    let token2 = s.slice(lastIndex, index2);
+    if (code[index2 - 1] === "(")
+      return a;
+    if (code[index2 + 1] === ")")
+      return a;
+    if (token2.startsWith("class:")) {
+      token2 = token2.slice("class:".length).split("=")[0];
+    }
+    if (token2) {
+      atoms.add(token2);
+    }
+    lastIndex = index2 + a.length;
+    return a;
+  });
+  return [...atoms];
+};
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
   ["(important)", /(!+$|!+\+)/],
@@ -1408,32 +1447,9 @@ var createGenerateCss = (rules = {}, prefixRules = {}) => {
   return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();
-
-// src/index.ts
-if (typeof document !== "undefined") {
-  const styleSheet = document.createElement("style");
-  styleSheet.innerHTML = "body {display:none!important}";
-  document.documentElement.querySelector("head").appendChild(styleSheet);
-  const classList = /* @__PURE__ */ new Set();
-  const generateStyleSheet = () => styleSheet.innerHTML = reset + generateCss([...classList]).join("\n");
-  const registerObserver = () => {
-    if (!document.body)
-      return;
-    const observer = new MutationObserver(() => init());
-    observer.observe(document.body, { attributes: true, childList: true, subtree: true, attributeFilter: ["class"] });
-  };
-  const init = () => {
-    const prevLength = classList.size;
-    Array.from(document.querySelectorAll("*[class]")).forEach((el) => Array.from(el.classList).forEach((value) => classList.add(value)));
-    if (prevLength !== classList.size) {
-      generateStyleSheet();
-    }
-  };
-  const bootstrap = () => {
-    init();
-    registerObserver();
-    document.removeEventListener("readystatechange", bootstrap);
-  };
-  bootstrap();
-  document.addEventListener("readystatechange", bootstrap);
-}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  createGenerateCss,
+  generateCss,
+  parseAtoms
+});

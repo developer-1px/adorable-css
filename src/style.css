@@ -10,7 +10,7 @@
   max-width:100%;
   margin:auto;
   line-height:1.6;
-  font-size:18px;
+  font-size:16px;
   letter-spacing:-0.01em;
   word-wrap:break-all;
   color:#333;
@@ -44,7 +44,7 @@
 .markdown h4 {
   font-size:2.4em;
   font-weight:bold;
-  margin-top:1em;
+  margin-top:1.4em;
 }
 
 .markdown h2 {
@@ -53,7 +53,7 @@
 }
 
 .markdown h3 {
-  font-size:1.6em;
+  font-size:1.4em;
 }
 
 .markdown h4 {

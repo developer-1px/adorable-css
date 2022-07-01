@@ -3828,7 +3828,7 @@ var require_nodefs_handler = __commonJS({
 var fsevents_default;
 var init_fsevents = __esm({
   "node_modules/fsevents/fsevents.node"() {
-    fsevents_default = "./fsevents-72LCIACT.node";
+    fsevents_default = "../fsevents-72LCIACT.node";
   }
 });
 
