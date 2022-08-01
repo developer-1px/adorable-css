@@ -466,7 +466,7 @@ export const RULES:Rules = {
   "transition": (value:string) => `transition:${makeTransition(value)};`,
 
   // @TODO:섞을수가 없네? mix transform
-  // @TBD:translate(10,10)|rotateX(180deg)|scale(2) 이런식으로 |기호로 묶자!!
+  // @TBD:translate(10,10)+rotateX(180deg)+scale(2) 이런식으로 +기호로 묶자!!
   "translate": (value:string) => `transform:translate(${makeCommaValues(value)});`,
   "translateX": (value:string) => `transform:translateX(${cssvar(value)});`,
   "translateY": (value:string) => `transform:translateY(${cssvar(value)});`,
@@ -483,6 +483,11 @@ export const RULES:Rules = {
   "scaleX": (value:string) => `transform:scaleX(${makeCommaValues(value)});`,
   "scaleY": (value:string) => `transform:scaleY(${makeCommaValues(value)});`,
   "scaleZ": (value:string) => `transform:scaleZ(${makeCommaValues(value)});`,
+
+  "skew": (value:string) => `transform:skew(${makeCommaValues(value)});`,
+  "skewX": (value:string) => `transform:skewX(${makeCommaValues(value)});`,
+  "skewY": (value:string) => `transform:skewY(${makeCommaValues(value)});`,
+  "skewZ": (value:string) => `transform:skewZ(${makeCommaValues(value)});`,
 
   // Util
   "ratio": (value:string) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,

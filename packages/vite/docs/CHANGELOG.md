@@ -1,3 +1,7 @@
+## 1.1.8
+- ✨️ cdn 방식이 astro에서 적용이 되지 않던 현상을 수정하였습니다.
+- ✨️ skew() skewX() skewY() skewZ()가 누락되어 있던 현상을 수정하였습니다.
+
 ## 1.1.5
 - ⛱ vite, webpack, postcss등 다른 복잡한 설정 없이 그냥 script 한줄만 추가하면 adorableCSS를 사용할 수 있습니다.
 - ⚡️ adorableCSS를 간편하게 쓰는 방법! body 맨 아래 `<script src="https://unpkg.com/adorable-css"></script>`만 추가해보세요.

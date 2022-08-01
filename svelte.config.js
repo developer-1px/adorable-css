@@ -16,22 +16,7 @@ const config = {
     adapter: adapter(),
     prerender: {
       default: true
-    },
-    vite: {
-      server: {
-        fs: {
-          // Allow serving files from one level up to the project root
-          strict: false
-        }
-      },
-      plugins: [adorableCSS()],
-      resolve: {
-        alias: {
-          "src": resolve("src"),
-          "packages": resolve("packages"),
-        },
-      },
-    },
+    }
   }
 }
 
