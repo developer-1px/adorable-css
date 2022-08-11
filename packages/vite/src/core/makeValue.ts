@@ -109,15 +109,9 @@ export const makeBorder = (value:string) => {
   return values.join(" ")
 }
 
-export const makeValues = (value:string, project = cssvar) => {
-  if (String(value).startsWith("--")) return `var(${value})`
-  return value && value.split("/").map(project).join(" ")
-}
+export const makeValues = (value:string, project = cssvar) => value.split("/").map(project).join(" ")
 
-export const makeCommaValues = (value:string, project = (a:string):string|number => a) => {
-  if (String(value).startsWith("--")) return `var(${value})`
-  return value && value.split(",").map(project).join(",")
-}
+export const makeCommaValues = (value:string, project = cssvar) => value.split(",").map(project).join(",")
 
 export const makeSide = (value:string) => makeValues(value, px)
 
@@ -181,3 +175,28 @@ export const makeTransition = (value:string) => {
   return value.split("/").map(item => item.replace("=", " ")).join(",")
 }
 
+export const makePosition = (value:string) => value.includes(",") ? makePosition2(value) : makePosition1(value)
+
+export const makePosition1 = (value:string) => {
+  const values = value.split(" ").map(px)
+  values[1] = values[1] || values[0]
+  values[2] = values[2] || values[0]
+  values[3] = values[3] || values[1] || values[0]
+
+  return ["top", "right", "bottom", "left"]
+    .map((prop, index) => {
+      const value = values[index]
+      if (!value || value === "-") return
+      return `${prop}:${px(value)};`
+    })
+    .filter(Boolean)
+    .join("")
+}
+
+export const makePosition2 = (value:string) => {
+  const [x, y] = value.split(",")
+  const res = []
+  res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`)
+  res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`)
+  return res.join("")
+}

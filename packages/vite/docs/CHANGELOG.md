@@ -1,3 +1,8 @@
+## 1.2.0
+- ✨️ absolute(-/10/20/-) 기능이 추가 되었습니다. position + top, right, bottom, left, -는 생략
+- ✨️ absolute(10,20) 기능이 추가 되었습니다. position(x,y)
+- ✨️ absolute(~10,~20) 기능이 추가 되었습니다. position(right,bottom)
+
 ## 1.1.8
 - ✨️ cdn 방식이 astro에서 적용이 되지 않던 현상을 수정하였습니다.
 - ✨️ skew() skewX() skewY() skewZ()가 누락되어 있던 현상을 수정하였습니다.

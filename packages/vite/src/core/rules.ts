@@ -1,5 +1,5 @@
 import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makePosition, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
@@ -401,14 +401,14 @@ export const RULES:Rules = {
     return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0;`).join("")
   },
 
-  "absolute": () => `position:absolute;`,
-  "relative": () => `position:relative;`,
-  "sticky": () => `position:sticky;`,
+  "absolute": (value:string) => `position:absolute;${makePosition(value)}`,
+  "relative": (value:string) => `position:relative;${makePosition(value)}`,
+  "sticky": (value:string) => `position:sticky;${makePosition(value)}`,
   "sticky-top": (value = "0") => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = "0") => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = "0") => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = "0") => `position:sticky;left:${px(value)};`,
-  "fixed": () => `position:fixed;`,
+  "fixed": (value:string) => `position:fixed;${makePosition(value)}`,
   "static": () => `position:static;`,
 
   // Position
