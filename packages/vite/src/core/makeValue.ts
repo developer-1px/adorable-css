@@ -175,7 +175,10 @@ export const makeTransition = (value:string) => {
   return value.split("/").map(item => item.replace("=", " ")).join(",")
 }
 
-export const makePosition = (value:string) => value.includes(",") ? makePosition2(value) : makePosition1(value)
+export const makePosition = (value?:string) => {
+  if (!value) return ""
+  return value.includes(",") ? makePosition2(value) : makePosition1(value)
+}
 
 export const makePosition1 = (value:string) => {
   const values = value.split(" ").map(px)

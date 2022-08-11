@@ -3883,7 +3883,7 @@ var require_nodefs_handler = __commonJS({
 var fsevents_default;
 var init_fsevents = __esm({
   "../../node_modules/.pnpm/fsevents@2.3.2/node_modules/fsevents/fsevents.node"() {
-    fsevents_default = "../fsevents-72LCIACT.node";
+    fsevents_default = "./fsevents-72LCIACT.node";
   }
 });
 
@@ -21429,16 +21429,8 @@ var makeBorder = (value) => {
     values.unshift("solid");
   return values.join(" ");
 };
-var makeValues = (value, project = cssvar) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split("/").map(project).join(" ");
-};
-var makeCommaValues = (value, project = (a) => a) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split(",").map(project).join(",");
-};
+var makeValues = (value, project = cssvar) => value.split("/").map(project).join(" ");
+var makeCommaValues = (value, project = cssvar) => value.split(",").map(project).join(",");
 var makeSide = (value) => makeValues(value, px);
 var makeRatio = (value) => {
   const [w, h] = value.split(":");
@@ -21527,13 +21519,28 @@ var makeTransition = (value) => {
   return value.split("/").map((item) => item.replace("=", " ")).join(",");
 };
 var makePosition = (value) => {
-  const values = makeValues(value);
+  if (!value)
+    return "";
+  return value.includes(",") ? makePosition2(value) : makePosition1(value);
+};
+var makePosition1 = (value) => {
+  const values = value.split(" ").map(px);
+  values[1] = values[1] || values[0];
+  values[2] = values[2] || values[0];
+  values[3] = values[3] || values[1] || values[0];
   return ["top", "right", "bottom", "left"].map((prop, index2) => {
     const value2 = values[index2];
     if (!value2 || value2 === "-")
       return;
     return `${prop}:${px(value2)};`;
   }).filter(Boolean).join("");
+};
+var makePosition2 = (value) => {
+  const [x, y] = value.split(",");
+  const res = [];
+  res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`);
+  res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`);
+  return res.join("");
 };
 
 // src/core/rules.ts

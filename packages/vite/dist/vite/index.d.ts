@@ -29,7 +29,7 @@ declare const makeRatio: (value: string) => string;
 declare const makeHBox: (value?: string) => string;
 declare const makeVBox: (value?: string) => string;
 declare const makeTransition: (value: string) => string;
-declare const makePosition: (value: string) => string;
+declare const makePosition: (value?: string) => string;
 declare const makePosition1: (value: string) => string;
 declare const makePosition2: (value: string) => string;
 

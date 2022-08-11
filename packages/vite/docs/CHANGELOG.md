@@ -1,4 +1,4 @@
-## 1.2.0
+## 1.2.1
 - ✨️ absolute(-/10/20/-) 기능이 추가 되었습니다. position + top, right, bottom, left, -는 생략
 - ✨️ absolute(10,20) 기능이 추가 되었습니다. position(x,y)
 - ✨️ absolute(~10,~20) 기능이 추가 되었습니다. position(right,bottom)
