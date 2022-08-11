@@ -79,8 +79,8 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .\>h1\:m\(20\)>h1{margin:20px;}
 .mt\(40\){margin-top:40px;}
 .p\(10\/20\){padding:10px 20px;}
-.p\(10\){padding:10px;}
 .p\(20\){padding:20px;}
+.p\(10\){padding:10px;}
 .p\(200\/32\){padding:200px 32px;}
 .p\(10\/10\){padding:10px 10px;}
 .p\(8\/12\){padding:8px 12px;}
@@ -114,9 +114,7 @@ html .active\:bg\(\#000\):active,html .active\:bg\(\#000\).\:active{background-c
 .layer\(right\){position:absolute;top:0;right:0;bottom:0;}
 .layer{position:absolute;top:0;right:0;bottom:0;left:0;}
 .layer\(bottom\+right\){position:absolute;right:0;bottom:0;}
-.relative{position:relative;}
 .sticky-top{position:sticky;top:0;}
-.fixed{position:fixed;}
 .z\(999\){z-index:999;}
 .z\(9999\){z-index:9999;}
 .none{display:none;}
