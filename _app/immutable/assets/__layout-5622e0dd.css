@@ -9,9 +9,9 @@ table{border-collapse:collapse;border-spacing:0;}
 ol,ul,menu,dir{list-style:none;}
 .\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
-.c\(red\){color:red;}
 @media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover,.\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}}
 .\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}
+.c\(red\){color:red;}
 .c\(\#555\){color:#555;}
 .c\(\#ccc\){color:#ccc;}
 .group:hover .group-hover\:c\(--primary\),html .group.\:hover .group-hover\:c\(--primary\){color:var(--primary);}
@@ -27,8 +27,8 @@ ol,ul,menu,dir{list-style:none;}
 .c\(\#999\){color:#999;}
 .\.selected\:c\(\#000\).selected,.selected .\.selected\:c\(\#000\){color:#000;}
 html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:active{color:var(--primary);}
-.font\(100\){font-size:100px}
 .font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em}
+.font\(100\){font-size:100px}
 .font\(3em\/-\/-1\.5\%\){font-size:3em;letter-spacing:-0.015em}
 .\~md\:font\(2em\)~md{font-size:2em}
 .font\(1\.2em\/-\/-1\.5\%\){font-size:1.2em;letter-spacing:-0.015em}
@@ -78,8 +78,8 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .m\(10\/0\){margin:10px 0;}
 .\>h1\:m\(20\)>h1{margin:20px;}
 .mt\(40\){margin-top:40px;}
-.p\(10\){padding:10px;}
 .p\(10\/20\){padding:10px 20px;}
+.p\(10\){padding:10px;}
 .p\(20\){padding:20px;}
 .p\(200\/32\){padding:200px 32px;}
 .p\(10\/10\){padding:10px 10px;}
