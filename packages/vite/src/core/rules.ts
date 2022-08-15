@@ -280,7 +280,7 @@ export const RULES:Rules = {
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
-  "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
+  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
 
   "outline": (value:string) => `outline:${makeBorder(value)};`,
   "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
@@ -304,7 +304,7 @@ export const RULES:Rules = {
   },
   "background-image": (value:string) => RULES["bg-image"](value),
 
-  "bg-position": (value:string) => `background-position:${value};`,
+  "bg-position": (value:string) => `background-position:${makeValues(value)};`,
 
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,

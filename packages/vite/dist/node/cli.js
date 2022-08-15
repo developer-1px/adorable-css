@@ -21763,7 +21763,7 @@ var RULES = {
     const [color, size = 1] = value.split("/");
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
-  "box-shadow": (value) => `box-shadow:${makeValues(value)}`,
+  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
   "outline": (value) => `outline:${makeBorder(value)};`,
   "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
   "bg": (value) => {
@@ -21785,7 +21785,7 @@ var RULES = {
     return `background-image:url(${value});`;
   },
   "background-image": (value) => RULES["bg-image"](value),
-  "bg-position": (value) => `background-position:${value};`,
+  "bg-position": (value) => `background-position:${makeValues(value)};`,
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,

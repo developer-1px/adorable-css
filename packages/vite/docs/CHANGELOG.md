@@ -1,3 +1,7 @@
+## 1.2.2
+- ✨️ box-shadow(0/0/10/#000.2) box-shadow에 단위를 생략하면 px이 자동으로 붙도록 수정하였습니다.
+- 🐛bg-position에서 /가 적용이 안되는 현상을 수정하였습니다. 
+
 ## 1.2.1
 - ✨️ absolute(-/10/20/-) 기능이 추가 되었습니다. position + top, right, bottom, left, -는 생략
 - ✨️ absolute(10,20) 기능이 추가 되었습니다. position(x,y)
