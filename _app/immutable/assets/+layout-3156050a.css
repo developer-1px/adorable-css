@@ -9,9 +9,9 @@ table{border-collapse:collapse;border-spacing:0;}
 ol,ul,menu,dir{list-style:none;}
 .\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
+.c\(red\){color:red;}
 @media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover,.\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}}
 .\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}
-.c\(red\){color:red;}
 .c\(\#555\){color:#555;}
 .c\(\#ccc\){color:#ccc;}
 .group:hover .group-hover\:c\(--primary\),html .group.\:hover .group-hover\:c\(--primary\){color:var(--primary);}
@@ -27,13 +27,14 @@ ol,ul,menu,dir{list-style:none;}
 .c\(\#999\){color:#999;}
 .\.selected\:c\(\#000\).selected,.selected .\.selected\:c\(\#000\){color:#000;}
 html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:active{color:var(--primary);}
-.font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em}
 .font\(100\){font-size:100px}
+.font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em}
 .font\(3em\/-\/-1\.5\%\){font-size:3em;letter-spacing:-0.015em}
-.\~md\:font\(2em\)~md{font-size:2em}
+@media(max-width:767.98px){html .\~md\:font\(1\.6em\){font-size:1.6em}}
 .font\(1\.2em\/-\/-1\.5\%\){font-size:1.2em;letter-spacing:-0.015em}
-.\~md\:font\(1\.2em\)~md{font-size:1.2em}
-.font\(100\/-\/-15\%\){font-size:100px;letter-spacing:-0.15em}
+@media(max-width:767.98px){html .\~md\:font\(1\.4em\){font-size:1.4em}}
+.font\(80\/-\/-15\%\){font-size:80px;letter-spacing:-0.15em}
+.font\(20\){font-size:20px}
 .font\(30\){font-size:30px}
 .font\(10\){font-size:10px}
 .font\(30\/-\/-1\.5\%\){font-size:30px;letter-spacing:-0.015em}
@@ -78,9 +79,9 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .m\(10\/0\){margin:10px 0;}
 .\>h1\:m\(20\)>h1{margin:20px;}
 .mt\(40\){margin-top:40px;}
+.p\(10\){padding:10px;}
 .p\(10\/20\){padding:10px 20px;}
 .p\(20\){padding:20px;}
-.p\(10\){padding:10px;}
 .p\(200\/32\){padding:200px 32px;}
 .p\(10\/10\){padding:10px 10px;}
 .p\(8\/12\){padding:8px 12px;}
@@ -133,4 +134,4 @@ html .active\:rotate\(5deg\):active,html .active\:rotate\(5deg\).\:active{transf
 @media(hover:hover){.hover\:scale\(1\.05\):hover,.hover\:scale\(1\.05\).\:hover{transform:scale(1.05);}}
 .after\:content\(--my-content\)::after{content:var(--my-content)}
 html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
-.\.selected\:c\(\#fff\)\!.selected,.selected .\.selected\:c\(\#fff\)\!{color:#fff!important;}:root{font-family:Pretendard,system-ui,sans-serif;color:#222;--primary:#fb3958;--primary-bg:rgba(251, 57, 88, .02)}.markdown{width:768px;max-width:100%;margin:auto;line-height:1.6;font-size:16px;letter-spacing:-.01em;word-wrap:break-all;color:#333}.markdown blockquote{background:var(--primary-bg);margin:1em 0;padding:.2em 1.4em;border-left:4px solid var(--primary)}.markdown hr{margin:2em 0;border-top:1px solid rgba(0,0,0,.1)}.markdown a{color:var(--primary)}.markdown a:hover{text-decoration:underline}.markdown h1,.markdown h2,.markdown h3,.markdown h4{font-size:2.4em;font-weight:700;margin-top:1.4em}.markdown h2{margin-top:1em;font-size:2em}.markdown h3{font-size:1.4em}.markdown h4{font-size:1em}.markdown p{margin:1em 0}.markdown ul,.markdown ol{list-style:disc;padding:0 1em;margin:1em 0}.markdown ol{list-style:number}.markdown pre{background:#f9f9f9;margin:1em 0;padding:1em;border-radius:.6em;white-space:pre-wrap;font-family:monospace;font-size:.8em;text-align:left}.markdown code{background:#f6f8fa;padding:2px .4em;border-radius:.4em;font-family:monospace}.markdown pre code{background:none;padding:0}.markdown .attr-value,.markdown .string,.markdown .string-property{color:var(--primary)}.markdown .comment{color:#999}@media (max-width:768px){.markdown{font-size:16px}}
+.\.selected\:c\(\#fff\)\!.selected,.selected .\.selected\:c\(\#fff\)\!{color:#fff!important;}:root{font-family:Pretendard,system-ui,sans-serif;color:#222;--primary:#fb3958;--primary-bg:rgba(251, 57, 88, .02)}.markdown{width:768px;max-width:100%;margin:auto;line-height:1.6;font-size:16px;letter-spacing:-.01em;word-wrap:break-all;color:#333}.markdown blockquote{background:var(--primary-bg);margin:1em 0;padding:.2em 1.4em;border-left:4px solid var(--primary)}.markdown hr{margin:2em 0;border-top:1px solid rgba(0,0,0,.1)}.markdown a{color:var(--primary)}.markdown a:hover{text-decoration:underline}.markdown h1,.markdown h2,.markdown h3,.markdown h4{font-size:2em;font-weight:700;margin-top:1.6em}.markdown h2{margin-top:1em;font-size:1.4em}.markdown h3{font-size:1.2em}.markdown h4{font-size:1em}.markdown p{margin:1em 0}.markdown ul,.markdown ol{list-style:disc;padding:0 1em;margin:1em 0}.markdown ol{list-style:number}.markdown pre{background:#f9f9f9;margin:1em 0;padding:1em;border-radius:.6em;white-space:pre-wrap;font-family:monospace;font-size:.8em;text-align:left}.markdown code{background:#f6f8fa;padding:2px .4em;border-radius:.4em;font-family:monospace}.markdown pre code{background:none;padding:0}.markdown .attr-value,.markdown .string,.markdown .string-property{color:var(--primary)}.markdown .comment{color:#999}@media (max-width:768px){.markdown{font-size:14px}}
