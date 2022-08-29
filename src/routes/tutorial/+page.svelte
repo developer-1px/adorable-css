@@ -79,7 +79,7 @@ let editor
         <div class="layer pack check-board none" class:none={type !== "Result"}>
           <iframe bind:this={element} class="layer w(100%) h(100%) bg(transparent)" frameborder="0"/>
         </div>
-        <div class="layer pre monospace font(12) p(10) none scroll-y" class:none={type !== "CSS_output"}>{css}</div>
+        <div class="layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none" class:none={type !== "CSS_output"}>{css}</div>
       </div>
     </div>
   </div>

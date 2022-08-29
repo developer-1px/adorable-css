@@ -1,14 +1,14 @@
 <script lang="ts">
 const slide = "text-center vbox pack p(200/32) max-h(60vh) odd:bg(#f9f9f9) clip"
-const h1 = "font(3em/-/-1.5%) bold ~md:font(2em)"
-const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.2em)"
+const h1 = "font(3em/-/-1.5%) bold ~md:font(1.6em)"
+const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
 </script>
 
 <div class="{slide} gap(40)">
-  <div class="hbox font(100/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
+  <div class="hbox font(80/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
     <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
     <span>^•ﻌ•^</span>
-    <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">ฅ <span class="font(30) c(#ccc) group-hover:c(--primary) vertical-top transition(.4s)">♥</span></span>
+    <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">ฅ <span class="font(20) c(#ccc) group-hover:c(--primary) vertical-top transition(.4s)">♥</span></span>
   </div>
 
   <div>

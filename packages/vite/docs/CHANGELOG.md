@@ -1,3 +1,6 @@
+## 1.2.4
+- ✨️ ~ selector는 media rule과 `ex) ~md:font(2em)`e 충돌이 나서 삭제하기로 함. ~selector는 반대로 만들어야 하는데 `ex) p ~ & { ... }` 사용성이 낮아서 우선순위 보류 
+
 ## 1.2.2
 - ✨️ box-shadow(0/0/10/#000.2) box-shadow에 단위를 생략하면 px이 자동으로 붙도록 수정하였습니다.
 - 🐛bg-position에서 /가 적용이 안되는 현상을 수정하였습니다. 

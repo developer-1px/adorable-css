@@ -124,23 +124,23 @@ const parsePrefix = (prefixRules:PrefixRules, e) => {
   const type = e[0].value
   const selector = e.map(e => e.value).join("")
 
-  // 1. Selector인가?
+  // 1. Pseudo Class, Pseudo Element 인가?
+  const makePseudo = prefixRules[selector + token.id]
+  if (makePseudo) {
+    return makePseudo
+  }
+
+  // 2. Selector인가?
   const makeSelector = PREFIX_SELECTOR[type]
   if (makeSelector) {
     return {selector: makeSelector(selector).replace(/>>/g, " ")}
   }
 
-  // 2. @at-rule인가?
+  // 3. @at-rule인가?
   const value = e.slice(0, 2).map(r => r.value).join("")
   const makeAtRule = AT_RULE[value]
   if (makeAtRule) {
     return makeAtRule(selector, e)
-  }
-
-  // 3. Pseudo Class, Pseudo Element 인가?
-  const makePseudo = prefixRules[selector + token.id]
-  if (makePseudo) {
-    return makePseudo
   }
 
   if (/^[-a-z]+$/.test(type)) {

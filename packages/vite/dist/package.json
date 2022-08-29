@@ -1,6 +1,6 @@
 {
   "name": "adorable-css",
-  "version": "1.2.2",
+  "version": "1.2.4",
   "description": "Rapid On-Demand Atomic CSS generator",
   "repository": {
     "type": "git",
@@ -26,10 +26,16 @@
     "dev": "npm run build -- --watch src",
     "dev:vite": "npm run build:vite -- --watch src",
     "dev:cli": "npm run build:cli -- --watch src",
-    "build": "rm -rf ./dist && npm run build:vite && npm run build:cli",
-    "build:vite": "tsup ./src/vite/index.ts ./src/index.ts --dts -d ./dist --minify",
-    "build:cli": "tsup ./src/node/cli.ts --dts -d ./dist/node",
-    "deploy": "npm run build && cp package.json ./dist/package.json && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish"
+    "build": "rm -rf ./dist && npm run build:vite && npm run build:cli && cp package.json ./dist/package.json",
+    "build:vite": "tsup ./src/index.ts -d ./dist && tsup ./src/vite/index.ts -d ./dist/vite",
+    "build:cli": "tsup ./src/node/cli.ts -d ./dist/node",
+    "deploy": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish"
+  },
+  "tsup": {
+    "splitting": false,
+    "sourcemap": false,
+    "dts": true,
+    "minify": false
   },
   "exports": {
     ".": {

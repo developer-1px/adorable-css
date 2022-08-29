@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
-import {reset} from "../../packages/vite/src/core/rules"
-import {generateCss} from "../../packages/vite/src/core/atomizer"
+import {reset} from "packages/vite/src/core/rules"
+import {generateCss} from "packages/vite/src/core/atomizer"
 
 if (typeof document !== "undefined") {
   const target = document.documentElement

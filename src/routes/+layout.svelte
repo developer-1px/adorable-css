@@ -48,4 +48,4 @@ const useActive = (el) => {
   <slot/>
 </div>
 
-<UIVersion version="0.1.3"/>
+<UIVersion version="1.2.4"/>
