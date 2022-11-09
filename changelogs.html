@@ -14,13 +14,15 @@
 
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
-	<link href="/adorable-css/_app/immutable/assets/+layout-3156050a.css" rel="stylesheet">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/start-d03deb1d.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-3e8365a0.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/paths-6cd3a76e.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-09a240dc.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-015954ff.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-c7cfe831.js">
+		<link href="/adorable-css/_app/immutable/assets/_layout-3156050a.css" rel="stylesheet">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-7f440a1c.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-1a214106.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-9b3339e4.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-e96905d0.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-0edefae1.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-b8ee4d7c.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-1daba58d.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-d9293f92.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -50,7 +52,9 @@
 
       <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank" aria-label="github"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></div>
 
-  <div class="markdown p(20)"><h2>1.2.4</h2>
+  <div class="markdown p(20)"><h2>1.2.5</h2>
+<ul><li>🐛 font(13/20)+c(red)와 같이 font를 먼저쓰고 +를 할 경우 이후 서식이 적용이 되지 않던 버그를 수정하였습니다.</li></ul>
+<h2>1.2.4</h2>
 <ul><li>✨️ ~ selector는 media rule과 <code>ex) ~md:font(2em)</code>e 충돌이 나서 삭제하기로 함. ~selector는 반대로 만들어야 하는데 <code>ex) p ~ &amp; { ... }</code> 사용성이 낮아서 우선순위 보류 </li></ul>
 <h2>1.2.2</h2>
 <ul><li>✨️ box-shadow(0/0/10/#000.2) box-shadow에 단위를 생략하면 px이 자동으로 붙도록 수정하였습니다.</li>
@@ -231,8 +235,8 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 <h2>0.5.7</h2>
 <ul><li><code>:after</code> <code>:before</code> <code>content</code> 기능이 추가되었습니다.</li>
 <li>class는 띄어쓰기를 못하므로 content에 공백이 있다면 css variable를 추천합니다.</li></ul>
-<pre class="language-html"><!-- HTML_TAG_START --><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>before:content(<span class="token punctuation">'</span>hello<span class="token punctuation">'</span>) before:c(red)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>world<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>before:content(--content) before:c(red)<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>--content:<span class="token punctuation">'</span>hello, <span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>world<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code><!-- HTML_TAG_END --></pre>
+<pre class="language-html"><!-- HTML_TAG_START --><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>before:content('hello') before:c(red)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>world<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>before:content(--content) before:c(red)<span class="token punctuation">"</span></span> <span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>--content:'hello, '<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>world<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code><!-- HTML_TAG_END --></pre>
 <blockquote><p>@NOTE: <code>:after</code> vs <code>::after</code> 정석은 <code>::after</code>가 맞으나 IE8 이후 오랜 관습으로 남아 있는 <code>:after</code>도 사용가능하도록 추가하였습니다. <code>:before</code>도 동일합니다.  </p></blockquote>
 <ul><li>::first-line과 같은 pseudo-elements를 지원합니다. <a href="https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements" rel="nofollow">https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements</a></li></ul>
 <pre class="language-html"><!-- HTML_TAG_START --><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>first-line::c(red)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -265,27 +269,25 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 <div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.4</div>
 
 
-		<script type="module" data-sveltekit-hydrate="asmi9q">
-		import { set_public_env, start } from "/adorable-css/_app/immutable/start-d03deb1d.js";
+		<script type="module" data-sveltekit-hydrate="545mv7">
+			import { start } from "/adorable-css/_app/immutable/start-7f440a1c.js";
 
-		set_public_env({});
-
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="asmi9q"]').parentNode,
-			paths: {"base":"/adorable-css","assets":"/adorable-css"},
-			session: {},
-			route: true,
-			spa: false,
-			trailing_slash: "never",
-			hydrate: {
-				status: 200,
-				error: null,
-				node_ids: [0, 4],
-				params: {},
-				routeId: "changelogs"
-			}
-		});
-	</script>
+			start({
+				env: {},
+				hydrate: {
+					status: 200,
+					error: null,
+					node_ids: [0, 4],
+					params: {},
+					route: {"id":"/changelogs"},
+					data: [null,null],
+					form: null
+				},
+				paths: {"base":"/adorable-css","assets":"/adorable-css"},
+				target: document.querySelector('[data-sveltekit-hydrate="545mv7"]').parentNode,
+				trailing_slash: "never"
+			});
+		</script>
 	</div>
 <!--<script src="https://unpkg.com/adorable-css"></script>-->
 </body>

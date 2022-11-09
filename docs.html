@@ -14,13 +14,15 @@
 
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
-	<link href="/adorable-css/_app/immutable/assets/+layout-3156050a.css" rel="stylesheet">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/start-d03deb1d.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-3e8365a0.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/paths-6cd3a76e.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-09a240dc.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-015954ff.js">
-	<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/docs/_page.svelte-97535a3d.js">
+		<link href="/adorable-css/_app/immutable/assets/_layout-3156050a.css" rel="stylesheet">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-7f440a1c.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-1a214106.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-9b3339e4.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-e96905d0.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-0edefae1.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-b8ee4d7c.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-1daba58d.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/docs/_page.svelte-1f35cc3b.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -198,26 +200,24 @@ prefix:property(value)! or property(value)! or property!
 
 
 		<script type="module" data-sveltekit-hydrate="tmydwq">
-		import { set_public_env, start } from "/adorable-css/_app/immutable/start-d03deb1d.js";
+			import { start } from "/adorable-css/_app/immutable/start-7f440a1c.js";
 
-		set_public_env({});
-
-		start({
-			target: document.querySelector('[data-sveltekit-hydrate="tmydwq"]').parentNode,
-			paths: {"base":"/adorable-css","assets":"/adorable-css"},
-			session: {},
-			route: true,
-			spa: false,
-			trailing_slash: "never",
-			hydrate: {
-				status: 200,
-				error: null,
-				node_ids: [0, 5],
-				params: {},
-				routeId: "docs"
-			}
-		});
-	</script>
+			start({
+				env: {},
+				hydrate: {
+					status: 200,
+					error: null,
+					node_ids: [0, 5],
+					params: {},
+					route: {"id":"/docs"},
+					data: [null,null],
+					form: null
+				},
+				paths: {"base":"/adorable-css","assets":"/adorable-css"},
+				target: document.querySelector('[data-sveltekit-hydrate="tmydwq"]').parentNode,
+				trailing_slash: "never"
+			});
+		</script>
 	</div>
 <!--<script src="https://unpkg.com/adorable-css"></script>-->
 </body>

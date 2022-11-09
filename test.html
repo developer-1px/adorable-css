@@ -22,7 +22,7 @@
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-0edefae1.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-b8ee4d7c.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-1daba58d.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/tutorial/_page.svelte-1782c84d.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/test/_page.svelte-6b92b9fe.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/atomizer-59ec978c.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
@@ -53,54 +53,13 @@
 
       <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank" aria-label="github"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></div>
 
-  <div class="layer vbox overscroll(none)"><div class="h(60)"></div>
-
-  <div class="flex hbox(fill) clip bg(#f9f9f9)"><div class="vbox w(240) monospace(number) p(10)"><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)! selected">Hello AdorableCSS!</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">1. Colors</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">2. Typography</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">3. Box Model</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">4. Overflow</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">5. Flexbox</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">6. Position</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">7. Hover, Active</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">8. Pseudo Class</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">9. Pseudo Element</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">10. Media Query</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">11. Selector</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">12. Important!</div><div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!">계속 작업 중입니다...</div></div>
-
-    <div class="flex(4) vbox p(10)"><div class="flex(4) vbox r(10) clip"><div class="h(100%)"></div></div></div>
-
-    <div class="flex(3) relative vbox c(#000) p(10) r(10)"><div class="hbox bg(#fff) font(12) c(#999)"><button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000) selected">Result</button>
-        <button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)">CSS Output</button></div>
-      <div class="flex relative"><div class="layer pack check-board none"><iframe class="layer w(100%) h(100%) bg(transparent)" frameborder="0"></iframe></div>
-        <div class="layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none none">*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
-html,body{height:100%;}
-img,picture,video,canvas{display:block;max-width:100%;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-.\32 00{font-weight:200;}
-.c\(red\){color:red;}
-.c\(\#ccc\){color:#ccc;}
-.group:hover .group-hover\:c\(\#fb3958\),html .group.\:hover .group-hover\:c\(\#fb3958\){color:#fb3958;}
-.c\(\#666\){color:#666;}
-.font\(20\){font-size:20px;}
-.font\(100\/-\/-15\%\){font-size:100px;letter-spacing:-0.15em;}
-.font\(30\){font-size:30px;}
-.AppleSD{font-family:"Apple SD Gothic Neo";}
-.text-center{text-align:center;}
-.vertical-top{vertical-align:top;}
-.hbox{display:flex;flex-flow:row;align-items:center;}
-.vbox{display:flex;flex-flow:column;align-items:stretch;}
-.pack{display:flex;align-items:center;justify-content:center;}
-.gap\(20\){gap:20px;grid-gap:20px;}
-.p\(50\){padding:50px;}
-.opacity\(0\.7\){opacity:0.7;}
-@media(hover:hover){.hover\:opacity\(1\):hover,.hover\:opacity\(1\).\:hover{opacity:1;}}
-.pointer{cursor: pointer;}
-.transition\(\.4s\){transition:all .4s;}
-.group:hover .group-hover\:rotate\(-10deg\),html .group.\:hover .group-hover\:rotate\(-10deg\){transform:rotate(-10deg);}
-html .group:active .group-active\:rotate\(10deg\),html .group.\:active .group-active\:rotate\(10deg\){transform:rotate(10deg);}
-.group:hover .group-hover\:rotate\(10deg\),html .group.\:hover .group-hover\:rotate\(10deg\){transform:rotate(10deg);}
-html .group:active .group-active\:rotate\(-10deg\),html .group.\:active .group-active\:rotate\(-10deg\){transform:rotate(-10deg);}
-@media(hover:hover){.hover\:scale\(1\.05\):hover,.hover\:scale\(1\.05\).\:hover{transform:scale(1.05);}}</div></div></div></div></div></div>
+  <div class="layer pack"><div class="w(800) m(auto) vbox"><input type="text" class="b(-) outline(-) bb(#000) p(10)" autofocus value="c(blue)+font(19/42)+c(#D0D0D0)">
+    <div class="pre font(10) word-spacing(20)">c ( blue ) + font ( 19/42 ) + c ( #D0D0D0 )</div></div></div></div>
 
 <div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.4</div>
 
 
-		<script type="module" data-sveltekit-hydrate="1dr5q10">
+		<script type="module" data-sveltekit-hydrate="1djoms5">
 			import { start } from "/adorable-css/_app/immutable/start-7f440a1c.js";
 
 			start({
@@ -108,14 +67,14 @@ html .group:active .group-active\:rotate\(-10deg\),html .group.\:active .group-a
 				hydrate: {
 					status: 200,
 					error: null,
-					node_ids: [0, 9],
+					node_ids: [0, 8],
 					params: {},
-					route: {"id":"/tutorial"},
+					route: {"id":"/test"},
 					data: [null,null],
 					form: null
 				},
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
-				target: document.querySelector('[data-sveltekit-hydrate="1dr5q10"]').parentNode,
+				target: document.querySelector('[data-sveltekit-hydrate="1djoms5"]').parentNode,
 				trailing_slash: "never"
 			});
 		</script>
