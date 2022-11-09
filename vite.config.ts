@@ -1,16 +1,16 @@
 import {resolve} from "path"
 import {sveltekit} from "@sveltejs/kit/vite"
-import {adorableCSS} from "./packages/vite/dist/vite/index.js"
+import type {UserConfig} from "vite"
+import {adorableCSS} from "./packages/vite/src/vite"
 
-/** @type {import("vite").UserConfig} */
-const config = {
+const config:UserConfig = {
+  plugins: [adorableCSS(), sveltekit()],
   server: {
     fs: {
       // Allow serving files from one level up to the project root
       strict: false
     }
   },
-  plugins: [adorableCSS(), sveltekit()],
   resolve: {
     alias: {
       "src": resolve("src"),

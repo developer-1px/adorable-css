@@ -1,6 +1,6 @@
 {
   "name": "adorable-css",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Rapid On-Demand Atomic CSS generator",
   "repository": {
     "type": "git",
@@ -48,5 +48,8 @@
       "import": "./vite/index.js",
       "types": "./vite/index.d.ts"
     }
+  },
+  "devDependencies": {
+    "unplugin": "^0.9.6"
   }
 }

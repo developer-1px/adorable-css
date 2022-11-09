@@ -48,5 +48,8 @@
       "import": "./vite/index.js",
       "types": "./vite/index.d.ts"
     }
+  },
+  "devDependencies": {
+    "unplugin": "^0.9.6"
   }
 }

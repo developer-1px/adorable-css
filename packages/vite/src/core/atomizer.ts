@@ -69,7 +69,7 @@ const next = (id?:string) => {
   return t
 }
 
-const tokenize = (script:string) => {
+export const tokenize = (script:string) => {
   tokens = []
   index = 0
 
@@ -83,6 +83,7 @@ const tokenize = (script:string) => {
   })
 
   next()
+  return tokens
 }
 
 // Parser: prop + ()[]{}

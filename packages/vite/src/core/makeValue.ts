@@ -70,14 +70,14 @@ export const makeFont = (value:string) => {
 
   return (value || "").split("/").map((value, index) => {
     if (value === "-") return
-    if (String(value).startsWith("--")) return `var(${value})`
+    if (String(value).startsWith("--")) return `var(${value});`
 
     switch (index) {
-      case 0: {return `font-size:${px(value)}`}
-      case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`}
-      case 2: {return `letter-spacing:${px(percentToEm(value))}`}
+      case 0: {return `font-size:${px(value)};`}
+      case 1: {return `line-height:${+value < 4 ? makeNumber(+value) : px(value)};`}
+      case 2: {return `letter-spacing:${px(percentToEm(value))};`}
     }
-  }).filter(Boolean).join(";")
+  }).filter(Boolean).join("")
 }
 
 
