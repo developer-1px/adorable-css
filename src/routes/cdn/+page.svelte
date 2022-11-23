@@ -11,8 +11,6 @@ if (typeof document !== "undefined") {
   const generateStyleSheet = () => styleSheet.innerHTML = reset + generateCss([...classList]).join("\n")
 
   const observer = new MutationObserver(mutations => {
-    console.log("mutations", mutations)
-
     mutations.forEach(mutation => {
       mutation.oldValue?.split(/\s+/).forEach(value => classList.delete(value))
       Array.from(mutation.target?.classList).forEach(value => classList.add(value))

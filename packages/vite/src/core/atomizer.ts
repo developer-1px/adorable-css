@@ -174,11 +174,29 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         if (token && (token.id === ":" || token.id === "::")) {
           const rule = parsePrefix(prefixRules, e)
           ast.push(rule)
+          next()
+          continue
         }
 
         // @FIXME: declaration
-        else if (!token || token.id === "(important)" || token.id === "+") {
-          const property = e[0].value
+        if (!token || token.id === "(important)" || token.id === "+") {
+          let property = e[0].value
+
+          // >> 기능 ex) >>c(red)
+          if (property === ">>") {
+            ast.push({selector: "& *"})
+            e.shift()
+            property = e[0].value
+          }
+
+          // > 기능 ex) >c(red)
+          else if (property === ">") {
+            ast.push({selector: "&>*"})
+            e.shift()
+            property = e[0].value
+          }
+
+          // 일반 Property
           const value = e.slice(2, -1).map(r => r.value).join("")
           const rule = rules[property]
           let priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0
@@ -193,7 +211,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
             throw new Error("Not defined property: " + property)
           }
 
-          // (important)에 따라서 priority 를 바꿔준다.
+          // (important)에 따라서 priority를 바꿔준다.
           if (token && token.id === "(important)") {
             declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a)
             priority = 9999 + token.value.length

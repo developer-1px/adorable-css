@@ -453,12 +453,6 @@ const generate = async () => {
   if (!selection.length) return
 
   const node = selection[0]
-  console.log(node.type)
-  console.log(node)
-
-  console.warn("!!!!! layoutGrow, layoutAlign", node.layoutGrow, node.layoutAlign)
-
-
   const record = {}
 
   traverse(node, (node) => {
@@ -468,8 +462,6 @@ const generate = async () => {
       record[node.mainComponent.id] = mainComponentSet.name
     }
   })
-
-  console.log(record)
 
   const code = await generateCode(node, 0)
 
