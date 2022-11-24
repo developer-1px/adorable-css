@@ -44,8 +44,28 @@ ex)
   <div>link <a href="#">#4</a></div>
 </div>
 
+
+<!-- New 1.2.7 -->
+
+<h1>Children Selector Shortcuts</h1>
+
+<div class="hbox gap(20) >c(blue)">
+  <div>link #1</div>
+  <div class="selected">link #1</div>
+  <div>link #1</div>
+  <div>link #1</div>
+</div>
+
+<h1>Descendants Selector Shortcuts</h1>
+
+<div class="hbox gap(20) >>c(blue)">
+  <div>link <a href="#">#1</a></div>
+  <div>link <a href="#">#2</a></div>
+  <div>link <a href="#">#3</a></div>
+  <div>link <a href="#">#4</a></div>
+</div>
+
 <style>
 h1 { margin: 20px 0; font-size: 20px;}
 </style>
-
 `.trim()

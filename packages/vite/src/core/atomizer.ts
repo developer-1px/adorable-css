@@ -155,12 +155,12 @@ const parsePrefix = (prefixRules:PrefixRules, e) => {
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   const priorityTable = Object.fromEntries(Object.keys(rules).map((key, index) => [key, index + 1]))
 
-  return (script:string):[string, number]|undefined => {
-
+  return (script:string):Array<[string, number]> => {
     try {
       tokenize(script)
 
-      const ast = []
+      const selectors = []
+      const declarations = []
 
       while (token) {
         const e = expr()
@@ -173,7 +173,7 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         // selector
         if (token && (token.id === ":" || token.id === "::")) {
           const rule = parsePrefix(prefixRules, e)
-          ast.push(rule)
+          selectors.push(rule)
           next()
           continue
         }
@@ -184,14 +184,14 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
 
           // >> 기능 ex) >>c(red)
           if (property === ">>") {
-            ast.push({selector: "& *"})
+            selectors.push({selector: "& *"})
             e.shift()
             property = e[0].value
           }
 
           // > 기능 ex) >c(red)
           else if (property === ">") {
-            ast.push({selector: "&>*"})
+            selectors.push({selector: "&>*"})
             e.shift()
             property = e[0].value
           }
@@ -217,30 +217,28 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
             priority = 9999 + token.value.length
           }
 
-          ast.push({declaration, priority})
+          declarations.push({declaration, priority})
         }
 
         next()
       }
 
-      const mediaQuery = ast.map(a => a.media).filter(Boolean)
+      const mediaQuery = selectors.map(a => a.media).filter(Boolean)
       const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : ""
 
       const atom = "." + cssEscape(script)
-      const selector = ast.map(a => a.selector).filter(Boolean).map(selector => selector.split(",")).reduce((prev, curr) => {
+      const selector = selectors.map(a => a.selector).filter(Boolean).map(selector => selector.split(",")).reduce((prev, curr) => {
         return prev.map(prev => curr.map(selector => selector.replace(/&/g, prev))).flat()
       }, [atom]).join(",")
 
-      const declaration = ast.map(a => a.declaration).filter(Boolean).join("")
-      if (!declaration) {
-        throw new Error("no declaration")
-      }
+      return declarations.map(({declaration, priority}) => {
+        if (!declaration) {
+          throw new Error("no declaration")
+        }
 
-      let priority = ast.map(a => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0)
-
-      const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
-
-      return [media ? media + "{" + rule + "}" : rule, priority]
+        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
+        return [media ? media + "{" + rule + "}" : rule, priority]
+      })
     }
     catch (e) {
       // console.error(e)
@@ -257,7 +255,7 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
   prefixRules = {...PREFIX_RULES, ...prefixRules}
 
   return (classList:string[]) => classList
-    .map(generateAtomicCss(rules, prefixRules))
+    .flatMap(generateAtomicCss(rules, prefixRules))
     .filter(Boolean)
     .sort(sortByRule)
     .map(a => a[0])

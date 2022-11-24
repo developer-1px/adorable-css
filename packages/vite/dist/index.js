@@ -1058,8 +1058,8 @@ var RULES = {
   "snap-both-proximity": () => `scroll-snap-type:both proximity;`,
   "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
-  "snap-normal": () => `scroll-snap-stop: normal;`,
-  "snap-always": () => `scroll-snap-stop: always;`,
+  "snap-normal": () => `scroll-snap-stop:normal;`,
+  "snap-always": () => `scroll-snap-stop:always;`,
   "overscroll": (value) => `overscroll-behavior:${value};`,
   "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
   "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
@@ -1386,63 +1386,64 @@ var generateAtomicCss = (rules, prefixRules) => {
   return (script) => {
     try {
       tokenize(script);
-      const ast = [];
+      const selectors = [];
+      const declarations = [];
       while (token) {
         const e = expr();
         if (e.find((e2) => e2.id === "(") && e[e.length - 1].id !== ")") {
           throw new Error("Invalid Syntax!");
         }
         if (token && (token.id === ":" || token.id === "::")) {
-          const rule2 = parsePrefix(prefixRules, e);
-          ast.push(rule2);
+          const rule = parsePrefix(prefixRules, e);
+          selectors.push(rule);
           next();
           continue;
         }
         if (!token || token.id === "(important)" || token.id === "+") {
           let property = e[0].value;
           if (property === ">>") {
-            ast.push({ selector: "& *" });
+            selectors.push({ selector: "& *" });
             e.shift();
             property = e[0].value;
           } else if (property === ">") {
-            ast.push({ selector: "&>*" });
+            selectors.push({ selector: "&>*" });
             e.shift();
             property = e[0].value;
           }
           const value = e.slice(2, -1).map((r) => r.value).join("");
-          const rule2 = rules[property];
-          let priority2 = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
-          let declaration2 = (() => {
-            if (rule2)
-              return value === "" ? rule2() : rule2(value);
+          const rule = rules[property];
+          let priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
+          let declaration = (() => {
+            if (rule)
+              return value === "" ? rule() : rule(value);
             if (value && ALL_PROPERTIES[property])
               return `${property}:${makeValues(value)};`;
             throw new Error("Not defined property: " + property);
           })();
-          if (declaration2.search("undefined") >= 0) {
+          if (declaration.search("undefined") >= 0) {
             throw new Error("Not defined property: " + property);
           }
           if (token && token.id === "(important)") {
-            declaration2 = declaration2.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
-            priority2 = 9999 + token.value.length;
+            declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
+            priority = 9999 + token.value.length;
           }
-          ast.push({ declaration: declaration2, priority: priority2 });
+          declarations.push({ declaration, priority });
         }
         next();
       }
-      const mediaQuery = ast.map((a) => a.media).filter(Boolean);
+      const mediaQuery = selectors.map((a) => a.media).filter(Boolean);
       const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : "";
       const atom = "." + cssEscape(script);
-      const selector = ast.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
+      const selector = selectors.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
         return prev.map((prev2) => curr.map((selector2) => selector2.replace(/&/g, prev2))).flat();
       }, [atom]).join(",");
-      const declaration = ast.map((a) => a.declaration).filter(Boolean).join("");
-      if (!declaration) {
-        throw new Error("no declaration");
-      }
-      let priority = ast.map((a) => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0);
-      const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
-      return [media ? media + "{" + rule + "}" : rule, priority];
+      return declarations.map(({ declaration, priority }) => {
+        if (!declaration) {
+          throw new Error("no declaration");
+        }
+        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
+        return [media ? media + "{" + rule + "}" : rule, priority];
+      });
     } catch (e) {
     }
   };
@@ -1451,7 +1452,7 @@ var sortByRule = (a, b) => a[1] - b[1];
 var createGenerateCss = (rules = {}, prefixRules = {}) => {
   rules = __spreadValues(__spreadValues({}, RULES), rules);
   prefixRules = __spreadValues(__spreadValues({}, PREFIX_RULES), prefixRules);
-  return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
+  return (classList) => classList.flatMap(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();
 

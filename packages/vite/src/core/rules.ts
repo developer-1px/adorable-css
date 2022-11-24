@@ -361,8 +361,8 @@ export const RULES:Rules = {
   "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
 
-  "snap-normal": () => `scroll-snap-stop: normal;`,
-  "snap-always": () => `scroll-snap-stop: always;`,
+  "snap-normal": () => `scroll-snap-stop:normal;`,
+  "snap-always": () => `scroll-snap-stop:always;`,
 
   // @TODO:- TBD
   "overscroll": (value:string) => `overscroll-behavior:${value};`,
