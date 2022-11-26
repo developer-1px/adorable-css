@@ -15,7 +15,7 @@ var __spreadValues = (a, b) => {
   return a;
 };
 
-// ../src[vite-plugin-adorable-css]/src/const.ts
+// ../vite/src/core/const.ts
 var ALL_PROPERTIES = {
   "--*": 1,
   "-ms-accelerator": 1,
@@ -532,7 +532,7 @@ var ALL_PROPERTIES = {
   "zoom": 1
 };
 
-// ../src[vite-plugin-adorable-css]/src/cssEscape.ts
+// ../vite/src/core/cssEscape.ts
 var cssEscape = (string) => {
   const length = string.length;
   const firstCodeUnit = string.charCodeAt(0);
@@ -562,7 +562,7 @@ var cssEscape = (string) => {
   return result;
 };
 
-// ../src[vite-plugin-adorable-css]/src/makeValue.ts
+// ../vite/src/core/makeValue.ts
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
 var px = (value) => {
@@ -623,19 +623,19 @@ var makeFont = (value) => {
     if (value2 === "-")
       return;
     if (String(value2).startsWith("--"))
-      return `var(${value2})`;
+      return `var(${value2});`;
     switch (index2) {
       case 0: {
-        return `font-size:${px(value2)}`;
+        return `font-size:${px(value2)};`;
       }
       case 1: {
-        return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)}`;
+        return `line-height:${+value2 < 4 ? makeNumber(+value2) : px(value2)};`;
       }
       case 2: {
-        return `letter-spacing:${px(percentToEm(value2))}`;
+        return `letter-spacing:${px(percentToEm(value2))};`;
       }
     }
-  }).filter(Boolean).join(";");
+  }).filter(Boolean).join("");
 };
 var makeFontFamily = (value) => `font-family:${value};font-family:var(--${value}, ${value});`;
 var makeBorder = (value) => {
@@ -661,16 +661,8 @@ var makeBorder = (value) => {
     values.unshift("solid");
   return values.join(" ");
 };
-var makeValues = (value, project = cssvar) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split("/").map(project).join(" ");
-};
-var makeCommaValues = (value, project = (a) => a) => {
-  if (String(value).startsWith("--"))
-    return `var(${value})`;
-  return value && value.split(",").map(project).join(",");
-};
+var makeValues = (value, project = cssvar) => value.split("/").map(project).join(" ");
+var makeCommaValues = (value, project = cssvar) => value.split(",").map(project).join(",");
 var makeSide = (value) => makeValues(value, px);
 var makeRatio = (value) => {
   const [w, h] = value.split(":");
@@ -758,8 +750,32 @@ var makeTransition = (value) => {
     return `all ${value}`;
   return value.split("/").map((item) => item.replace("=", " ")).join(",");
 };
+var makePosition = (value) => {
+  if (!value)
+    return "";
+  return value.includes(",") ? makePosition2(value) : makePosition1(value);
+};
+var makePosition1 = (value) => {
+  const values = value.split(" ").map(px);
+  values[1] = values[1] || values[0];
+  values[2] = values[2] || values[0];
+  values[3] = values[3] || values[1] || values[0];
+  return ["top", "right", "bottom", "left"].map((prop, index2) => {
+    const value2 = values[index2];
+    if (!value2 || value2 === "-")
+      return;
+    return `${prop}:${px(value2)};`;
+  }).filter(Boolean).join("");
+};
+var makePosition2 = (value) => {
+  const [x, y] = value.split(",");
+  const res = [];
+  res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`);
+  res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`);
+  return res.join("");
+};
 
-// ../src[vite-plugin-adorable-css]/src/rules.ts
+// ../vite/src/core/rules.ts
 var RULES = {
   "c": (value) => `color:${makeColor(value)};`,
   "color": (value) => RULES.c(value),
@@ -865,6 +881,7 @@ var RULES = {
   "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
   "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
+  "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
   "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
   "hbox(": () => ``,
   "vbox(": () => ``,
@@ -967,14 +984,8 @@ var RULES = {
     const [color, size = 1] = value.split("/");
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
-  "box-shadow": (value) => `box-shadow:${makeValues(value)}`,
-  "outline": (value) => {
-    if (value === "-")
-      return `outline:none;`;
-    if (value === "none" || value === "unset" || value === "inherit" || value === "initial")
-      return `outline:${value};`;
-    return `outline:1px solid ${makeColor(value)};`;
-  },
+  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
+  "outline": (value) => `outline:${makeBorder(value)};`,
   "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
   "bg": (value) => {
     if (value.startsWith("linear-gradient"))
@@ -989,12 +1000,18 @@ var RULES = {
       return `background-color:transparent;`;
     return `background-color:${makeColor(value)};`;
   },
+  "bg-image": (value) => {
+    if (value.startsWith("url"))
+      return `background-image:${value};`;
+    return `background-image:url(${value});`;
+  },
+  "background-image": (value) => RULES["bg-image"](value),
+  "bg-position": (value) => `background-position:${makeValues(value)};`,
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
   "bg-fixed": () => `background-attachment:fixed;`,
   "bg-scroll": () => `background-attachment:scroll;`,
-  "bg-position": (value) => `background-position:${value};`,
   "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
   "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
   "overflow": (value) => `overflow:${value};`,
@@ -1031,8 +1048,8 @@ var RULES = {
   "snap-both-proximity": () => `scroll-snap-type:both proximity;`,
   "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
-  "snap-normal": () => `scroll-snap-stop: normal;`,
-  "snap-always": () => `scroll-snap-stop: always;`,
+  "snap-normal": () => `scroll-snap-stop:normal;`,
+  "snap-always": () => `scroll-snap-stop:always;`,
   "overscroll": (value) => `overscroll-behavior:${value};`,
   "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
   "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
@@ -1066,14 +1083,14 @@ var RULES = {
     });
     return `position:absolute;` + Object.keys(pos).map((value2) => `${value2}:0;`).join("");
   },
-  "absolute": () => `position:absolute;`,
-  "relative": () => `position:relative;`,
-  "sticky": () => `position:sticky;`,
+  "absolute": (value) => `position:absolute;${makePosition(value)}`,
+  "relative": (value) => `position:relative;${makePosition(value)}`,
+  "sticky": (value) => `position:sticky;${makePosition(value)}`,
   "sticky-top": (value = "0") => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = "0") => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = "0") => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = "0") => `position:sticky;left:${px(value)};`,
-  "fixed": () => `position:fixed;`,
+  "fixed": (value) => `position:fixed;${makePosition(value)}`,
   "static": () => `position:static;`,
   "x": (value) => `left:${px(value)};`,
   "y": (value) => `top:${px(value)};`,
@@ -1133,6 +1150,10 @@ var RULES = {
   "scaleX": (value) => `transform:scaleX(${makeCommaValues(value)});`,
   "scaleY": (value) => `transform:scaleY(${makeCommaValues(value)});`,
   "scaleZ": (value) => `transform:scaleZ(${makeCommaValues(value)});`,
+  "skew": (value) => `transform:skew(${makeCommaValues(value)});`,
+  "skewX": (value) => `transform:skewX(${makeCommaValues(value)});`,
+  "skewY": (value) => `transform:skewY(${makeCommaValues(value)});`,
+  "skewZ": (value) => `transform:skewZ(${makeCommaValues(value)});`,
   "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "gpu": () => `transform:translateZ(0.1px);`,
   "no-border": () => `border:none;outline:none;`,
@@ -1147,7 +1168,7 @@ var RULES = {
   "blur": (value) => `filter:blur(${px(value)})`,
   "brightness": (value) => `filter:brightness(${cssvar(value)})`,
   "contrast": (value) => `filter:contrast(${cssvar(value)})`,
-  "drop-shadow": (value) => `filter:drop-shadow(${cssvar(value)})`,
+  "drop-shadow": (value) => `filter:drop-shadow(${makeValues(value, px)})`,
   "grayscale": (value) => `filter:grayscale(${cssvar(value)})`,
   "hue-rotate": (value) => `filter:hue-rotate(${cssvar(value)})`,
   "invert": (value) => `filter:invert(${cssvar(value)})`,
@@ -1156,7 +1177,7 @@ var RULES = {
   "backdrop-blur": (value) => `backdrop-filter:blur(${px(value)})`,
   "backdrop-brightness": (value) => `backdrop-filter:brightness(${cssvar(value)})`,
   "backdrop-contrast": (value) => `backdrop-filter:contrast(${cssvar(value)})`,
-  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${cssvar(value)})`,
+  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${makeValues(value, px)})`,
   "backdrop-grayscale": (value) => `backdrop-filter:grayscale(${cssvar(value)})`,
   "backdrop-hue-rotate": (value) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
   "backdrop-invert": (value) => `backdrop-filter:invert(${cssvar(value)})`,
@@ -1267,11 +1288,10 @@ var PREFIX_SELECTOR = {
   "[": (selector) => `&${selector},${selector} &`,
   ">": (selector) => `&${selector}`,
   "+": (selector) => `&${selector}`,
-  "~": (selector) => `&${selector}`,
   "#": (selector) => `&${selector}`
 };
 
-// ../src[vite-plugin-adorable-css]/src/atomizer.ts
+// ../vite/src/core/atomizer.ts
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var parseAtoms = (code) => {
   let lastIndex = 0;
@@ -1280,14 +1300,20 @@ var parseAtoms = (code) => {
   code += " ";
   code.replace(delimiter, (a, index2, s) => {
     let token2 = s.slice(lastIndex, index2);
+    if (code[index2 - 1] === "(")
+      return a;
+    if (code[index2 + 1] === ")")
+      return a;
     if (token2.startsWith("class:")) {
       token2 = token2.slice("class:".length).split("=")[0];
     }
-    atoms.add(token2);
+    if (token2) {
+      atoms.add(token2);
+    }
     lastIndex = index2 + a.length;
     return a;
   });
-  return [...atoms].filter(Boolean);
+  return [...atoms];
 };
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
@@ -1321,6 +1347,7 @@ var tokenize = (script) => {
     return value;
   });
   next();
+  return tokens;
 };
 var expr = () => {
   const args = [];
@@ -1348,6 +1375,10 @@ var expr = () => {
 var parsePrefix = (prefixRules, e) => {
   const type = e[0].value;
   const selector = e.map((e2) => e2.value).join("");
+  const makePseudo = prefixRules[selector + token.id];
+  if (makePseudo) {
+    return makePseudo;
+  }
   const makeSelector = PREFIX_SELECTOR[type];
   if (makeSelector) {
     return { selector: makeSelector(selector).replace(/>>/g, " ") };
@@ -1356,10 +1387,6 @@ var parsePrefix = (prefixRules, e) => {
   const makeAtRule = AT_RULE[value];
   if (makeAtRule) {
     return makeAtRule(selector, e);
-  }
-  const makePseudo = prefixRules[selector + token.id];
-  if (makePseudo) {
-    return makePseudo;
   }
   if (/^[-a-z]+$/.test(type)) {
     return { selector: `&${token.id}${selector}` };
@@ -1371,51 +1398,64 @@ var generateAtomicCss = (rules, prefixRules) => {
   return (script) => {
     try {
       tokenize(script);
-      const ast = [];
+      const selectors = [];
+      const declarations = [];
       while (token) {
         const e = expr();
         if (e.find((e2) => e2.id === "(") && e[e.length - 1].id !== ")") {
           throw new Error("Invalid Syntax!");
         }
         if (token && (token.id === ":" || token.id === "::")) {
-          const rule2 = parsePrefix(prefixRules, e);
-          ast.push(rule2);
-        } else if (!token || token.id === "(important)" || token.id === "+") {
-          const property = e[0].value;
+          const rule = parsePrefix(prefixRules, e);
+          selectors.push(rule);
+          next();
+          continue;
+        }
+        if (!token || token.id === "(important)" || token.id === "+") {
+          let property = e[0].value;
+          if (property === ">>") {
+            selectors.push({ selector: "& *" });
+            e.shift();
+            property = e[0].value;
+          } else if (property === ">") {
+            selectors.push({ selector: "&>*" });
+            e.shift();
+            property = e[0].value;
+          }
           const value = e.slice(2, -1).map((r) => r.value).join("");
-          const rule2 = rules[property];
-          let priority2 = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
-          let declaration2 = (() => {
-            if (rule2)
-              return value === "" ? rule2() : rule2(value);
+          const rule = rules[property];
+          let priority = priorityTable[property + property.includes("(") ? "(" : ""] || priorityTable[property] || 0;
+          let declaration = (() => {
+            if (rule)
+              return value === "" ? rule() : rule(value);
             if (value && ALL_PROPERTIES[property])
               return `${property}:${makeValues(value)};`;
             throw new Error("Not defined property: " + property);
           })();
-          if (declaration2.search("undefined") >= 0) {
+          if (declaration.search("undefined") >= 0) {
             throw new Error("Not defined property: " + property);
           }
           if (token && token.id === "(important)") {
-            declaration2 = declaration2.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
-            priority2 = 9999 + token.value.length;
+            declaration = declaration.replace(/;/g, (a, b, c) => c.charAt(b - 1) !== "\\" ? "!important;" : a);
+            priority = 9999 + token.value.length;
           }
-          ast.push({ declaration: declaration2, priority: priority2 });
+          declarations.push({ declaration, priority });
         }
         next();
       }
-      const mediaQuery = ast.map((a) => a.media).filter(Boolean);
+      const mediaQuery = selectors.map((a) => a.media).filter(Boolean);
       const media = mediaQuery.length ? "@media" + mediaQuery.join(" and ") : "";
       const atom = "." + cssEscape(script);
-      const selector = ast.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
+      const selector = selectors.map((a) => a.selector).filter(Boolean).map((selector2) => selector2.split(",")).reduce((prev, curr) => {
         return prev.map((prev2) => curr.map((selector2) => selector2.replace(/&/g, prev2))).flat();
       }, [atom]).join(",");
-      const declaration = ast.map((a) => a.declaration).filter(Boolean).join("");
-      if (!declaration) {
-        throw new Error("no declaration");
-      }
-      let priority = ast.map((a) => a.priority).filter(Boolean).reduce((prev, curr) => Math.max(prev, curr), 0);
-      const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
-      return [media ? media + "{" + rule + "}" : rule, priority];
+      return declarations.map(({ declaration, priority }) => {
+        if (!declaration) {
+          throw new Error("no declaration");
+        }
+        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
+        return [media ? media + "{" + rule + "}" : rule, priority];
+      });
     } catch (e) {
     }
   };
@@ -1424,7 +1464,7 @@ var sortByRule = (a, b) => a[1] - b[1];
 var createGenerateCss = (rules = {}, prefixRules = {}) => {
   rules = __spreadValues(__spreadValues({}, RULES), rules);
   prefixRules = __spreadValues(__spreadValues({}, PREFIX_RULES), prefixRules);
-  return (classList) => classList.map(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
+  return (classList) => classList.flatMap(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();
 
@@ -1837,9 +1877,6 @@ var generate = async () => {
   if (!selection.length)
     return;
   const node = selection[0];
-  console.log(node.type);
-  console.log(node);
-  console.warn("!!!!! layoutGrow, layoutAlign", node.layoutGrow, node.layoutAlign);
   const record = {};
   traverse(node, (node2) => {
     var _a;
@@ -1849,7 +1886,6 @@ var generate = async () => {
       record[node2.mainComponent.id] = mainComponentSet.name;
     }
   });
-  console.log(record);
   const code = await generateCode(node, 0);
   figma.showUI(__html__, {
     width: Math.min(1440, (Math.floor(node.width) || 0) + 40 + 40 + 240),

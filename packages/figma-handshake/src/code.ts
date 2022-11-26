@@ -1,4 +1,4 @@
-import {generateCss, parseAtoms} from "../../vite/src/atomizer"
+import {generateCss, parseAtoms} from "../../vite/src/core/atomizer"
 import {ab2str, capitalize, makeColor, makeFourSideValues, makeInt, makeNumber, unitValue} from "./util"
 
 type AddClass = (prop, value?) => number
