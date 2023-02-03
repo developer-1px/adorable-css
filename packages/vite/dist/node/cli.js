@@ -21843,24 +21843,61 @@ var RULES = {
   "max-lines": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value) => `text-indent:${px(value)};`,
   "layer": (value = "") => {
-    const pos = { top: 0, right: 0, bottom: 0, left: 0 };
+    const pos = { top: "0", right: "0", bottom: "0", left: "0" };
+    const outsides = [];
+    let outside = false;
     value.split("+").forEach((v) => {
-      switch (v) {
+      const [direction, value2 = "0"] = v.split(":");
+      switch (direction) {
         case "top": {
-          return delete pos.bottom;
+          pos.top = value2;
+          delete pos.bottom;
+          outsides.push("top");
+          return;
         }
         case "right": {
-          return delete pos.left;
+          pos.right = value2;
+          delete pos.left;
+          outsides.push("right");
+          return;
         }
         case "bottom": {
-          return delete pos.top;
+          pos.bottom = value2;
+          delete pos.top;
+          outsides.push("bottom");
+          return;
         }
         case "left": {
-          return delete pos.right;
+          pos.left = value2;
+          delete pos.right;
+          outsides.push("left");
+          return;
+        }
+        case "outside": {
+          outside = true;
+          return;
         }
       }
     });
-    return `position:absolute;` + Object.keys(pos).map((value2) => `${value2}:0;`).join("");
+    if (outside) {
+      const revert = (b, a) => {
+        pos[a] = pos[b] === "0" ? "100%" : `calc(100% + ${px(pos[b])})`;
+        delete pos[b];
+      };
+      outsides.forEach((direction) => {
+        switch (direction) {
+          case "top":
+            return revert("top", "bottom");
+          case "right":
+            return revert("right", "left");
+          case "bottom":
+            return revert("bottom", "top");
+          case "left":
+            return revert("left", "right");
+        }
+      });
+    }
+    return `position:absolute;` + Object.keys(pos).map((value2) => `${value2}:${px(pos[value2])};`).join("");
   },
   "absolute": (value) => `position:absolute;${makePosition(value)}`,
   "relative": (value) => `position:relative;${makePosition(value)}`,
@@ -22073,16 +22110,15 @@ var PREFIX_SELECTOR = {
 // src/core/atomizer.ts
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var parseAtoms = (code) => {
-  let lastIndex = 0;
-  const atoms = /* @__PURE__ */ new Set();
   const delimiter = /["'`]|\s+/g;
+  const atoms = /* @__PURE__ */ new Set();
+  let lastIndex = 0;
   code += " ";
-  code.replace(delimiter, (a, index2, s) => {
-    let token2 = s.slice(lastIndex, index2);
-    if (code[index2 - 1] === "(")
+  code.replace(delimiter, (a, index2) => {
+    if (code[index2 - 1] === "(" || code[index2 + 1] === ")") {
       return a;
-    if (code[index2 + 1] === ")")
-      return a;
+    }
+    let token2 = code.slice(lastIndex, index2);
     if (token2.startsWith("class:")) {
       token2 = token2.slice("class:".length).split("=")[0];
     }
@@ -22233,7 +22269,8 @@ var generateAtomicCss = (rules, prefixRules) => {
           throw new Error("no declaration");
         }
         const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
-        return [media ? media + "{" + rule + "}" : rule, priority];
+        const rule2 = selectors.length ? rule + "{}" : rule;
+        return [media ? media + "{" + rule2 + "}" : rule2, priority];
       });
     } catch (e) {
     }

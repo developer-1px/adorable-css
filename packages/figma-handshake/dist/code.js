@@ -1294,16 +1294,15 @@ var PREFIX_SELECTOR = {
 // ../vite/src/core/atomizer.ts
 var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
 var parseAtoms = (code) => {
-  let lastIndex = 0;
-  const atoms = /* @__PURE__ */ new Set();
   const delimiter = /["'`]|\s+/g;
+  const atoms = /* @__PURE__ */ new Set();
+  let lastIndex = 0;
   code += " ";
-  code.replace(delimiter, (a, index2, s) => {
-    let token2 = s.slice(lastIndex, index2);
-    if (code[index2 - 1] === "(")
+  code.replace(delimiter, (a, index2) => {
+    if (code[index2 - 1] === "(" || code[index2 + 1] === ")") {
       return a;
-    if (code[index2 + 1] === ")")
-      return a;
+    }
+    let token2 = code.slice(lastIndex, index2);
     if (token2.startsWith("class:")) {
       token2 = token2.slice("class:".length).split("=")[0];
     }
@@ -1454,7 +1453,8 @@ var generateAtomicCss = (rules, prefixRules) => {
           throw new Error("no declaration");
         }
         const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
-        return [media ? media + "{" + rule + "}" : rule, priority];
+        const rule2 = selectors.length ? rule + "{}" : rule;
+        return [media ? media + "{" + rule2 + "}" : rule2, priority];
       });
     } catch (e) {
     }

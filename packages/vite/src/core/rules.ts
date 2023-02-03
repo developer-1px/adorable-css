@@ -389,16 +389,65 @@ export const RULES:Rules = {
 
   // Position
   "layer": (value = "") => {
-    const pos = {top: 0, right: 0, bottom: 0, left: 0}
+    const pos = {top: "0", right: "0", bottom: "0", left: "0"}
+    const outsides = []
+    let outside = false
+
     value.split("+").forEach(v => {
-      switch (v) {
-        case "top": {return (delete pos.bottom)}
-        case "right": {return (delete pos.left)}
-        case "bottom": {return (delete pos.top)}
-        case "left": {return (delete pos.right)}
+      const [direction, value = "0"] = v.split(":")
+      switch (direction) {
+        case "top": {
+          pos.top = value
+          delete pos.bottom
+          outsides.push("top")
+          return
+        }
+        case "right": {
+          pos.right = value
+          delete pos.left
+          outsides.push("right")
+          return
+        }
+        case "bottom": {
+          pos.bottom = value
+          delete pos.top
+          outsides.push("bottom")
+          return
+        }
+        case "left": {
+          pos.left = value
+          delete pos.right
+          outsides.push("left")
+          return
+        }
+        case "outside": {
+          outside = true
+          return
+        }
       }
     })
-    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0;`).join("")
+
+    if (outside) {
+      const revert = (b:string, a:string) => {
+        pos[a] = pos[b] === "0" ? "100%" : `calc(100% + ${px(pos[b])})`
+        delete pos[b]
+      }
+
+      outsides.forEach(direction => {
+        switch (direction) {
+          case "top":
+            return revert("top", "bottom")
+          case "right":
+            return revert("right", "left")
+          case "bottom":
+            return revert("bottom", "top")
+          case "left":
+            return revert("left", "right")
+        }
+      })
+    }
+
+    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:${px(pos[value])};`).join("")
   },
 
   "absolute": (value:string) => `position:absolute;${makePosition(value)}`,

@@ -15,17 +15,19 @@ const PREFIX_RULES:PrefixRules = {
 /// parseAtoms
 // @TODO: lex를 이용해서 validate와 parse를 같이 하는 방식으로 업데이트하자!
 export const parseAtoms = (code:string):string[] => {
-  let lastIndex = 0
-  const atoms = new Set<string>()
   const delimiter = /["'`]|\s+/g
 
-  code += " "
-  code.replace(delimiter, (a, index, s) => {
-    let token = s.slice(lastIndex, index)
+  const atoms = new Set<string>()
+  let lastIndex = 0
 
+  code += " "
+  code.replace(delimiter, (a, index) => {
     // @NOTE: content('aa') 용도
-    if (code[index - 1] === "(") return a
-    if (code[index + 1] === ")") return a
+    if (code[index - 1] === "(" || code[index + 1] === ")") {
+      return a
+    }
+
+    let token = code.slice(lastIndex, index)
 
     // @NOTE: svelte class:prop 지원
     if (token.startsWith("class:")) {
@@ -85,6 +87,7 @@ export const tokenize = (script:string) => {
   next()
   return tokens
 }
+
 
 // Parser: prop + ()[]{}
 const expr = () => {
@@ -237,7 +240,9 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         }
 
         const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
-        return [media ? media + "{" + rule + "}" : rule, priority]
+        const rule2 = selectors.length ? rule + "{}" : rule
+
+        return [media ? media + "{" + rule2 + "}" : rule2, priority]
       })
     }
     catch (e) {

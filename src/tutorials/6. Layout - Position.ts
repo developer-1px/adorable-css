@@ -31,6 +31,12 @@ Extension
 3. layer(top+left) / layer(top+right) / layer(bottom+left) / layer(bottom+right)
 : top/bottom + left/right 는 조립이 가능합니다.
 : 팝업의 닫기 버튼 등에서 margin과 함께 주로 사용합니다.
+
+
+4. layer(top:10) 과 같이 값을 지정해주면 해당 값만큼 떨어진 위치에 붙여줍니다.
+
+4. layer(top+outside) 
+: layer(top)과 동일하지만, layer(top)은 부모엘리먼트의 바깥쪽 기준으로 붙습니다. 
 -->
 
 
@@ -93,6 +99,34 @@ Extension
       <div class="layer(bottom+right) pack bg(#ff6347.5) text-center">layer<br/>(bottom<br/>+right)</div>
     </div>
   </div>
+
+
+  <h2>layer(top:10) / layer(top:50%)</h2>
+
+  <div class="hbox gap(10)">
+    <div class="relative w(200) h(100) b(#ff6347) pack">
+      <div class="font(90)">🐳</div>
+      <div class="layer(top:10) pack bg(#ff6347.5)">layer(top:10)</div>
+    </div>
+    
+    <div class="relative w(200) h(100) b(#ff6347) pack">
+      <div class="font(90)">🐳</div>
+      <div class="layer(top:50%) pack bg(#ff6347.5)">layer(top:50%)</div>
+    </div>    
+  </div>
+
+
+  <h2>layer + outside</h2>
+
+  <div class="hbox gap(10)">
+    <div class="relative w(200) h(200) b(#ff6347) pack">
+      <div class="font(90)">🐳</div>
+      <div class="layer(top+outside) pack bg(#ff6347.5)">layer(top+outside)</div>
+      <div class="layer(right+outside) pack bg(#ff6347.5) w(150)">layer(top+outside)</div>
+      <div class="layer(bottom+outside) pack bg(#ff6347.5)">layer(bottom+outside)</div>
+    </div>    
+  </div>
+
 
 </div>
 
