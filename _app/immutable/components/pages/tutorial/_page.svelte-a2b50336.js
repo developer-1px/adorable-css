@@ -1,44 +1,44 @@
-import{S as Ce,i as ce,s as ne,k as h,l as p,m as f,h as c,n,b as $,B as J,o as he,P as G,Q as pe,a as L,w as fe,q,c as U,x as be,r as W,R as E,C as r,y as Be,O as Z,T as ge,u as De,f as me,t as Ae,U as we,z as Ee,K as ye}from"../../../chunks/index-1a214106.js";import{r as ke,g as xe,p as Fe}from"../../../chunks/atomizer-240d0ef9.js";const le=`
+import{S as ne,i as ve,s as he,k as f,l as b,m as g,h as v,n as p,b as $,B as J,o as fe,P as G,Q as be,a as B,w as ge,q,c as z,x as ue,r as W,R as S,C as d,y as me,O as Z,T as we,u as ye,f as ke,t as xe,U as _e,z as Se,K as Re}from"../../../chunks/index-5e2bc00b.js";import{r as Te,g as Oe,p as Ee}from"../../../chunks/atomizer-4bfe88c5.js";const re=`
 <!--
-\u0E05^\u2022\uFECC\u2022^\u0E05 \u2665
+ฅ^•ﻌ•^ฅ ♥
 
-AdorableCSS\uC5D0 \uB180\uB7EC\uC624\uC2E0\uAC83\uC744 \uD658\uC601\uD569\uB2C8\uB2E4.
-AdorableCSS\uB294 \uC544\uC8FC \uB2E8\uC21C\uD55C \uBB38\uBC95\uC73C\uB85C \uB418\uC5B4 \uC788\uC2B5\uB2C8\uB2E4. \uC544\uB798 HTML\uC744 \uC0AD\uC81C \uD6C4
+AdorableCSS에 놀러오신것을 환영합니다.
+AdorableCSS는 아주 단순한 문법으로 되어 있습니다. 아래 HTML을 삭제 후
  
 <div class="font(20) c(red)">Hello world</div>
  
-\uB77C\uACE0 \uC785\uB825\uD574\uBCF4\uC138\uC694.
+라고 입력해보세요.
 
-class="property(value)" \uC758 \uD615\uC2DD\uC758 \uBB38\uBC95\uC73C\uB85C \uC791\uC131\uD574 \uC8FC\uC2DC\uBA74 \uB429\uB2C8\uB2E4.
-\uC6D0\uD558\uB294 \uC18D\uC131\uB4E4\uC740 Tutorial\uC774\uB098 Reference\uB97C \uBCF4\uACE0 \uCC38\uACE0\uD574\uC8FC\uC138\uC694.
+class="property(value)" 의 형식의 문법으로 작성해 주시면 됩니다.
+원하는 속성들은 Tutorial이나 Reference를 보고 참고해주세요.
 
-\uC5EC\uAE30 \uCF54\uB4DC\uB294 \uC218\uC815\uC774 \uAC00\uB2A5\uD558\uB2C8 \uB9C8\uC74C\uAECF \uD14C\uC2A4\uD2B8 \uD574\uBCF4\uC138\uC694!
+여기 코드는 수정이 가능하니 마음껏 테스트 해보세요!
 -->
 
 <div class="vbox pack gap(20) text-center p(50)">
   <div class="hbox font(100/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
-    <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">\u0E05</span>
-    <span>^\u2022\uFECC\u2022^</span>
-    <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">\u0E05 <span class="font(30) c(#ccc) group-hover:c(#fb3958) vertical-top transition(.4s)">\u2665</span></span>
+    <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
+    <span>^•ﻌ•^</span>
+    <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">ฅ <span class="font(30) c(#ccc) group-hover:c(#fb3958) vertical-top transition(.4s)">♥</span></span>
   </div>
 
   <div>
     <h1 class="font(30) 200 c(#666)">AdorableCSS</h1>
-    <p>\u2728 Rapid on-demand atomic css framework</p>
+    <p>✨ Rapid on-demand atomic css framework</p>
   </div>
 </div>
 
-`.trim(),_e=`
+`.trim(),Ie=`
 <!--
 
 Colors
-: \uBA3C\uC800 \uAE00\uC790\uC0C9\uC744 \uBCC0\uACBD\uD574 \uBD05\uC2DC\uB2E4.
-: \uC0C9\uC0C1\uC740 \uC544\uB798\uC640 \uAC19\uC774 \uC5EC\uB7EC\uAC00\uC9C0 \uBC29\uC2DD\uC744 \uC9C0\uC6D0\uD558\uBA70 \uBC30\uACBD\uC0C9\uACFC \uD14C\uB450\uB9AC\uC0C9\uC5D0\uB3C4 \uACF5\uD1B5\uC73C\uB85C \uC801\uC6A9\uB429\uB2C8\uB2E4. eg) bg(), b()
+: 먼저 글자색을 변경해 봅시다.
+: 색상은 아래와 같이 여러가지 방식을 지원하며 배경색과 테두리색에도 공통으로 적용됩니다. eg) bg(), b()
 
 
 sample)
 
-c(red) \uC0C9\uC0C1\uC774\uB984
+c(red) 색상이름
 
 c(#0080ff) HEX
 
@@ -55,7 +55,7 @@ c(100,50%,50%,.5) hsla
 c(--css-var) css-variable
 
 
-@TODO: bg(...), b(...)\uB85C\uB3C4 \uD55C\uBC88 \uD574\uBCF4\uC138\uC694.  
+@TODO: bg(...), b(...)로도 한번 해보세요.  
 -->
 
 
@@ -94,7 +94,7 @@ c(--css-var) css-variable
   <div class="bg(--css-var)">bg(--css-var) css-variable</div>
 </div>
 
-`.trim(),Se=`
+`.trim(),Le=`
 <!--
 Media Query
 https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries 
@@ -116,15 +116,15 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries
 
 </div>
 
-`.trim(),Re=`
+`.trim(),Ce=`
 <!--
 Class Selector
-\uD074\uB798\uC2A4 \uC870\uAC74\uC5D0 \uB9DE\uB294 \uC18D\uC131\uC744 \uC120\uD0DD\uD558\uB294 \uC120\uD0DD\uC790 \uAE30\uB2A5\uC785\uB2C8\uB2E4.
+클래스 조건에 맞는 속성을 선택하는 선택자 기능입니다.
 
 ex)
 .className:c(red)
 
-\uADF8 \uBC16\uC5D0 Children Selector(>), Descendants Selector(>>) \uB3C4 \uAC00\uB2A5\uD569\uB2C8\uB2E4.  
+그 밖에 Children Selector(>), Descendants Selector(>>) 도 가능합니다.  
 -->
 <h1>class Selector</h1>
 
@@ -186,11 +186,11 @@ ex)
 <style>
 h1 { margin: 20px 0; font-size: 20px;}
 </style>
-`.trim(),Te=`
+`.trim(),Ue=`
 <!--
 Important!
 
-important!\uB97C \uD1B5\uD574\uC11C \uC6B0\uC120\uC21C\uC704\uB97C \uC9C0\uC815\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+important!를 통해서 우선순위를 지정할 수 있습니다.
 -->
 <h1>important!</h1>
 
@@ -210,25 +210,25 @@ important!\uB97C \uD1B5\uD574\uC11C \uC6B0\uC120\uC21C\uC704\uB97C \uC9C0\uC815\
 h1 { margin: 20px 0; font-size: 20px;}
 </style>
 
-`.trim(),Oe=`
+`.trim(),Ae=`
 <!--
 
 Typography
 
 1. font(...)
 
-font()\uB294 font-size / line-height / letter-spacing \uC744 \uC785\uB825\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+font()는 font-size / line-height / letter-spacing 을 입력할 수 있습니다.
 
 font(20) { font-size: 20px }
 font(20/1.5) { font-size: 20px; line-height:1.5 }
 font(20/150%/-1%) { font-size: 20px; line-height:150%; letter-spacing:-1em }
-font(20/-/-1%) { font-size: 20px; letter-spacing:-1em } // -\uB294 skip
+font(20/-/-1%) { font-size: 20px; letter-spacing:-1em } // -는 skip
 
 @NOTE
 line-height(1.3)
 letter-spacing(1.5)
 word-spacing(1.5)
-\uB530\uB85C \uC0AC\uC6A9\uB3C4 \uAC00\uB2A5\uD569\uB2C8\uB2E4.
+따로 사용도 가능합니다.
 
 
 2. font-weight
@@ -349,7 +349,7 @@ capitalize {text-transform:capitalize}
 
 </div>
 
-`.trim(),Ie=`
+`.trim(),Fe=`
 <!--
 Box Model
 - width / height
@@ -360,11 +360,13 @@ w(~32) { max-width: 32px }
 w(32~) { min-width: 32px }
 w(32~63) { min-width: 32px; max-width: 32px }
 w(1/5) { width:20% }
-w(100%-20px) { width: calc(100% - 20px) } // \uC8FC\uC758: calc\uC5D0\uC11C\uB294 px\uB97C \uC0DD\uB7B5\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4!
+w(100%-20px) { width: calc(100% - 20px) } // 주의: calc에서는 px를 생략할 수 없습니다!
+
+h(100vh) -webkit-fill-available
 
 - margin / padding / border / border-radius + (top / right / bottom / left)
-: m/p/b/r + t/r/b/l \uC774\uB7F0\uC2DD\uC758 \uC870\uD569\uBC29\uC2DD\uC744 \uC0AC\uC6A9\uD569\uB2C8\uB2E4.
-: box-model\uB294 \uBE48\uB3C4\uB97C \uACE0\uB824\uD574 \uCD95\uC57D\uD574\uC11C \uC0AC\uC6A9\uD569\uB2C8\uB2E4.
+: m/p/b/r + t/r/b/l 이런식의 조합방식을 사용합니다.
+: box-model는 빈도를 고려해 축약해서 사용합니다.
 
 ex)
 m(10) { margin: 10px }
@@ -397,10 +399,10 @@ content-box { box-sizing: content-box }
 
 <div class="bg(#fff) w(100) h(100) bt(red) br(8/orange) bb(dashed) bl(dotted/blue) m(20)">bt br bb bl</div>
 
-`.trim(),Le=`
+`.trim(),Be=`
 <!--
 Overflow
-- \uC790\uC8FC\uC4F0\uB294 \uAE30\uB2A5 \uC18D\uC131\uC744 \uC9E7\uAC8C \uC4F8 \uC218 \uC788\uB3C4\uB85D \uD3B8\uC758\uC131 \uC81C\uACF5
+- 자주쓰는 기능 속성을 짧게 쓸 수 있도록 편의성 제공
 
 clip { overflow: hidden }
 scroll {overflow:auto;}
@@ -410,7 +412,7 @@ scrollbar {overflow:scroll;} &.scroll {overflow:scroll;} &.scroll-x {overflow-x:
 no-scrollbar { &::-webkit-scrollbar {display:none;} }
 no-scrollbar-x { &::-webkit-scrollbar:horizontal {display:none;} }
 
-- \uD544\uC694\uD55C \uACBD\uC6B0 css\uC5D0\uC11C \uC9C0\uC6D0\uD558\uB294 \uBAA8\uB4E0 \uAC12\uC744 \uC0AC\uC6A9\uD560 \uC218 \uC788\uB2E4.
+- 필요한 경우 css에서 지원하는 모든 값을 사용할 수 있다.
 overflow(value) { overflow: <value> }
 overflow-x(value) { overflow-x: <value> }
 overflow-y(value) { overflow-y: <value> }
@@ -475,81 +477,81 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
   </div>
 </div>
 
-`.trim(),Ue=`
+`.trim(),ze=`
 <!--
 Layout - Flexbox
-AdorableCSS\uB294 flexbox\uC5D0 \uAE30\uBC18\uD558\uC5EC \uB808\uC774\uC544\uC6C3\uC744 \uC544\uC8FC \uC27D\uAC8C \uB9CC\uB4E4\uC218 \uC788\uB3C4\uB85D \uAD6C\uC131\uD558\uC600\uC2B5\uB2C8\uB2E4.
+AdorableCSS는 flexbox에 기반하여 레이아웃을 아주 쉽게 만들수 있도록 구성하였습니다.
 https://youtu.be/qFvOhBqX1-k
 
 1
 hbox
-: \uCEE8\uD150\uCE20\uB97C \uAC00\uB85C\uB85C \uBC30\uCE58\uD558\uACE0 \uC2F6\uB2E4\uBA74 hbox(horizontal box)\uB97C \uC0AC\uC6A9\uD558\uC138\uC694.
-: hbox\uC758 \uACBD\uC6B0 \uC804\uCCB4 \uBC15\uC2A4\uB97C \uAC00\uC6B4\uB370\uB85C \uB9DE\uCDB0 \uC815\uB82C\uD558\uBA70 \uC790\uC2DD \uC5D8\uB9AC\uBA3C\uD2B8\uC758 \uD06C\uAE30\uAC00 \uC9C0\uC815\uB418\uC9C0 \uC54A\uC744 \uACBD\uC6B0\uC5D0\uB294 \uCEE8\uD150\uCE20\uC5D0 \uB9DE\uAC8C \uC790\uB3D9\uC73C\uB85C \uB298\uC5B4\uB0A9\uB2C8\uB2E4.
+: 컨텐츠를 가로로 배치하고 싶다면 hbox(horizontal box)를 사용하세요.
+: hbox의 경우 전체 박스를 가운데로 맞춰 정렬하며 자식 엘리먼트의 크기가 지정되지 않을 경우에는 컨텐츠에 맞게 자동으로 늘어납니다.
 
 gap(value)
 gap(vertical/horizonal)
-: \uAC01 \uCEE8\uD150\uCE20\uBCC4 \uAC04\uACA9\uC744 \uC785\uB825\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+: 각 컨텐츠별 간격을 입력할 수 있습니다.
 https://caniuse.com/flexbox-gap
 
-@NOTE: IE<=11,  safari<14.1 \uC744 \uC9C0\uC6D0\uD574\uC57C \uD55C\uB2E4\uBA74 hgap, hgap-reverse\uB97C \uC0AC\uC6A9\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+@NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
 
-\uD2B9\uC815 \uAC04\uACA9\uC744 \uBCC0\uACBD\uD558\uACE0 \uC2F6\uB2E4\uBA74 subbox\uB97C \uC368\uBCF4\uC138\uC694!
+특정 간격을 변경하고 싶다면 subbox를 써보세요!
 
 
 1-2
-\uBC30\uCE58\uB97C \uBCC0\uACBD\uD574\uBCF4\uC790)
+배치를 변경해보자)
 
 hbox(top)
 hbox(bottom)
-hbox(fill) = hbox(stretch)  // stretch\uB294 \uC624\uD0C0\uAC00 \uC790\uC8FC\uB098\uACE0 \uAE38\uC5B4\uC11C fill alias\uB97C \uC81C\uACF5\uD569\uB2C8\uB2E4.
+hbox(fill) = hbox(stretch)  // stretch는 오타가 자주나고 길어서 fill alias를 제공합니다.
 hbox(right)
 hbox(reverse)
 
-+\uB85C \uC870\uB9BD\uD574\uC11C \uC0AC\uC6A9\uD560\uC218 \uC788\uB2E4.
++로 조립해서 사용할수 있다.
 
 hbox(top+right)
 hbox(bottom+right)
 hbox(fill+reverse+left)
 
-+ \uAE30\uD638\uB97C \uC0AC\uC6A9\uD558\uC5EC bottom+right / top+reverse \uB4F1 \uC790\uC720\uB86D\uAC8C \uCEE8\uD150\uCE20\uB97C \uBC30\uCE58\uD558\uC138\uC694
++ 기호를 사용하여 bottom+right / top+reverse 등 자유롭게 컨텐츠를 배치하세요
 
 1-3 h(fill)
 : fill = fill-parent
-: \uAC1C\uBCC4 \uD56D\uBAA9\uC5D0 height\uB97C fill\uB85C \uC9C0\uC815\uD558\uBA74 \uBD80\uBAA8 \uCEE8\uD150\uCE20 \uB9CC\uD07C\uC758 \uD06C\uAE30\uB97C \uAC16\uC2B5\uB2C8\uB2E4.
+: 개별 항목에 height를 fill로 지정하면 부모 컨텐츠 만큼의 크기를 갖습니다.
 
 1-4 hbox(fill)
-: \uBAA8\uB4E0 \uC790\uC2DD \uCEE8\uD150\uCE20\uC758 \uD06C\uAE30\uB97C \uBD80\uBAA8 \uCEE8\uD150\uCE20\uC640 \uAC19\uC774 \uB9CC\uB4E4\uC5B4 \uC90D\uB2C8\uB2E4. (\uB2E8, \uC790\uC2DD\uC758 height\uAC00 \uC9C0\uC815\uC774 \uB420 \uACBD\uC6B0\uC5D0\uB294 \uC9C0\uC815\uB41C height\uB97C \uC6B0\uC120\uD569\uB2C8\uB2E4.)
+: 모든 자식 컨텐츠의 크기를 부모 컨텐츠와 같이 만들어 줍니다. (단, 자식의 height가 지정이 될 경우에는 지정된 height를 우선합니다.)
 
 
 2
 pack / space-between
-pack\uC740 \uBAA8\uB4E0 \uCEE8\uD150\uCE20\uB97C \uAC00\uC6B4\uB370\uB85C \uBC30\uCE58\uD569\uB2C8\uB2E4.
-\uBC84\uD2BC\uC774\uB098 \uBAA8\uB2EC \uD31D\uC5C5 \uB4F1\uB4F1 \uC5EC\uB7EC\uACF3\uC5D0\uC11C \uC790\uC8FC \uC0AC\uC6A9\uD569\uB2C8\uB2E4. \uC790\uC2DD \uCEE8\uD150\uCE20\uB294 \uC5EC\uB7EC\uAC1C\uAC00 \uC788\uC744 \uACBD\uC6B0 \uAC19\uC774 \uAC00\uC6B4\uB370\uC5D0 \uBC30\uCE58\uB429\uB2C8\uB2E4.
+pack은 모든 컨텐츠를 가운데로 배치합니다.
+버튼이나 모달 팝업 등등 여러곳에서 자주 사용합니다. 자식 컨텐츠는 여러개가 있을 경우 같이 가운데에 배치됩니다.
 
 vpack / space-between
-vpack\uC740 pack\uC758 column \uBC84\uC804\uC785\uB2C8\uB2E4. \uBAA8\uB4E0 \uCEE8\uD150\uCE20\uB97C column \uAC00\uC6B4\uB370\uB85C \uBC30\uCE58\uD569\uB2C8\uB2E4.
+vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로 배치합니다.
 
 3
 space-between space-around / space-evenly
-:space-between\uC740 \uAC01 \uCEE8\uD150\uCE20\uB97C \uAC19\uC740 \uAC04\uACA9\uC73C\uB85C \uBC8C\uB824\uB193\uC2B5\uB2C8\uB2E4. (NAVBar \uAC19\uC740 \uACF3\uC5D0\uC11C \uC0AC\uC6A9\uD569\uB2C8\uB2E4.) 
+:space-between은 각 컨텐츠를 같은 간격으로 벌려놓습니다. (NAVBar 같은 곳에서 사용합니다.) 
 
 4
 space / flex
 
 space
-: \uCEE4\uC2A4\uD140 \uBD80\uBD84\uC744 \uC9C0\uC815\uD558\uC5EC \uAC04\uACA9\uC744 \uB744\uC6B8\uB54C\uB294 margin\uC744 \uC0AC\uC6A9\uD558\uB294 \uAC83\uBCF4\uB2E4 \uBE48 \uC5D8\uB9AC\uBA3C\uD2B8\uB97C \uB9CC\uB4DC\uB294\uAC83\uC774 \uB354 \uC88B\uC2B5\uB2C8\uB2E4.
-: \uC2E4\uC804\uC5D0\uC11C \uB514\uC790\uC778 \uAC00\uC774\uB4DC\uC5D0 \uBCF4\uD1B5 \uC800 \uC0AC\uC774 \uAC04\uACA9\uC744 \uC801\uC5B4\uC8FC\uB294 \uD3B8\uC774\uAE30\uB3C4 \uD558\uACE0 \uCEF4\uD3EC\uB10C\uD2B8\uB098 \uC5D8\uB9AC\uBA3C\uD2B8\uC5D0 margin\uC744 \uC9C1\uC811 \uC801\uC6A9\uD558\uBA74 \uC7AC\uC0AC\uC6A9\uC774 \uD798\uB4E4\uC5B4\uC9C0\uAE30 \uB54C\uBB38\uC785\uB2C8\uB2E4.
+: 커스텀 부분을 지정하여 간격을 띄울때는 margin을 사용하는 것보다 빈 엘리먼트를 만드는것이 더 좋습니다.
+: 실전에서 디자인 가이드에 보통 저 사이 간격을 적어주는 편이기도 하고 컴포넌트나 엘리먼트에 margin을 직접 적용하면 재사용이 힘들어지기 때문입니다.
 
 flex
-: flex\uB294 \uBE48\uACF5\uAC04\uC744 \uBA54\uC6CC\uC8FC\uB294 \uC5ED\uD560\uC744 \uD569\uB2C8\uB2E4.
-: \uB2E8\uB3C5\uC73C\uB85C\uB9CC \uC0AC\uC6A9\uD574\uC11C \uC88C\uC6B0\uB97C \uBC8C\uB824\uC8FC\uB294 \uC6A9\uB3C4\uB85C \uAC00\uC7A5 \uB9CE\uC774 \uC0AC\uC6A9\uD558\uACE0 Auto Grow\uAC00 \uD544\uC694\uD55C \uCEE8\uD150\uCE20 \uC601\uC5ED\uC5D0 \uC0AC\uC6A9\uD558\uAE30\uB3C4 \uD569\uB2C8\uB2E4.
-: \uC22B\uC790\uB97C \uBD80\uC5EC\uD558\uBA74 \uB0A8\uB294 \uACF5\uAC04\uC744 \uBE44\uC728\uB85C \uB098\uB20C \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+: flex는 빈공간을 메워주는 역할을 합니다.
+: 단독으로만 사용해서 좌우를 벌려주는 용도로 가장 많이 사용하고 Auto Grow가 필요한 컨텐츠 영역에 사용하기도 합니다.
+: 숫자를 부여하면 남는 공간을 비율로 나눌 수 있습니다.
 
 
 5
 vbox
-: \uCEE8\uD150\uCE20\uB97C \uC138\uB85C\uB85C \uBC30\uCE58\uD558\uACE0 \uC2F6\uB2E4\uBA74 vbox(vertical box)\uB97C \uC0AC\uC6A9\uD558\uC138\uC694.
-: \uC0AC\uC6A9\uBC95\uC740 hbox\uC640 \uB3D9\uC77C \uD569\uB2C8\uB2E4. \uB2E8, vbox\uB294 \uAE30\uBCF8\uAC12\uC774 fill = stretch \uC785\uB2C8\uB2E4.
+: 컨텐츠를 세로로 배치하고 싶다면 vbox(vertical box)를 사용하세요.
+: 사용법은 hbox와 동일 합니다. 단, vbox는 기본값이 fill = stretch 입니다.
 -->
 
 
@@ -612,7 +614,7 @@ vbox
   <h2>hbox(fill) = hbox(stretch)</h2>  
   <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
     <div class="w(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">\uD06C\uAE30\uB97C \uC9C0\uC815\uD558\uBA74<br/>\uCEE8\uD150\uCE20 \uD06C\uAE30</div>
+    <div class="w(48) h(100) bg(orange) pack">크기를 지정하면<br/>컨텐츠 크기</div>
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) bg(orange) pack">x</div>
     <div class="p(10) bg(orange) pack">(fill)</div>
@@ -673,45 +675,45 @@ vbox
   
 </div>
 
-`.trim(),ze=`
+`.trim(),De=`
 <!--
 Layout - Position
 https://youtu.be/T5wMhoVHFU0
 
 Basic
-- \uC6B0\uC120 css\uC640 1:1 \uB300\uC751\uC744 \uD558\uB294 \uC18D\uC131
+- 우선 css와 1:1 대응을 하는 속성
 
 1. absolute / fixed / relative / static / sticky / sticky-top / sticky-left 
-: css position \uD0C0\uC785\uC744 \uBCC0\uACBD\uD560 \uC218 \uC788\uB2E4.
+: css position 타입을 변경할 수 있다.
 
 2. top / right / bottom / lef
-: css\uC758 top, right, bottom, left\uC758 \uAC12\uC744 \uC870\uC808 \uD560 \uC218 \uC788\uB2E4.
+: css의 top, right, bottom, left의 값을 조절 할 수 있다.
 
 3. z
-: css\uC758 z-index\uAC12\uC744 \uBCC0\uACBD\uD560 \uC218 \uC788\uB2E4.
+: css의 z-index값을 변경할 수 있다.
 
 
 Extension
 
 1. layer
-: \uC804\uCCB4\uB97C \uB36E\uB294 \uD615\uD0DC\uC758 \uB808\uC774\uC544\uC6C3 
-: \uBAA8\uB2EC \uD31D\uC5C5\uB4F1\uC5D0 dimmed\uB97C \uAE4C\uB294 \uB4F1 \uBE48\uBC88\uD788 \uC0AC\uC6A9\uB418\uC5B4 \uC18D\uC131\uC5D0 \uCD94\uAC00 \uD558\uC600\uC2B5\uB2C8\uB2E4.
-: absolute top(0) left(0) right(0) bottom(0)\uC758 \uCD95\uC57D\uD615\uC785\uB2C8\uB2E4.
+: 전체를 덮는 형태의 레이아웃 
+: 모달 팝업등에 dimmed를 까는 등 빈번히 사용되어 속성에 추가 하였습니다.
+: absolute top(0) left(0) right(0) bottom(0)의 축약형입니다.
 
 2. layer(top) / layer(right) / layer(bottom) / layer(left)
-: \uBC29\uD5A5\uC744 \uC9C0\uC815\uD574\uC8FC\uBA74 \uD574\uB2F9 \uBA74\uC5D0 \uBD99\uB294 \uD615\uD0DC\uB85C \uBD99\uC5EC\uC90D\uB2C8\uB2E4.
-: NAV\uB098 BAR\uB4F1\uC744 \uACE0\uC815\uD560\uB54C \uC8FC\uB85C \uC0AC\uC6A9\uD569\uB2C8\uB2E4.
+: 방향을 지정해주면 해당 면에 붙는 형태로 붙여줍니다.
+: NAV나 BAR등을 고정할때 주로 사용합니다.
 
 
 3. layer(top+left) / layer(top+right) / layer(bottom+left) / layer(bottom+right)
-: top/bottom + left/right \uB294 \uC870\uB9BD\uC774 \uAC00\uB2A5\uD569\uB2C8\uB2E4.
-: \uD31D\uC5C5\uC758 \uB2EB\uAE30 \uBC84\uD2BC \uB4F1\uC5D0\uC11C margin\uACFC \uD568\uAED8 \uC8FC\uB85C \uC0AC\uC6A9\uD569\uB2C8\uB2E4.
+: top/bottom + left/right 는 조립이 가능합니다.
+: 팝업의 닫기 버튼 등에서 margin과 함께 주로 사용합니다.
 
 
-4. layer(top:10) \uACFC \uAC19\uC774 \uAC12\uC744 \uC9C0\uC815\uD574\uC8FC\uBA74 \uD574\uB2F9 \uAC12\uB9CC\uD07C \uB5A8\uC5B4\uC9C4 \uC704\uCE58\uC5D0 \uBD99\uC5EC\uC90D\uB2C8\uB2E4.
+4. layer(top:10) 과 같이 값을 지정해주면 해당 값만큼 떨어진 위치에 붙여줍니다.
 
 4. layer(top+outside) 
-: layer(top)\uACFC \uB3D9\uC77C\uD558\uC9C0\uB9CC, layer(top)\uC740 \uBD80\uBAA8\uC5D8\uB9AC\uBA3C\uD2B8\uC758 \uBC14\uAE65\uCABD \uAE30\uC900\uC73C\uB85C \uBD99\uC2B5\uB2C8\uB2E4. 
+: layer(top)과 동일하지만, layer(top)은 부모엘리먼트의 바깥쪽 기준으로 붙습니다. 
 -->
 
 
@@ -721,7 +723,7 @@ Extension
 
   <h2>layer</h2>
   <div class="relative w(100) h(100) b(#ff6347) pack">
-    <div class="font(90)">\u{1F433}</div>
+    <div class="font(90)">🐳</div>
     <div class="layer pack bg(#ff6347.5)">layer</div>
   </div>
 
@@ -730,22 +732,22 @@ Extension
   
   <div class="hbox gap(10)">
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top) pack bg(#ff6347.5)">layer(top)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(right) pack bg(#ff6347.5)">layer(right)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(bottom) pack bg(#ff6347.5)">layer(bottom)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(left) pack bg(#ff6347.5)">layer(left)</div>
     </div>
   </div>
@@ -755,22 +757,22 @@ Extension
   
   <div class="hbox gap(10)">
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top+left) pack bg(#ff6347.5) text-center">layer<br/>(top+left)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top+right) pack bg(#ff6347.5) text-center">layer<br/>(top+right)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(bottom+left) pack bg(#ff6347.5) text-center">layer<br/>(bottom<br/>+left)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(bottom+right) pack bg(#ff6347.5) text-center">layer<br/>(bottom<br/>+right)</div>
     </div>
   </div>
@@ -780,12 +782,12 @@ Extension
 
   <div class="hbox gap(10)">
     <div class="relative w(200) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top:10) pack bg(#ff6347.5)">layer(top:10)</div>
     </div>
     
     <div class="relative w(200) h(100) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top:50%) pack bg(#ff6347.5)">layer(top:50%)</div>
     </div>    
   </div>
@@ -795,7 +797,7 @@ Extension
 
   <div class="hbox gap(10)">
     <div class="relative w(200) h(200) b(#ff6347) pack">
-      <div class="font(90)">\u{1F433}</div>
+      <div class="font(90)">🐳</div>
       <div class="layer(top+outside) pack bg(#ff6347.5)">layer(top+outside)</div>
       <div class="layer(right+outside) pack bg(#ff6347.5) w(150)">layer(top+outside)</div>
       <div class="layer(bottom+outside) pack bg(#ff6347.5)">layer(bottom+outside)</div>
@@ -878,7 +880,7 @@ https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW
 <!--
 Prefix
 https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements 
-* \uBE0C\uB77C\uC6B0\uC800\uC5D0 \uB530\uB77C \uC9C0\uC6D0\uD558\uC9C0 \uC54A\uC744 \uC218 \uC788\uC2B5\uB2C8\uB2E4.
+* 브라우저에 따라 지원하지 않을 수 있습니다.
 
 ::after (:after)
 ::backdrop (en-US) 
@@ -912,7 +914,7 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements
     <div>third</div>
   </div>
 
-  <div>selection::bg(red) (\uB4DC\uB798\uADF8 \uD574\uBCF4\uC138\uC694.)</div>
+  <div>selection::bg(red) (드래그 해보세요.)</div>
   <div class="bg(#fff) selection::bg(red)">
     <div>first</div>
     <div>second</div>
@@ -941,11 +943,11 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements
   </div>
 </div>
 
-`.trim(),Pe="vs",Ye=!0,Ne=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Xe={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},qe={base:Pe,inherit:Ye,rules:Ne,colors:Xe};function We(e){let u;return{c(){u=h("div"),this.h()},l(i){u=p(i,"DIV",{class:!0}),f(u).forEach(c),this.h()},h(){n(u,"class","h(100%)")},m(i,l){$(i,u,l),e[3](u)},p:J,i:J,o:J,d(i){i&&c(u),e[3](null)}}}function Ge(e,u,i){let{value:l=""}=u,a=null,t;const y=s=>{t&&t.setValue(s)};he(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>s};let s=URL.createObjectURL(new Blob([`
+`.trim(),Pe="vs",Ye=!0,Ne=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Xe={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},qe={base:Pe,inherit:Ye,rules:Ne,colors:Xe};function We(e){let i;return{c(){i=f("div"),this.h()},l(o){i=b(o,"DIV",{class:!0}),g(i).forEach(v),this.h()},h(){p(i,"class","h(100%)")},m(o,r){$(o,i,r),e[3](i)},p:J,i:J,o:J,d(o){o&&v(i),e[3](null)}}}function Ge(e,i,o){let{value:r=""}=i,l=null,s;const R=a=>{s&&s.setValue(a)};fe(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>a};let a=URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
 		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
 	};
 	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",qe),t=monaco.editor.create(a,{value:l,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),t.onDidChangeModelContent(g=>{i(1,l=t.getValue())}),t.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){t.getAction("editor.action.formatDocument").run()})}),()=>{t&&t.dispose()}});function C(s){G[s?"unshift":"push"](()=>{a=s,i(0,a)})}return e.$$set=s=>{"value"in s&&i(1,l=s.value)},[a,l,y,C]}class Qe extends Ce{constructor(u){super(),ce(this,u,Ge,We,ne,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}function re(e,u,i){const l=e.slice();return l[14]=u[i][0],l[15]=u[i][1],l[17]=i,l}function de(e){let u,i=e[14]+"",l,a,t;function y(){return e[10](e[14],e[15],e[17])}return{c(){u=h("div"),l=q(i),this.h()},l(C){u=p(C,"DIV",{class:!0});var s=f(u);l=W(s,i),s.forEach(c),this.h()},h(){n(u,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),E(u,"selected",e[3]===e[17])},m(C,s){$(C,u,s),r(u,l),a||(t=Z(u,"click",y),a=!0)},p(C,s){e=C,s&8&&E(u,"selected",e[3]===e[17])},d(C){C&&c(u),a=!1,t()}}}function Ke(e){let u,i,l,a,t,y,C,s,g,z,O,D,w,A,V,M,d,x,R,F,_,T,Q,S,P,k,K,ee,I=e[6],v=[];for(let o=0;o<I.length;o+=1)v[o]=de(re(e,I,o));function ve(o){e[11](o)}let ue={};return e[1]!==void 0&&(ue.value=e[1]),g=new Qe({props:ue}),G.push(()=>pe(g,"value",ve)),e[12](g),{c(){u=h("div"),i=h("div"),l=L(),a=h("div"),t=h("div");for(let o=0;o<v.length;o+=1)v[o].c();y=L(),C=h("div"),s=h("div"),fe(g.$$.fragment),O=L(),D=h("div"),w=h("div"),A=h("button"),V=q("Result"),M=L(),d=h("button"),x=q("CSS Output"),R=L(),F=h("div"),_=h("div"),T=h("iframe"),Q=L(),S=h("div"),P=q(e[2]),this.h()},l(o){u=p(o,"DIV",{class:!0});var b=f(u);i=p(b,"DIV",{class:!0}),f(i).forEach(c),l=U(b),a=p(b,"DIV",{class:!0});var m=f(a);t=p(m,"DIV",{class:!0});var B=f(t);for(let j=0;j<v.length;j+=1)v[j].l(B);B.forEach(c),y=U(m),C=p(m,"DIV",{class:!0});var H=f(C);s=p(H,"DIV",{class:!0});var ie=f(s);be(g.$$.fragment,ie),ie.forEach(c),H.forEach(c),O=U(m),D=p(m,"DIV",{class:!0});var Y=f(D);w=p(Y,"DIV",{class:!0});var N=f(w);A=p(N,"BUTTON",{class:!0});var oe=f(A);V=W(oe,"Result"),oe.forEach(c),M=U(N),d=p(N,"BUTTON",{class:!0});var te=f(d);x=W(te,"CSS Output"),te.forEach(c),N.forEach(c),R=U(Y),F=p(Y,"DIV",{class:!0});var X=f(F);_=p(X,"DIV",{class:!0});var se=f(_);T=p(se,"IFRAME",{class:!0,frameborder:!0}),f(T).forEach(c),se.forEach(c),Q=U(X),S=p(X,"DIV",{class:!0});var ae=f(S);P=W(ae,e[2]),ae.forEach(c),X.forEach(c),Y.forEach(c),m.forEach(c),b.forEach(c),this.h()},h(){n(i,"class","h(60)"),n(t,"class","vbox w(240) monospace(number) p(10)"),n(s,"class","flex(4) vbox r(10) clip"),n(C,"class","flex(4) vbox p(10)"),n(A,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),E(A,"selected",e[4]==="Result"),n(d,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),E(d,"selected",e[4]==="CSS_output"),n(w,"class","hbox bg(#fff) font(12) c(#999)"),n(T,"class","layer w(100%) h(100%) bg(transparent)"),n(T,"frameborder","0"),n(_,"class","layer pack check-board none"),E(_,"none",e[4]!=="Result"),n(S,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),E(S,"none",e[4]!=="CSS_output"),n(F,"class","flex relative"),n(D,"class","flex(3) relative vbox c(#000) p(10) r(10)"),n(a,"class","flex hbox(fill) clip bg(#f9f9f9)"),n(u,"class","layer vbox overscroll(none)")},m(o,b){$(o,u,b),r(u,i),r(u,l),r(u,a),r(a,t);for(let m=0;m<v.length;m+=1)v[m].m(t,null);r(a,y),r(a,C),r(C,s),Be(g,s,null),r(a,O),r(a,D),r(D,w),r(w,A),r(A,V),r(w,M),r(w,d),r(d,x),r(D,R),r(D,F),r(F,_),r(_,T),e[13](T),r(F,Q),r(F,S),r(S,P),k=!0,K||(ee=[Z(A,"click",e[7]),Z(d,"click",e[8])],K=!0)},p(o,[b]){if(b&584){I=o[6];let B;for(B=0;B<I.length;B+=1){const H=re(o,I,B);v[B]?v[B].p(H,b):(v[B]=de(H),v[B].c(),v[B].m(t,null))}for(;B<v.length;B+=1)v[B].d(1);v.length=I.length}const m={};!z&&b&2&&(z=!0,m.value=o[1],ge(()=>z=!1)),g.$set(m),(!k||b&16)&&E(A,"selected",o[4]==="Result"),(!k||b&16)&&E(d,"selected",o[4]==="CSS_output"),(!k||b&16)&&E(_,"none",o[4]!=="Result"),(!k||b&4)&&De(P,o[2]),(!k||b&16)&&E(S,"none",o[4]!=="CSS_output")},i(o){k||(me(g.$$.fragment,o),k=!0)},o(o){Ae(g.$$.fragment,o),k=!1},d(o){o&&c(u),we(v,o),e[12](null),Ee(g),e[13](null),K=!1,ye(ee)}}}function je(e,u,i){let l,a,t=le;const y=[["Hello AdorableCSS!",le],["1. Colors",_e],["2. Typography",Oe],["3. Box Model",Ie],["4. Overflow",Le],["5. Flexbox",Ue],["6. Position",ze],["7. Hover, Active",Ve],["8. Pseudo Class",Me],["9. Pseudo Element",He],["10. Media Query",Se],["11. Selector",Re],["12. Important!",Te],["\uACC4\uC18D \uC791\uC5C5 \uC911\uC785\uB2C8\uB2E4...",""]];let C=0,s="Result";const g=()=>i(4,s="Result"),z=()=>i(4,s="CSS_output"),O=(d,x,R)=>{i(1,t=x),i(3,C=R),D.setValue(x)};let D;const w=(d,x,R)=>O(d,x,R);function A(d){t=d,i(1,t)}function V(d){G[d?"unshift":"push"](()=>{D=d,i(5,D)})}function M(d){G[d?"unshift":"push"](()=>{a=d,i(0,a),i(2,l),i(1,t)})}return e.$$.update=()=>{e.$$.dirty&2&&i(2,l=ke+xe(Fe(t)).join(`
-`)),e.$$.dirty&7&&a&&i(0,a.contentWindow.document.body.innerHTML=`<style>${l}</style>
-`+t,a)},[a,t,l,C,s,D,y,g,z,O,w,A,V,M]}class $e extends Ce{constructor(u){super(),ce(this,u,je,Ke,ne,{})}}export{$e as default};
+`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",qe),s=monaco.editor.create(l,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(y=>{o(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function n(a){G[a?"unshift":"push"](()=>{l=a,o(0,l)})}return e.$$set=a=>{"value"in a&&o(1,r=a.value)},[l,r,R,n]}class Qe extends ne{constructor(i){super(),ve(this,i,Ge,We,he,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}function de(e,i,o){const r=e.slice();return r[14]=i[o][0],r[15]=i[o][1],r[17]=o,r}function ce(e){let i,o=e[14]+"",r,l,s;function R(){return e[10](e[14],e[15],e[17])}return{c(){i=f("div"),r=q(o),this.h()},l(n){i=b(n,"DIV",{class:!0});var a=g(i);r=W(a,o),a.forEach(v),this.h()},h(){p(i,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),S(i,"selected",e[3]===e[17])},m(n,a){$(n,i,a),d(i,r),l||(s=Z(i,"click",R),l=!0)},p(n,a){e=n,a&8&&S(i,"selected",e[3]===e[17])},d(n){n&&v(i),l=!1,s()}}}function Ke(e){let i,o,r,l,s,R,n,a,y,D,A,k,_,x,V,M,c,O,C,E,I,U,Q,L,P,T,K,ee,F=e[6],h=[];for(let t=0;t<F.length;t+=1)h[t]=ce(de(e,F,t));function pe(t){e[11](t)}let ie={};return e[1]!==void 0&&(ie.value=e[1]),y=new Qe({props:ie}),G.push(()=>be(y,"value",pe)),e[12](y),{c(){i=f("div"),o=f("div"),r=B(),l=f("div"),s=f("div");for(let t=0;t<h.length;t+=1)h[t].c();R=B(),n=f("div"),a=f("div"),ge(y.$$.fragment),A=B(),k=f("div"),_=f("div"),x=f("button"),V=q("Result"),M=B(),c=f("button"),O=q("CSS Output"),C=B(),E=f("div"),I=f("div"),U=f("iframe"),Q=B(),L=f("div"),P=q(e[2]),this.h()},l(t){i=b(t,"DIV",{class:!0});var u=g(i);o=b(u,"DIV",{class:!0}),g(o).forEach(v),r=z(u),l=b(u,"DIV",{class:!0});var w=g(l);s=b(w,"DIV",{class:!0});var m=g(s);for(let j=0;j<h.length;j+=1)h[j].l(m);m.forEach(v),R=z(w),n=b(w,"DIV",{class:!0});var H=g(n);a=b(H,"DIV",{class:!0});var oe=g(a);ue(y.$$.fragment,oe),oe.forEach(v),H.forEach(v),A=z(w),k=b(w,"DIV",{class:!0});var Y=g(k);_=b(Y,"DIV",{class:!0});var N=g(_);x=b(N,"BUTTON",{class:!0});var te=g(x);V=W(te,"Result"),te.forEach(v),M=z(N),c=b(N,"BUTTON",{class:!0});var se=g(c);O=W(se,"CSS Output"),se.forEach(v),N.forEach(v),C=z(Y),E=b(Y,"DIV",{class:!0});var X=g(E);I=b(X,"DIV",{class:!0});var ae=g(I);U=b(ae,"IFRAME",{class:!0,frameborder:!0}),g(U).forEach(v),ae.forEach(v),Q=z(X),L=b(X,"DIV",{class:!0});var le=g(L);P=W(le,e[2]),le.forEach(v),X.forEach(v),Y.forEach(v),w.forEach(v),u.forEach(v),this.h()},h(){p(o,"class","h(60)"),p(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),p(a,"class","flex(4) vbox r(10) clip"),p(n,"class","flex(4) vbox p(10)"),p(x,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),S(x,"selected",e[4]==="Result"),p(c,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),S(c,"selected",e[4]==="CSS_output"),p(_,"class","hbox bg(#fff) font(12) c(#999)"),p(U,"class","layer w(100%) h(100%) bg(transparent)"),p(U,"frameborder","0"),p(I,"class","layer pack check-board none"),S(I,"none",e[4]!=="Result"),p(L,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),S(L,"none",e[4]!=="CSS_output"),p(E,"class","flex relative"),p(k,"class","flex(3) relative vbox c(#000) p(10) r(10)"),p(l,"class","flex hbox(fill) clip bg(#f9f9f9)"),p(i,"class","layer vbox overscroll(none)")},m(t,u){$(t,i,u),d(i,o),d(i,r),d(i,l),d(l,s);for(let w=0;w<h.length;w+=1)h[w]&&h[w].m(s,null);d(l,R),d(l,n),d(n,a),me(y,a,null),d(l,A),d(l,k),d(k,_),d(_,x),d(x,V),d(_,M),d(_,c),d(c,O),d(k,C),d(k,E),d(E,I),d(I,U),e[13](U),d(E,Q),d(E,L),d(L,P),T=!0,K||(ee=[Z(x,"click",e[7]),Z(c,"click",e[8])],K=!0)},p(t,[u]){if(u&584){F=t[6];let m;for(m=0;m<F.length;m+=1){const H=de(t,F,m);h[m]?h[m].p(H,u):(h[m]=ce(H),h[m].c(),h[m].m(s,null))}for(;m<h.length;m+=1)h[m].d(1);h.length=F.length}const w={};!D&&u&2&&(D=!0,w.value=t[1],we(()=>D=!1)),y.$set(w),(!T||u&16)&&S(x,"selected",t[4]==="Result"),(!T||u&16)&&S(c,"selected",t[4]==="CSS_output"),(!T||u&16)&&S(I,"none",t[4]!=="Result"),(!T||u&4)&&ye(P,t[2]),(!T||u&16)&&S(L,"none",t[4]!=="CSS_output")},i(t){T||(ke(y.$$.fragment,t),T=!0)},o(t){xe(y.$$.fragment,t),T=!1},d(t){t&&v(i),_e(h,t),e[12](null),Se(y),e[13](null),K=!1,Re(ee)}}}function je(e,i,o){let r,l,s=re;const R=[["Hello AdorableCSS!",re],["1. Colors",Ie],["2. Typography",Ae],["3. Box Model",Fe],["4. Overflow",Be],["5. Flexbox",ze],["6. Position",De],["7. Hover, Active",Ve],["8. Pseudo Class",Me],["9. Pseudo Element",He],["10. Media Query",Le],["11. Selector",Ce],["12. Important!",Ue],["계속 작업 중입니다...",""]];let n=0,a="Result";const y=()=>o(4,a="Result"),D=()=>o(4,a="CSS_output"),A=(c,O,C)=>{o(1,s=O),o(3,n=C),k.setValue(O)};let k;const _=(c,O,C)=>A(c,O,C);function x(c){s=c,o(1,s)}function V(c){G[c?"unshift":"push"](()=>{k=c,o(5,k)})}function M(c){G[c?"unshift":"push"](()=>{l=c,o(0,l),o(2,r),o(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&o(2,r=Te+Oe(Ee(s)).join(`
+`)),e.$$.dirty&7&&l&&o(0,l.contentWindow.document.body.innerHTML=`<style>${r}</style>
+`+s,l)},[l,s,r,n,a,k,R,y,D,A,_,x,V,M]}class $e extends ne{constructor(i){super(),ve(this,i,je,Ke,he,{})}}export{$e as default};
