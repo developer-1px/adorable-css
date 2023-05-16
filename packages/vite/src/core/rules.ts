@@ -226,18 +226,22 @@ export const RULES:Rules = {
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 
+  // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
   "mt": (value:string) => `margin-top:${px(value)};`,
   "mr": (value:string) => `margin-right:${px(value)};`,
   "mb": (value:string) => `margin-bottom:${px(value)};`,
   "ml": (value:string) => `margin-left:${px(value)};`,
 
+  // BoxModel - Padding
   "p": (value:string) => `padding:${makeSide(value)};`,
   "pt": (value:string) => `padding-top:${px(value)};`,
   "pr": (value:string) => `padding-right:${px(value)};`,
   "pb": (value:string) => `padding-bottom:${px(value)};`,
   "pl": (value:string) => `padding-left:${px(value)};`,
 
+  // BoxModel - Border
+  "no-border": () => `border:none;outline:none;`,
   "b": (value:string) => `border:${makeBorder(value)};`,
   "bt": (value:string) => `border-top:${makeBorder(value)};`,
   "br": (value:string) => `border-right:${makeBorder(value)};`,
@@ -262,6 +266,10 @@ export const RULES:Rules = {
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value:string) => `border-left-color:${makeColor(value)};`,
 
+  // outline
+  "outline": (value:string) => `outline:${makeBorder(value)};`,
+  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+
   // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
 
@@ -275,15 +283,13 @@ export const RULES:Rules = {
   "rbr": (value:string) => `border-bottom-right-radius:${px(value)};`,
   "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
 
+  // box-shadow
   "ring": (value:string) => {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
   "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
-
-  "outline": (value:string) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
 
   // -- Background
   "bg": (value:string) => {
@@ -543,7 +549,6 @@ export const RULES:Rules = {
   "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
-  "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
   "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,

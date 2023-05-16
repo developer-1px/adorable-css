@@ -58,7 +58,7 @@ let editor
   <div class="h(60)"/>
 
   <div class="flex hbox(fill) clip bg(#f9f9f9)">
-    <div class="vbox w(240) monospace(number) p(10)">
+    <div class="vbox w(240) monospace(number) p(10) scroll-y">
       {#each tutorials as [title, code], index}
         <div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!" class:selected={currentTutorialIndex === index} on:click={() => 튜토리얼_선택(title, code, index)}>{title}</div>
       {/each}
