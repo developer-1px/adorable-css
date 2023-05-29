@@ -193,7 +193,18 @@ vbox
     <div class="flex"></div>
     <div class="p(10) bg(orange)">flex</div>
   </div>
-  
+
+  <h2>visible / none visible hidden gone</h2>
+
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">1</div>
+    <div class="w(48) h(48) bg(orange) pack none">2</div>
+    <div class="w(48) h(48) bg(orange) pack visible">3</div>
+    <div class="w(48) h(48) bg(orange) pack hidden">4</div>
+    <div class="w(48) h(48) bg(orange) pack gone">5</div>
+    <div class="w(48) h(48) bg(orange) pack opacity(0.4)">6</div>
+  </div>
+
 </div>
 
-`.trim()
+`.trim();
