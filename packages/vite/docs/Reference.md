@@ -157,13 +157,58 @@ export const RULES:Rules = {
   "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
   "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
 
+  // align-items
+  "ai": (value:string) => `align-items:${value};`,
+  "items": (value:string) => `align-items:${value};`,
+  "items-start": () => `align-items:flex-start;`,
+  "items-end": () => `align-items:flex-end;`,
+  "items-center": () => `align-items:center;`,
+  "items-baseline": () => `align-items:baseline;`,
+  "items-stretch": () => `align-items:stretch;`,
+
+  // align-content
+  "ac": (value:string) => `align-content:${value};`,
+  "content-start": () => `align-content:flex-start;`,
+  "content-end": () => `align-content:flex-end;`,
+  "content-center": () => `align-content:center;`,
+  "content-between": () => `align-content:space-between;`,
+  "content-around": () => `align-content:space-around;`,
+  "content-evenly": () => `align-content:space-evenly;`,
+  "content-stretch": () => `align-content:stretch;`,
+
+  // justify-content
+  "jc": (value:string) => `justify-content:${value};`,
+  "justify": (value:string) => `justify-content:${value};`,
+  "justify-start": () => `justify-content:flex-start;`,
+  "justify-end": () => `justify-content:flex-end;`,
+  "justify-center": () => `justify-content:center;`,
+  "justify-between": () => `justify-content:space-between;`,
+  "justify-around": () => `justify-content:space-around;`,
+  "justify-evenly": () => `justify-content:space-evenly;`,
+  "justify-stretch": () => `justify-content:stretch;`,
+
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
 
+  // justify-items
+  "ji": (value:string) => `justify-items:${value};`,
+  "justify-items": (value:string) => `justify-items:${value};`,
+  "justify-items-start": () => `justify-items:start;`,
+  "justify-items-end": () => `justify-items:end;`,
+  "justify-items-center": () => `justify-items:center;`,
+  "justify-items-stretch": () => `justify-items:stretch;`,
+
+
   // flex
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+
+  "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "grow-0": () => `flex-grow:0;`,
+  "no-grow": () => `flex-grow:0;`,
+  "shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "no-shrink": () => `flex-shrink:0;`,
 
   "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
@@ -174,7 +219,6 @@ export const RULES:Rules = {
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
-  // "self":(value:string) => `order:${cssvar(value)};`,
 
   // -- Box
 
@@ -228,18 +272,22 @@ export const RULES:Rules = {
     return (value === "stretch" || value === "fill") ? `align-self:stretch` : `height:${px(value)};`
   },
 
+  // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
   "mt": (value:string) => `margin-top:${px(value)};`,
   "mr": (value:string) => `margin-right:${px(value)};`,
   "mb": (value:string) => `margin-bottom:${px(value)};`,
   "ml": (value:string) => `margin-left:${px(value)};`,
 
+  // BoxModel - Padding
   "p": (value:string) => `padding:${makeSide(value)};`,
   "pt": (value:string) => `padding-top:${px(value)};`,
   "pr": (value:string) => `padding-right:${px(value)};`,
   "pb": (value:string) => `padding-bottom:${px(value)};`,
   "pl": (value:string) => `padding-left:${px(value)};`,
 
+  // BoxModel - Border
+  "no-border": () => `border:none;outline:none;`,
   "b": (value:string) => `border:${makeBorder(value)};`,
   "bt": (value:string) => `border-top:${makeBorder(value)};`,
   "br": (value:string) => `border-right:${makeBorder(value)};`,
@@ -264,6 +312,10 @@ export const RULES:Rules = {
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value:string) => `border-left-color:${makeColor(value)};`,
 
+  // outline
+  "outline": (value:string) => `outline:${makeBorder(value)};`,
+  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+
   // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
 
@@ -277,15 +329,13 @@ export const RULES:Rules = {
   "rbr": (value:string) => `border-bottom-right-radius:${px(value)};`,
   "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
 
+  // box-shadow
   "ring": (value:string) => {
     const [color, size = 1] = value.split("/")
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
-  "box-shadow": (value:string) => `box-shadow:${makeValues(value)}`,
-
-  "outline": (value:string) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
 
   // -- Background
   "bg": (value:string) => {
@@ -306,7 +356,7 @@ export const RULES:Rules = {
   },
   "background-image": (value:string) => RULES["bg-image"](value),
 
-  "bg-position": (value:string) => `background-position:${value};`,
+  "bg-position": (value:string) => `background-position:${makeValues(value)};`,
 
   // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
@@ -363,8 +413,8 @@ export const RULES:Rules = {
   "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
 
-  "snap-normal": () => `scroll-snap-stop: normal;`,
-  "snap-always": () => `scroll-snap-stop: always;`,
+  "snap-normal": () => `scroll-snap-stop:normal;`,
+  "snap-always": () => `scroll-snap-stop:always;`,
 
   // @TODO:- TBD
   "overscroll": (value:string) => `overscroll-behavior:${value};`,
@@ -391,16 +441,65 @@ export const RULES:Rules = {
 
   // Position
   "layer": (value = "") => {
-    const pos = {top: 0, right: 0, bottom: 0, left: 0}
+    const pos = {top: "0", right: "0", bottom: "0", left: "0"}
+    const outsides = []
+    let outside = false
+
     value.split("+").forEach(v => {
-      switch (v) {
-        case "top": {return (delete pos.bottom)}
-        case "right": {return (delete pos.left)}
-        case "bottom": {return (delete pos.top)}
-        case "left": {return (delete pos.right)}
+      const [direction, value = "0"] = v.split(":")
+      switch (direction) {
+        case "top": {
+          pos.top = value
+          delete pos.bottom
+          outsides.push("top")
+          return
+        }
+        case "right": {
+          pos.right = value
+          delete pos.left
+          outsides.push("right")
+          return
+        }
+        case "bottom": {
+          pos.bottom = value
+          delete pos.top
+          outsides.push("bottom")
+          return
+        }
+        case "left": {
+          pos.left = value
+          delete pos.right
+          outsides.push("left")
+          return
+        }
+        case "outside": {
+          outside = true
+          return
+        }
       }
     })
-    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:0;`).join("")
+
+    if (outside) {
+      const revert = (b:string, a:string) => {
+        pos[a] = pos[b] === "0" ? "100%" : `calc(100% + ${px(pos[b])})`
+        delete pos[b]
+      }
+
+      outsides.forEach(direction => {
+        switch (direction) {
+          case "top":
+            return revert("top", "bottom")
+          case "right":
+            return revert("right", "left")
+          case "bottom":
+            return revert("bottom", "top")
+          case "left":
+            return revert("left", "right")
+        }
+      })
+    }
+
+    return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:${px(pos[value])};`).join("")
   },
 
   "absolute": (value:string) => `position:absolute;${makePosition(value)}`,
@@ -429,6 +528,7 @@ export const RULES:Rules = {
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);`,
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
+  "collapse": () => `visibility:collapse;`,
 
   // Interactions
   "col-resize": () => `cursor: col-resize;`,
@@ -496,7 +596,6 @@ export const RULES:Rules = {
   "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
-  "no-border": () => `border:none;outline:none;`,
   "app-region": (value:string) => `-webkit-app-region:${value};`,
   "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
@@ -670,7 +769,6 @@ export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
   "[": (selector:string) => `&${selector},${selector} &`,
   ">": (selector:string) => `&${selector}`,
   "+": (selector:string) => `&${selector}`,
-  "~": (selector:string) => `&${selector}`,
   "#": (selector:string) => `&${selector}`,
 }
 ```

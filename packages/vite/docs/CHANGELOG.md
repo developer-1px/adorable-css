@@ -1,3 +1,13 @@
+## 1.2.9
+- ✨align-items, justify-content, align-content, justify-items의 축약버전을 추가하였습니다.   
+- `ex) <div class="ai(flex-start) jc(flex-end)">`
+
+- ✨flex-grow, flex-shrink의 축약버전을 추가하였습니다. grow, grow-0, no-grow, shrink, shrink-0, no-shrink
+- no-grow와 grow-0는 같은 의미입니다.
+
+- 🐛CDN 방식에서 class가 하나도 없을 때 `body {display:none}`이 사라지지 않던 버그를 수정하였습니다. 
+
+
 ## 1.2.8
 - ✨layer(top:10) 과 같이 layer에 offset을 지정할 수 있는 기능을 추가하였습니다. 
 

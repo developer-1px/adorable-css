@@ -29,6 +29,7 @@ if (typeof document !== "undefined") {
 
   const bootstrap = () => {
     init()
+    generateStyleSheet()
     registerObserver()
     document.removeEventListener("readystatechange", bootstrap)
   }

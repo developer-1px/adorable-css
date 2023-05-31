@@ -2,8 +2,6 @@
 
 > ⚡️ Rapid On-Demand Atomic CSS framework
 
-
-
 ## Getting Started
 
 ```sh

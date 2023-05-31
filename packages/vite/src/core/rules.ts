@@ -155,13 +155,58 @@ export const RULES:Rules = {
   "vgap": (value:string) => `&>*+* {margin-top:${px(value)};}`,
   "vgap-reverse": (value:string) => `&>*+* {margin-bottom:${px(value)};}`,
 
+  // align-items
+  "ai": (value:string) => `align-items:${value};`,
+  "items": (value:string) => `align-items:${value};`,
+  "items-start": () => `align-items:flex-start;`,
+  "items-end": () => `align-items:flex-end;`,
+  "items-center": () => `align-items:center;`,
+  "items-baseline": () => `align-items:baseline;`,
+  "items-stretch": () => `align-items:stretch;`,
+
+  // align-content
+  "ac": (value:string) => `align-content:${value};`,
+  "content-start": () => `align-content:flex-start;`,
+  "content-end": () => `align-content:flex-end;`,
+  "content-center": () => `align-content:center;`,
+  "content-between": () => `align-content:space-between;`,
+  "content-around": () => `align-content:space-around;`,
+  "content-evenly": () => `align-content:space-evenly;`,
+  "content-stretch": () => `align-content:stretch;`,
+
+  // justify-content
+  "jc": (value:string) => `justify-content:${value};`,
+  "justify": (value:string) => `justify-content:${value};`,
+  "justify-start": () => `justify-content:flex-start;`,
+  "justify-end": () => `justify-content:flex-end;`,
+  "justify-center": () => `justify-content:center;`,
+  "justify-between": () => `justify-content:space-between;`,
+  "justify-around": () => `justify-content:space-around;`,
+  "justify-evenly": () => `justify-content:space-evenly;`,
+  "justify-stretch": () => `justify-content:stretch;`,
+
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
 
+  // justify-items
+  "ji": (value:string) => `justify-items:${value};`,
+  "justify-items": (value:string) => `justify-items:${value};`,
+  "justify-items-start": () => `justify-items:start;`,
+  "justify-items-end": () => `justify-items:end;`,
+  "justify-items-center": () => `justify-items:center;`,
+  "justify-items-stretch": () => `justify-items:stretch;`,
+
+
   // flex
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value:string) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+
+  "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "grow-0": () => `flex-grow:0;`,
+  "no-grow": () => `flex-grow:0;`,
+  "shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "no-shrink": () => `flex-shrink:0;`,
 
   "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
@@ -172,7 +217,6 @@ export const RULES:Rules = {
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
-  // "self":(value:string) => `order:${cssvar(value)};`,
 
   // -- Box
 
@@ -482,6 +526,7 @@ export const RULES:Rules = {
   "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);`,
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
+  "collapse": () => `visibility:collapse;`,
 
   // Interactions
   "col-resize": () => `cursor: col-resize;`,
