@@ -15,18 +15,17 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
 		<link href="/adorable-css/_app/immutable/assets/_layout-3156050a.css" rel="stylesheet">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-56ba16df.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-5b80bc67.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-5e2bc00b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-1b3e4a4c.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-3b5109d3.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-07324bd5.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-9cbb603b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-407ec6f0.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-161f4579.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
-
   function gtag() {dataLayer.push(arguments)}
 
   gtag("js", new Date())
@@ -52,7 +51,13 @@
 
       <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank" aria-label="github"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></div>
 
-  <div class="markdown p(20)"><h2>1.2.8</h2>
+  <div class="markdown p(20)"><h2>1.2.9</h2>
+<ul><li><p>✨align-items, justify-content, align-content, justify-items의 축약버전을 추가하였습니다.   </p></li>
+<li><p><code>ex) &lt;div class=&quot;ai(flex-start) jc(flex-end)&quot;&gt;</code></p></li>
+<li><p>✨flex-grow, flex-shrink의 축약버전을 추가하였습니다. grow, grow-0, no-grow, shrink, shrink-0, no-shrink</p></li>
+<li><p>no-grow와 grow-0는 같은 의미입니다.</p></li>
+<li><p>🐛CDN 방식에서 class가 하나도 없을 때 <code>body {display:none}</code>이 사라지지 않던 버그를 수정하였습니다. </p></li></ul>
+<h2>1.2.8</h2>
 <ul><li><p>✨layer(top:10) 과 같이 layer에 offset을 지정할 수 있는 기능을 추가하였습니다. </p></li>
 <li><p>✨layer(top+outside) 와 같이 부모 엘리먼트의 바깥쪽을 기준으로 붙이는 기능이 추가되었습니다.</p></li>
 <li><p>🐛adorableCSS가 잘못된 CSS를 생성하더라도 이후 라인이 문제가 생기지 않게 하도록 개선하였습니다. 복잡한 Selector 구문인 경우 맨 뒤에 <code>{}</code> 문자열을 추가하여 그 다음 라인은 정상적으로 동작할 수 있도록 하였습니다. </p></li>
@@ -278,14 +283,14 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 <div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.4</div>
 
 
-		<script type="module" data-sveltekit-hydrate="7ocu7q">
-			import { start } from "/adorable-css/_app/immutable/start-56ba16df.js";
+		<script type="module" data-sveltekit-hydrate="7tbie1">
+			import { start } from "/adorable-css/_app/immutable/start-5b80bc67.js";
 
 			start({
 				env: {},
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
-				target: document.querySelector('[data-sveltekit-hydrate="7ocu7q"]').parentNode,
-				version: "1684206058902",
+				target: document.querySelector('[data-sveltekit-hydrate="7tbie1"]').parentNode,
+				version: "1685498394023",
 				hydrate: {
 					node_ids: [0, 4],
 					data: [null,null],

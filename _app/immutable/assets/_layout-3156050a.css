@@ -11,7 +11,6 @@ ol,ul,menu,dir{list-style:none;}
 .\37 00{font-weight:700;}
 @media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover,.\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}{}}
 .\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}{}
-.c\(red\){color:red;}
 .c\(\#555\){color:#555;}
 .c\(\#ccc\){color:#ccc;}
 .group:hover .group-hover\:c\(--primary\),html .group.\:hover .group-hover\:c\(--primary\){color:var(--primary);}{}
@@ -22,6 +21,7 @@ ol,ul,menu,dir{list-style:none;}
 .\.selected\:c\(\#fff\).selected,.selected .\.selected\:c\(\#fff\){color:#fff;}{}
 .\>\>a\:c\(\#4f80ff\) a{color:#4f80ff;}{}
 @media only screen and (min-width:320px){html .\@w\(320\~\)\:c\(red\){color:red;}{}}
+.c\(red\){color:red;}
 .c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:blue;}
 .c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:#D0D0D0;}
 .c\(\#000\){color:#000;}
@@ -30,7 +30,6 @@ ol,ul,menu,dir{list-style:none;}
 .\.selected\:c\(\#000\).selected,.selected .\.selected\:c\(\#000\){color:#000;}{}
 html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:active{color:var(--primary);}{}
 .font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em;}
-.font\(100\){font-size:100px;}
 .font\(3em\/-\/-1\.5\%\){font-size:3em;letter-spacing:-0.015em;}
 @media(max-width:767.98px){html .\~md\:font\(1\.6em\){font-size:1.6em;}{}}
 .font\(1\.2em\/-\/-1\.5\%\){font-size:1.2em;letter-spacing:-0.015em;}
@@ -44,6 +43,7 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .font\(24\){font-size:24px;}
 .font\(13\){font-size:13px;}
 .font\(14\/1\.5\/-1\%\){font-size:14px;line-height:1.5;letter-spacing:-0.01em;}
+.font\(100\){font-size:100px;}
 .c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){font-size:19px;line-height:42px;}
 .font\(12\){font-size:12px;}
 .word-spacing\(20\){word-spacing:20px;}
@@ -86,11 +86,11 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .m\(auto\){margin:auto;}
 .mt\(40\){margin-top:40px;}
 .p\(10\/20\){padding:10px 20px;}
-.p\(10\){padding:10px;}
-.p\(20\){padding:20px;}
 .p\(200\/32\){padding:200px 32px;}
 .p\(10\/10\){padding:10px 10px;}
+.p\(20\){padding:20px;}
 .p\(8\/12\){padding:8px 12px;}
+.p\(10\){padding:10px;}
 .pt\(12\){padding-top:12px;}
 .b\(\#000\.2\){border:solid 1px rgba(0,0,0,.2);}
 html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:solid 1px rgba(0,0,0,.2);}{}
