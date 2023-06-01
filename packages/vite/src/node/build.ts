@@ -4,7 +4,7 @@ import chokidar from 'chokidar'
 import fs from 'fs/promises'
 import path from 'path'
 import CleanCSS from 'clean-css'
-import glob from 'glob'
+import {glob} from 'glob'
 
 type BuildOptions = {
   'out': string
