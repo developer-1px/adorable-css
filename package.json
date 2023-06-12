@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "adorable-css-docs",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "homepage": "https://developer-1px.github.io/adorable-css",
   "scripts": {
     "dev": "vite dev",

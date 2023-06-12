@@ -1,4 +1,14 @@
-## 1.2.9
+## 1.3.2
+- ✨`mx(3)`, `px(10) py(20)` 과 같이 mx = margin-left+margin-right를 같이 적용하는 rule을 추가하였습니다.
+ 
+## 1.3.1
+- ✨`.blind`, `.sr-only` 스크린 리더용 클래스를 추가하였습니다. 해당 클래스를 사용하면 화면에는 보이지 않지만 스크린 리더에서는 읽어줍니다. 참고로 blind와 sr-only는 동일한 역할을 수행합니다.
+- table-layout의 축약버전을 추가하였습니다.
+- table-fixed `table-layout:fixed;`,
+- table-auto `table-layout:auto;`,
+
+
+## 1.3.0
 - ✨align-items, justify-content, align-content, justify-items의 축약버전을 추가하였습니다.   
 - `ex) <div class="ai(flex-start) jc(flex-end)">`
 

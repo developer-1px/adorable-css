@@ -276,6 +276,8 @@ export const RULES:Rules = {
   "mr": (value:string) => `margin-right:${px(value)};`,
   "mb": (value:string) => `margin-bottom:${px(value)};`,
   "ml": (value:string) => `margin-left:${px(value)};`,
+  "mx": (value:string) => `margin-left:${px(value)};margin-right:${px(value)};`,
+  "my": (value:string) => `margin-top:${px(value)};margin-bottom:${px(value)};`,
 
   // BoxModel - Padding
   "p": (value:string) => `padding:${makeSide(value)};`,
@@ -283,6 +285,8 @@ export const RULES:Rules = {
   "pr": (value:string) => `padding-right:${px(value)};`,
   "pb": (value:string) => `padding-bottom:${px(value)};`,
   "pl": (value:string) => `padding-left:${px(value)};`,
+  "px": (value:string) => `padding-left:${px(value)};padding-right:${px(value)};`,
+  "py": (value:string) => `padding-top:${px(value)};padding-bottom:${px(value)};`,
 
   // BoxModel - Border
   "no-border": () => `border:none;outline:none;`,
@@ -291,24 +295,32 @@ export const RULES:Rules = {
   "br": (value:string) => `border-right:${makeBorder(value)};`,
   "bb": (value:string) => `border-bottom:${makeBorder(value)};`,
   "bl": (value:string) => `border-left:${makeBorder(value)};`,
+  "bx": (value:string) => `border-left:${makeBorder(value)};border-right:${makeBorder(value)};`,
+  "by": (value:string) => `border-top:${makeBorder(value)};border-bottom:${makeBorder(value)};`,
 
   "bw": (value:string) => `border-width:${px(value)};`,
   "btw": (value:string) => `border-top-width:${px(value)};`,
   "brw": (value:string) => `border-right-width:${px(value)};`,
   "bbw": (value:string) => `border-bottom-width:${px(value)};`,
   "blw": (value:string) => `border-left-width:${px(value)};`,
+  "bxw": (value:string) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
+  "byw": (value:string) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
 
   "bs": (value:string) => `border-style:${cssvar(value)};`,
   "bts": (value:string) => `border-top-style:${cssvar(value)};`,
   "brs": (value:string) => `border-right-style:${cssvar(value)};`,
   "bbs": (value:string) => `border-bottom-style:${cssvar(value)};`,
   "bls": (value:string) => `border-left-style:${cssvar(value)};`,
+  "bxs": (value:string) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
+  "bys": (value:string) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
 
   "bc": (value:string) => `border-color:${makeColor(value)};`,
   "btc": (value:string) => `border-top-color:${makeColor(value)};`,
   "brc": (value:string) => `border-right-color:${makeColor(value)};`,
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value:string) => `border-left-color:${makeColor(value)};`,
+  "bxc": (value:string) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
+  "byc": (value:string) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
 
   // outline
   "outline": (value:string) => `outline:${makeBorder(value)};`,

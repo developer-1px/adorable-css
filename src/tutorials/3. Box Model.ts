@@ -19,9 +19,15 @@ h(100vh) -webkit-fill-available
 
 ex)
 m(10) { margin: 10px }
+mx(10) { margin-left: 10px; margin-right: 10px; }
+
 p(10/20) { padding: 10px 20px; }
+pl(10) { padding-left: 10px; }
+py(10) { padding-top: 10px; padding-bottom: 10px; }
+
 br(#ccc) { border-right: 1px solid #ccc }
 bbw(2) { border-bottom-width: 2px }
+
 r(10) { border-radius: 10px }
 r(10/10/20/20) { border-radius: 10px 10px 20px 20px }
 r(100%) { border-radius: 100% }
