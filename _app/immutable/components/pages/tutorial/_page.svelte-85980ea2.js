@@ -1,4 +1,4 @@
-import{S as ne,i as ve,s as he,k as f,l as b,m as g,h as v,n as p,b as $,B as J,o as fe,P as G,Q as be,a as B,w as ge,q,c as z,x as ue,r as W,R as S,C as d,y as me,O as Z,T as we,u as ke,f as ye,t as xe,U as _e,z as Se,K as Re}from"../../../chunks/index-5e2bc00b.js";import{r as Te,g as Oe,p as Ee}from"../../../chunks/atomizer-a7d21650.js";const re=`
+import{S as ne,i as ve,s as he,k as f,l as b,m as g,h as v,n as p,b as $,B as J,o as pe,P as W,Q as be,a as B,w as ge,q as X,c as V,x as ue,r as q,R,C as n,y as me,O as Z,T as we,u as ye,f as ke,t as xe,U as _e,z as Se,K as Re}from"../../../chunks/index-5e2bc00b.js";import{r as Te,g as Ie,p as Oe}from"../../../chunks/atomizer-c629c26a.js";const re=`
 <!--
 ฅ^•ﻌ•^ฅ ♥
 
@@ -28,7 +28,7 @@ class="property(value)" 의 형식의 문법으로 작성해 주시면 됩니다
   </div>
 </div>
 
-`.trim(),Ie=`
+`.trim(),Ee=`
 <!--
 
 Colors
@@ -212,6 +212,25 @@ h1 { margin: 20px 0; font-size: 20px;}
 
 `.trim(),Ae=`
 <!--
+Grouping
+
+hover:font(30) hover:c(blue)
+-> hover:font(30)+c(blue)
+
++로 조립해서 Grouping해서 사용 할 수 있습니다.
+-->
+<h1>Grouping</h1>
+
+<div class="font(20) c(red) hover:font(30) hover:c(blue)">Hello world</div>
+
+<div class="font(20) c(red) hover:font(30)+c(blue)">Hello world</div>
+
+<style>
+h1 { margin: 20px 0; font-size: 20px;}
+</style>
+
+`.trim(),Fe=`
+<!--
 
 Typography
 
@@ -349,7 +368,7 @@ capitalize {text-transform:capitalize}
 
 </div>
 
-`.trim(),Fe=`
+`.trim(),Be=`
 <!--
 Box Model
 - width / height
@@ -399,7 +418,7 @@ content-box { box-sizing: content-box }
 
 <div class="bg(#fff) w(100) h(100) bt(red) br(8/orange) bb(dashed) bl(dotted/blue) m(20)">bt br bb bl</div>
 
-`.trim(),Be=`
+`.trim(),Ve=`
 <!--
 Overflow
 - 자주쓰는 기능 속성을 짧게 쓸 수 있도록 편의성 제공
@@ -672,18 +691,6 @@ vbox
     <div class="flex"></div>
     <div class="p(10) bg(orange)">flex</div>
   </div>
-
-  <h2>visible / none visible hidden gone</h2>
-
-  <div class="hbox gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">1</div>
-    <div class="w(48) h(48) bg(orange) pack none">2</div>
-    <div class="w(48) h(48) bg(orange) pack visible">3</div>
-    <div class="w(48) h(48) bg(orange) pack hidden">4</div>
-    <div class="w(48) h(48) bg(orange) pack gone">5</div>
-    <div class="w(48) h(48) bg(orange) pack opacity(0.4)">6</div>
-  </div>
-
 </div>
 
 `.trim(),De=`
@@ -818,7 +825,7 @@ Extension
 
 </div>
 
-`.trim(),Ve=`
+`.trim(),He=`
 <!--
 Prefix
 https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=5 
@@ -868,6 +875,57 @@ https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW
 
 `.trim(),Me=`
 <!--
+Visibility
+
+화면의 표시여부를 결정합니다. 각각의 속성들은 모두 화면에서 사라지게 만듭니다.
+그렇지만 각각의 속성들은 다른 방식으로 사라지게 만듭니다.
+
+아래 3가지를 고려하여 사용하세요.
+1. 자리차지 여부
+2. 사용자 입력 가능
+3. 스크린 리더기에 읽히는지 여부
+
+=================
+
+1) .none {display:none}
+- 화면에서 사라집니다.
+- 자리를 차지하지 않습니다.
+- 사용자 입력도 불가능합니다.
+- 스크린 리더기에 읽히지 않습니다.
+
+2) .hidden {visibility:hidden}
+- 화면에서 보이지 않지만 자리를 차지합니다.
+- 사용자 입력은 불가능합니다.
+- 스크린 리더기에도 읽히지 않습니다.
+
+참고) invisible도 같은 역할을 합니다. (tailwindCSS 네이밍)
+     visible을 사용하면 다시 보이게 됩니다. .visible {visibility:visible}
+
+3) .opacity(0) {opacity:0}
+- 투명하게 만들어 화면에서 사라집니다.
+- 자리를 차지합니다.
+- 사용자 입력은 가능합니다.
+- 스크린 리더기에 읽힙니다. 
+
+4) .blind: {position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);}
+- 화면에서 사라집니다. (실제로는 1px만큼의 공간을 차지합니다.)
+- 자리를 차지하지 않습니다.
+- 사용자 입력은 불가능합니다.
+- 스크린 리더기에 읽힙니다.
+
+참고) sr-only도 같은 역할을 합니다. (tailwindCSS 네이밍)
+     sr-only는 screen reader only의 약자입니다.
+
+-->
+<h1>Visibility</h1>
+
+<div class="none">none</div>
+<div class="hidden invisible">hidden(=invisible)</div>
+<div class="blind sr-only">blind(=sr-only)</div>
+<div class="opacity(0)">opacity(0)</div>
+
+`.trim(),Pe=`
+<!--
 Prefix
 https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW1TL&index=5 
 
@@ -887,7 +945,7 @@ https://www.youtube.com/watch?v=12YGCglbdrY&list=PLiyB-5pV363Q2_itR2K2FIr6qe3kNW
   <div class="nth-child(3n+1):bg(orange)">nth-child(3n+1)</div>
 </div>
 
-`.trim(),He=`
+`.trim(),Ye=`
 <!--
 Prefix
 https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements 
@@ -954,11 +1012,11 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements
   </div>
 </div>
 
-`.trim(),Pe="vs",Ye=!0,Ne=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Xe={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},qe={base:Pe,inherit:Ye,rules:Ne,colors:Xe};function We(e){let i;return{c(){i=f("div"),this.h()},l(o){i=b(o,"DIV",{class:!0}),g(i).forEach(v),this.h()},h(){p(i,"class","h(100%)")},m(o,r){$(o,i,r),e[3](i)},p:J,i:J,o:J,d(o){o&&v(i),e[3](null)}}}function Ge(e,i,o){let{value:r=""}=i,l=null,s;const R=a=>{s&&s.setValue(a)};fe(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>a};let a=URL.createObjectURL(new Blob([`
+`.trim(),Ge="vs",Ne=!0,Xe=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],qe={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},We={base:Ge,inherit:Ne,rules:Xe,colors:qe};function Qe(e){let i;return{c(){i=f("div"),this.h()},l(o){i=b(o,"DIV",{class:!0}),g(i).forEach(v),this.h()},h(){p(i,"class","h(100%)")},m(o,r){$(o,i,r),e[3](i)},p:J,i:J,o:J,d(o){o&&v(i),e[3](null)}}}function Ke(e,i,o){let{value:r=""}=i,l=null,s;const _=a=>{s&&s.setValue(a)};pe(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>a};let a=URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
 		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
 	};
 	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",qe),s=monaco.editor.create(l,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(k=>{o(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function n(a){G[a?"unshift":"push"](()=>{l=a,o(0,l)})}return e.$$set=a=>{"value"in a&&o(1,r=a.value)},[l,r,R,n]}class Qe extends ne{constructor(i){super(),ve(this,i,Ge,We,he,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}function de(e,i,o){const r=e.slice();return r[14]=i[o][0],r[15]=i[o][1],r[17]=o,r}function ce(e){let i,o=e[14]+"",r,l,s;function R(){return e[10](e[14],e[15],e[17])}return{c(){i=f("div"),r=q(o),this.h()},l(n){i=b(n,"DIV",{class:!0});var a=g(i);r=W(a,o),a.forEach(v),this.h()},h(){p(i,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),S(i,"selected",e[3]===e[17])},m(n,a){$(n,i,a),d(i,r),l||(s=Z(i,"click",R),l=!0)},p(n,a){e=n,a&8&&S(i,"selected",e[3]===e[17])},d(n){n&&v(i),l=!1,s()}}}function Ke(e){let i,o,r,l,s,R,n,a,k,D,A,y,_,x,V,M,c,O,C,E,I,U,Q,L,P,T,K,ee,F=e[6],h=[];for(let t=0;t<F.length;t+=1)h[t]=ce(de(e,F,t));function pe(t){e[11](t)}let ie={};return e[1]!==void 0&&(ie.value=e[1]),k=new Qe({props:ie}),G.push(()=>be(k,"value",pe)),e[12](k),{c(){i=f("div"),o=f("div"),r=B(),l=f("div"),s=f("div");for(let t=0;t<h.length;t+=1)h[t].c();R=B(),n=f("div"),a=f("div"),ge(k.$$.fragment),A=B(),y=f("div"),_=f("div"),x=f("button"),V=q("Result"),M=B(),c=f("button"),O=q("CSS Output"),C=B(),E=f("div"),I=f("div"),U=f("iframe"),Q=B(),L=f("div"),P=q(e[2]),this.h()},l(t){i=b(t,"DIV",{class:!0});var u=g(i);o=b(u,"DIV",{class:!0}),g(o).forEach(v),r=z(u),l=b(u,"DIV",{class:!0});var w=g(l);s=b(w,"DIV",{class:!0});var m=g(s);for(let j=0;j<h.length;j+=1)h[j].l(m);m.forEach(v),R=z(w),n=b(w,"DIV",{class:!0});var H=g(n);a=b(H,"DIV",{class:!0});var oe=g(a);ue(k.$$.fragment,oe),oe.forEach(v),H.forEach(v),A=z(w),y=b(w,"DIV",{class:!0});var Y=g(y);_=b(Y,"DIV",{class:!0});var N=g(_);x=b(N,"BUTTON",{class:!0});var te=g(x);V=W(te,"Result"),te.forEach(v),M=z(N),c=b(N,"BUTTON",{class:!0});var se=g(c);O=W(se,"CSS Output"),se.forEach(v),N.forEach(v),C=z(Y),E=b(Y,"DIV",{class:!0});var X=g(E);I=b(X,"DIV",{class:!0});var ae=g(I);U=b(ae,"IFRAME",{class:!0,frameborder:!0}),g(U).forEach(v),ae.forEach(v),Q=z(X),L=b(X,"DIV",{class:!0});var le=g(L);P=W(le,e[2]),le.forEach(v),X.forEach(v),Y.forEach(v),w.forEach(v),u.forEach(v),this.h()},h(){p(o,"class","h(60)"),p(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),p(a,"class","flex(4) vbox r(10) clip"),p(n,"class","flex(4) vbox p(10)"),p(x,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),S(x,"selected",e[4]==="Result"),p(c,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),S(c,"selected",e[4]==="CSS_output"),p(_,"class","hbox bg(#fff) font(12) c(#999)"),p(U,"class","layer w(100%) h(100%) bg(transparent)"),p(U,"frameborder","0"),p(I,"class","layer pack check-board none"),S(I,"none",e[4]!=="Result"),p(L,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),S(L,"none",e[4]!=="CSS_output"),p(E,"class","flex relative"),p(y,"class","flex(3) relative vbox c(#000) p(10) r(10)"),p(l,"class","flex hbox(fill) clip bg(#f9f9f9)"),p(i,"class","layer vbox overscroll(none)")},m(t,u){$(t,i,u),d(i,o),d(i,r),d(i,l),d(l,s);for(let w=0;w<h.length;w+=1)h[w]&&h[w].m(s,null);d(l,R),d(l,n),d(n,a),me(k,a,null),d(l,A),d(l,y),d(y,_),d(_,x),d(x,V),d(_,M),d(_,c),d(c,O),d(y,C),d(y,E),d(E,I),d(I,U),e[13](U),d(E,Q),d(E,L),d(L,P),T=!0,K||(ee=[Z(x,"click",e[7]),Z(c,"click",e[8])],K=!0)},p(t,[u]){if(u&584){F=t[6];let m;for(m=0;m<F.length;m+=1){const H=de(t,F,m);h[m]?h[m].p(H,u):(h[m]=ce(H),h[m].c(),h[m].m(s,null))}for(;m<h.length;m+=1)h[m].d(1);h.length=F.length}const w={};!D&&u&2&&(D=!0,w.value=t[1],we(()=>D=!1)),k.$set(w),(!T||u&16)&&S(x,"selected",t[4]==="Result"),(!T||u&16)&&S(c,"selected",t[4]==="CSS_output"),(!T||u&16)&&S(I,"none",t[4]!=="Result"),(!T||u&4)&&ke(P,t[2]),(!T||u&16)&&S(L,"none",t[4]!=="CSS_output")},i(t){T||(ye(k.$$.fragment,t),T=!0)},o(t){xe(k.$$.fragment,t),T=!1},d(t){t&&v(i),_e(h,t),e[12](null),Se(k),e[13](null),K=!1,Re(ee)}}}function je(e,i,o){let r,l,s=re;const R=[["Hello AdorableCSS!",re],["1. Colors",Ie],["2. Typography",Ae],["3. Box Model",Fe],["4. Overflow",Be],["5. Flexbox",ze],["6. Position",De],["7. Hover, Active",Ve],["8. Pseudo Class",Me],["9. Pseudo Element",He],["10. Media Query",Le],["11. Selector",Ce],["12. Important!",Ue],["계속 작업 중입니다...",""]];let n=0,a="Result";const k=()=>o(4,a="Result"),D=()=>o(4,a="CSS_output"),A=(c,O,C)=>{o(1,s=O),o(3,n=C),y.setValue(O)};let y;const _=(c,O,C)=>A(c,O,C);function x(c){s=c,o(1,s)}function V(c){G[c?"unshift":"push"](()=>{y=c,o(5,y)})}function M(c){G[c?"unshift":"push"](()=>{l=c,o(0,l),o(2,r),o(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&o(2,r=Te+Oe(Ee(s)).join(`
+`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",We),s=monaco.editor.create(l,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(y=>{o(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function d(a){W[a?"unshift":"push"](()=>{l=a,o(0,l)})}return e.$$set=a=>{"value"in a&&o(1,r=a.value)},[l,r,_,d]}class je extends ne{constructor(i){super(),ve(this,i,Ke,Qe,he,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}function de(e,i,o){const r=e.slice();return r[14]=i[o][0],r[15]=i[o][1],r[17]=o,r}function ce(e){let i,o=e[14]+"",r,l,s;function _(){return e[10](e[14],e[15],e[17])}return{c(){i=f("div"),r=X(o),this.h()},l(d){i=b(d,"DIV",{class:!0});var a=g(i);r=q(a,o),a.forEach(v),this.h()},h(){p(i,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),R(i,"selected",e[3]===e[17])},m(d,a){$(d,i,a),n(i,r),l||(s=Z(i,"click",_),l=!0)},p(d,a){e=d,a&8&&R(i,"selected",e[3]===e[17])},d(d){d&&v(i),l=!1,s()}}}function Je(e){let i,o,r,l,s,_,d,a,y,z,C,k,S,x,D,H,c,I,U,O,E,A,Q,L,P,T,K,ee,F=e[6],h=[];for(let t=0;t<F.length;t+=1)h[t]=ce(de(e,F,t));function fe(t){e[11](t)}let ie={};return e[1]!==void 0&&(ie.value=e[1]),y=new je({props:ie}),W.push(()=>be(y,"value",fe)),e[12](y),{c(){i=f("div"),o=f("div"),r=B(),l=f("div"),s=f("div");for(let t=0;t<h.length;t+=1)h[t].c();_=B(),d=f("div"),a=f("div"),ge(y.$$.fragment),C=B(),k=f("div"),S=f("div"),x=f("button"),D=X("Result"),H=B(),c=f("button"),I=X("CSS Output"),U=B(),O=f("div"),E=f("div"),A=f("iframe"),Q=B(),L=f("div"),P=X(e[2]),this.h()},l(t){i=b(t,"DIV",{class:!0});var u=g(i);o=b(u,"DIV",{class:!0}),g(o).forEach(v),r=V(u),l=b(u,"DIV",{class:!0});var w=g(l);s=b(w,"DIV",{class:!0});var m=g(s);for(let j=0;j<h.length;j+=1)h[j].l(m);m.forEach(v),_=V(w),d=b(w,"DIV",{class:!0});var M=g(d);a=b(M,"DIV",{class:!0});var oe=g(a);ue(y.$$.fragment,oe),oe.forEach(v),M.forEach(v),C=V(w),k=b(w,"DIV",{class:!0});var Y=g(k);S=b(Y,"DIV",{class:!0});var G=g(S);x=b(G,"BUTTON",{class:!0});var te=g(x);D=q(te,"Result"),te.forEach(v),H=V(G),c=b(G,"BUTTON",{class:!0});var se=g(c);I=q(se,"CSS Output"),se.forEach(v),G.forEach(v),U=V(Y),O=b(Y,"DIV",{class:!0});var N=g(O);E=b(N,"DIV",{class:!0});var ae=g(E);A=b(ae,"IFRAME",{class:!0,frameborder:!0}),g(A).forEach(v),ae.forEach(v),Q=V(N),L=b(N,"DIV",{class:!0});var le=g(L);P=q(le,e[2]),le.forEach(v),N.forEach(v),Y.forEach(v),w.forEach(v),u.forEach(v),this.h()},h(){p(o,"class","h(60)"),p(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),p(a,"class","flex(4) vbox r(10) clip"),p(d,"class","flex(4) vbox p(10)"),p(x,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),R(x,"selected",e[4]==="Result"),p(c,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),R(c,"selected",e[4]==="CSS_output"),p(S,"class","hbox bg(#fff) font(12) c(#999)"),p(A,"class","layer w(100%) h(100%) bg(transparent)"),p(A,"frameborder","0"),p(E,"class","layer pack check-board none"),R(E,"none",e[4]!=="Result"),p(L,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),R(L,"none",e[4]!=="CSS_output"),p(O,"class","flex relative"),p(k,"class","flex(3) relative vbox c(#000) p(10) r(10)"),p(l,"class","flex hbox(fill) clip bg(#f9f9f9)"),p(i,"class","layer vbox overscroll(none)")},m(t,u){$(t,i,u),n(i,o),n(i,r),n(i,l),n(l,s);for(let w=0;w<h.length;w+=1)h[w]&&h[w].m(s,null);n(l,_),n(l,d),n(d,a),me(y,a,null),n(l,C),n(l,k),n(k,S),n(S,x),n(x,D),n(S,H),n(S,c),n(c,I),n(k,U),n(k,O),n(O,E),n(E,A),e[13](A),n(O,Q),n(O,L),n(L,P),T=!0,K||(ee=[Z(x,"click",e[7]),Z(c,"click",e[8])],K=!0)},p(t,[u]){if(u&584){F=t[6];let m;for(m=0;m<F.length;m+=1){const M=de(t,F,m);h[m]?h[m].p(M,u):(h[m]=ce(M),h[m].c(),h[m].m(s,null))}for(;m<h.length;m+=1)h[m].d(1);h.length=F.length}const w={};!z&&u&2&&(z=!0,w.value=t[1],we(()=>z=!1)),y.$set(w),(!T||u&16)&&R(x,"selected",t[4]==="Result"),(!T||u&16)&&R(c,"selected",t[4]==="CSS_output"),(!T||u&16)&&R(E,"none",t[4]!=="Result"),(!T||u&4)&&ye(P,t[2]),(!T||u&16)&&R(L,"none",t[4]!=="CSS_output")},i(t){T||(ke(y.$$.fragment,t),T=!0)},o(t){xe(y.$$.fragment,t),T=!1},d(t){t&&v(i),_e(h,t),e[12](null),Se(y),e[13](null),K=!1,Re(ee)}}}function Ze(e,i,o){let r,l,s=re;const _=[["Hello AdorableCSS!",re],["1. Colors",Ee],["2. Typography",Fe],["3. Box Model",Be],["4. Overflow",Ve],["5. Flexbox",ze],["6. Position",De],["✨7. Visibility",Me],["8. Hover, Active",He],["9. Pseudo Class",Pe],["10. Pseudo Element",Ye],["11. Media Query",Le],["12. Selector",Ce],["13. Important!",Ue],["✨14. Grouping+",Ae],["계속 작업 중입니다...",""]];let d=0,a="Result";const y=()=>o(4,a="Result"),z=()=>o(4,a="CSS_output"),C=(c,I,U)=>{o(1,s=I),o(3,d=U),k.setValue(I),location.hash=String(d)};let k;pe(()=>{const c=+location.hash.slice(1);c>0&&(o(3,d=c),C(..._[d],d))});const S=(c,I,U)=>C(c,I,U);function x(c){s=c,o(1,s)}function D(c){W[c?"unshift":"push"](()=>{k=c,o(5,k)})}function H(c){W[c?"unshift":"push"](()=>{l=c,o(0,l),o(2,r),o(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&o(2,r=Te+Ie(Oe(s)).join(`
 `)),e.$$.dirty&7&&l&&o(0,l.contentWindow.document.body.innerHTML=`<style>${r}</style>
-`+s,l)},[l,s,r,n,a,y,R,k,D,A,_,x,V,M]}class $e extends ne{constructor(i){super(),ve(this,i,je,Ke,he,{})}}export{$e as default};
+`+s,l)},[l,s,r,d,a,k,_,y,z,C,S,x,D,H]}class ii extends ne{constructor(i){super(),ve(this,i,Ze,Je,he,{})}}export{ii as default};
