@@ -2,7 +2,7 @@
 
 > 불칠절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
-```typescript
+```ts
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
@@ -525,7 +525,9 @@ export const RULES:Rules = {
   "none": () => `display:none;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
-  "gone": () => `position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);`,
+  "blind": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
+  "sr-only": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
+  "gone": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
   "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
   "collapse": () => `visibility:collapse;`,
@@ -600,6 +602,8 @@ export const RULES:Rules = {
   "content": (value = "''") => `content:${cssvar(value)}`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
+  "table-fixed": () => `table-layout:fixed;`,
+  "table-auto": () => `table-layout:auto;`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
 

@@ -1,19 +1,22 @@
 <script lang="ts">
-import {TURORIAL_0_Hello} from "../../tutorials/0. Hello Adorable"
-import {TURORIAL_1_COLORS} from "../../tutorials/1. Colors"
-import {TURORIAL_10_MEDIA_QUERY} from "../../tutorials/10. Media Query"
-import {TURORIAL_11_Selector} from "../../tutorials/11. Selector"
-import {TURORIAL_12_Important} from "../../tutorials/12. Important"
-import {TURORIAL_2_TYPOGRAPHY} from "../../tutorials/2. Typography"
-import {TURORIAL_3_BOX_MODEL} from "../../tutorials/3. Box Model"
-import {TURORIAL_4_OVERFLOW} from "../../tutorials/4. Overflow"
-import {TURORIAL_5_LAYOUT_FLEXBOX} from "../../tutorials/5. Layout - Flexbox"
-import {TURORIAL_6_LAYOUT_POSITION} from "../../tutorials/6. Layout - Position"
-import {TURORIAL_7_PREFIX} from "../../tutorials/7. Prefix"
-import {TURORIAL_8_PREFIX2} from "../../tutorials/8. Prefix2"
-import {TURORIAL_9_PSEUDO_ELEMENT} from "../../tutorials/9. Pseudo Element"
-import {generateCss, parseAtoms} from "../../../packages/vite/src/core/atomizer"
-import {reset} from "../../../packages/vite/src/core/rules"
+import {generateCss, parseAtoms} from "packages/vite/src/core/atomizer"
+import {reset} from "packages/vite/src/core/rules"
+import {TURORIAL_0_Hello} from "src/tutorials/0. Hello Adorable"
+import {TURORIAL_1_COLORS} from "src/tutorials/1. Colors"
+import {TURORIAL_10_MEDIA_QUERY} from "src/tutorials/10. Media Query"
+import {TURORIAL_11_Selector} from "src/tutorials/11. Selector"
+import {TURORIAL_12_Important} from "src/tutorials/12. Important"
+import {TURORIAL_14_Grouping} from "src/tutorials/14. Grouping"
+import {TURORIAL_2_TYPOGRAPHY} from "src/tutorials/2. Typography"
+import {TURORIAL_3_BOX_MODEL} from "src/tutorials/3. Box Model"
+import {TURORIAL_4_OVERFLOW} from "src/tutorials/4. Overflow"
+import {TURORIAL_5_LAYOUT_FLEXBOX} from "src/tutorials/5. Layout - Flexbox"
+import {TURORIAL_6_LAYOUT_POSITION} from "src/tutorials/6. Layout - Position"
+import {TURORIAL_7_PREFIX} from "src/tutorials/7. Prefix"
+import {TUTORIAL_7_VISIBILITY} from "src/tutorials/7. Visibility"
+import {TURORIAL_8_PREFIX2} from "src/tutorials/8. Prefix2"
+import {TURORIAL_9_PSEUDO_ELEMENT} from "src/tutorials/9. Pseudo Element"
+import {onMount} from "svelte"
 import MonacoEditor from "../../screens/MonacoEditor.svelte"
 
 let element:HTMLElement
@@ -27,12 +30,14 @@ const tutorials = [
   ["4. Overflow", TURORIAL_4_OVERFLOW],
   ["5. Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
   ["6. Position", TURORIAL_6_LAYOUT_POSITION],
-  ["7. Hover, Active", TURORIAL_7_PREFIX],
-  ["8. Pseudo Class", TURORIAL_8_PREFIX2],
-  ["9. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
-  ["10. Media Query", TURORIAL_10_MEDIA_QUERY],
-  ["11. Selector", TURORIAL_11_Selector],
-  ["12. Important!", TURORIAL_12_Important],
+  ["✨7. Visibility", TUTORIAL_7_VISIBILITY],
+  ["8. Hover, Active", TURORIAL_7_PREFIX],
+  ["9. Pseudo Class", TURORIAL_8_PREFIX2],
+  ["10. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
+  ["11. Media Query", TURORIAL_10_MEDIA_QUERY],
+  ["12. Selector", TURORIAL_11_Selector],
+  ["13. Important!", TURORIAL_12_Important],
+  ["✨14. Grouping+", TURORIAL_14_Grouping],
   ["계속 작업 중입니다...", ""]
 ]
 
@@ -49,9 +54,18 @@ const 튜토리얼_선택 = (title, code, index) => {
   value = code
   currentTutorialIndex = index
   editor.setValue(code)
+  location.hash = String(currentTutorialIndex)
 }
 
 let editor
+
+onMount(() => {
+  const index = +location.hash.slice(1)
+  if (index > 0) {
+    currentTutorialIndex = index
+    튜토리얼_선택(...tutorials[currentTutorialIndex], currentTutorialIndex)
+  }
+})
 </script>
 
 <div class="layer vbox overscroll(none)">

@@ -55,7 +55,7 @@ function resolveBuildContext(root: string | undefined, options: BuildOptions) {
 
 function buildOnce(context: BuildContext) {
   const pattern = path.join(context.root, '**', `?(${supportedExts.map((ext) => `*.${ext}`)})`)
-  glob(pattern, async (_, matches) => {
+  glob(pattern).then(async matches => {
     const entry = await filesToEntry(matches)
     const style = entryToStyle(context, entry)
     context.resolver(style)

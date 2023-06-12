@@ -16,14 +16,6 @@
   color:#333;
 }
 
-.markdown blockquote {
-  background:var(--primary-bg);
-  margin:1em 0;
-  padding:0.2em 1.4em;
-  padding-left:1.4em;
-  border-left:4px solid var(--primary)
-}
-
 .markdown hr {
   margin:2em 0;
   border-top:1px solid rgba(0, 0, 0, .1)
@@ -44,11 +36,11 @@
 .markdown h4 {
   font-size:2em;
   font-weight:bold;
-  margin-top:1.6em;
+  margin-top:2.4em;
+  margin-bottom:.6em;
 }
 
 .markdown h2 {
-  margin-top:1em;
   font-size:1.4em;
 }
 
@@ -61,18 +53,22 @@
 }
 
 .markdown p {
-  margin:1em 0;
+  margin:1.4em 0;
 }
 
 .markdown ul,
 .markdown ol {
   list-style:disc;
-  padding:0 1em;
+  padding:0 1.6em;
   margin:1em 0;
 }
 
 .markdown ol {
   list-style:number;
+}
+
+.markdown li {
+  margin:0.2em 0;
 }
 
 .markdown pre {
@@ -82,7 +78,7 @@
   border-radius:.6em;
   white-space:pre-wrap;
   font-family:monospace;
-  font-size:0.8em;
+  font-size:0.9em;
   text-align:left;
 }
 
@@ -91,6 +87,7 @@
   padding:2px .4em;
   border-radius:.4em;
   font-family:monospace;
+  font-size:0.9em;
 }
 
 .markdown pre code {
@@ -106,6 +103,25 @@
 
 .markdown .comment {
   color:#999;
+}
+
+.markdown blockquote {
+  background:var(--primary-bg);
+  margin:1.4em 0;
+  padding:1.4em;
+  border-left:4px solid var(--primary)
+}
+
+.markdown blockquote > :first-child {
+  margin-top:0;
+}
+
+.markdown blockquote > :last-child {
+  margin-bottom:0;
+}
+
+.markdown strong {
+  font-weight:bold;
 }
 
 @media (max-width:768px) {

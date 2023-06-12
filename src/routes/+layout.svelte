@@ -17,12 +17,13 @@ const useActive = (el) => {
     <a href="{base}/" class="pack font(20/-/-10%) pointer AppleSD">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">
-      <a href="{base}/guide" use:useActive>Guide</a>
-      <a href="{base}/docs" use:useActive>Docs</a>
-      <a href="{base}/tutorial" use:useActive>Tutorial</a>
+      <a href="{base}/background" use:useActive>왜 만들었나요?</a>
+      <a href="{base}/guide" use:useActive>가이드</a>
+      <a href="{base}/docs" use:useActive>문서</a>
+      <a href="{base}/tutorial" use:useActive>튜토리얼</a>
       <a href="{base}/changelogs" use:useActive>ChangeLog</a>
       <a href="{base}/reference" use:useActive>Reference</a>
-      <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">Blog</a>
+      <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">블로그</a>
       <a target="_blank" href="https://github.com/developer-1px/adorable-css/issues">기능 제안</a>
     </div>
 
@@ -48,4 +49,4 @@ const useActive = (el) => {
   <slot/>
 </div>
 
-<UIVersion version="1.2.4"/>
+<UIVersion/>

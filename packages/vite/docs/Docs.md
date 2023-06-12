@@ -231,9 +231,10 @@ prefix:property(value)! or property(value)! or property!
 ### Visibility
 
 ```none```
-```visible``` ```hidden```
-```gone```
-```opacity(.4)```
+```hidden``` 
+```visible``` 
+```blind```
+```opacity(.5)```
 
 ---
 
