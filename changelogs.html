@@ -15,14 +15,14 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
 		<link href="/adorable-css/_app/immutable/assets/_layout-043fc2e2.css" rel="stylesheet">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-4054d64f.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-6b035a2e.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-5e2bc00b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-1b3e4a4c.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-265fd5b8.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-9f028e6a.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-07324bd5.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-9cbb603b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-561e1d57.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-9e2a3695.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -52,7 +52,10 @@
 
       <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank" aria-label="github"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></div>
 
-  <div class="markdown p(20)"><h2>1.3.2</h2>
+  <div class="markdown p(20)"><h2>1.3.4</h2>
+<ul><li>✨filter와 backdrop-filter에 -webkit- prefix를 추가하였습니다.</li>
+<li>🐛일부 ;이 누락되어 !important가 적용되지 않던 속성들을 수정하였습니다.</li></ul>
+<h2>1.3.3</h2>
 <ul><li>✨<code>mx(3)</code>, <code>px(10) py(20)</code> 과 같이 mx = margin-left+margin-right를 같이 적용하는 rule을 추가하였습니다.</li></ul>
 <h2>1.3.1</h2>
 <ul><li>✨<code>.blind</code>, <code>.sr-only</code> 스크린 리더용 클래스를 추가하였습니다. 해당 클래스를 사용하면 화면에는 보이지 않지만 스크린 리더에서는 읽어줍니다. 참고로 blind와 sr-only는 동일한 역할을 수행합니다.</li>
@@ -288,17 +291,17 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 <ul><li>transform 결합: ex) translateX(10)+scale(.5)</li>
 <li>more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!</li></ul></div></div>
 
-<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.6</div>
+<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.7</div>
 
 
-		<script type="module" data-sveltekit-hydrate="1p1ht64">
-			import { start } from "/adorable-css/_app/immutable/start-4054d64f.js";
+		<script type="module" data-sveltekit-hydrate="164ib65">
+			import { start } from "/adorable-css/_app/immutable/start-6b035a2e.js";
 
 			start({
 				env: {},
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
-				target: document.querySelector('[data-sveltekit-hydrate="1p1ht64"]').parentNode,
-				version: "1686570213643",
+				target: document.querySelector('[data-sveltekit-hydrate="164ib65"]').parentNode,
+				version: "1687152906743",
 				hydrate: {
 					node_ids: [0, 5],
 					data: [null,null],
