@@ -1,9 +1,9 @@
 import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeNumber, makePosition, makeRatio, makeSide, makeTransition, makeValues, makeVBox, percentToEm, px} from "./makeValue"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxWithSemi, makeNumber, makePositionWithSemi, makeRatio, makeSide, makeTransition, makeValues, makeVBoxWithSemi, percentToEm, px} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
@@ -18,12 +18,12 @@ export const RULES:Rules = {
   "c": (value:string) => `color:${makeColor(value)};`,
   "color": (value:string) => RULES.c(value),
   "caret": (value:string) => `caret-color:${makeColor(value)};`,
-  "caret-current": () => `color:currentColor`,
+  "caret-current": () => `color:currentColor;`,
 
   // -- Typography
   "font": (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
-  "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
+  "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)};`,
   "letter-spacing": (value:string) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
@@ -138,8 +138,8 @@ export const RULES:Rules = {
   "inline-grid": () => "display:inline-grid;",
 
   // -- Flexbox
-  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBoxWithSemi(value)}`,
+  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBoxWithSemi(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
   "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
@@ -221,8 +221,8 @@ export const RULES:Rules = {
   // -- Box
 
   // Box-Sizing
-  "border-box": () => `box-sizing:border-box`,
-  "content-box": () => `box-sizing:content-box`,
+  "border-box": () => `box-sizing:border-box;`,
+  "content-box": () => `box-sizing:content-box;`,
 
   // Box-Model
   "w": (value:string) => {
@@ -324,7 +324,7 @@ export const RULES:Rules = {
 
   // outline
   "outline": (value:string) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}{}`,
 
   // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
@@ -345,7 +345,7 @@ export const RULES:Rules = {
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
-  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
+  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))};`,
 
   // -- Background
   "bg": (value:string) => {
@@ -390,9 +390,9 @@ export const RULES:Rules = {
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}{}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}{}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}{}`,
 
   // Scroll Snap
   "scroll-m": (value:string) => `scroll-margin:${makeSide(value)};`,
@@ -512,14 +512,14 @@ export const RULES:Rules = {
     return `position:absolute;` + Object.keys(pos).map((value:string) => `${value}:${px(pos[value])};`).join("")
   },
 
-  "absolute": (value:string) => `position:absolute;${makePosition(value)}`,
-  "relative": (value:string) => `position:relative;${makePosition(value)}`,
-  "sticky": (value:string) => `position:sticky;${makePosition(value)}`,
+  "absolute": (value:string) => `position:absolute;${makePositionWithSemi(value)}`,
+  "relative": (value:string) => `position:relative;${makePositionWithSemi(value)}`,
+  "sticky": (value:string) => `position:sticky;${makePositionWithSemi(value)}`,
   "sticky-top": (value = "0") => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = "0") => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = "0") => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = "0") => `position:sticky;left:${px(value)};`,
-  "fixed": (value:string) => `position:fixed;${makePosition(value)}`,
+  "fixed": (value:string) => `position:fixed;${makePositionWithSemi(value)}`,
   "static": () => `position:static;`,
 
   // Position
@@ -543,28 +543,28 @@ export const RULES:Rules = {
   "collapse": () => `visibility:collapse;`,
 
   // Interactions
-  "col-resize": () => `cursor: col-resize;`,
-  "crosshair": () => `cursor: crosshair;`,
-  "e-resize": () => `cursor: e-resize;`,
-  "ew-resize": () => `cursor: ew-resize;`,
-  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
-  "grabbing": () => `cursor: grabbing;`,
-  "n-resize": () => `cursor: n-resize;`,
-  "ne-resize": () => `cursor: ne-resize;`,
-  "nesw-resize": () => `cursor: nesw-resize;`,
-  "ns-resize": () => `cursor: ns-resize;`,
-  "nw-resize": () => `cursor: nw-resize;`,
-  "nwse-resize": () => `cursor: nwse-resize;`,
-  "not-allowed": () => `cursor: not-allowed;`,
-  "pointer": () => `cursor: pointer;`,
-  "progress": () => `cursor: progress;`,
-  "row-resize": () => `cursor: row-resize;`,
-  "s-resize": () => `cursor: s-resize;`,
-  "se-resize": () => `cursor: se-resize;`,
-  "sw-resize": () => `cursor: sw-resize;`,
-  "w-resize": () => `cursor: w-resize;`,
-  "zoom-in": () => `cursor: zoom-in;`,
-  "zoom-out": () => `cursor: zoom-out;`,
+  "col-resize": () => `cursor:col-resize;`,
+  "crosshair": () => `cursor:crosshair;`,
+  "e-resize": () => `cursor:e-resize;`,
+  "ew-resize": () => `cursor:ew-resize;`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}{}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "n-resize": () => `cursor:n-resize;`,
+  "ne-resize": () => `cursor:ne-resize;`,
+  "nesw-resize": () => `cursor:nesw-resize;`,
+  "ns-resize": () => `cursor:ns-resize;`,
+  "nw-resize": () => `cursor:nw-resize;`,
+  "nwse-resize": () => `cursor:nwse-resize;`,
+  "not-allowed": () => `cursor:not-allowed;`,
+  "pointer": () => `cursor:pointer;`,
+  "progress": () => `cursor:progress;`,
+  "row-resize": () => `cursor:row-resize;`,
+  "s-resize": () => `cursor:s-resize;`,
+  "se-resize": () => `cursor:se-resize;`,
+  "sw-resize": () => `cursor:sw-resize;`,
+  "w-resize": () => `cursor:w-resize;`,
+  "zoom-in": () => `cursor:zoom-in;`,
+  "zoom-out": () => `cursor:zoom-out;`,
   "cursor": (value:string) => `cursor:${value};`,
 
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
@@ -604,12 +604,12 @@ export const RULES:Rules = {
   "skewZ": (value:string) => `transform:skewZ(${makeCommaValues(value)});`,
 
   // Util
-  "ratio": (value:string) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "ratio": (value:string) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}{}`,
   "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  "content": (value = "''") => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)};`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-fixed": () => `table-layout:fixed;`,
@@ -617,32 +617,32 @@ export const RULES:Rules = {
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
 
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
 
   // Float & Clear
   "float": (value:string) => `float:${cssvar(value)};`,
   "clear": (value:string) => `clear:${cssvar(value)};`,
 
   // Filter
-  "blur": (value:string) => `filter:blur(${px(value)})`,
-  "brightness": (value:string) => `filter:brightness(${cssvar(value)})`,
-  "contrast": (value:string) => `filter:contrast(${cssvar(value)})`,
-  "drop-shadow": (value:string) => `filter:drop-shadow(${makeValues(value, px)})`,
-  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)})`,
-  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)})`,
-  "invert": (value:string) => `filter:invert(${cssvar(value)})`,
-  "sepia": (value:string) => `filter:sepia(${cssvar(value)})`,
-  "saturate": (value:string) => `filter:saturate(${cssvar(value)})`,
+  "blur": (value:string) => `filter:blur(${px(value)});-webkit-filter:blur(${px(value)});`,
+  "brightness": (value:string) => `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
+  "contrast": (value:string) => `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
+  "drop-shadow": (value:string) => `filter:drop-shadow(${makeValues(value, px)});-webkit-filter:drop-shadow(${makeValues(value, px)});`,
+  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
+  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
+  "invert": (value:string) => `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
+  "sepia": (value:string) => `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
+  "saturate": (value:string) => `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
 
-  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)})`,
-  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)})`,
-  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)})`,
-  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${makeValues(value, px)})`,
-  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)})`,
-  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
-  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)})`,
-  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
-  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
+  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
+  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)});-webkit-backdrop-filter:brightness(${cssvar(value)});`,
+  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)});-webkit-backdrop-filter:contrast(${cssvar(value)});`,
+  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${makeValues(value, px)});-webkit-backdrop-filter:drop-shadow(${makeValues(value, px)});`,
+  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)});-webkit-backdrop-filter:grayscale(${cssvar(value)});`,
+  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)});-webkit-backdrop-filter:hue-rotate(${cssvar(value)});`,
+  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)});-webkit-backdrop-filter:invert(${cssvar(value)});`,
+  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)});-webkit-backdrop-filter:sepia(${cssvar(value)});`,
+  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)});-webkit-backdrop-filter:saturate(${cssvar(value)});`,
 
   // @TODO:triangle
   "triangle": (value:string) => {

@@ -1,3 +1,7 @@
+## 1.3.4
+- ✨filter와 backdrop-filter에 -webkit- prefix를 추가하였습니다.
+- 🐛일부 ;이 누락되어 !important가 적용되지 않던 속성들을 수정하였습니다.
+ 
 ## 1.3.3
 - ✨`mx(3)`, `px(10) py(20)` 과 같이 mx = margin-left+margin-right를 같이 적용하는 rule을 추가하였습니다.
  

@@ -120,7 +120,7 @@ export const makeRatio = (value:string) => {
   return (+h / +w * 100).toFixed(2) + "%"
 }
 
-export const makeHBox = (value = "") => {
+export const makeHBoxWithSemi = (value = "") => {
   const values = value.split("+")
 
   const result = values.map(v => {
@@ -145,7 +145,7 @@ export const makeHBox = (value = "") => {
   return [...new Set(result)].join("")
 }
 
-export const makeVBox = (value = "") => {
+export const makeVBoxWithSemi = (value = "") => {
   const values = value.split("+")
 
   const result = values.map(v => {
@@ -175,11 +175,6 @@ export const makeTransition = (value:string) => {
   return value.split("/").map(item => item.replace("=", " ")).join(",")
 }
 
-export const makePosition = (value?:string) => {
-  if (!value) return ""
-  return value.includes(",") ? makePosition2(value) : makePosition1(value)
-}
-
 export const makePosition1 = (value:string) => {
   const values = value.split(" ").map(px)
   values[1] = values[1] || values[0]
@@ -202,4 +197,9 @@ export const makePosition2 = (value:string) => {
   res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`)
   res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`)
   return res.join("")
+}
+
+export const makePositionWithSemi = (value?:string) => {
+  if (!value) return ""
+  return (value.includes(",") ? makePosition2(value) : makePosition1(value)) + ";"
 }

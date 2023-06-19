@@ -5,27 +5,26 @@
 ```ts
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-`
+ol,ul,menu,dir{list-style:none;}`
 
+  
 export const RULES:Rules = {
-
   // -- Color
   "c": (value:string) => `color:${makeColor(value)};`,
   "color": (value:string) => RULES.c(value),
   "caret": (value:string) => `caret-color:${makeColor(value)};`,
-  "caret-current": () => `color:currentColor`,
+  "caret-current": () => `color:currentColor;`,
 
   // -- Typography
   "font": (value:string) => makeFont(value),
   "font-size": (value:string) => `font-size:${px(value)};`,
-  "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
+  "line-height": (value:string) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)};`,
   "letter-spacing": (value:string) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
@@ -140,8 +139,8 @@ export const RULES:Rules = {
   "inline-grid": () => "display:inline-grid;",
 
   // -- Flexbox
-  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)};`,
+  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)};`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
   "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
@@ -223,8 +222,8 @@ export const RULES:Rules = {
   // -- Box
 
   // Box-Sizing
-  "border-box": () => `box-sizing:border-box`,
-  "content-box": () => `box-sizing:content-box`,
+  "border-box": () => `box-sizing:border-box;`,
+  "content-box": () => `box-sizing:content-box;`,
 
   // Box-Model
   "w": (value:string) => {
@@ -274,6 +273,8 @@ export const RULES:Rules = {
 
   // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
+  "mx": (value:string) => `margin-left:${px(value)};margin-right:${px(value)};`,
+  "my": (value:string) => `margin-top:${px(value)};margin-bottom:${px(value)};`,
   "mt": (value:string) => `margin-top:${px(value)};`,
   "mr": (value:string) => `margin-right:${px(value)};`,
   "mb": (value:string) => `margin-bottom:${px(value)};`,
@@ -281,6 +282,8 @@ export const RULES:Rules = {
 
   // BoxModel - Padding
   "p": (value:string) => `padding:${makeSide(value)};`,
+  "px": (value:string) => `padding-left:${px(value)};padding-right:${px(value)};`,
+  "py": (value:string) => `padding-top:${px(value)};padding-bottom:${px(value)};`,
   "pt": (value:string) => `padding-top:${px(value)};`,
   "pr": (value:string) => `padding-right:${px(value)};`,
   "pb": (value:string) => `padding-bottom:${px(value)};`,
@@ -289,24 +292,32 @@ export const RULES:Rules = {
   // BoxModel - Border
   "no-border": () => `border:none;outline:none;`,
   "b": (value:string) => `border:${makeBorder(value)};`,
+  "bx": (value:string) => `border-left:${makeBorder(value)};border-right:${makeBorder(value)};`,
+  "by": (value:string) => `border-top:${makeBorder(value)};border-bottom:${makeBorder(value)};`,
   "bt": (value:string) => `border-top:${makeBorder(value)};`,
   "br": (value:string) => `border-right:${makeBorder(value)};`,
   "bb": (value:string) => `border-bottom:${makeBorder(value)};`,
   "bl": (value:string) => `border-left:${makeBorder(value)};`,
 
   "bw": (value:string) => `border-width:${px(value)};`,
+  "bxw": (value:string) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
+  "byw": (value:string) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
   "btw": (value:string) => `border-top-width:${px(value)};`,
   "brw": (value:string) => `border-right-width:${px(value)};`,
   "bbw": (value:string) => `border-bottom-width:${px(value)};`,
   "blw": (value:string) => `border-left-width:${px(value)};`,
 
   "bs": (value:string) => `border-style:${cssvar(value)};`,
+  "bxs": (value:string) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
+  "bys": (value:string) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
   "bts": (value:string) => `border-top-style:${cssvar(value)};`,
   "brs": (value:string) => `border-right-style:${cssvar(value)};`,
   "bbs": (value:string) => `border-bottom-style:${cssvar(value)};`,
   "bls": (value:string) => `border-left-style:${cssvar(value)};`,
 
   "bc": (value:string) => `border-color:${makeColor(value)};`,
+  "bxc": (value:string) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
+  "byc": (value:string) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
   "btc": (value:string) => `border-top-color:${makeColor(value)};`,
   "brc": (value:string) => `border-right-color:${makeColor(value)};`,
   "bbc": (value:string) => `border-bottom-color:${makeColor(value)};`,
@@ -314,7 +325,7 @@ export const RULES:Rules = {
 
   // outline
   "outline": (value:string) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};};`,
 
   // border-radius
   "r": (value:string) => `border-radius:${makeSide(value)};`,
@@ -335,7 +346,7 @@ export const RULES:Rules = {
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`
   },
 
-  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
+  "box-shadow": (value:string) => `box-shadow:${makeValues(value, v => Number.isInteger(+v) ? px(v) : cssvar(v))};`,
 
   // -- Background
   "bg": (value:string) => {
@@ -599,7 +610,7 @@ export const RULES:Rules = {
 
   // etc
   "app-region": (value:string) => `-webkit-app-region:${value};`,
-  "content": (value = "''") => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)};`,
   "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
 
   "table-fixed": () => `table-layout:fixed;`,
@@ -607,32 +618,32 @@ export const RULES:Rules = {
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
 
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
 
   // Float & Clear
   "float": (value:string) => `float:${cssvar(value)};`,
   "clear": (value:string) => `clear:${cssvar(value)};`,
 
   // Filter
-  "blur": (value:string) => `filter:blur(${px(value)})`,
-  "brightness": (value:string) => `filter:brightness(${cssvar(value)})`,
-  "contrast": (value:string) => `filter:contrast(${cssvar(value)})`,
-  "drop-shadow": (value:string) => `filter:drop-shadow(${makeValues(value, px)})`,
-  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)})`,
-  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)})`,
-  "invert": (value:string) => `filter:invert(${cssvar(value)})`,
-  "sepia": (value:string) => `filter:sepia(${cssvar(value)})`,
-  "saturate": (value:string) => `filter:saturate(${cssvar(value)})`,
+  "blur": (value:string) => `filter:blur(${px(value)});-webkit-filter:blur(${px(value)});`,
+  "brightness": (value:string) => `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
+  "contrast": (value:string) => `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
+  "drop-shadow": (value:string) => `filter:drop-shadow(${makeValues(value, px)});-webkit-filter:drop-shadow(${makeValues(value, px)});`,
+  "grayscale": (value:string) => `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
+  "hue-rotate": (value:string) => `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
+  "invert": (value:string) => `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
+  "sepia": (value:string) => `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
+  "saturate": (value:string) => `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
 
-  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)})`,
-  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)})`,
-  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)})`,
-  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${makeValues(value, px)})`,
-  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)})`,
-  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
-  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)})`,
-  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)})`,
-  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)})`,
+  "backdrop-blur": (value:string) => `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
+  "backdrop-brightness": (value:string) => `backdrop-filter:brightness(${cssvar(value)});-webkit-backdrop-filter:brightness(${cssvar(value)});`,
+  "backdrop-contrast": (value:string) => `backdrop-filter:contrast(${cssvar(value)});-webkit-backdrop-filter:contrast(${cssvar(value)});`,
+  "backdrop-drop-shadow": (value:string) => `backdrop-filter:drop-shadow(${makeValues(value, px)});-webkit-backdrop-filter:drop-shadow(${makeValues(value, px)});`,
+  "backdrop-grayscale": (value:string) => `backdrop-filter:grayscale(${cssvar(value)});-webkit-backdrop-filter:grayscale(${cssvar(value)});`,
+  "backdrop-hue-rotate": (value:string) => `backdrop-filter:hue-rotate(${cssvar(value)});-webkit-backdrop-filter:hue-rotate(${cssvar(value)});`,
+  "backdrop-invert": (value:string) => `backdrop-filter:invert(${cssvar(value)});-webkit-backdrop-filter:invert(${cssvar(value)});`,
+  "backdrop-sepia": (value:string) => `backdrop-filter:sepia(${cssvar(value)});-webkit-backdrop-filter:sepia(${cssvar(value)});`,
+  "backdrop-saturate": (value:string) => `backdrop-filter:saturate(${cssvar(value)});-webkit-backdrop-filter:saturate(${cssvar(value)});`,
 
   // @TODO:triangle
   "triangle": (value:string) => {
@@ -775,4 +786,6 @@ export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
   "+": (selector:string) => `&${selector}`,
   "#": (selector:string) => `&${selector}`,
 }
+
+// "~": (selector:string) => `&${selector}`,
 ```
