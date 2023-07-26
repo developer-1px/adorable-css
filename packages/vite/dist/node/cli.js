@@ -20195,8 +20195,8 @@ var RULES = {
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;`,
-  "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;`,
+  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
   // line-clamp vs max-lines
   // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
   // @NOTE:그냥 둘다 제공한다.
