@@ -20,8 +20,8 @@ const useActive = (el) => {
       <a href="{base}/background" use:useActive>왜 만들었나요?</a>
       <a href="{base}/guide" use:useActive>가이드</a>
       <a href="{base}/docs" use:useActive>문서</a>
-      <a href="{base}/tutorial" use:useActive>튜토리얼</a>
-      <a href="{base}/changelogs" use:useActive>ChangeLog</a>
+      <a href="{base}/tutorial" use:useActive>✨ 튜토리얼</a>
+      <a href="{base}/changelogs" use:useActive>✨ ChangeLog</a>
       <a href="{base}/reference" use:useActive>Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">블로그</a>
       <a target="_blank" href="https://github.com/developer-1px/adorable-css/issues">기능 제안</a>

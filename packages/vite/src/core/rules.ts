@@ -1,5 +1,5 @@
 import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxWithSemi, makeNumber, makePositionWithSemi, makeRatio, makeSide, makeTransition, makeValues, makeVBoxWithSemi, percentToEm, px} from "./makeValue"
+import {cssvar, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxWithSemi, makeNumber, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxWithSemi, percentToEm, px} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
@@ -88,6 +88,9 @@ export const RULES:Rules = {
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
+
+  // Text Align
+  "text": (value:string) => makeTextBox(value),
 
   "vertical-top": () => `vertical-align:top;`,
   "vertical-middle": () => `vertical-align:middle;`,

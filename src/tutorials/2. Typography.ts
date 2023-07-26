@@ -130,10 +130,10 @@ capitalize {text-transform:capitalize}
 
   <h1>text-align</h1>
 
-  <div class="small-caps">text-left</div>
-  <div class="lowercase">lowercase</div>
-  <div class="uppercase">uppercase</div>
-  <div class="capitalize">capitalize</div>
+  <div class="text-left">text-left</div>
+  <div class="text-center">text-center</div>
+  <div class="text-right">text-right</div>
+  <div class="text-justify">text-justify</div>
 
 </div>
 

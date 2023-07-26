@@ -145,6 +145,25 @@ export const makeHBoxWithSemi = (value = "") => {
   return [...new Set(result)].join("")
 }
 
+export const makeTextBox = (value = "") => {
+  const values = value.split("+")
+
+  const result = values.map(v => {
+    switch (v) {
+      case "left": {return "text-align:left;"}
+      case "center": {return "text-align:center;"}
+      case "right": {return "text-align:right;"}
+      case "justify": {return "text-align:justify;"}
+      case "top": {return "display:flex;flex-flow:column;justify-content:flex-start;"}
+      case "middle": {return "display:flex;flex-flow:column;justify-content:center;"}
+      case "bottom": {return "display:flex;flex-flow:column;justify-content:flex-end;"}
+      case "pack": {return "display:flex;flex-flow:column;align-items:center;justify-content:center;text-align:center;"}
+    }
+    return ""
+  })
+
+  return [...new Set(result)].join("")
+}
 export const makeVBoxWithSemi = (value = "") => {
   const values = value.split("+")
 

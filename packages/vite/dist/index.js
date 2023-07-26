@@ -1,20 +1,3 @@
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-
 // src/core/const.ts
 var ALL_PROPERTIES = {
   "--*": 1,
@@ -545,11 +528,23 @@ var cssEscape = (string) => {
       result += "\uFFFD";
       continue;
     }
-    if (codeUnit >= 1 && codeUnit <= 31 || codeUnit == 127 || index2 == 0 && codeUnit >= 48 && codeUnit <= 57 || index2 == 1 && codeUnit >= 48 && codeUnit <= 57 && firstCodeUnit == 45) {
+    if (
+      // If the character is in the range [\1-\1F] (U+0001 to U+001F) or is
+      // U+007F, […]
+      codeUnit >= 1 && codeUnit <= 31 || codeUnit == 127 || // If the character is the first character and is in the range [0-9]
+      // (U+0030 to U+0039), […]
+      index2 == 0 && codeUnit >= 48 && codeUnit <= 57 || // If the character is the second character and is in the range [0-9]
+      // (U+0030 to U+0039) and the first character is a `-` (U+002D), […]
+      index2 == 1 && codeUnit >= 48 && codeUnit <= 57 && firstCodeUnit == 45
+    ) {
       result += "\\" + codeUnit.toString(16) + " ";
       continue;
     }
-    if (index2 == 0 && length == 1 && codeUnit == 45) {
+    if (
+      // If the character is the first character and is a `-` (U+002D), and
+      // there is no second character, […]
+      index2 == 0 && length == 1 && codeUnit == 45
+    ) {
       result += "\\" + string.charAt(index2);
       continue;
     }
@@ -668,7 +663,7 @@ var makeRatio = (value) => {
   const [w, h] = value.split(":");
   return (+h / +w * 100).toFixed(2) + "%";
 };
-var makeHBox = (value = "") => {
+var makeHBoxWithSemi = (value = "") => {
   const values = value.split("+");
   const result = values.map((v) => {
     switch (v) {
@@ -707,7 +702,40 @@ var makeHBox = (value = "") => {
   }
   return [...new Set(result)].join("");
 };
-var makeVBox = (value = "") => {
+var makeTextBox = (value = "") => {
+  const values = value.split("+");
+  const result = values.map((v) => {
+    switch (v) {
+      case "left": {
+        return "text-align:left;";
+      }
+      case "center": {
+        return "text-align:center;";
+      }
+      case "right": {
+        return "text-align:right;";
+      }
+      case "justify": {
+        return "text-align:justify;";
+      }
+      case "top": {
+        return "display:flex;flex-flow:column;justify-content:flex-start;";
+      }
+      case "middle": {
+        return "display:flex;flex-flow:column;justify-content:center;";
+      }
+      case "bottom": {
+        return "display:flex;flex-flow:column;justify-content:flex-end;";
+      }
+      case "pack": {
+        return "display:flex;flex-flow:column;align-items:center;justify-content:center;text-align:center;";
+      }
+    }
+    return "";
+  });
+  return [...new Set(result)].join("");
+};
+var makeVBoxWithSemi = (value = "") => {
   const values = value.split("+");
   const result = values.map((v) => {
     switch (v) {
@@ -750,11 +778,6 @@ var makeTransition = (value) => {
     return `all ${value}`;
   return value.split("/").map((item) => item.replace("=", " ")).join(",");
 };
-var makePosition = (value) => {
-  if (!value)
-    return "";
-  return value.includes(",") ? makePosition2(value) : makePosition1(value);
-};
 var makePosition1 = (value) => {
   const values = value.split(" ").map(px);
   values[1] = values[1] || values[0];
@@ -774,11 +797,16 @@ var makePosition2 = (value) => {
   res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`);
   return res.join("");
 };
+var makePositionWithSemi = (value) => {
+  if (!value)
+    return "";
+  return (value.includes(",") ? makePosition2(value) : makePosition1(value)) + ";";
+};
 
 // src/core/rules.ts
 var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
 button{background:none;border:0;cursor:pointer;}
@@ -787,15 +815,19 @@ table{border-collapse:collapse;border-spacing:0;}
 ol,ul,menu,dir{list-style:none;}
 `;
 var RULES = {
+  // -- Color
   "c": (value) => `color:${makeColor(value)};`,
   "color": (value) => RULES.c(value),
   "caret": (value) => `caret-color:${makeColor(value)};`,
-  "caret-current": () => `color:currentColor`,
+  "caret-current": () => `color:currentColor;`,
+  // -- Typography
   "font": (value) => makeFont(value),
   "font-size": (value) => `font-size:${px(value)};`,
-  "line-height": (value) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)}`,
+  "line-height": (value) => `line-height:${+value < 4 ? makeNumber(+value) : px(value)};`,
   "letter-spacing": (value) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value) => `word-spacing:${px(value)};`,
+  // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
+  // @TODO:font-family:var(--serif),serif; 이게 먹히나?
   "sans": () => makeFontFamily("sans-serif"),
   "sans-serif": () => makeFontFamily("sans-serif"),
   "serif": () => makeFontFamily("serif"),
@@ -809,6 +841,7 @@ var RULES = {
   },
   "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
   "Roboto": () => makeFontFamily("Roboto"),
+  // Font Weight
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
   "300": () => `font-weight:300;`,
@@ -825,7 +858,9 @@ var RULES = {
   "semibold": () => `font-weight:600;`,
   "bold": () => `font-weight:bold;`,
   "heavy": () => `font-weight:900;`,
+  // Font Weight Utility
   "thicker": (value = "1") => `text-shadow:0 0 ${px(value)} currentColor;`,
+  // Font-Style
   "italic": () => `font-style:italic;`,
   "overline": () => `text-decoration:overline;`,
   "underline": () => `text-decoration:underline;`,
@@ -839,10 +874,13 @@ var RULES = {
   "lowercase": () => `text-transform:lowercase;`,
   "uppercase": () => `text-transform:uppercase;`,
   "capitalize": () => `text-transform:capitalize;`,
+  // Text Align
   "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
+  // Text Align
+  "text": (value) => makeTextBox(value),
   "vertical-top": () => `vertical-align:top;`,
   "vertical-middle": () => `vertical-align:middle;`,
   "vertical-bottom": () => `vertical-align:bottom;`,
@@ -850,10 +888,12 @@ var RULES = {
   "super": () => `vertical-align:super;`,
   "text-top": () => `vertical-align:text-top;`,
   "text-bottom": () => `vertical-align:text-bottom;`,
+  // Text Wrap
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
   "hyphens": (value = "auto") => `hyphens:${value};`,
+  // -- Display
   "block": () => "display:block;",
   "inline-block": () => "display:inline-block;",
   "inline": () => "display:inline;",
@@ -871,6 +911,7 @@ var RULES = {
   "flow-root": () => "display:flow-root;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
+  // @TODO:-- GRID TBD
   "grid": (value) => {
     const css = ["display:grid;"];
     if (+value === +value)
@@ -888,8 +929,9 @@ var RULES = {
     return css.join("");
   },
   "inline-grid": () => "display:inline-grid;",
-  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBox(value)}`,
-  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBox(value)}`,
+  // -- Flexbox
+  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBoxWithSemi(value)}`,
+  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBoxWithSemi(value)}`,
   "pack": () => `display:flex;align-items:center;justify-content:center;`,
   "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
   "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
@@ -897,10 +939,12 @@ var RULES = {
   "vbox(": () => ``,
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
   "gap": (value) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
+  // @NOTE:IE,safari<=13
   "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
   "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
   "vgap": (value) => `&>*+* {margin-top:${px(value)};}`,
   "vgap-reverse": (value) => `&>*+* {margin-bottom:${px(value)};}`,
+  // align-items
   "ai": (value) => `align-items:${value};`,
   "items": (value) => `align-items:${value};`,
   "items-start": () => `align-items:flex-start;`,
@@ -908,6 +952,7 @@ var RULES = {
   "items-center": () => `align-items:center;`,
   "items-baseline": () => `align-items:baseline;`,
   "items-stretch": () => `align-items:stretch;`,
+  // align-content
   "ac": (value) => `align-content:${value};`,
   "content-start": () => `align-content:flex-start;`,
   "content-end": () => `align-content:flex-end;`,
@@ -916,6 +961,7 @@ var RULES = {
   "content-around": () => `align-content:space-around;`,
   "content-evenly": () => `align-content:space-evenly;`,
   "content-stretch": () => `align-content:stretch;`,
+  // justify-content
   "jc": (value) => `justify-content:${value};`,
   "justify": (value) => `justify-content:${value};`,
   "justify-start": () => `justify-content:flex-start;`,
@@ -928,12 +974,14 @@ var RULES = {
   "space-between": () => `justify-content:space-between;`,
   "space-around": () => `justify-content:space-around;`,
   "space-evenly": () => `justify-content:space-evenly;`,
+  // justify-items
   "ji": (value) => `justify-items:${value};`,
   "justify-items": (value) => `justify-items:${value};`,
   "justify-items-start": () => `justify-items:start;`,
   "justify-items-end": () => `justify-items:end;`,
   "justify-items-center": () => `justify-items:center;`,
   "justify-items-stretch": () => `justify-items:stretch;`,
+  // flex
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
   "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
@@ -948,8 +996,11 @@ var RULES = {
   "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value) => `order:${cssvar(value)};`,
-  "border-box": () => `box-sizing:border-box`,
-  "content-box": () => `box-sizing:content-box`,
+  // -- Box
+  // Box-Sizing
+  "border-box": () => `box-sizing:border-box;`,
+  "content-box": () => `box-sizing:content-box;`,
+  // Box-Model
   "w": (value) => {
     if (value.includes("~")) {
       const result = [];
@@ -986,6 +1037,7 @@ var RULES = {
     }
     return value === "stretch" || value === "fill" ? `align-self:stretch` : `height:${px(value)};`;
   },
+  // BoxModel - Margin
   "m": (value) => `margin:${makeSide(value)};`,
   "mx": (value) => `margin-left:${px(value)};margin-right:${px(value)};`,
   "my": (value) => `margin-top:${px(value)};margin-bottom:${px(value)};`,
@@ -993,6 +1045,7 @@ var RULES = {
   "mr": (value) => `margin-right:${px(value)};`,
   "mb": (value) => `margin-bottom:${px(value)};`,
   "ml": (value) => `margin-left:${px(value)};`,
+  // BoxModel - Padding
   "p": (value) => `padding:${makeSide(value)};`,
   "px": (value) => `padding-left:${px(value)};padding-right:${px(value)};`,
   "py": (value) => `padding-top:${px(value)};padding-bottom:${px(value)};`,
@@ -1000,6 +1053,7 @@ var RULES = {
   "pr": (value) => `padding-right:${px(value)};`,
   "pb": (value) => `padding-bottom:${px(value)};`,
   "pl": (value) => `padding-left:${px(value)};`,
+  // BoxModel - Border
   "no-border": () => `border:none;outline:none;`,
   "b": (value) => `border:${makeBorder(value)};`,
   "bx": (value) => `border-left:${makeBorder(value)};border-right:${makeBorder(value)};`,
@@ -1029,8 +1083,10 @@ var RULES = {
   "brc": (value) => `border-right-color:${makeColor(value)};`,
   "bbc": (value) => `border-bottom-color:${makeColor(value)};`,
   "blc": (value) => `border-left-color:${makeColor(value)};`,
+  // outline
   "outline": (value) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{ outline:1px solid ${makeColor(value)};}`,
+  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}{}`,
+  // border-radius
   "r": (value) => `border-radius:${makeSide(value)};`,
   "rt": (value) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
   "rr": (value) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
@@ -1040,11 +1096,13 @@ var RULES = {
   "rtr": (value) => `border-top-right-radius:${px(value)};`,
   "rbr": (value) => `border-bottom-right-radius:${px(value)};`,
   "rbl": (value) => `border-bottom-left-radius:${px(value)};`,
+  // box-shadow
   "ring": (value) => {
     const [color, size = 1] = value.split("/");
     return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
-  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))}`,
+  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))};`,
+  // -- Background
   "bg": (value) => {
     if (value.startsWith("linear-gradient"))
       return `background:${value.replace(/\//g, " ")};`;
@@ -1065,6 +1123,7 @@ var RULES = {
   },
   "background-image": (value) => RULES["bg-image"](value),
   "bg-position": (value) => `background-position:${makeValues(value)};`,
+  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
   "bg-repeat-x": () => `background-repeat:repeat-x;`,
   "bg-repeat-y": () => `background-repeat:repeat-y;`,
   "bg-no-repeat": () => `background-repeat:no-repeat;`,
@@ -1072,16 +1131,20 @@ var RULES = {
   "bg-scroll": () => `background-attachment:scroll;`,
   "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
   "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
+  /// -- Overflow
+  // OverFlow
   "overflow": (value) => `overflow:${value};`,
   "overflow-x": (value) => `overflow-x:${value};`,
   "overflow-y": (value) => `overflow-y:${value};`,
   "clip": () => `overflow:hidden;`,
+  // Scroll
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}{}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}{}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}{}`,
+  // Scroll Snap
   "scroll-m": (value) => `scroll-margin:${makeSide(value)};`,
   "scroll-mt": (value) => `scroll-margin-top:${px(value)};`,
   "scroll-mr": (value) => `scroll-margin-right:${px(value)};`,
@@ -1108,19 +1171,26 @@ var RULES = {
   "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
   "snap-normal": () => `scroll-snap-stop:normal;`,
   "snap-always": () => `scroll-snap-stop:always;`,
+  // @TODO:- TBD
   "overscroll": (value) => `overscroll-behavior:${value};`,
   "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
   "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
+  // @TODO:- TBD
   "no-bouncing": () => "",
   "no-overscroll": () => "",
+  // OverFlow + Text
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
   "nowrap": () => `white-space:nowrap;flex-shrink:0;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;`,
+  // line-clamp vs max-lines
+  // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
+  // @NOTE:그냥 둘다 제공한다.
   "line-clamp": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "max-lines": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "text-indent": (value) => `text-indent:${px(value)};`,
+  // Position
   "layer": (value = "") => {
     const pos = { top: "0", right: "0", bottom: "0", left: "0" };
     const outsides = [];
@@ -1178,15 +1248,16 @@ var RULES = {
     }
     return `position:absolute;` + Object.keys(pos).map((value2) => `${value2}:${px(pos[value2])};`).join("");
   },
-  "absolute": (value) => `position:absolute;${makePosition(value)}`,
-  "relative": (value) => `position:relative;${makePosition(value)}`,
-  "sticky": (value) => `position:sticky;${makePosition(value)}`,
+  "absolute": (value) => `position:absolute;${makePositionWithSemi(value)}`,
+  "relative": (value) => `position:relative;${makePositionWithSemi(value)}`,
+  "sticky": (value) => `position:sticky;${makePositionWithSemi(value)}`,
   "sticky-top": (value = "0") => `position:sticky;top:${px(value)};`,
   "sticky-right": (value = "0") => `position:sticky;right:${px(value)};`,
   "sticky-bottom": (value = "0") => `position:sticky;bottom:${px(value)};`,
   "sticky-left": (value = "0") => `position:sticky;left:${px(value)};`,
-  "fixed": (value) => `position:fixed;${makePosition(value)}`,
+  "fixed": (value) => `position:fixed;${makePositionWithSemi(value)}`,
   "static": () => `position:static;`,
+  // Position
   "x": (value) => `left:${px(value)};`,
   "y": (value) => `top:${px(value)};`,
   "z": (value) => `z-index:${cssvar(value)};`,
@@ -1194,6 +1265,7 @@ var RULES = {
   "left": (value) => `left:${px(value)};`,
   "right": (value) => `right:${px(value)};`,
   "bottom": (value) => `bottom:${px(value)};`,
+  // Visibility
   "none": () => `display:none;`,
   "hidden": () => `visibility:hidden;`,
   "invisible": () => `visibility:hidden;`,
@@ -1203,28 +1275,29 @@ var RULES = {
   "opacity": (value) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
   "collapse": () => `visibility:collapse;`,
-  "col-resize": () => `cursor: col-resize;`,
-  "crosshair": () => `cursor: crosshair;`,
-  "e-resize": () => `cursor: e-resize;`,
-  "ew-resize": () => `cursor: ew-resize;`,
-  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
-  "grabbing": () => `cursor: grabbing;`,
-  "n-resize": () => `cursor: n-resize;`,
-  "ne-resize": () => `cursor: ne-resize;`,
-  "nesw-resize": () => `cursor: nesw-resize;`,
-  "ns-resize": () => `cursor: ns-resize;`,
-  "nw-resize": () => `cursor: nw-resize;`,
-  "nwse-resize": () => `cursor: nwse-resize;`,
-  "not-allowed": () => `cursor: not-allowed;`,
-  "pointer": () => `cursor: pointer;`,
-  "progress": () => `cursor: progress;`,
-  "row-resize": () => `cursor: row-resize;`,
-  "s-resize": () => `cursor: s-resize;`,
-  "se-resize": () => `cursor: se-resize;`,
-  "sw-resize": () => `cursor: sw-resize;`,
-  "w-resize": () => `cursor: w-resize;`,
-  "zoom-in": () => `cursor: zoom-in;`,
-  "zoom-out": () => `cursor: zoom-out;`,
+  // Interactions
+  "col-resize": () => `cursor:col-resize;`,
+  "crosshair": () => `cursor:crosshair;`,
+  "e-resize": () => `cursor:e-resize;`,
+  "ew-resize": () => `cursor:ew-resize;`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}{}`,
+  "grabbing": () => `cursor:grabbing;`,
+  "n-resize": () => `cursor:n-resize;`,
+  "ne-resize": () => `cursor:ne-resize;`,
+  "nesw-resize": () => `cursor:nesw-resize;`,
+  "ns-resize": () => `cursor:ns-resize;`,
+  "nw-resize": () => `cursor:nw-resize;`,
+  "nwse-resize": () => `cursor:nwse-resize;`,
+  "not-allowed": () => `cursor:not-allowed;`,
+  "pointer": () => `cursor:pointer;`,
+  "progress": () => `cursor:progress;`,
+  "row-resize": () => `cursor:row-resize;`,
+  "s-resize": () => `cursor:s-resize;`,
+  "se-resize": () => `cursor:se-resize;`,
+  "sw-resize": () => `cursor:sw-resize;`,
+  "w-resize": () => `cursor:w-resize;`,
+  "zoom-in": () => `cursor:zoom-in;`,
+  "zoom-out": () => `cursor:zoom-out;`,
   "cursor": (value) => `cursor:${value};`,
   "user-select-none": () => "user-select:none;-webkit-user-select:none;",
   "user-select-all": () => "user-select:all;-webkit-user-select:all;",
@@ -1233,7 +1306,10 @@ var RULES = {
   "user-select": (value) => `user-select:${cssvar(value)};-webkit-user-select:${cssvar(value)};`,
   "pointer-events-none": () => "pointer-events:none;",
   "pointer-events-auto": () => "pointer-events:auto;",
+  // 에니메이션:transition(transform=100s/opacity=2s)
   "transition": (value) => `transition:${makeTransition(value)};`,
+  // @TODO:섞을수가 없네? mix transform
+  // @TBD:translate(10,10)+rotateX(180deg)+scale(2) 이런식으로 +기호로 묶자!!
   "translate": (value) => `transform:translate(${makeCommaValues(value)});`,
   "translateX": (value) => `transform:translateX(${cssvar(value)});`,
   "translateY": (value) => `transform:translateY(${cssvar(value)});`,
@@ -1252,36 +1328,41 @@ var RULES = {
   "skewX": (value) => `transform:skewX(${makeCommaValues(value)});`,
   "skewY": (value) => `transform:skewY(${makeCommaValues(value)});`,
   "skewZ": (value) => `transform:skewZ(${makeCommaValues(value)});`,
-  "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  // Util
+  "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}{}`,
   "gpu": () => `transform:translateZ(0.1px);`,
+  // etc
   "app-region": (value) => `-webkit-app-region:${value};`,
-  "content": (value = "''") => `content:${cssvar(value)}`,
+  "content": (value = "''") => `content:${cssvar(value)};`,
   "clip-path": (value) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
   "table-fixed": () => `table-layout:fixed;`,
   "table-auto": () => `table-layout:auto;`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
-  "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))}`,
+  "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
+  // Float & Clear
   "float": (value) => `float:${cssvar(value)};`,
   "clear": (value) => `clear:${cssvar(value)};`,
-  "blur": (value) => `filter:blur(${px(value)})`,
-  "brightness": (value) => `filter:brightness(${cssvar(value)})`,
-  "contrast": (value) => `filter:contrast(${cssvar(value)})`,
-  "drop-shadow": (value) => `filter:drop-shadow(${makeValues(value, px)})`,
-  "grayscale": (value) => `filter:grayscale(${cssvar(value)})`,
-  "hue-rotate": (value) => `filter:hue-rotate(${cssvar(value)})`,
-  "invert": (value) => `filter:invert(${cssvar(value)})`,
-  "sepia": (value) => `filter:sepia(${cssvar(value)})`,
-  "saturate": (value) => `filter:saturate(${cssvar(value)})`,
-  "backdrop-blur": (value) => `backdrop-filter:blur(${px(value)})`,
-  "backdrop-brightness": (value) => `backdrop-filter:brightness(${cssvar(value)})`,
-  "backdrop-contrast": (value) => `backdrop-filter:contrast(${cssvar(value)})`,
-  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${makeValues(value, px)})`,
-  "backdrop-grayscale": (value) => `backdrop-filter:grayscale(${cssvar(value)})`,
-  "backdrop-hue-rotate": (value) => `backdrop-filter:hue-rotate(${cssvar(value)})`,
-  "backdrop-invert": (value) => `backdrop-filter:invert(${cssvar(value)})`,
-  "backdrop-sepia": (value) => `backdrop-filter:sepia(${cssvar(value)})`,
-  "backdrop-saturate": (value) => `backdrop-filter:saturate(${cssvar(value)})`,
+  // Filter
+  "blur": (value) => `filter:blur(${px(value)});-webkit-filter:blur(${px(value)});`,
+  "brightness": (value) => `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
+  "contrast": (value) => `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
+  "drop-shadow": (value) => `filter:drop-shadow(${makeValues(value, px)});-webkit-filter:drop-shadow(${makeValues(value, px)});`,
+  "grayscale": (value) => `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
+  "hue-rotate": (value) => `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
+  "invert": (value) => `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
+  "sepia": (value) => `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
+  "saturate": (value) => `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
+  "backdrop-blur": (value) => `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
+  "backdrop-brightness": (value) => `backdrop-filter:brightness(${cssvar(value)});-webkit-backdrop-filter:brightness(${cssvar(value)});`,
+  "backdrop-contrast": (value) => `backdrop-filter:contrast(${cssvar(value)});-webkit-backdrop-filter:contrast(${cssvar(value)});`,
+  "backdrop-drop-shadow": (value) => `backdrop-filter:drop-shadow(${makeValues(value, px)});-webkit-backdrop-filter:drop-shadow(${makeValues(value, px)});`,
+  "backdrop-grayscale": (value) => `backdrop-filter:grayscale(${cssvar(value)});-webkit-backdrop-filter:grayscale(${cssvar(value)});`,
+  "backdrop-hue-rotate": (value) => `backdrop-filter:hue-rotate(${cssvar(value)});-webkit-backdrop-filter:hue-rotate(${cssvar(value)});`,
+  "backdrop-invert": (value) => `backdrop-filter:invert(${cssvar(value)});-webkit-backdrop-filter:invert(${cssvar(value)});`,
+  "backdrop-sepia": (value) => `backdrop-filter:sepia(${cssvar(value)});-webkit-backdrop-filter:sepia(${cssvar(value)});`,
+  "backdrop-saturate": (value) => `backdrop-filter:saturate(${cssvar(value)});-webkit-backdrop-filter:saturate(${cssvar(value)});`,
+  // @TODO:triangle
   "triangle": (value) => {
     const [direction, size, angle = 0] = value.split("/");
     const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"];
@@ -1293,6 +1374,7 @@ var RULES = {
     css += "border-" + bdr[2] + ":" + Math.round(+size * height) + "px solid black;";
     return css;
   },
+  // elevation
   "elevation": (value) => {
     const dp = +value;
     if (!dp) {
@@ -1350,6 +1432,8 @@ var PREFIX_MEDIA_QUERY = {
   "desktop:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "!mobile:": { media: `(min-device-width:768px)`, selector: `html &` },
   "!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
+  // "touch:":{media:`(hover:none)`,selector:`html &`},
+  // "!touch:":{media:`(hover:hover)`,selector:`html &`},
   "touch:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
   "!touch:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "portrait:": { media: `(orientation:portrait)`, selector: `html &` },
@@ -1357,12 +1441,12 @@ var PREFIX_MEDIA_QUERY = {
   "print:": { media: `print`, selector: `html &` },
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
+  // dark:@TBD
   "dark:": { selector: `html.dark &` }
 };
 var AT_RULE = {
   "@w": (ident, tokens2) => {
-    var _a, _b;
-    if (((_a = tokens2[2]) == null ? void 0 : _a.value) !== "(" || ((_b = tokens2[tokens2.length - 1]) == null ? void 0 : _b.value) !== ")") {
+    if (tokens2[2]?.value !== "(" || tokens2[tokens2.length - 1]?.value !== ")") {
       throw Error("invalid syntax!");
     }
     const value = tokens2.slice(3, -1).map((t) => t.value).join("");
@@ -1391,7 +1475,10 @@ var PREFIX_SELECTOR = {
 };
 
 // src/core/atomizer.ts
-var PREFIX_RULES = __spreadValues(__spreadValues({}, PREFIX_PSEUDO_CLASS), PREFIX_MEDIA_QUERY);
+var PREFIX_RULES = {
+  ...PREFIX_PSEUDO_CLASS,
+  ...PREFIX_MEDIA_QUERY
+};
 var lex = [
   ["(hexcolor)", /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/],
   ["(important)", /(!+$|!+\+)/],
@@ -1540,8 +1627,8 @@ var generateAtomicCss = (rules, prefixRules) => {
 };
 var sortByRule = (a, b) => a[1] - b[1];
 var createGenerateCss = (rules = {}, prefixRules = {}) => {
-  rules = __spreadValues(__spreadValues({}, RULES), rules);
-  prefixRules = __spreadValues(__spreadValues({}, PREFIX_RULES), prefixRules);
+  rules = { ...RULES, ...rules };
+  prefixRules = { ...PREFIX_RULES, ...prefixRules };
   return (classList) => classList.flatMap(generateAtomicCss(rules, prefixRules)).filter(Boolean).sort(sortByRule).map((a) => a[0]);
 };
 var generateCss = createGenerateCss();

@@ -1,3 +1,9 @@
+## 1.3.5
+- ✨글자 배치를 가로+세로를 함께 할 수 있는 새로운 textAlign 스펙이 추가되었습니다.
+- 튜토리얼을 확인해주세요!
+- ex) `text(left)` `text(middle+right)` `text(pack)`
+
+
 ## 1.3.4
 - ✨filter와 backdrop-filter에 -webkit- prefix를 추가하였습니다.
 - 🐛일부 ;이 누락되어 !important가 적용되지 않던 속성들을 수정하였습니다.

@@ -1,11 +1,11 @@
 import { Plugin } from 'vite';
 
-declare type Rules = Record<string, (value?: string) => string>;
-declare type PrefixProps = {
+type Rules = Record<string, (value?: string) => string>;
+type PrefixProps = {
     media?: string;
     selector?: string;
 };
-declare type PrefixRules = Record<string, PrefixProps>;
+type PrefixRules = Record<string, PrefixProps>;
 declare const parseAtoms: (code: string) => string[];
 declare const tokenize: (script: string) => any[];
 declare const createGenerateCss: (rules?: Rules, prefixRules?: PrefixRules) => (classList: string[]) => string[];
@@ -27,14 +27,15 @@ declare const makeValues: (value: string, project?: (value: string | number) => 
 declare const makeCommaValues: (value: string, project?: (value: string | number) => string | number) => string;
 declare const makeSide: (value: string) => string;
 declare const makeRatio: (value: string) => string;
-declare const makeHBox: (value?: string) => string;
-declare const makeVBox: (value?: string) => string;
+declare const makeHBoxWithSemi: (value?: string) => string;
+declare const makeTextBox: (value?: string) => string;
+declare const makeVBoxWithSemi: (value?: string) => string;
 declare const makeTransition: (value: string) => string;
-declare const makePosition: (value?: string) => string;
 declare const makePosition1: (value: string) => string;
 declare const makePosition2: (value: string) => string;
+declare const makePositionWithSemi: (value?: string) => string;
 
-declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2}\nhtml,body{height:100%;}\nimg,picture,video,canvas{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n";
+declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}\nhtml,body{height:100%;}\nimg,picture,video,canvas{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n";
 declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
@@ -574,4 +575,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBox, makeHEX, makeHLS, makeNumber, makePosition, makePosition1, makePosition2, makeRGB, makeRatio, makeSide, makeTransition, makeVBox, makeValues, parseAtoms, percentToEm, px, reset, tokenize };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, tokenize };
