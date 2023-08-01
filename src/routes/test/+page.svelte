@@ -10,7 +10,6 @@ $: console.log(result)
 $: console.log(result2)
 </script>
 
-
 <div class="layer pack">
   <div class="w(800) m(auto) vbox">
     <input type="text" class="b(-) outline(-) bb(#000) p(10)" bind:value={test} autofocus>

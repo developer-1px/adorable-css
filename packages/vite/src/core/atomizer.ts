@@ -4,7 +4,7 @@ import {makeHEX, makeValues} from "./makeValue"
 import {AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, RULES} from "./rules"
 
 export type Rules = Record<string, (value?:string) => string>
-export type PrefixProps = { media?:string, selector?:string }
+export type PrefixProps = {media?:string, selector?:string}
 export type PrefixRules = Record<string, PrefixProps>
 
 const PREFIX_RULES:PrefixRules = {
@@ -154,6 +154,52 @@ const parsePrefix = (prefixRules:PrefixRules, e) => {
   throw new Error("Invalid Prefix Syntax:" + token.id)
 }
 
+const validateCSS = (s:string) => {
+  const stack = [];
+  const pairs = {
+    ")": "(",
+    "}": "{",
+    "]": "[",
+    "'": "'",
+    '"': '"',
+    "`": "`"
+  };
+
+  let inString = null;
+  let lastChar = null;
+
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+
+    if (inString) {
+      if (char === inString && lastChar !== '\\') {
+        if (stack.length === 0 || stack.pop() !== pairs[char]) {
+          return false;
+        }
+        inString = null;
+      }
+      // Update lastChar at the end of the loop
+      lastChar = char;
+      continue;
+    }
+
+    if (char === "(" || char === "{" || char === "[" || char === "'" || char === '"' || char === "`") {
+      stack.push(char);
+      if (char === "'" || char === '"' || char === "`") {
+        inString = char;
+      }
+    }
+    else if (char === ")" || char === "}" || char === "]" || char === "'" || char === '"' || char === "`") {
+      if (stack.length === 0 || stack.pop() !== pairs[char]) {
+        return false;
+      }
+    }
+    // Update lastChar at the end of the loop
+    lastChar = char;
+  }
+
+  return stack.length === 0;
+}
 
 const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
   const priorityTable = Object.fromEntries(Object.keys(rules).map((key, index) => [key, index + 1]))
@@ -240,12 +286,15 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
         }
 
         const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
-        const rule2 = selectors.length ? rule + "{}" : rule
+        const finalRule = media ? media + "{" + rule + "}" : rule
 
-        return [media ? media + "{" + rule2 + "}" : rule2, priority]
+        if (!validateCSS(finalRule)) {
+          throw new Error("no validate css!!")
+        }
+
+        return [finalRule, priority]
       })
-    }
-    catch (e) {
+    } catch (e) {
       // console.error(e)
     }
   }
@@ -260,10 +309,10 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
   prefixRules = {...PREFIX_RULES, ...prefixRules}
 
   return (classList:string[]) => classList
-    .flatMap(generateAtomicCss(rules, prefixRules))
-    .filter(Boolean)
-    .sort(sortByRule)
-    .map(a => a[0])
+  .flatMap(generateAtomicCss(rules, prefixRules))
+  .filter(Boolean)
+  .sort(sortByRule)
+  .map(a => a[0])
 }
 
 export const generateCss = createGenerateCss()

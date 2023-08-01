@@ -196,8 +196,7 @@ const generateFrame = async (node:ComponentNode|FrameNode, depth) => {
   const numChildren = node.children?.filter(child => child.visible).length
   const hasChildren = numChildren > 0
   const hasMoreChildren = numChildren > 1
-  const {layoutGrow, layoutAlign} = node
-  const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
+  const {layoutAlign, layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
   if (hasChildren) {
     if (layoutMode === "HORIZONTAL") {

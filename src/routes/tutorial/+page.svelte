@@ -9,8 +9,8 @@ import {TURORIAL_12_Important} from "src/tutorials/12. Important"
 import {TURORIAL_14_Grouping} from "src/tutorials/14. Grouping"
 import {TURORIAL_2_TYPOGRAPHY} from "src/tutorials/2. Typography"
 import {TURORIAL_3_BOX_MODEL} from "src/tutorials/3. Box Model"
-import {TURORIAL_4_OVERFLOW} from "src/tutorials/4. Overflow"
-import {TURORIAL_5_LAYOUT_FLEXBOX} from "src/tutorials/5. Layout - Flexbox"
+import {TURORIAL_4_OVERFLOW} from "../../tutorials/5. Overflow"
+import {TURORIAL_5_LAYOUT_FLEXBOX} from "../../tutorials/4. Layout - Flexbox"
 import {TURORIAL_6_LAYOUT_POSITION} from "src/tutorials/6. Layout - Position"
 import {TURORIAL_7_PREFIX} from "src/tutorials/7. Prefix"
 import {TUTORIAL_7_VISIBILITY} from "src/tutorials/7. Visibility"
@@ -29,8 +29,8 @@ const tutorials = [
   ["2. Typography", TURORIAL_2_TYPOGRAPHY],
   ["✨3. TextBox(TextAlign)", TURORIAL_TEXTBOX],
   ["4. Box Model", TURORIAL_3_BOX_MODEL],
-  ["5. Overflow", TURORIAL_4_OVERFLOW],
-  ["6. Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
+  ["5. Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
+  ["6. Overflow", TURORIAL_4_OVERFLOW],
   ["7. Position", TURORIAL_6_LAYOUT_POSITION],
   ["8. Visibility", TUTORIAL_7_VISIBILITY],
   ["9. Hover, Active", TURORIAL_7_PREFIX],

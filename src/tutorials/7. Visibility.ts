@@ -43,6 +43,7 @@ Visibility
 
 -->
 <h1>Visibility</h1>
+<p>아래 컨텐츠들은 보이지 않는게 맞습니다.</p>
 
 <div class="none">none</div>
 <div class="hidden invisible">hidden(=invisible)</div>

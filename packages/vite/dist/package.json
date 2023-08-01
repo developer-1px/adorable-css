@@ -1,6 +1,6 @@
 {
   "name": "adorable-css",
-  "version": "1.3.6",
+  "version": "1.3.7-beta.3",
   "description": "Rapid On-Demand Atomic CSS generator",
   "repository": {
     "type": "git",
@@ -29,7 +29,8 @@
     "build": "rm -rf ./dist && npm run build:vite && npm run build:cli && cp package.json ./dist/package.json",
     "build:vite": "tsup ./src/index.ts -d ./dist && tsup ./src/vite/index.ts -d ./dist/vite",
     "build:cli": "tsup ./src/node/cli.ts -d ./dist/node",
-    "deploy": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish"
+    "deploy": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish",
+    "deploy:beta": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish --tag beta"
   },
   "tsup": {
     "splitting": false,

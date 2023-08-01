@@ -121,7 +121,7 @@ export const makeRatio = (value:string) => {
 }
 
 export const makeHBoxWithSemi = (value = "") => {
-  const values = value.split("+")
+  const values = value.split(/[+/]/)
 
   const result = values.map(v => {
     switch (v) {
@@ -135,7 +135,7 @@ export const makeHBoxWithSemi = (value = "") => {
       case "reverse": {return "flex-direction:row-reverse;"}
       case "center": {return "justify-content:center;"}
     }
-    return ""
+    return /^[\d.]+$/.test(v) ? `gap:${px(v)};` : ""
   })
 
   if (!result.find(r => r.startsWith("align-items:"))) {
@@ -143,6 +143,40 @@ export const makeHBoxWithSemi = (value = "") => {
   }
 
   return [...new Set(result)].join("")
+}
+
+export const makeVBoxWithSemi = (value = "") => {
+  const values = value.split(/[+/]/)
+
+  const result = values.map(v => {
+    switch (v) {
+      case "left": {return "align-items:flex-start;"}
+      case "center": {return "align-items:center;"}
+      case "right": {return "align-items:flex-end;"}
+      case "fill": {return "align-items:stretch;"}
+      case "top": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "middle": {return "justify-content:center;"}
+      case "bottom": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
+      case "reverse": {return "flex-direction:column-reverse;"}
+    }
+    return /^[\d.]+$/.test(v) ? `gap:${px(v)};` : ""
+  })
+
+  if (!result.find(r => r.startsWith("align-items:"))) {
+    result.unshift("align-items:stretch;")
+  }
+
+  return [...new Set(result)].join("")
+}
+
+export const makeHBoxFill = () => "&>*{--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}"
+export const makeVBoxFill = () => "&>*{--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}"
+
+export const makeBoxFill = (value:string) => {
+  const val = value.split(/\s+/)
+  if (val.includes("row")) return makeHBoxFill()
+  if (val.includes("column")) return makeVBoxFill()
+  return ""
 }
 
 export const makeTextBox = (value = "") => {
@@ -161,29 +195,6 @@ export const makeTextBox = (value = "") => {
     }
     return ""
   })
-
-  return [...new Set(result)].join("")
-}
-export const makeVBoxWithSemi = (value = "") => {
-  const values = value.split("+")
-
-  const result = values.map(v => {
-    switch (v) {
-      case "left": {return "align-items:flex-start;"}
-      case "center": {return "align-items:center;"}
-      case "right": {return "align-items:flex-end;"}
-      case "fill": {return "align-items:stretch;"}
-      case "top": {return values.includes("reverse") ? "justify-content:flex-end;" : ""}
-      case "middle": {return "justify-content:center;"}
-      case "bottom": {return !values.includes("reverse") ? "justify-content:flex-end;" : ""}
-      case "reverse": {return "flex-direction:column-reverse;"}
-    }
-    return ""
-  })
-
-  if (!result.find(r => r.startsWith("align-items:"))) {
-    result.unshift("align-items:stretch;")
-  }
 
   return [...new Set(result)].join("")
 }

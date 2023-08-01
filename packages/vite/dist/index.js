@@ -664,7 +664,7 @@ var makeRatio = (value) => {
   return (+h / +w * 100).toFixed(2) + "%";
 };
 var makeHBoxWithSemi = (value = "") => {
-  const values = value.split("+");
+  const values = value.split(/[+/]/);
   const result = values.map((v) => {
     switch (v) {
       case "top": {
@@ -695,12 +695,58 @@ var makeHBoxWithSemi = (value = "") => {
         return "justify-content:center;";
       }
     }
-    return "";
+    return /^[\d.]+$/.test(v) ? `gap:${px(v)};` : "";
   });
   if (!result.find((r) => r.startsWith("align-items:"))) {
     result.unshift("align-items:center;");
   }
   return [...new Set(result)].join("");
+};
+var makeVBoxWithSemi = (value = "") => {
+  const values = value.split(/[+/]/);
+  const result = values.map((v) => {
+    switch (v) {
+      case "left": {
+        return "align-items:flex-start;";
+      }
+      case "center": {
+        return "align-items:center;";
+      }
+      case "right": {
+        return "align-items:flex-end;";
+      }
+      case "fill": {
+        return "align-items:stretch;";
+      }
+      case "top": {
+        return values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "middle": {
+        return "justify-content:center;";
+      }
+      case "bottom": {
+        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
+      }
+      case "reverse": {
+        return "flex-direction:column-reverse;";
+      }
+    }
+    return /^[\d.]+$/.test(v) ? `gap:${px(v)};` : "";
+  });
+  if (!result.find((r) => r.startsWith("align-items:"))) {
+    result.unshift("align-items:stretch;");
+  }
+  return [...new Set(result)].join("");
+};
+var makeHBoxFill = () => "&>*{--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}";
+var makeVBoxFill = () => "&>*{--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}";
+var makeBoxFill = (value) => {
+  const val = value.split(/\s+/);
+  if (val.includes("row"))
+    return makeHBoxFill();
+  if (val.includes("column"))
+    return makeVBoxFill();
+  return "";
 };
 var makeTextBox = (value = "") => {
   const values = value.split("+");
@@ -733,42 +779,6 @@ var makeTextBox = (value = "") => {
     }
     return "";
   });
-  return [...new Set(result)].join("");
-};
-var makeVBoxWithSemi = (value = "") => {
-  const values = value.split("+");
-  const result = values.map((v) => {
-    switch (v) {
-      case "left": {
-        return "align-items:flex-start;";
-      }
-      case "center": {
-        return "align-items:center;";
-      }
-      case "right": {
-        return "align-items:flex-end;";
-      }
-      case "fill": {
-        return "align-items:stretch;";
-      }
-      case "top": {
-        return values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "middle": {
-        return "justify-content:center;";
-      }
-      case "bottom": {
-        return !values.includes("reverse") ? "justify-content:flex-end;" : "";
-      }
-      case "reverse": {
-        return "flex-direction:column-reverse;";
-      }
-    }
-    return "";
-  });
-  if (!result.find((r) => r.startsWith("align-items:"))) {
-    result.unshift("align-items:stretch;");
-  }
   return [...new Set(result)].join("");
 };
 var makeTransition = (value) => {
@@ -813,6 +823,7 @@ button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
 ol,ul,menu,dir{list-style:none;}
+*{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}
 `;
 var RULES = {
   // -- Color
@@ -828,7 +839,7 @@ var RULES = {
   "word-spacing": (value) => `word-spacing:${px(value)};`,
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
   // @TODO:font-family:var(--serif),serif; 이게 먹히나?
-  "sans": () => makeFontFamily("sans-serif"),
+  "sans": () => makeFontFamily("sans"),
   "sans-serif": () => makeFontFamily("sans-serif"),
   "serif": () => makeFontFamily("serif"),
   "cursive": () => makeFontFamily("cursive"),
@@ -911,6 +922,53 @@ var RULES = {
   "flow-root": () => "display:flow-root;",
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
+  // -- Box
+  // Box-Sizing
+  "border-box": () => `box-sizing:border-box;`,
+  "content-box": () => `box-sizing:content-box;`,
+  // Box-Model
+  "w": (value) => {
+    if (value === "stretch" || value === "fill") {
+      return `&{flex-grow:var(--w-grow);align-self:var(--w-align);flex-shrink:1;max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
+    }
+    if (value.includes("~")) {
+      const result = [];
+      const values = value.split("~");
+      if (values.length <= 2) {
+        const [min2, max2] = values;
+        min2 && result.push(`min-width:${px(min2)};`);
+        max2 && result.push(`max-width:${px(max2)};`);
+        return result.join("");
+      }
+      const [min, width, max] = values;
+      min && result.push(`min-width:${px(min)};`);
+      result.push(`width:${px(width)};`);
+      max && result.push(`max-width:${px(max)};`);
+      return result.join("");
+    }
+    return `width:${px(value)};`;
+  },
+  "h": (value) => {
+    if (value === "stretch" || value === "fill") {
+      return `flex-grow:var(--h-grow);align-self:var(--h-align)`;
+    }
+    if (value.includes("~")) {
+      const result = [];
+      const values = value.split("~");
+      if (values.length <= 2) {
+        const [min2, max2] = value.split("~");
+        min2 && result.push(`min-height:${px(min2)};`);
+        max2 && result.push(`max-height:${px(max2)};`);
+        return result.join("");
+      }
+      const [min, height, max] = values;
+      min && result.push(`min-height:${px(min)};`);
+      result.push(`height:${px(height)};`);
+      max && result.push(`max-height:${px(max)};`);
+      return result.join("");
+    }
+    return `height:${px(value)};`;
+  },
   // @TODO:-- GRID TBD
   "grid": (value) => {
     const css = ["display:grid;"];
@@ -930,20 +988,22 @@ var RULES = {
   },
   "inline-grid": () => "display:inline-grid;",
   // -- Flexbox
-  "hbox": (value = "") => `display:flex;flex-flow:row;${makeHBoxWithSemi(value)}`,
-  "vbox": (value = "") => `display:flex;flex-flow:column;${makeVBoxWithSemi(value)}`,
-  "pack": () => `display:flex;align-items:center;justify-content:center;`,
-  "hpack": () => `display:flex;flex-flow:row;align-items:center;justify-content:center;`,
-  "vpack": () => `display:flex;flex-flow:column;align-items:center;justify-content:center;`,
+  "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
+  "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
+  "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
+  "hpack": () => `&{display:flex;flex-flow:row;align-items:center;justify-content:center;}${makeHBoxFill()}`,
+  "vpack": () => `&{display:flex;flex-flow:column;align-items:center;justify-content:center;}${makeVBoxFill()}`,
   "hbox(": () => ``,
   "vbox(": () => ``,
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
+  "flex-flow:": (value) => `&{flex-flow:${value};}${makeBoxFill(value)}`,
+  "flex-direction:": (value) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
   "gap": (value) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
   // @NOTE:IE,safari<=13
-  "hgap": (value) => `&>*+* {margin-left:${px(value)};}`,
-  "hgap-reverse": (value) => `&>*+* {margin-right:${px(value)};}`,
-  "vgap": (value) => `&>*+* {margin-top:${px(value)};}`,
-  "vgap-reverse": (value) => `&>*+* {margin-bottom:${px(value)};}`,
+  "hgap": (value) => `&>*+*{margin-left:${px(value)};}`,
+  "hgap-reverse": (value) => `&>*+*{margin-right:${px(value)};}`,
+  "vgap": (value) => `&>*+*{margin-top:${px(value)};}`,
+  "vgap-reverse": (value) => `&>*+*{margin-bottom:${px(value)};}`,
   // align-items
   "ai": (value) => `align-items:${value};`,
   "items": (value) => `align-items:${value};`,
@@ -971,9 +1031,9 @@ var RULES = {
   "justify-around": () => `justify-content:space-around;`,
   "justify-evenly": () => `justify-content:space-evenly;`,
   "justify-stretch": () => `justify-content:stretch;`,
-  "space-between": () => `justify-content:space-between;`,
-  "space-around": () => `justify-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;`,
+  "space-between": () => `justify-content:space-between;align-content:space-between;`,
+  "space-around": () => `justify-content:space-around;align-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;align-content:space-evenly;`,
   // justify-items
   "ji": (value) => `justify-items:${value};`,
   "justify-items": (value) => `justify-items:${value};`,
@@ -983,7 +1043,7 @@ var RULES = {
   "justify-items-stretch": () => `justify-items:stretch;`,
   // flex
   "flex": (value = "1") => `flex:${makeValues(value)};`,
-  "space": (value) => `[class*="hbox"]>& {width:${px(value)};} [class*="vbox"]>& {height:${px(value)};}`,
+  "space": (value) => `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
   "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "grow-0": () => `flex-grow:0;`,
   "no-grow": () => `flex-grow:0;`,
@@ -996,47 +1056,6 @@ var RULES = {
   "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value) => `order:${cssvar(value)};`,
-  // -- Box
-  // Box-Sizing
-  "border-box": () => `box-sizing:border-box;`,
-  "content-box": () => `box-sizing:content-box;`,
-  // Box-Model
-  "w": (value) => {
-    if (value.includes("~")) {
-      const result = [];
-      const values = value.split("~");
-      if (values.length <= 2) {
-        const [min2, max2] = values;
-        min2 && result.push(`min-width:${px(min2)};`);
-        max2 && result.push(`max-width:${px(max2)};`);
-        return result.join("");
-      }
-      const [min, width, max] = values;
-      min && result.push(`min-width:${px(min)};`);
-      result.push(`width:${px(width)};`);
-      max && result.push(`max-width:${px(max)};`);
-      return result.join("");
-    }
-    return value === "stretch" || value === "fill" ? `align-self:stretch` : `width:${px(value)};`;
-  },
-  "h": (value) => {
-    if (value.includes("~")) {
-      const result = [];
-      const values = value.split("~");
-      if (values.length <= 2) {
-        const [min2, max2] = value.split("~");
-        min2 && result.push(`min-height:${px(min2)};`);
-        max2 && result.push(`max-height:${px(max2)};`);
-        return result.join("");
-      }
-      const [min, height, max] = values;
-      min && result.push(`min-height:${px(min)};`);
-      result.push(`height:${px(height)};`);
-      max && result.push(`max-height:${px(max)};`);
-      return result.join("");
-    }
-    return value === "stretch" || value === "fill" ? `align-self:stretch` : `height:${px(value)};`;
-  },
   // BoxModel - Margin
   "m": (value) => `margin:${makeSide(value)};`,
   "mx": (value) => `margin-left:${px(value)};margin-right:${px(value)};`,
@@ -1085,7 +1104,7 @@ var RULES = {
   "blc": (value) => `border-left-color:${makeColor(value)};`,
   // outline
   "outline": (value) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}{}`,
+  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}`,
   // border-radius
   "r": (value) => `border-radius:${makeSide(value)};`,
   "rt": (value) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
@@ -1136,14 +1155,14 @@ var RULES = {
   "overflow": (value) => `overflow:${value};`,
   "overflow-x": (value) => `overflow-x:${value};`,
   "overflow-y": (value) => `overflow-y:${value};`,
-  "clip": () => `overflow:hidden;`,
+  "clip": () => `overflow:hidden;flex-shrink:1`,
   // Scroll
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
   "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}{}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}{}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}{}`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
   // Scroll Snap
   "scroll-m": (value) => `scroll-margin:${makeSide(value)};`,
   "scroll-mt": (value) => `scroll-margin-top:${px(value)};`,
@@ -1280,7 +1299,7 @@ var RULES = {
   "crosshair": () => `cursor:crosshair;`,
   "e-resize": () => `cursor:e-resize;`,
   "ew-resize": () => `cursor:ew-resize;`,
-  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}{}`,
+  "grab": () => `&{cursor:grab;}&:active{cursor:grabbing;}`,
   "grabbing": () => `cursor:grabbing;`,
   "n-resize": () => `cursor:n-resize;`,
   "ne-resize": () => `cursor:ne-resize;`,
@@ -1329,7 +1348,7 @@ var RULES = {
   "skewY": (value) => `transform:skewY(${makeCommaValues(value)});`,
   "skewZ": (value) => `transform:skewZ(${makeCommaValues(value)});`,
   // Util
-  "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}{}`,
+  "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "gpu": () => `transform:translateZ(0.1px);`,
   // etc
   "app-region": (value) => `-webkit-app-region:${value};`,
@@ -1557,6 +1576,44 @@ var parsePrefix = (prefixRules, e) => {
   }
   throw new Error("Invalid Prefix Syntax:" + token.id);
 };
+var validateCSS = (s) => {
+  const stack = [];
+  const pairs = {
+    ")": "(",
+    "}": "{",
+    "]": "[",
+    "'": "'",
+    '"': '"',
+    "`": "`"
+  };
+  let inString = null;
+  let lastChar = null;
+  for (let i = 0; i < s.length; i++) {
+    const char = s[i];
+    if (inString) {
+      if (char === inString && lastChar !== "\\") {
+        if (stack.length === 0 || stack.pop() !== pairs[char]) {
+          return false;
+        }
+        inString = null;
+      }
+      lastChar = char;
+      continue;
+    }
+    if (char === "(" || char === "{" || char === "[" || char === "'" || char === '"' || char === "`") {
+      stack.push(char);
+      if (char === "'" || char === '"' || char === "`") {
+        inString = char;
+      }
+    } else if (char === ")" || char === "}" || char === "]" || char === "'" || char === '"' || char === "`") {
+      if (stack.length === 0 || stack.pop() !== pairs[char]) {
+        return false;
+      }
+    }
+    lastChar = char;
+  }
+  return stack.length === 0;
+};
 var generateAtomicCss = (rules, prefixRules) => {
   const priorityTable = Object.fromEntries(Object.keys(rules).map((key, index2) => [key, index2 + 1]));
   return (script) => {
@@ -1618,8 +1675,11 @@ var generateAtomicCss = (rules, prefixRules) => {
           throw new Error("no declaration");
         }
         const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
-        const rule2 = selectors.length ? rule + "{}" : rule;
-        return [media ? media + "{" + rule2 + "}" : rule2, priority];
+        const finalRule = media ? media + "{" + rule + "}" : rule;
+        if (!validateCSS(finalRule)) {
+          throw new Error("no validate css!!");
+        }
+        return [finalRule, priority];
       });
     } catch (e) {
     }
