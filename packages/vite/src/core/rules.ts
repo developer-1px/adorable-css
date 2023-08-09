@@ -282,8 +282,8 @@ export const RULES:Rules = {
   "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value:string) => `flex-basis:${px(value)};`,
 
-  "flex-wrap": () => "&{flex-wrap:wrap;}&>*{max-width:100%;max-height:100%;}",
-  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
+  "flex-wrap": () => "&{flex-wrap:wrap;}:where(&>*){max-width:100%;max-height:100%;}",
+  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}:where(&>*){max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value:string) => `order:${cssvar(value)};`,
 
@@ -399,10 +399,10 @@ export const RULES:Rules = {
   /// -- Overflow
 
   // OverFlow
+  "clip": () => `&{overflow:hidden;}&:has(.nowrap\\.\\.\\.){flex-shrink:1;}`,
   "overflow": (value:string) => `overflow:${value};`,
   "overflow-x": (value:string) => `overflow-x:${value};`,
   "overflow-y": (value:string) => `overflow-y:${value};`,
-  "clip": () => `overflow:hidden;flex-shrink:1`,
 
   // Scroll
   "scroll": () => `overflow:auto;`,
@@ -628,7 +628,7 @@ export const RULES:Rules = {
   // etc
   "app-region": (value:string) => `-webkit-app-region:${value};`,
   "content": (value = "''") => `content:${cssvar(value)};`,
-  "clip-path": (value:string) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
+  "clip-path": (value:string) => `clip-path:${makeValues(value)};-webkit-clip-path:${makeValues(value)};`,
 
   "table-fixed": () => `table-layout:fixed;`,
   "table-auto": () => `table-layout:auto;`,

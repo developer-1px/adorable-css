@@ -20065,8 +20065,8 @@ var RULES = {
   "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
   "flex-basis": (value) => `flex-basis:${px(value)};`,
-  "flex-wrap": () => "&{flex-wrap:wrap;}&>*{max-width:100%;max-height:100%;}",
-  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}&>*{max-width:100%;max-height:100%;}",
+  "flex-wrap": () => "&{flex-wrap:wrap;}:where(&>*){max-width:100%;max-height:100%;}",
+  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}:where(&>*){max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value) => `order:${cssvar(value)};`,
   // BoxModel - Margin
@@ -20168,7 +20168,7 @@ var RULES = {
   "overflow": (value) => `overflow:${value};`,
   "overflow-x": (value) => `overflow-x:${value};`,
   "overflow-y": (value) => `overflow-y:${value};`,
-  "clip": () => `overflow:hidden;flex-shrink:1`,
+  "clip": () => `&{overflow:hidden;}&:has( .nowrap\\.\\.\\.){flex-shrink:1;}`,
   // Scroll
   "scroll": () => `overflow:auto;`,
   "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,

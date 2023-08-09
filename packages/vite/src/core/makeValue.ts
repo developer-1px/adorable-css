@@ -1,3 +1,18 @@
+export const splitValues = (value:string, project = cssvar) => {
+  if (value.includes("|")) return value.split("|").map(project)
+  return value.split("/").map(project)
+}
+export const makeValues = (value:string, project = cssvar) => splitValues(value, project).join(" ")
+
+export const makeCommaValues = (value:string, project = cssvar) => value.split(",").map(project).join(",")
+
+export const makeSide = (value:string) => makeValues(value, px)
+
+export const makeRatio = (value:string) => {
+  const [w, h] = value.split(":")
+  return (+h / +w * 100).toFixed(2) + "%"
+}
+
 export const makeNumber = (num:number) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0"
 
 export const cssvar = (value:string|number) => String(value).startsWith("--") ? `var(${value})` : value
@@ -92,36 +107,28 @@ export const makeBorder = (value:string) => {
   let hasWidth = false
   let hasStyle = false
 
-  const values = value.split("/").map(value => {
+  const values = splitValues(value, value => {
     if (parseInt(value) > 0) {
       hasWidth = true
       return value.includes(",") ? makeColor(value) : px(value)
     }
+
     if (borderStyles.includes(value)) {
       hasStyle = true
       return value
     }
+
     return makeColor(value)
   })
 
   if (!hasWidth) values.unshift("1px")
   if (!hasStyle) values.unshift("solid")
+
   return values.join(" ")
 }
 
-export const makeValues = (value:string, project = cssvar) => value.split("/").map(project).join(" ")
-
-export const makeCommaValues = (value:string, project = cssvar) => value.split(",").map(project).join(",")
-
-export const makeSide = (value:string) => makeValues(value, px)
-
-export const makeRatio = (value:string) => {
-  const [w, h] = value.split(":")
-  return (+h / +w * 100).toFixed(2) + "%"
-}
-
 export const makeHBoxWithSemi = (value = "") => {
-  const values = value.split(/[+/]/)
+  const values = value.split(/[+/|]/)
 
   const result = values.map(v => {
     switch (v) {
@@ -146,7 +153,7 @@ export const makeHBoxWithSemi = (value = "") => {
 }
 
 export const makeVBoxWithSemi = (value = "") => {
-  const values = value.split(/[+/]/)
+  const values = value.split(/[+/|]/)
 
   const result = values.map(v => {
     switch (v) {
@@ -202,7 +209,7 @@ export const makeTextBox = (value = "") => {
 export const makeTransition = (value:string) => {
   if (!/\d/.test(value)) return value
   if (!value.includes("=")) return `all ${value}`
-  return value.split("/").map(item => item.replace("=", " ")).join(",")
+  return value.split(/[/|]/).map(item => item.replace("=", " ")).join(",")
 }
 
 export const makePosition1 = (value:string) => {
@@ -212,13 +219,13 @@ export const makePosition1 = (value:string) => {
   values[3] = values[3] || values[1] || values[0]
 
   return ["top", "right", "bottom", "left"]
-    .map((prop, index) => {
-      const value = values[index]
-      if (!value || value === "-") return
-      return `${prop}:${px(value)};`
-    })
-    .filter(Boolean)
-    .join("")
+  .map((prop, index) => {
+    const value = values[index]
+    if (!value || value === "-") return
+    return `${prop}:${px(value)};`
+  })
+  .filter(Boolean)
+  .join("")
 }
 
 export const makePosition2 = (value:string) => {
