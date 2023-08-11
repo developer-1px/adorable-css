@@ -1,0 +1,8 @@
+{
+  "editorType": ["figma"],
+  "name": "Preview & HandOff 1.0.9 (HandShake)",
+  "id": "938565216945387250",
+  "api": "1.0.0",
+  "main": "./code.js",
+  "ui": "./ui.html"
+}

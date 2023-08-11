@@ -1,0 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Apple+SD+Gothic+Neo:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Bhai:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+html, body {
+  background: #fff;
+}
+
+#app {
+  display: contents;
+}
+
+.Roboto {
+  font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.Baloo-Bhai {
+  font-family: "Baloo Bhai", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* FIXME: Remove this */
+* {z-index: 11;}
+
+.itemReverseZIndex > *:nth-child(1) {z-index: 10;}
+
+.itemReverseZIndex > *:nth-child(2) {z-index: 9;}
+
+.itemReverseZIndex > *:nth-child(3) {z-index: 8;}
+
+.itemReverseZIndex > *:nth-child(4) {z-index: 7;}
+
+.itemReverseZIndex > *:nth-child(5) {z-index: 6;}
+
+.itemReverseZIndex > *:nth-child(6) {z-index: 5;}
+
+.itemReverseZIndex > *:nth-child(7) {z-index: 4;}
+
+.itemReverseZIndex > *:nth-child(8) {z-index: 3;}
+
+.itemReverseZIndex > *:nth-child(9) {z-index: 2;}
+
+.itemReverseZIndex > *:nth-child(10) {z-index: 1;}
+
+
+[class].flex {
+  flex: initial;
+}
+
+[class].flex-1 {
+  flex: 1 1 0;
+}
