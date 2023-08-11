@@ -42,6 +42,24 @@ export const px = (value:string|number) => {
   return +value === +value ? value + "px" : value
 }
 
+export const deg = (value:string|number) => {
+  if (value === undefined || value === null) throw new Error("deg: value is undefined")
+  if (value === 0 || value === "0") return 0
+
+  const v = String(value)
+
+  // --css-var
+  if (v.startsWith("--")) return cssvar("" + value)
+
+  // calc
+  if (/.[-+*/]/.test(v) && /\d/.test(v)) {
+    return "calc(" + v.replace(/[-+]/g, (a) => ` ${a} `) + ")"
+  }
+
+  // number
+  return +value === +value ? value + "deg" : value
+}
+
 export const rpx = (value:string|number) => {
   if (value === "fill") return "9999px"
   return px(value)
@@ -237,7 +255,7 @@ export const makePosition1 = (value:string) => {
 
 export const makePosition2X = (x:string) => {
   if (x.startsWith("center")) {
-    const left = x === "center" ? "50%" : `calc(50% + ${x.slice(7)})`
+    const left = x === "center" ? "50%" : `calc(50% + ${x.slice(6)})`
     return `left:${left};transform:translateX(-50%);`
   }
   const [left, right] = x.split("~")
@@ -249,7 +267,7 @@ export const makePosition2X = (x:string) => {
 
 export const makePosition2Y = (y:string) => {
   if (y.startsWith("center")) {
-    const top = y === "center" ? "50%" : `calc(50% + ${y.slice(7)})`
+    const top = y === "center" ? "50%" : `calc(50% + ${y.slice(6)})`
     return `top:${top};transform:translateY(-50%);`
   }
   const [top, bottom] = y.split("~")

@@ -19826,7 +19826,7 @@ var makePosition1 = (value) => {
 };
 var makePosition2X = (x) => {
   if (x.startsWith("center")) {
-    const left2 = x === "center" ? "50%" : `calc(50% + ${x.slice(7)})`;
+    const left2 = x === "center" ? "50%" : `calc(50% + ${x.slice(6)})`;
     return `left:${left2};transform:translateX(-50%);`;
   }
   const [left, right] = x.split("~");
@@ -19837,7 +19837,7 @@ var makePosition2X = (x) => {
 };
 var makePosition2Y = (y) => {
   if (y.startsWith("center")) {
-    const top2 = y === "center" ? "50%" : `calc(50% + ${y.slice(7)})`;
+    const top2 = y === "center" ? "50%" : `calc(50% + ${y.slice(6)})`;
     return `top:${top2};transform:translateY(-50%);`;
   }
   const [top, bottom] = y.split("~");
