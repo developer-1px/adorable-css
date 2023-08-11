@@ -15,14 +15,14 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
 		<link href="/adorable-css/_app/immutable/assets/_layout-043fc2e2.css" rel="stylesheet">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-17a58cea.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-fe611891.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-5e2bc00b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-1b3e4a4c.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-56954787.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-34dab486.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-07324bd5.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-9cbb603b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/docs/_page.svelte-28dfffdf.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/docs/_page.svelte-1b28247f.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -109,7 +109,7 @@ prefix:property(value)! or property(value)! or property!
 <h2>Text</h2>
 <h3>Color</h3>
 <p><code>c(red)</code> <code>c(#f00)</code> <code>c(#f00.5)</code> <code>c(255,0,0)</code> <code>c(255,0,0,.3)</code> <code>c(100%,0,0)</code></p>
-<h3>font-size / line-height / letter-spacing / word-spacing</h3>
+<h3>font(size/line-height/letter-spacing/word-spacing)</h3>
 <p><code>font(20/1.4/-1%)</code> <code>font(20/1.4)</code> <code>font(20/-/-1%)</code></p>
 <p><code>font-size(30)</code>
 <code>line-height(1.5)</code>
@@ -123,10 +123,10 @@ prefix:property(value)! or property(value)! or property!
 <p><code>100</code> <code>200</code> <code>300</code> <code>400</code> <code>500</code> <code>600</code> <code>700</code> <code>800</code> <code>900</code></p>
 <p><code>thin</code> <code>light</code> <code>medium</code> <code>regular</code> <code>bold</code> <code>heavy</code></p>
 <h3>text-align</h3>
-<p><code>text-left</code> <code>text-center</code> <code>text-right</code> <code>text-justify</code></p>
+<p><code>text(left)</code> <code>text(center)</code> <code>text(right)</code> <code>text(justify)</code></p>
+<p><code>text(center+bottom)</code> <code>text(pack)</code></p>
 <h3>etc</h3>
 <p><code>lowercase</code> <code>uppercase</code> <code>small-caps</code></p>
-<p><code>text-indent</code></p>
 <p><code>monospace(number)</code></p>
 <h3>stroke</h3>
 <p><code>text-shadow()</code></p>
@@ -136,9 +136,9 @@ prefix:property(value)! or property(value)! or property!
 <p><code>w(30)</code> <code>w(~30)</code> <code>w(30~)</code> <code>w(20~30)</code></p>
 <p><code>h(30)</code> <code>h(~30)</code> <code>h(30~)</code> <code>h(20~30)</code></p>
 <h3>Radius</h3>
-<p><code>r(10)</code> <code>r(100%)</code></p>
+<p><code>r(10)</code> <code>r(fill)</code> <code>r(100%)</code></p>
 <h3>Fill</h3>
-<p><code>bg(#B75959)</code> <code>bg(linear-gradient(#000,#fff))</code></p>
+<p><code>bg(#B75959)</code> <code>bg(linear-gradient(#000,#fff))</code> <code>bg(/image.png)</code></p>
 <p><code>cover</code> <code>contain</code></p>
 <h3>Stroke</h3>
 <p><code>b(#000)</code> <code>b(1/#000)</code> <code>b(1/solid/#000)</code></p>
@@ -197,17 +197,17 @@ prefix:property(value)! or property(value)! or property!
 <span class="token selector">table</span> <span class="token punctuation">&#123;</span><span class="token property">border-collapse</span><span class="token punctuation">:</span>collapse<span class="token punctuation">;</span><span class="token property">border-spacing</span><span class="token punctuation">:</span>0<span class="token punctuation">;</span><span class="token punctuation">&#125;</span>
 <span class="token selector">ol, ul, menu, dir</span> <span class="token punctuation">&#123;</span><span class="token property">list-style</span><span class="token punctuation">:</span>none<span class="token punctuation">;</span><span class="token punctuation">&#125;</span></code><!-- HTML_TAG_END --></pre></div></div>
 
-<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.9</div>
+<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.3.0</div>
 
 
-		<script type="module" data-sveltekit-hydrate="mqzun9">
-			import { start } from "/adorable-css/_app/immutable/start-17a58cea.js";
+		<script type="module" data-sveltekit-hydrate="1ykqkwj">
+			import { start } from "/adorable-css/_app/immutable/start-fe611891.js";
 
 			start({
 				env: {},
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
-				target: document.querySelector('[data-sveltekit-hydrate="mqzun9"]').parentNode,
-				version: "1690407206966",
+				target: document.querySelector('[data-sveltekit-hydrate="1ykqkwj"]').parentNode,
+				version: "1691721796844",
 				hydrate: {
 					node_ids: [0, 6],
 					data: [null,null],
@@ -216,6 +216,6 @@ prefix:property(value)! or property(value)! or property!
 			});
 		</script>
 	</div>
-<!--<script src="https://unpkg.com/adorable-css"></script>-->
+<script async src="https://unpkg.com/adorable-css"></script>
 </body>
 </html>

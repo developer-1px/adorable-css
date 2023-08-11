@@ -15,14 +15,14 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
   <meta http-equiv="content-security-policy" content="">
 		<link href="/adorable-css/_app/immutable/assets/_layout-043fc2e2.css" rel="stylesheet">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-17a58cea.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/start-fe611891.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/index-5e2bc00b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/singletons-1b3e4a4c.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-56954787.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/_layout.svelte-34dab486.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/stores-07324bd5.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/modules/pages/_layout.ts-9cbb603b.js">
 		<link rel="modulepreload" href="/adorable-css/_app/immutable/chunks/_layout-da46b06b.js">
-		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-10793416.js">
+		<link rel="modulepreload" href="/adorable-css/_app/immutable/components/pages/changelogs/_page.svelte-e2ed479d.js">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV4FB601YT"></script>
   <script>
   window.dataLayer = window.dataLayer || []
@@ -52,8 +52,22 @@
 
       <a class="pack" href="https://github.com/developer-1px/adorable-css" target="_blank" aria-label="github"><svg width="24" height="24" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></a></div></div>
 
-  <div class="markdown p(20)"><h2>1.3.6</h2>
-<ul><li>🐛nowrap, nowrap… 에 max-width:100%를 두어 특정 상황에서 글 내용이 넘치는 현상을 수정하였습니다.</li></ul>
+  <div class="markdown p(20)"><h2>1.3.9</h2>
+<ul><li><p>✨ top/bottom 과 left/right를 이제 x(), y()로 더 간단하고 멋지게 표현할 수 있습니다.</p>
+<ul><li><code>x(10) = left(10)</code></li>
+<li><code>x(~10) = right(10)</code></li>
+<li><code>x(10~20) = left(10)+right(20)</code></li></ul></li>
+<li><p>✨ x(center) 기능이 추가 되었습니다.</p>
+<ul><li><code>x(center) = left(50%)+translateX(-50%)</code></li>
+<li><code>x(center+50px) = left(50%+50px)+translateX(-50%)</code></li></ul></li>
+<li><p>✨<code>r(fill)</code>이 추가되어 양 옆이 둥근 사각형을 더 직관적으로 만들 수 있게 되었습니다.</p>
+<ul><li><code>r(fill) = border-radius:9999px;</code></li></ul></li>
+<li><p>🐛 w(max-content) width:max-content;가 적용되지 않던 버그를 수정하였습니다.</p></li></ul>
+<h2>1.3.7</h2>
+<ul><li>✨ 이제 <code>w(fill)</code>, <code>h(fill)</code>이 Flexbox에서 제대로 동작하게 됩니다.</li>
+<li>🐛 invalidate한 CSS 결과물들을 필터링하는 기능이 추가되었습니다.</li></ul>
+<h2>1.3.6</h2>
+<ul><li>🐛<code>nowrap</code>, <code>nowrap...</code> 에 max-width:100%를 두어 특정 상황에서 글 내용이 넘치는 현상을 수정하였습니다.</li></ul>
 <h2>1.3.5</h2>
 <ul><li>✨글자 배치를 가로+세로를 함께 할 수 있는 새로운 textAlign 스펙이 추가되었습니다.</li>
 <li>튜토리얼을 확인해주세요!</li>
@@ -297,17 +311,17 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 <ul><li>transform 결합: ex) translateX(10)+scale(.5)</li>
 <li>more level cascade priority(!important): ex) bg(red) .test:bg(orange)! .test2:bg(red)!!</li></ul></div></div>
 
-<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.2.9</div>
+<div class="version fixed z(9999) layer(bottom+right) p(10/20) font(10) c(#999)" aria-hidden="true"> 1.3.0</div>
 
 
-		<script type="module" data-sveltekit-hydrate="3206m5">
-			import { start } from "/adorable-css/_app/immutable/start-17a58cea.js";
+		<script type="module" data-sveltekit-hydrate="v0n40">
+			import { start } from "/adorable-css/_app/immutable/start-fe611891.js";
 
 			start({
 				env: {},
 				paths: {"base":"/adorable-css","assets":"/adorable-css"},
-				target: document.querySelector('[data-sveltekit-hydrate="3206m5"]').parentNode,
-				version: "1690407206966",
+				target: document.querySelector('[data-sveltekit-hydrate="v0n40"]').parentNode,
+				version: "1691721796844",
 				hydrate: {
 					node_ids: [0, 5],
 					data: [null,null],
@@ -316,6 +330,6 @@ config에 <code>preLoads</code>의 옵션을 이용해서 (default: <code>[/*/**
 			});
 		</script>
 	</div>
-<!--<script src="https://unpkg.com/adorable-css"></script>-->
+<script async src="https://unpkg.com/adorable-css"></script>
 </body>
 </html>

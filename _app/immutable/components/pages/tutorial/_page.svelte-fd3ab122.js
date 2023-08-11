@@ -1,4 +1,4 @@
-import{S as ne,i as ve,s as he,k as f,l as b,m as g,h as v,n as p,b as $,B as J,o as pe,P as q,Q as be,a as B,w as ge,q as j,c as V,x as ue,r as N,R as T,C as n,y as me,O as Z,T as we,u as xe,f as ye,t as ke,U as _e,z as Se,K as Te}from"../../../chunks/index-5e2bc00b.js";import{r as Re,g as Oe,p as Ie}from"../../../chunks/atomizer-a70c0d22.js";const re=`
+import{S as ne,i as ve,s as he,k as f,l as b,m as g,h as v,n as p,b as $,B as J,o as pe,P as j,Q as be,a as F,w as ge,q as G,c as V,x as ue,r as N,R as T,C as n,y as me,O as Z,T as we,u as xe,f as ye,t as ke,U as _e,z as Se,K as Te}from"../../../chunks/index-5e2bc00b.js";import{r as Re,g as Oe,p as Ie}from"../../../chunks/atomizer-2efabfa0.js";const re=`
 <!--
 ฅ^•ﻌ•^ฅ ♥
 
@@ -28,7 +28,7 @@ class="property(value)" 의 형식의 문법으로 작성해 주시면 됩니다
   </div>
 </div>
 
-`.trim(),Ee=`
+`.trim(),Le=`
 <!--
 
 Colors
@@ -94,7 +94,7 @@ c(--css-var) css-variable
   <div class="bg(--css-var)">bg(--css-var) css-variable</div>
 </div>
 
-`.trim(),Le=`
+`.trim(),Ae=`
 <!--
 Media Query
 https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries 
@@ -116,7 +116,7 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries
 
 </div>
 
-`.trim(),Ae=`
+`.trim(),Ee=`
 <!--
 Class Selector
 클래스 조건에 맞는 속성을 선택하는 선택자 기능입니다.
@@ -190,7 +190,8 @@ h1 { margin: 20px 0; font-size: 20px;}
 <!--
 Important!
 
-important!를 통해서 우선순위를 지정할 수 있습니다.
+- ! 통해서 !important를 지정하여 우선순위를 지정할 수 있습니다.
+- !! 개수에 따라서 더 높은 우선순위를 지정할 수 있습니다. 
 -->
 <h1>important!</h1>
 
@@ -229,7 +230,7 @@ hover:font(30) hover:c(blue)
 h1 { margin: 20px 0; font-size: 20px;}
 </style>
 
-`.trim(),Fe=`
+`.trim(),Be=`
 <!--
 
 Typography
@@ -368,7 +369,7 @@ capitalize {text-transform:capitalize}
 
 </div>
 
-`.trim(),Be=`
+`.trim(),Fe=`
 <!--
 Box Model
 - width / height
@@ -502,7 +503,7 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
   </div>
 </div>
 
-`.trim(),De=`
+`.trim(),ze=`
 <!--
 Layout - Flexbox
 AdorableCSS는 flexbox에 기반하여 레이아웃을 아주 쉽게 만들수 있도록 구성하였습니다.
@@ -519,8 +520,6 @@ gap(vertical/horizonal)
 https://caniuse.com/flexbox-gap
 
 @NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
-
-특정 간격을 변경하고 싶다면 subbox를 써보세요!
 
 
 1-2
@@ -594,21 +593,6 @@ vbox
   </div>  
 
 
-  <h2>hbox + gap + subbox</h2>
-
-  <div class="hbox gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-
-    <div class="subbox gap(50)">
-      <div class="w(48) h(48) bg(orange) pack">b</div>    
-      <div class="w(48) h(48) bg(orange) pack">o</div>
-    </div>
-
-    <div class="w(48) h(48) bg(orange) pack">x</div>
-  </div>  
-
-
-
   <h2>hbox(top)</h2>  
   <div class="hbox(top) gap(10) b(orange) p(10)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
@@ -636,16 +620,16 @@ vbox
     <div class="p(10) h(50) bg(orange) pack">(bottom+right)</div>
   </div>
 
-  <h2>hbox(fill) = hbox(stretch)</h2>  
+  <h2>hbox(fill)</h2>  
   <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
     <div class="w(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">크기를 지정하면<br/>컨텐츠 크기</div>
+    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) bg(orange) pack">x</div>
     <div class="p(10) bg(orange) pack">(fill)</div>
   </div>
 
-  <h2>h(fill) = h(stretch) = align-self:stretch</h2>  
+  <h2>h(fill) = align-self:stretch</h2>  
   <div class="hbox gap(10) b(orange) p(10)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
     <div class="w(48) h(100) bg(orange) pack">b</div>
@@ -667,12 +651,12 @@ vbox
     </div>
   </div>
   
-  <h2>space-beetween / space-around / space-evenly</h2>  
+  <h2>space-between / space-around / space-evenly</h2>  
 
   <div class="hbox space-between b(orange) w(300)">
     <div class="p(10) bg(orange) pack">space</div>
     <div class="p(10) bg(orange) pack">-</div>
-    <div class="p(10) bg(orange) pack">beetween</div>
+    <div class="p(10) bg(orange) pack">between</div>
   </div>
 
   <div class="hbox space-around b(orange) w(300)">
@@ -699,7 +683,7 @@ vbox
   </div>
 </div>
 
-`.trim(),ze=`
+`.trim(),De=`
 <!--
 Layout - Position
 https://youtu.be/T5wMhoVHFU0
@@ -924,6 +908,7 @@ Visibility
 
 -->
 <h1>Visibility</h1>
+<p>아래 컨텐츠들은 보이지 않는게 맞습니다.</p>
 
 <div class="none">none</div>
 <div class="hidden invisible">hidden(=invisible)</div>
@@ -1018,12 +1003,12 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements
   </div>
 </div>
 
-`.trim(),Xe="vs",Ge=!0,je=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Ne={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},qe={base:Xe,inherit:Ge,rules:je,colors:Ne};function We(e){let i;return{c(){i=f("div"),this.h()},l(t){i=b(t,"DIV",{class:!0}),g(i).forEach(v),this.h()},h(){p(i,"class","h(100%)")},m(t,r){$(t,i,r),e[3](i)},p:J,i:J,o:J,d(t){t&&v(i),e[3](null)}}}function Qe(e,i,t){let{value:r=""}=i,l=null,s;const _=a=>{s&&s.setValue(a)};pe(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>a};let a=URL.createObjectURL(new Blob([`
+`.trim(),Xe="vs",qe=!0,Ge=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Ne={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},je={base:Xe,inherit:qe,rules:Ge,colors:Ne};function We(e){let i;return{c(){i=f("div"),this.h()},l(t){i=b(t,"DIV",{class:!0}),g(i).forEach(v),this.h()},h(){p(i,"class","h(100%)")},m(t,r){$(t,i,r),e[3](i)},p:J,i:J,o:J,d(t){t&&v(i),e[3](null)}}}function Qe(e,i,t){let{value:r=""}=i,a=null,s;const _=l=>{s&&s.setValue(l)};pe(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>l};let l=URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
 		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
 	};
 	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",qe),s=monaco.editor.create(l,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(x=>{t(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function d(a){q[a?"unshift":"push"](()=>{l=a,t(0,l)})}return e.$$set=a=>{"value"in a&&t(1,r=a.value)},[l,r,_,d]}class Ke extends ne{constructor(i){super(),ve(this,i,Qe,We,he,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}const Je=`
+`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",je),s=monaco.editor.create(a,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(x=>{t(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function d(l){j[l?"unshift":"push"](()=>{a=l,t(0,a)})}return e.$$set=l=>{"value"in l&&t(1,r=l.value)},[a,r,_,d]}class Ke extends ne{constructor(i){super(),ve(this,i,Qe,We,he,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}const Je=`
 <!--
 
 TextBox (TextAlign)
@@ -1054,6 +1039,63 @@ text(pack): {text-align:left;display:flex;flex-flow:column;justify-content:cente
   <div class="w(200) h(150) b(#000) text(pack)">This is<br/> text(pack)</div>
 </div>
 
-`.trim();function de(e,i,t){const r=e.slice();return r[14]=i[t][0],r[15]=i[t][1],r[17]=t,r}function ce(e){let i,t=e[14]+"",r,l,s;function _(){return e[10](e[14],e[15],e[17])}return{c(){i=f("div"),r=j(t),this.h()},l(d){i=b(d,"DIV",{class:!0});var a=g(i);r=N(a,t),a.forEach(v),this.h()},h(){p(i,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),T(i,"selected",e[3]===e[17])},m(d,a){$(d,i,a),n(i,r),l||(s=Z(i,"click",_),l=!0)},p(d,a){e=d,a&8&&T(i,"selected",e[3]===e[17])},d(d){d&&v(i),l=!1,s()}}}function Ze(e){let i,t,r,l,s,_,d,a,x,D,A,y,S,k,z,H,c,O,U,I,E,C,W,L,P,R,Q,ee,F=e[6],h=[];for(let o=0;o<F.length;o+=1)h[o]=ce(de(e,F,o));function fe(o){e[11](o)}let ie={};return e[1]!==void 0&&(ie.value=e[1]),x=new Ke({props:ie}),q.push(()=>be(x,"value",fe)),e[12](x),{c(){i=f("div"),t=f("div"),r=B(),l=f("div"),s=f("div");for(let o=0;o<h.length;o+=1)h[o].c();_=B(),d=f("div"),a=f("div"),ge(x.$$.fragment),A=B(),y=f("div"),S=f("div"),k=f("button"),z=j("Result"),H=B(),c=f("button"),O=j("CSS Output"),U=B(),I=f("div"),E=f("div"),C=f("iframe"),W=B(),L=f("div"),P=j(e[2]),this.h()},l(o){i=b(o,"DIV",{class:!0});var u=g(i);t=b(u,"DIV",{class:!0}),g(t).forEach(v),r=V(u),l=b(u,"DIV",{class:!0});var w=g(l);s=b(w,"DIV",{class:!0});var m=g(s);for(let K=0;K<h.length;K+=1)h[K].l(m);m.forEach(v),_=V(w),d=b(w,"DIV",{class:!0});var M=g(d);a=b(M,"DIV",{class:!0});var te=g(a);ue(x.$$.fragment,te),te.forEach(v),M.forEach(v),A=V(w),y=b(w,"DIV",{class:!0});var Y=g(y);S=b(Y,"DIV",{class:!0});var X=g(S);k=b(X,"BUTTON",{class:!0});var oe=g(k);z=N(oe,"Result"),oe.forEach(v),H=V(X),c=b(X,"BUTTON",{class:!0});var se=g(c);O=N(se,"CSS Output"),se.forEach(v),X.forEach(v),U=V(Y),I=b(Y,"DIV",{class:!0});var G=g(I);E=b(G,"DIV",{class:!0});var ae=g(E);C=b(ae,"IFRAME",{class:!0,frameborder:!0}),g(C).forEach(v),ae.forEach(v),W=V(G),L=b(G,"DIV",{class:!0});var le=g(L);P=N(le,e[2]),le.forEach(v),G.forEach(v),Y.forEach(v),w.forEach(v),u.forEach(v),this.h()},h(){p(t,"class","h(60)"),p(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),p(a,"class","flex(4) vbox r(10) clip"),p(d,"class","flex(4) vbox p(10)"),p(k,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(k,"selected",e[4]==="Result"),p(c,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(c,"selected",e[4]==="CSS_output"),p(S,"class","hbox bg(#fff) font(12) c(#999)"),p(C,"class","layer w(100%) h(100%) bg(transparent)"),p(C,"frameborder","0"),p(E,"class","layer pack check-board none"),T(E,"none",e[4]!=="Result"),p(L,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),T(L,"none",e[4]!=="CSS_output"),p(I,"class","flex relative"),p(y,"class","flex(3) relative vbox c(#000) p(10) r(10)"),p(l,"class","flex hbox(fill) clip bg(#f9f9f9)"),p(i,"class","layer vbox overscroll(none)")},m(o,u){$(o,i,u),n(i,t),n(i,r),n(i,l),n(l,s);for(let w=0;w<h.length;w+=1)h[w]&&h[w].m(s,null);n(l,_),n(l,d),n(d,a),me(x,a,null),n(l,A),n(l,y),n(y,S),n(S,k),n(k,z),n(S,H),n(S,c),n(c,O),n(y,U),n(y,I),n(I,E),n(E,C),e[13](C),n(I,W),n(I,L),n(L,P),R=!0,Q||(ee=[Z(k,"click",e[7]),Z(c,"click",e[8])],Q=!0)},p(o,[u]){if(u&584){F=o[6];let m;for(m=0;m<F.length;m+=1){const M=de(o,F,m);h[m]?h[m].p(M,u):(h[m]=ce(M),h[m].c(),h[m].m(s,null))}for(;m<h.length;m+=1)h[m].d(1);h.length=F.length}const w={};!D&&u&2&&(D=!0,w.value=o[1],we(()=>D=!1)),x.$set(w),(!R||u&16)&&T(k,"selected",o[4]==="Result"),(!R||u&16)&&T(c,"selected",o[4]==="CSS_output"),(!R||u&16)&&T(E,"none",o[4]!=="Result"),(!R||u&4)&&xe(P,o[2]),(!R||u&16)&&T(L,"none",o[4]!=="CSS_output")},i(o){R||(ye(x.$$.fragment,o),R=!0)},o(o){ke(x.$$.fragment,o),R=!1},d(o){o&&v(i),_e(h,o),e[12](null),Se(x),e[13](null),Q=!1,Te(ee)}}}function $e(e,i,t){let r,l,s=re;const _=[["Hello AdorableCSS!",re],["1. Colors",Ee],["2. Typography",Fe],["✨3. TextBox(TextAlign)",Je],["4. Box Model",Be],["5. Overflow",Ve],["6. Flexbox",De],["7. Position",ze],["8. Visibility",Me],["9. Hover, Active",He],["10. Pseudo Class",Pe],["11. Pseudo Element",Ye],["12. Media Query",Le],["13. Selector",Ae],["14. Important!",Ue],["15. Grouping +",Ce],["계속 작업 중입니다...",""]];let d=0,a="Result";const x=()=>t(4,a="Result"),D=()=>t(4,a="CSS_output"),A=(c,O,U)=>{t(1,s=O),t(3,d=U),y.setValue(O),location.hash=String(d)};let y;pe(()=>{const c=+location.hash.slice(1);c>0&&(t(3,d=c),A(..._[d],d))});const S=(c,O,U)=>A(c,O,U);function k(c){s=c,t(1,s)}function z(c){q[c?"unshift":"push"](()=>{y=c,t(5,y)})}function H(c){q[c?"unshift":"push"](()=>{l=c,t(0,l),t(2,r),t(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&t(2,r=Re+Oe(Ie(s)).join(`
-`)),e.$$.dirty&7&&l&&t(0,l.contentWindow.document.body.innerHTML=`<style>${r}</style>
-`+s,l)},[l,s,r,d,a,y,_,x,D,A,S,k,z,H]}class ti extends ne{constructor(i){super(),ve(this,i,$e,Ze,he,{})}}export{ti as default};
+`.trim(),Ze=`
+<!--
+<Basic Position>
+
+static => position: static;
+fixed => position: fixed;
+absolute => position: absolute;
+relative => position: relative;
+
+sticky => position: sticky
+sticky-top => position: sticky; top: 0;
+sticky-left => position: sticky; left: 0;
+sticky-right => position: sticky; right: 0;
+sticky-bottom => position: sticky; bottom: 0;
+
+top(value) => top: value;
+right(value) => right: value;
+bottom(value) => bottom: value;
+left(value) => left: value;
+
+z(value) => z-index: value;
+
+
+<Advanced Position>
+
+1. x(), y()
+- css의 top, right, bottom, left의 값을 조금 더 간단한 표현으로 지정할 수 있습니다.
+: x(10) => left:10px;
+: x(~10) => right:10px;
+: x(10~20) => left:10px; right:20px;
+
+2. x(center), y(center)
+- 가운데 정렬을 지정할 수 있습니다.
+: x(center) => left:50%; transform:translateX(-50%);
+
+3. absolute(x,y) / reative, fixed, sticky 모두 동일합니다.
+- 조금 더 축약된 표현으로 position과 x, y값을 한번에 지정할 수 있습니다. 
+: absolute(10,20) => position:absolute; left:10px; top:20px;
+: absolute(~10,~20) => position:absolute; right:10px; bottom:20px;
+: absolute(10~20,30~40) => position:absolute; left:10px; right:20px; top:30px; bottom:40px;
+-->
+
+<div class="relative w(400) h(300) b(#ff6347)">
+  <div class="absolute bg(yellow)">absolute</div>
+  <div class="absolute(20,20) bg(#ff6347.5)">absolute(20,20)</div>
+  <div class="absolute x(5) y(100) bg(blue) c(#fff)">absolute x(5) y(100)</div>
+  <div class="absolute x(~5) y(~5) bg(green) c(#fff)">absolute x(~5) y(~5)</div>
+  
+  <div class="absolute x(center) y(50) bg(aqua) nowrap">absolute x(center) y(50)</div>
+  <div class="absolute x(center+50px) y(80) bg(aqua) nowrap">absolute x(center+50px) y(50)</div>
+  <div class="absolute(center) bg(tomato)">absolute(center)</div>
+
+  <div class="absolute bottom(0) bg(khaki)">absolute bottom(0)</div>
+
+  <div class="fixed(~0,0) bg(aqua)">fixed(~0,0)</div>
+</div>
+
+`.trim();function de(e,i,t){const r=e.slice();return r[14]=i[t][0],r[15]=i[t][1],r[17]=t,r}function ce(e){let i,t=e[14]+"",r,a,s;function _(){return e[10](e[14],e[15],e[17])}return{c(){i=f("div"),r=G(t),this.h()},l(d){i=b(d,"DIV",{class:!0});var l=g(i);r=N(l,t),l.forEach(v),this.h()},h(){p(i,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),T(i,"selected",e[3]===e[17])},m(d,l){$(d,i,l),n(i,r),a||(s=Z(i,"click",_),a=!0)},p(d,l){e=d,l&8&&T(i,"selected",e[3]===e[17])},d(d){d&&v(i),a=!1,s()}}}function $e(e){let i,t,r,a,s,_,d,l,x,z,E,y,S,k,D,H,c,O,U,I,L,C,W,A,P,R,Q,ee,B=e[6],h=[];for(let o=0;o<B.length;o+=1)h[o]=ce(de(e,B,o));function fe(o){e[11](o)}let ie={};return e[1]!==void 0&&(ie.value=e[1]),x=new Ke({props:ie}),j.push(()=>be(x,"value",fe)),e[12](x),{c(){i=f("div"),t=f("div"),r=F(),a=f("div"),s=f("div");for(let o=0;o<h.length;o+=1)h[o].c();_=F(),d=f("div"),l=f("div"),ge(x.$$.fragment),E=F(),y=f("div"),S=f("div"),k=f("button"),D=G("Result"),H=F(),c=f("button"),O=G("CSS Output"),U=F(),I=f("div"),L=f("div"),C=f("iframe"),W=F(),A=f("div"),P=G(e[2]),this.h()},l(o){i=b(o,"DIV",{class:!0});var u=g(i);t=b(u,"DIV",{class:!0}),g(t).forEach(v),r=V(u),a=b(u,"DIV",{class:!0});var w=g(a);s=b(w,"DIV",{class:!0});var m=g(s);for(let K=0;K<h.length;K+=1)h[K].l(m);m.forEach(v),_=V(w),d=b(w,"DIV",{class:!0});var M=g(d);l=b(M,"DIV",{class:!0});var te=g(l);ue(x.$$.fragment,te),te.forEach(v),M.forEach(v),E=V(w),y=b(w,"DIV",{class:!0});var Y=g(y);S=b(Y,"DIV",{class:!0});var X=g(S);k=b(X,"BUTTON",{class:!0});var oe=g(k);D=N(oe,"Result"),oe.forEach(v),H=V(X),c=b(X,"BUTTON",{class:!0});var se=g(c);O=N(se,"CSS Output"),se.forEach(v),X.forEach(v),U=V(Y),I=b(Y,"DIV",{class:!0});var q=g(I);L=b(q,"DIV",{class:!0});var le=g(L);C=b(le,"IFRAME",{class:!0,frameborder:!0}),g(C).forEach(v),le.forEach(v),W=V(q),A=b(q,"DIV",{class:!0});var ae=g(A);P=N(ae,e[2]),ae.forEach(v),q.forEach(v),Y.forEach(v),w.forEach(v),u.forEach(v),this.h()},h(){p(t,"class","h(60)"),p(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),p(l,"class","flex(4) vbox r(10) clip"),p(d,"class","flex(4) vbox p(10)"),p(k,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(k,"selected",e[4]==="Result"),p(c,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(c,"selected",e[4]==="CSS_output"),p(S,"class","hbox bg(#fff) font(12) c(#999)"),p(C,"class","layer w(100%) h(100%) bg(transparent)"),p(C,"frameborder","0"),p(L,"class","layer pack check-board none"),T(L,"none",e[4]!=="Result"),p(A,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),T(A,"none",e[4]!=="CSS_output"),p(I,"class","flex relative"),p(y,"class","flex(3) relative vbox c(#000) p(10) r(10)"),p(a,"class","flex hbox(fill) clip bg(#f9f9f9)"),p(i,"class","layer vbox overscroll(none)")},m(o,u){$(o,i,u),n(i,t),n(i,r),n(i,a),n(a,s);for(let w=0;w<h.length;w+=1)h[w]&&h[w].m(s,null);n(a,_),n(a,d),n(d,l),me(x,l,null),n(a,E),n(a,y),n(y,S),n(S,k),n(k,D),n(S,H),n(S,c),n(c,O),n(y,U),n(y,I),n(I,L),n(L,C),e[13](C),n(I,W),n(I,A),n(A,P),R=!0,Q||(ee=[Z(k,"click",e[7]),Z(c,"click",e[8])],Q=!0)},p(o,[u]){if(u&584){B=o[6];let m;for(m=0;m<B.length;m+=1){const M=de(o,B,m);h[m]?h[m].p(M,u):(h[m]=ce(M),h[m].c(),h[m].m(s,null))}for(;m<h.length;m+=1)h[m].d(1);h.length=B.length}const w={};!z&&u&2&&(z=!0,w.value=o[1],we(()=>z=!1)),x.$set(w),(!R||u&16)&&T(k,"selected",o[4]==="Result"),(!R||u&16)&&T(c,"selected",o[4]==="CSS_output"),(!R||u&16)&&T(L,"none",o[4]!=="Result"),(!R||u&4)&&xe(P,o[2]),(!R||u&16)&&T(A,"none",o[4]!=="CSS_output")},i(o){R||(ye(x.$$.fragment,o),R=!0)},o(o){ke(x.$$.fragment,o),R=!1},d(o){o&&v(i),_e(h,o),e[12](null),Se(x),e[13](null),Q=!1,Te(ee)}}}function ei(e,i,t){let r,a,s=re;const _=[["Hello AdorableCSS!",re],["1. Colors",Le],["2. Typography",Be],["✨3. TextBox(TextAlign)",Je],["4. Box Model",Fe],["5. Overflow",Ve],["6. Flexbox",ze],["✨7. Position",Ze],["8. Layer",De],["9. Visibility",Me],["10. Hover, Active",He],["11. Pseudo Class",Pe],["12. Pseudo Element",Ye],["13. Media Query",Ae],["14. Selector",Ee],["15. Important!",Ue],["16. Grouping +",Ce],["계속 작업 중입니다...",""]];let d=0,l="Result";const x=()=>t(4,l="Result"),z=()=>t(4,l="CSS_output"),E=(c,O,U)=>{t(1,s=O),t(3,d=U),y.setValue(O),location.hash=String(d)};let y;pe(()=>{const c=+location.hash.slice(1);c>0&&(t(3,d=c),E(..._[d],d))});const S=(c,O,U)=>E(c,O,U);function k(c){s=c,t(1,s)}function D(c){j[c?"unshift":"push"](()=>{y=c,t(5,y)})}function H(c){j[c?"unshift":"push"](()=>{a=c,t(0,a),t(2,r),t(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&t(2,r=Re+Oe(Ie(s)).join(`
+`)),e.$$.dirty&7&&a&&t(0,a.contentWindow.document.body.innerHTML=`<style>${r}</style>
+`+s,a)},[a,s,r,d,l,y,_,x,z,E,S,k,D,H]}class oi extends ne{constructor(i){super(),ve(this,i,ei,$e,he,{})}}export{oi as default};
