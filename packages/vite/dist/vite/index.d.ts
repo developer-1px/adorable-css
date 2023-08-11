@@ -11,10 +11,16 @@ declare const tokenize: (script: string) => any[];
 declare const createGenerateCss: (rules?: Rules, prefixRules?: PrefixRules) => (classList: string[]) => string[];
 declare const generateCss: (classList: string[]) => string[];
 
+declare const splitValues: (value: string, project?: (value: string | number) => string | number) => (string | number)[];
+declare const makeValues: (value: string, project?: (value: string | number) => string | number) => string;
+declare const makeCommaValues: (value: string, project?: (value: string | number) => string | number) => string;
+declare const makeSide: (value: string) => string;
+declare const makeRatio: (value: string) => string;
 declare const makeNumber: (num: number) => string;
 declare const cssvar: (value: string | number) => string | number;
 declare const cssString: (value: string | number) => string;
 declare const px: (value: string | number) => string | number;
+declare const rpx: (value: string | number) => string | number;
 declare const percentToEm: (value: string) => string | number;
 declare const makeHEX: (value: string) => string;
 declare const makeHLS: (value: string) => string;
@@ -23,10 +29,6 @@ declare const makeColor: (value?: string) => string;
 declare const makeFont: (value: string) => string;
 declare const makeFontFamily: (value: string) => string;
 declare const makeBorder: (value: string) => string;
-declare const makeValues: (value: string, project?: (value: string | number) => string | number) => string;
-declare const makeCommaValues: (value: string, project?: (value: string | number) => string | number) => string;
-declare const makeSide: (value: string) => string;
-declare const makeRatio: (value: string) => string;
 declare const makeHBoxWithSemi: (value?: string) => string;
 declare const makeVBoxWithSemi: (value?: string) => string;
 declare const makeHBoxFill: () => string;
@@ -35,6 +37,8 @@ declare const makeBoxFill: (value: string) => string;
 declare const makeTextBox: (value?: string) => string;
 declare const makeTransition: (value: string) => string;
 declare const makePosition1: (value: string) => string;
+declare const makePosition2X: (x: string) => string;
+declare const makePosition2Y: (y: string) => string;
 declare const makePosition2: (value: string) => string;
 declare const makePositionWithSemi: (value?: string) => string;
 
@@ -578,4 +582,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, tokenize };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePosition2X, makePosition2Y, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, rpx, splitValues, tokenize };

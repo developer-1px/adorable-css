@@ -1,5 +1,5 @@
 import {PrefixRules, Rules} from "./atomizer"
-import {cssvar, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeNumber, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxFill, makeVBoxWithSemi, percentToEm, px} from "./makeValue"
+import {cssvar, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeNumber, makePosition2X, makePosition2Y, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxFill, makeVBoxWithSemi, percentToEm, px, rpx} from "./makeValue"
 
 export const reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
 *,:after,:before{box-sizing:border-box;flex-shrink:0;}
@@ -29,6 +29,9 @@ export const RULES:Rules = {
   "word-spacing": (value:string) => `word-spacing:${px(value)};`,
 
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
+  // @TODO: Font-Family Utility
+  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
+  "Roboto": () => makeFontFamily("Roboto"),
 
   // @TODO:font-family:var(--serif),serif; 이게 먹히나?
   "sans": () => makeFontFamily("sans"),
@@ -41,9 +44,6 @@ export const RULES:Rules = {
     if (value === "number") return `font-variant-numeric:tabular-nums;`
     return makeFontFamily("monospace")
   },
-
-  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
-  "Roboto": () => makeFontFamily("Roboto"),
 
   // Font Weight
   "100": () => `font-weight:100;`,
@@ -85,13 +85,12 @@ export const RULES:Rules = {
   "capitalize": () => `text-transform:capitalize;`,
 
   // Text Align
+  "text": (value:string) => makeTextBox(value),
+
   "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
-
-  // Text Align
-  "text": (value:string) => makeTextBox(value),
 
   "vertical-top": () => `vertical-align:top;`,
   "vertical-middle": () => `vertical-align:middle;`,
@@ -101,11 +100,15 @@ export const RULES:Rules = {
   "text-top": () => `vertical-align:text-top;`,
   "text-bottom": () => `vertical-align:text-bottom;`,
 
+  // Text Indent
+  "text-indent": (value:string) => `text-indent:${px(value)};`,
+
   // Text Wrap
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `overflow-wrap:break-word;`,
   "keep-all": () => `word-break:keep-all;`,
   "hyphens": (value = "auto") => `hyphens:${value};`,
+
 
   // -- Display
   "block": () => "display:block;",
@@ -126,7 +129,6 @@ export const RULES:Rules = {
   "contents": () => "display:contents;",
   "list-item": () => "display:list-item;",
 
-
   // -- Box
 
   // Box-Sizing
@@ -135,6 +137,7 @@ export const RULES:Rules = {
 
   // Box-Model
   "w": (value:string) => {
+    if (value === "hug") return "width:max-content;"
     if (value === "stretch" || value === "fill") {
       return `&{flex-grow:var(--w-grow);align-self:var(--w-align);flex-shrink:1;max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`
     }
@@ -161,9 +164,8 @@ export const RULES:Rules = {
   },
 
   "h": (value:string) => {
-    if (value === "stretch" || value === "fill") {
-      return `flex-grow:var(--h-grow);align-self:var(--h-align)`
-    }
+    if (value === "hug") return "height:max-content;"
+    if (value === "stretch" || value === "fill") return `flex-grow:var(--h-grow);align-self:var(--h-align)`
 
     if (value.includes("~")) {
       const result = []
@@ -186,107 +188,6 @@ export const RULES:Rules = {
 
     return `height:${px(value)};`
   },
-
-
-  // @TODO:-- GRID TBD
-  "grid": (value) => {
-    const css = ["display:grid;"]
-    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
-    else if (value) css.push(`grid-template-columns:${value};`)
-    return css.join("")
-  },
-  "grid-cols": (value) => {
-    const css = ["display:grid;"]
-    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
-    else if (value) css.push(`grid-template-columns:${value};`)
-    return css.join("")
-  },
-  "inline-grid": () => "display:inline-grid;",
-
-
-  // -- Flexbox
-  "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
-  "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
-  "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
-  "hpack": () => `&{display:flex;flex-flow:row;align-items:center;justify-content:center;}${makeHBoxFill()}`,
-  "vpack": () => `&{display:flex;flex-flow:column;align-items:center;justify-content:center;}${makeVBoxFill()}`,
-  "hbox(": () => ``,
-  "vbox(": () => ``,
-  "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
-
-  "flex-flow:": (value:string) => `&{flex-flow:${value};}${makeBoxFill(value)}`,
-  "flex-direction:": (value:string) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
-
-  "gap": (value:string) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
-
-  // @NOTE:IE,safari<=13
-  "hgap": (value:string) => `&>*+*{margin-left:${px(value)};}`,
-  "hgap-reverse": (value:string) => `&>*+*{margin-right:${px(value)};}`,
-  "vgap": (value:string) => `&>*+*{margin-top:${px(value)};}`,
-  "vgap-reverse": (value:string) => `&>*+*{margin-bottom:${px(value)};}`,
-
-  // align-items
-  "ai": (value:string) => `align-items:${value};`,
-  "items": (value:string) => `align-items:${value};`,
-  "items-start": () => `align-items:flex-start;`,
-  "items-end": () => `align-items:flex-end;`,
-  "items-center": () => `align-items:center;`,
-  "items-baseline": () => `align-items:baseline;`,
-  "items-stretch": () => `align-items:stretch;`,
-
-  // align-content
-  "ac": (value:string) => `align-content:${value};`,
-  "content-start": () => `align-content:flex-start;`,
-  "content-end": () => `align-content:flex-end;`,
-  "content-center": () => `align-content:center;`,
-  "content-between": () => `align-content:space-between;`,
-  "content-around": () => `align-content:space-around;`,
-  "content-evenly": () => `align-content:space-evenly;`,
-  "content-stretch": () => `align-content:stretch;`,
-
-  // justify-content
-  "jc": (value:string) => `justify-content:${value};`,
-  "justify": (value:string) => `justify-content:${value};`,
-  "justify-start": () => `justify-content:flex-start;`,
-  "justify-end": () => `justify-content:flex-end;`,
-  "justify-center": () => `justify-content:center;`,
-  "justify-between": () => `justify-content:space-between;`,
-  "justify-around": () => `justify-content:space-around;`,
-  "justify-evenly": () => `justify-content:space-evenly;`,
-  "justify-stretch": () => `justify-content:stretch;`,
-
-  "space-between": () => `justify-content:space-between;align-content:space-between;`,
-  "space-around": () => `justify-content:space-around;align-content:space-around;`,
-  "space-evenly": () => `justify-content:space-evenly;align-content:space-evenly;`,
-
-  // justify-items
-  "ji": (value:string) => `justify-items:${value};`,
-  "justify-items": (value:string) => `justify-items:${value};`,
-  "justify-items-start": () => `justify-items:start;`,
-  "justify-items-end": () => `justify-items:end;`,
-  "justify-items-center": () => `justify-items:center;`,
-  "justify-items-stretch": () => `justify-items:stretch;`,
-
-
-  // flex
-  "flex": (value = "1") => `flex:${makeValues(value)};`,
-  "space": (value:string) => `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
-
-  "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
-  "grow-0": () => `flex-grow:0;`,
-  "no-grow": () => `flex-grow:0;`,
-  "shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
-  "no-shrink": () => `flex-shrink:0;`,
-
-  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
-  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
-  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
-
-  "flex-wrap": () => "&{flex-wrap:wrap;}:where(&>*){max-width:100%;max-height:100%;}",
-  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}:where(&>*){max-width:100%;max-height:100%;}",
-  "flex-nowrap": () => "flex-wrap:nowrap;",
-  "order": (value:string) => `order:${cssvar(value)};`,
-
 
   // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
@@ -345,17 +246,17 @@ export const RULES:Rules = {
   "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}`,
 
   // border-radius
-  "r": (value:string) => `border-radius:${makeSide(value)};`,
+  "r": (value:string) => `border-radius:${makeValues(value, rpx)};`,
 
-  "rt": (value:string) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
-  "rr": (value:string) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  "rb": (value:string) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  "rl": (value:string) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
+  "rt": (value:string) => `border-top-left-radius:${rpx(value)};border-top-right-radius:${rpx(value)};`,
+  "rr": (value:string) => `border-top-right-radius:${rpx(value)};border-bottom-right-radius:${rpx(value)};`,
+  "rb": (value:string) => `border-bottom-left-radius:${rpx(value)};border-bottom-right-radius:${rpx(value)};`,
+  "rl": (value:string) => `border-top-left-radius:${rpx(value)};border-bottom-left-radius:${rpx(value)};`,
 
-  "rtl": (value:string) => `border-top-left-radius:${px(value)};`,
-  "rtr": (value:string) => `border-top-right-radius:${px(value)};`,
-  "rbr": (value:string) => `border-bottom-right-radius:${px(value)};`,
-  "rbl": (value:string) => `border-bottom-left-radius:${px(value)};`,
+  "rtl": (value:string) => `border-top-left-radius:${rpx(value)};`,
+  "rtr": (value:string) => `border-top-right-radius:${rpx(value)};`,
+  "rbr": (value:string) => `border-bottom-right-radius:${rpx(value)};`,
+  "rbl": (value:string) => `border-bottom-left-radius:${rpx(value)};`,
 
   // box-shadow
   "ring": (value:string) => {
@@ -465,9 +366,110 @@ export const RULES:Rules = {
   // @NOTE:그냥 둘다 제공한다.
   "line-clamp": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
   "max-lines": (value:string) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
-  "text-indent": (value:string) => `text-indent:${px(value)};`,
 
-  // Position
+
+  // -- Flexbox Layout
+  "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
+  "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
+  "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
+  "hpack": () => `&{display:flex;flex-flow:row;align-items:center;justify-content:center;}${makeHBoxFill()}`,
+  "vpack": () => `&{display:flex;flex-flow:column;align-items:center;justify-content:center;}${makeVBoxFill()}`,
+  "hbox(": () => ``,
+  "vbox(": () => ``,
+  "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
+
+  "flex-flow:": (value:string) => `&{flex-flow:${value};}${makeBoxFill(value)}`,
+  "flex-direction:": (value:string) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
+
+  "gap": (value:string) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
+
+  // @NOTE:IE,safari<=13
+  "hgap": (value:string) => `&>*+*{margin-left:${px(value)};}`,
+  "hgap-reverse": (value:string) => `&>*+*{margin-right:${px(value)};}`,
+  "vgap": (value:string) => `&>*+*{margin-top:${px(value)};}`,
+  "vgap-reverse": (value:string) => `&>*+*{margin-bottom:${px(value)};}`,
+
+  // align-items
+  "ai": (value:string) => `align-items:${value};`,
+  "items": (value:string) => `align-items:${value};`,
+  "items-start": () => `align-items:flex-start;`,
+  "items-end": () => `align-items:flex-end;`,
+  "items-center": () => `align-items:center;`,
+  "items-baseline": () => `align-items:baseline;`,
+  "items-stretch": () => `align-items:stretch;`,
+
+  // align-content
+  "ac": (value:string) => `align-content:${value};`,
+  "content-start": () => `align-content:flex-start;`,
+  "content-end": () => `align-content:flex-end;`,
+  "content-center": () => `align-content:center;`,
+  "content-between": () => `align-content:space-between;`,
+  "content-around": () => `align-content:space-around;`,
+  "content-evenly": () => `align-content:space-evenly;`,
+  "content-stretch": () => `align-content:stretch;`,
+
+  // justify-content
+  "jc": (value:string) => `justify-content:${value};`,
+  "justify": (value:string) => `justify-content:${value};`,
+  "justify-start": () => `justify-content:flex-start;`,
+  "justify-end": () => `justify-content:flex-end;`,
+  "justify-center": () => `justify-content:center;`,
+  "justify-between": () => `justify-content:space-between;`,
+  "justify-around": () => `justify-content:space-around;`,
+  "justify-evenly": () => `justify-content:space-evenly;`,
+  "justify-stretch": () => `justify-content:stretch;`,
+
+  "space-between": () => `justify-content:space-between;align-content:space-between;`,
+  "space-around": () => `justify-content:space-around;align-content:space-around;`,
+  "space-evenly": () => `justify-content:space-evenly;align-content:space-evenly;`,
+
+  // justify-items
+  "ji": (value:string) => `justify-items:${value};`,
+  "justify-items": (value:string) => `justify-items:${value};`,
+  "justify-items-start": () => `justify-items:start;`,
+  "justify-items-end": () => `justify-items:end;`,
+  "justify-items-center": () => `justify-items:center;`,
+  "justify-items-stretch": () => `justify-items:stretch;`,
+
+
+  // flex
+  "flex": (value = "1") => `flex:${makeValues(value)};`,
+  "space": (value:string) => `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
+
+  "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "grow-0": () => `flex-grow:0;`,
+  "no-grow": () => `flex-grow:0;`,
+  "shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "no-shrink": () => `flex-shrink:0;`,
+
+  "flex-grow": (value = "1") => `flex-grow:${cssvar(value)};`,
+  "flex-shrink": (value = "1") => `flex-shrink:${cssvar(value)};`,
+  "flex-basis": (value:string) => `flex-basis:${px(value)};`,
+
+  "flex-wrap": () => "&{flex-wrap:wrap;}:where(&>*){max-width:100%;max-height:100%;}",
+  "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}:where(&>*){max-width:100%;max-height:100%;}",
+  "flex-nowrap": () => "flex-wrap:nowrap;",
+  "order": (value:string) => `order:${cssvar(value)};`,
+
+
+  // -- Grid
+  // @TODO:-- GRID TBD
+  "grid": (value) => {
+    const css = ["display:grid;"]
+    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
+    else if (value) css.push(`grid-template-columns:${value};`)
+    return css.join("")
+  },
+  "grid-cols": (value) => {
+    const css = ["display:grid;"]
+    if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
+    else if (value) css.push(`grid-template-columns:${value};`)
+    return css.join("")
+  },
+  "inline-grid": () => "display:inline-grid;",
+
+
+  // -- Position Utilities
   "layer": (value = "") => {
     const pos = {top: "0", right: "0", bottom: "0", left: "0"}
     const outsides = []
@@ -541,8 +543,8 @@ export const RULES:Rules = {
   "static": () => `position:static;`,
 
   // Position
-  "x": (value:string) => `left:${px(value)};`,
-  "y": (value:string) => `top:${px(value)};`,
+  "x": (value:string) => makePosition2X(value),
+  "y": (value:string) => makePosition2Y(value),
   "z": (value:string) => `z-index:${cssvar(value)};`,
   "top": (value:string) => `top:${px(value)};`,
   "left": (value:string) => `left:${px(value)};`,
@@ -556,9 +558,9 @@ export const RULES:Rules = {
   "blind": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
   "sr-only": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
   "gone": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
-  "opacity": (value:string) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
   "collapse": () => `visibility:collapse;`,
+  "opacity": (value:string) => `opacity:${cssvar(value)};`,
 
   // Interactions
   "col-resize": () => `cursor:col-resize;`,
@@ -623,19 +625,20 @@ export const RULES:Rules = {
 
   // Util
   "ratio": (value:string) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "aspect": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
+  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
   "gpu": () => `transform:translateZ(0.1px);`,
 
   // etc
-  "app-region": (value:string) => `-webkit-app-region:${value};`,
   "content": (value = "''") => `content:${cssvar(value)};`,
+  "app-region": (value:string) => `app-region:${value};-webkit-app-region:${value};`,
   "clip-path": (value:string) => `clip-path:${makeValues(value)};-webkit-clip-path:${makeValues(value)};`,
 
+  // table
   "table-fixed": () => `table-layout:fixed;`,
   "table-auto": () => `table-layout:auto;`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
-
-  "aspect-ratio": (value:string) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
 
   // Float & Clear
   "float": (value:string) => `float:${cssvar(value)};`,

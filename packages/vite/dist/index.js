@@ -558,6 +558,18 @@ var cssEscape = (string) => {
 };
 
 // src/core/makeValue.ts
+var splitValues = (value, project = cssvar) => {
+  if (value.includes("|"))
+    return value.split("|").map(project);
+  return value.split("/").map(project);
+};
+var makeValues = (value, project = cssvar) => splitValues(value, project).join(" ");
+var makeCommaValues = (value, project = cssvar) => value.split(",").map(project).join(",");
+var makeSide = (value) => makeValues(value, px);
+var makeRatio = (value) => {
+  const [w, h] = value.split(/[:/]/);
+  return (+h / +w * 100).toFixed(2) + "%";
+};
 var makeNumber = (num) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, "") || "0";
 var cssvar = (value) => String(value).startsWith("--") ? `var(${value})` : value;
 var px = (value) => {
@@ -565,15 +577,21 @@ var px = (value) => {
     throw new Error("px: value is undefined");
   if (value === 0 || value === "0")
     return 0;
-  if (String(value).startsWith("--"))
+  const v = String(value);
+  if (v.startsWith("--"))
     return cssvar("" + value);
-  const [n, m] = String(value).split("/");
+  const [n, m] = v.split("/");
   if (+n > 0 && +m > 0)
     return makeNumber(+n / +m * 100) + "%";
-  if (/.[-+*/]/.test(String(value))) {
-    return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")";
+  if (/.[-+*/]/.test(v) && /\d/.test(v)) {
+    return "calc(" + v.replace(/[-+]/g, (a) => ` ${a} `) + ")";
   }
   return +value === +value ? value + "px" : value;
+};
+var rpx = (value) => {
+  if (value === "fill")
+    return "9999px";
+  return px(value);
 };
 var percentToEm = (value) => {
   if (value.endsWith("%"))
@@ -639,16 +657,16 @@ var makeBorder = (value) => {
   const borderStyles = ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset"];
   let hasWidth = false;
   let hasStyle = false;
-  const values = value.split("/").map((value2) => {
-    if (parseInt(value2) > 0) {
+  const values = splitValues(value, (value2) => {
+    if (+value2 > 0) {
       hasWidth = true;
-      return value2.includes(",") ? makeColor(value2) : px(value2);
+      return px(value2);
     }
-    if (borderStyles.includes(value2)) {
+    if (borderStyles.includes(String(value2))) {
       hasStyle = true;
       return value2;
     }
-    return makeColor(value2);
+    return makeColor(String(value2));
   });
   if (!hasWidth)
     values.unshift("1px");
@@ -656,15 +674,8 @@ var makeBorder = (value) => {
     values.unshift("solid");
   return values.join(" ");
 };
-var makeValues = (value, project = cssvar) => value.split("/").map(project).join(" ");
-var makeCommaValues = (value, project = cssvar) => value.split(",").map(project).join(",");
-var makeSide = (value) => makeValues(value, px);
-var makeRatio = (value) => {
-  const [w, h] = value.split(":");
-  return (+h / +w * 100).toFixed(2) + "%";
-};
 var makeHBoxWithSemi = (value = "") => {
-  const values = value.split(/[+/]/);
+  const values = value.split(/[+/|]/);
   const result = values.map((v) => {
     switch (v) {
       case "top": {
@@ -703,7 +714,7 @@ var makeHBoxWithSemi = (value = "") => {
   return [...new Set(result)].join("");
 };
 var makeVBoxWithSemi = (value = "") => {
-  const values = value.split(/[+/]/);
+  const values = value.split(/[+/|]/);
   const result = values.map((v) => {
     switch (v) {
       case "left": {
@@ -786,7 +797,7 @@ var makeTransition = (value) => {
     return value;
   if (!value.includes("="))
     return `all ${value}`;
-  return value.split("/").map((item) => item.replace("=", " ")).join(",");
+  return value.split(/[/|]/).map((item) => item.replace("=", " ")).join(",");
 };
 var makePosition1 = (value) => {
   const values = value.split(" ").map(px);
@@ -800,16 +811,38 @@ var makePosition1 = (value) => {
     return `${prop}:${px(value2)};`;
   }).filter(Boolean).join("");
 };
+var makePosition2X = (x) => {
+  if (x.startsWith("center")) {
+    const left2 = x === "center" ? "50%" : `calc(50% + ${x.slice(7)})`;
+    return `left:${left2};transform:translateX(-50%);`;
+  }
+  const [left, right] = x.split("~");
+  const res = [];
+  res.push(left ? `left:${px(left)};` : "");
+  res.push(right ? `right:${px(right)};` : "");
+  return res.join("");
+};
+var makePosition2Y = (y) => {
+  if (y.startsWith("center")) {
+    const top2 = y === "center" ? "50%" : `calc(50% + ${y.slice(7)})`;
+    return `top:${top2};transform:translateY(-50%);`;
+  }
+  const [top, bottom] = y.split("~");
+  const res = [];
+  res.push(top ? `top:${px(top)};` : "");
+  res.push(bottom ? `bottom:${px(bottom)};` : "");
+  return res.join("");
+};
 var makePosition2 = (value) => {
   const [x, y] = value.split(",");
-  const res = [];
-  res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`);
-  res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`);
-  return res.join("");
+  return makePosition2X(x) + makePosition2Y(y);
 };
 var makePositionWithSemi = (value) => {
   if (!value)
     return "";
+  if (value === "pack" || value === "center") {
+    return "left:50%;top:50%;transform:translate(-50%,-50%);";
+  }
   return (value.includes(",") ? makePosition2(value) : makePosition1(value)) + ";";
 };
 
@@ -838,6 +871,9 @@ var RULES = {
   "letter-spacing": (value) => `letter-spacing:${percentToEm(value)};`,
   "word-spacing": (value) => `word-spacing:${px(value)};`,
   // Font-Family @TODO:font-stack은 일반적인 스택 만들어 두기...(L),Roboto,NotoSans와 같은것도 만들까?
+  // @TODO: Font-Family Utility
+  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
+  "Roboto": () => makeFontFamily("Roboto"),
   // @TODO:font-family:var(--serif),serif; 이게 먹히나?
   "sans": () => makeFontFamily("sans"),
   "sans-serif": () => makeFontFamily("sans-serif"),
@@ -850,8 +886,6 @@ var RULES = {
       return `font-variant-numeric:tabular-nums;`;
     return makeFontFamily("monospace");
   },
-  "AppleSD": () => `font-family:"Apple SD Gothic Neo";`,
-  "Roboto": () => makeFontFamily("Roboto"),
   // Font Weight
   "100": () => `font-weight:100;`,
   "200": () => `font-weight:200;`,
@@ -886,12 +920,11 @@ var RULES = {
   "uppercase": () => `text-transform:uppercase;`,
   "capitalize": () => `text-transform:capitalize;`,
   // Text Align
+  "text": (value) => makeTextBox(value),
   "text-justify": () => `text-align:justify;`,
   "text-center": () => `text-align:center;`,
   "text-right": () => `text-align:right;`,
   "text-left": () => `text-align:left;`,
-  // Text Align
-  "text": (value) => makeTextBox(value),
   "vertical-top": () => `vertical-align:top;`,
   "vertical-middle": () => `vertical-align:middle;`,
   "vertical-bottom": () => `vertical-align:bottom;`,
@@ -899,6 +932,8 @@ var RULES = {
   "super": () => `vertical-align:super;`,
   "text-top": () => `vertical-align:text-top;`,
   "text-bottom": () => `vertical-align:text-bottom;`,
+  // Text Indent
+  "text-indent": (value) => `text-indent:${px(value)};`,
   // Text Wrap
   "break-all": () => `word-break:break-all;`,
   "break-word": () => `overflow-wrap:break-word;`,
@@ -928,6 +963,8 @@ var RULES = {
   "content-box": () => `box-sizing:content-box;`,
   // Box-Model
   "w": (value) => {
+    if (value === "hug")
+      return "width:max-content;";
     if (value === "stretch" || value === "fill") {
       return `&{flex-grow:var(--w-grow);align-self:var(--w-align);flex-shrink:1;max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
     }
@@ -949,9 +986,10 @@ var RULES = {
     return `width:${px(value)};`;
   },
   "h": (value) => {
-    if (value === "stretch" || value === "fill") {
+    if (value === "hug")
+      return "height:max-content;";
+    if (value === "stretch" || value === "fill")
       return `flex-grow:var(--h-grow);align-self:var(--h-align)`;
-    }
     if (value.includes("~")) {
       const result = [];
       const values = value.split("~");
@@ -969,25 +1007,159 @@ var RULES = {
     }
     return `height:${px(value)};`;
   },
-  // @TODO:-- GRID TBD
-  "grid": (value) => {
-    const css = ["display:grid;"];
-    if (+value === +value)
-      css.push(`grid-template-columns:repeat(${value},1fr);`);
-    else if (value)
-      css.push(`grid-template-columns:${value};`);
-    return css.join("");
+  // BoxModel - Margin
+  "m": (value) => `margin:${makeSide(value)};`,
+  "mx": (value) => `margin-left:${px(value)};margin-right:${px(value)};`,
+  "my": (value) => `margin-top:${px(value)};margin-bottom:${px(value)};`,
+  "mt": (value) => `margin-top:${px(value)};`,
+  "mr": (value) => `margin-right:${px(value)};`,
+  "mb": (value) => `margin-bottom:${px(value)};`,
+  "ml": (value) => `margin-left:${px(value)};`,
+  // BoxModel - Padding
+  "p": (value) => `padding:${makeSide(value)};`,
+  "px": (value) => `padding-left:${px(value)};padding-right:${px(value)};`,
+  "py": (value) => `padding-top:${px(value)};padding-bottom:${px(value)};`,
+  "pt": (value) => `padding-top:${px(value)};`,
+  "pr": (value) => `padding-right:${px(value)};`,
+  "pb": (value) => `padding-bottom:${px(value)};`,
+  "pl": (value) => `padding-left:${px(value)};`,
+  // BoxModel - Border
+  "no-border": () => `border:none;outline:none;`,
+  "b": (value) => `border:${makeBorder(value)};`,
+  "bx": (value) => `border-left:${makeBorder(value)};border-right:${makeBorder(value)};`,
+  "by": (value) => `border-top:${makeBorder(value)};border-bottom:${makeBorder(value)};`,
+  "bt": (value) => `border-top:${makeBorder(value)};`,
+  "br": (value) => `border-right:${makeBorder(value)};`,
+  "bb": (value) => `border-bottom:${makeBorder(value)};`,
+  "bl": (value) => `border-left:${makeBorder(value)};`,
+  "bw": (value) => `border-width:${px(value)};`,
+  "bxw": (value) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
+  "byw": (value) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
+  "btw": (value) => `border-top-width:${px(value)};`,
+  "brw": (value) => `border-right-width:${px(value)};`,
+  "bbw": (value) => `border-bottom-width:${px(value)};`,
+  "blw": (value) => `border-left-width:${px(value)};`,
+  "bs": (value) => `border-style:${cssvar(value)};`,
+  "bxs": (value) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
+  "bys": (value) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
+  "bts": (value) => `border-top-style:${cssvar(value)};`,
+  "brs": (value) => `border-right-style:${cssvar(value)};`,
+  "bbs": (value) => `border-bottom-style:${cssvar(value)};`,
+  "bls": (value) => `border-left-style:${cssvar(value)};`,
+  "bc": (value) => `border-color:${makeColor(value)};`,
+  "bxc": (value) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
+  "byc": (value) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
+  "btc": (value) => `border-top-color:${makeColor(value)};`,
+  "brc": (value) => `border-right-color:${makeColor(value)};`,
+  "bbc": (value) => `border-bottom-color:${makeColor(value)};`,
+  "blc": (value) => `border-left-color:${makeColor(value)};`,
+  // outline
+  "outline": (value) => `outline:${makeBorder(value)};`,
+  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}`,
+  // border-radius
+  "r": (value) => `border-radius:${makeValues(value, rpx)};`,
+  "rt": (value) => `border-top-left-radius:${rpx(value)};border-top-right-radius:${rpx(value)};`,
+  "rr": (value) => `border-top-right-radius:${rpx(value)};border-bottom-right-radius:${rpx(value)};`,
+  "rb": (value) => `border-bottom-left-radius:${rpx(value)};border-bottom-right-radius:${rpx(value)};`,
+  "rl": (value) => `border-top-left-radius:${rpx(value)};border-bottom-left-radius:${rpx(value)};`,
+  "rtl": (value) => `border-top-left-radius:${rpx(value)};`,
+  "rtr": (value) => `border-top-right-radius:${rpx(value)};`,
+  "rbr": (value) => `border-bottom-right-radius:${rpx(value)};`,
+  "rbl": (value) => `border-bottom-left-radius:${rpx(value)};`,
+  // box-shadow
+  "ring": (value) => {
+    const [color, size = 1] = value.split("/");
+    return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
   },
-  "grid-cols": (value) => {
-    const css = ["display:grid;"];
-    if (+value === +value)
-      css.push(`grid-template-columns:repeat(${value},1fr);`);
-    else if (value)
-      css.push(`grid-template-columns:${value};`);
-    return css.join("");
+  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))};`,
+  // -- Background
+  "bg": (value) => {
+    if (value.startsWith("linear-gradient"))
+      return `background:${value.replace(/\//g, " ")};`;
+    if (value.startsWith("radial-gradient"))
+      return `background:${value.replace(/\//g, " ")};`;
+    if (value.startsWith("url"))
+      return `background-image:${value};`;
+    if (/^(http|[./])/.test(value))
+      return `background-image:url(${value});`;
+    if (value === "transparent")
+      return `background-color:transparent;`;
+    return `background-color:${makeColor(value)};`;
   },
-  "inline-grid": () => "display:inline-grid;",
-  // -- Flexbox
+  "bg-image": (value) => {
+    if (value.startsWith("url"))
+      return `background-image:${value};`;
+    return `background-image:url(${value});`;
+  },
+  "background-image": (value) => RULES["bg-image"](value),
+  "bg-position": (value) => `background-position:${makeValues(value)};`,
+  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
+  "bg-repeat-x": () => `background-repeat:repeat-x;`,
+  "bg-repeat-y": () => `background-repeat:repeat-y;`,
+  "bg-no-repeat": () => `background-repeat:no-repeat;`,
+  "bg-fixed": () => `background-attachment:fixed;`,
+  "bg-scroll": () => `background-attachment:scroll;`,
+  "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
+  "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
+  /// -- Overflow
+  // OverFlow
+  "clip": () => `&{overflow:hidden;}&:has(.nowrap\\.\\.\\.){flex-shrink:1;}`,
+  "overflow": (value) => `overflow:${value};`,
+  "overflow-x": (value) => `overflow-x:${value};`,
+  "overflow-y": (value) => `overflow-y:${value};`,
+  // Scroll
+  "scroll": () => `overflow:auto;`,
+  "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
+  "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
+  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
+  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
+  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
+  // Scroll Snap
+  "scroll-m": (value) => `scroll-margin:${makeSide(value)};`,
+  "scroll-mt": (value) => `scroll-margin-top:${px(value)};`,
+  "scroll-mr": (value) => `scroll-margin-right:${px(value)};`,
+  "scroll-mb": (value) => `scroll-margin-bottom:${px(value)};`,
+  "scroll-ml": (value) => `scroll-margin-left:${px(value)};`,
+  "scroll-p": (value) => `scroll-padding:${makeSide(value)};`,
+  "scroll-pt": (value) => `scroll-padding-top:${px(value)};`,
+  "scroll-pr": (value) => `scroll-padding-right:${px(value)};`,
+  "scroll-pb": (value) => `scroll-padding-bottom:${px(value)};`,
+  "scroll-pl": (value) => `scroll-padding-left:${px(value)};`,
+  "snap": (value) => `scroll-snap-align:${cssvar(value)};`,
+  "snap-start": () => `scroll-snap-align:start;`,
+  "snap-end": () => `scroll-snap-align:end;`,
+  "snap-center": () => `scroll-snap-align:center;`,
+  "snap-align-none": () => `scroll-snap-align:none;`,
+  "snap-none": () => `scroll-snap-type:none;`,
+  "snap-x": () => `scroll-snap-type:x var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-x-proximity": () => `scroll-snap-type:x proximity;`,
+  "snap-y": () => `scroll-snap-type:y var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-y-proximity": () => `scroll-snap-type:y proximity;`,
+  "snap-both": () => `scroll-snap-type:both var(--a-scroll-snap-strictness, mandatory);`,
+  "snap-both-proximity": () => `scroll-snap-type:both proximity;`,
+  "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
+  "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
+  "snap-normal": () => `scroll-snap-stop:normal;`,
+  "snap-always": () => `scroll-snap-stop:always;`,
+  // @TODO:- TBD
+  "overscroll": (value) => `overscroll-behavior:${value};`,
+  "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
+  "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
+  // @TODO:- TBD
+  "no-bouncing": () => "",
+  "no-overscroll": () => "",
+  // OverFlow + Text
+  "pre": () => `white-space:pre-wrap;`,
+  "pre-wrap": () => `white-space:pre-wrap;`,
+  "pre-line": () => `white-space:pre-line;`,
+  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
+  // line-clamp vs max-lines
+  // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
+  // @NOTE:그냥 둘다 제공한다.
+  "line-clamp": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
+  "max-lines": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
+  // -- Flexbox Layout
   "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
   "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
   "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
@@ -1056,160 +1228,26 @@ var RULES = {
   "flex-wrap-reverse": () => "&{flex-wrap:wrap-reverse;}:where(&>*){max-width:100%;max-height:100%;}",
   "flex-nowrap": () => "flex-wrap:nowrap;",
   "order": (value) => `order:${cssvar(value)};`,
-  // BoxModel - Margin
-  "m": (value) => `margin:${makeSide(value)};`,
-  "mx": (value) => `margin-left:${px(value)};margin-right:${px(value)};`,
-  "my": (value) => `margin-top:${px(value)};margin-bottom:${px(value)};`,
-  "mt": (value) => `margin-top:${px(value)};`,
-  "mr": (value) => `margin-right:${px(value)};`,
-  "mb": (value) => `margin-bottom:${px(value)};`,
-  "ml": (value) => `margin-left:${px(value)};`,
-  // BoxModel - Padding
-  "p": (value) => `padding:${makeSide(value)};`,
-  "px": (value) => `padding-left:${px(value)};padding-right:${px(value)};`,
-  "py": (value) => `padding-top:${px(value)};padding-bottom:${px(value)};`,
-  "pt": (value) => `padding-top:${px(value)};`,
-  "pr": (value) => `padding-right:${px(value)};`,
-  "pb": (value) => `padding-bottom:${px(value)};`,
-  "pl": (value) => `padding-left:${px(value)};`,
-  // BoxModel - Border
-  "no-border": () => `border:none;outline:none;`,
-  "b": (value) => `border:${makeBorder(value)};`,
-  "bx": (value) => `border-left:${makeBorder(value)};border-right:${makeBorder(value)};`,
-  "by": (value) => `border-top:${makeBorder(value)};border-bottom:${makeBorder(value)};`,
-  "bt": (value) => `border-top:${makeBorder(value)};`,
-  "br": (value) => `border-right:${makeBorder(value)};`,
-  "bb": (value) => `border-bottom:${makeBorder(value)};`,
-  "bl": (value) => `border-left:${makeBorder(value)};`,
-  "bw": (value) => `border-width:${px(value)};`,
-  "bxw": (value) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
-  "byw": (value) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
-  "btw": (value) => `border-top-width:${px(value)};`,
-  "brw": (value) => `border-right-width:${px(value)};`,
-  "bbw": (value) => `border-bottom-width:${px(value)};`,
-  "blw": (value) => `border-left-width:${px(value)};`,
-  "bs": (value) => `border-style:${cssvar(value)};`,
-  "bxs": (value) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
-  "bys": (value) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
-  "bts": (value) => `border-top-style:${cssvar(value)};`,
-  "brs": (value) => `border-right-style:${cssvar(value)};`,
-  "bbs": (value) => `border-bottom-style:${cssvar(value)};`,
-  "bls": (value) => `border-left-style:${cssvar(value)};`,
-  "bc": (value) => `border-color:${makeColor(value)};`,
-  "bxc": (value) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
-  "byc": (value) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
-  "btc": (value) => `border-top-color:${makeColor(value)};`,
-  "brc": (value) => `border-right-color:${makeColor(value)};`,
-  "bbc": (value) => `border-bottom-color:${makeColor(value)};`,
-  "blc": (value) => `border-left-color:${makeColor(value)};`,
-  // outline
-  "outline": (value) => `outline:${makeBorder(value)};`,
-  "guide": (value = "#4f80ff") => `&,&>*{outline:1px solid ${makeColor(value)};}`,
-  // border-radius
-  "r": (value) => `border-radius:${makeSide(value)};`,
-  "rt": (value) => `border-top-left-radius:${px(value)};border-top-right-radius:${px(value)};`,
-  "rr": (value) => `border-top-right-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  "rb": (value) => `border-bottom-left-radius:${px(value)};border-bottom-right-radius:${px(value)};`,
-  "rl": (value) => `border-top-left-radius:${px(value)};border-bottom-left-radius:${px(value)};`,
-  "rtl": (value) => `border-top-left-radius:${px(value)};`,
-  "rtr": (value) => `border-top-right-radius:${px(value)};`,
-  "rbr": (value) => `border-bottom-right-radius:${px(value)};`,
-  "rbl": (value) => `border-bottom-left-radius:${px(value)};`,
-  // box-shadow
-  "ring": (value) => {
-    const [color, size = 1] = value.split("/");
-    return `box-shadow:0 0 0 ${px(size)} ${makeColor(color)};`;
+  // -- Grid
+  // @TODO:-- GRID TBD
+  "grid": (value) => {
+    const css = ["display:grid;"];
+    if (+value === +value)
+      css.push(`grid-template-columns:repeat(${value},1fr);`);
+    else if (value)
+      css.push(`grid-template-columns:${value};`);
+    return css.join("");
   },
-  "box-shadow": (value) => `box-shadow:${makeValues(value, (v) => Number.isInteger(+v) ? px(v) : cssvar(v))};`,
-  // -- Background
-  "bg": (value) => {
-    if (value.startsWith("linear-gradient"))
-      return `background:${value.replace(/\//g, " ")};`;
-    if (value.startsWith("radial-gradient"))
-      return `background:${value.replace(/\//g, " ")};`;
-    if (value.startsWith("url"))
-      return `background-image:${value};`;
-    if (/^(http|[./])/.test(value))
-      return `background-image:url(${value});`;
-    if (value === "transparent")
-      return `background-color:transparent;`;
-    return `background-color:${makeColor(value)};`;
+  "grid-cols": (value) => {
+    const css = ["display:grid;"];
+    if (+value === +value)
+      css.push(`grid-template-columns:repeat(${value},1fr);`);
+    else if (value)
+      css.push(`grid-template-columns:${value};`);
+    return css.join("");
   },
-  "bg-image": (value) => {
-    if (value.startsWith("url"))
-      return `background-image:${value};`;
-    return `background-image:url(${value});`;
-  },
-  "background-image": (value) => RULES["bg-image"](value),
-  "bg-position": (value) => `background-position:${makeValues(value)};`,
-  // @TODO:background 이미지에 대한 세련된 방법이 필요하다!
-  "bg-repeat-x": () => `background-repeat:repeat-x;`,
-  "bg-repeat-y": () => `background-repeat:repeat-y;`,
-  "bg-no-repeat": () => `background-repeat:no-repeat;`,
-  "bg-fixed": () => `background-attachment:fixed;`,
-  "bg-scroll": () => `background-attachment:scroll;`,
-  "contain": () => `background-size:contain;background-position:center;background-repeat:no-repeat;object-fit:contain;`,
-  "cover": () => `background-size:cover;background-position:center;background-repeat:no-repeat;object-fit:cover;`,
-  /// -- Overflow
-  // OverFlow
-  "overflow": (value) => `overflow:${value};`,
-  "overflow-x": (value) => `overflow-x:${value};`,
-  "overflow-y": (value) => `overflow-y:${value};`,
-  "clip": () => `&{overflow:hidden;}&:has( .nowrap\\.\\.\\.){flex-shrink:1;}`,
-  // Scroll
-  "scroll": () => `overflow:auto;`,
-  "scroll-x": () => `overflow-x:auto;overflow-y:hidden;`,
-  "scroll-y": () => `overflow-x:hidden;overflow-y:auto;`,
-  "scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
-  "no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
-  "no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
-  // Scroll Snap
-  "scroll-m": (value) => `scroll-margin:${makeSide(value)};`,
-  "scroll-mt": (value) => `scroll-margin-top:${px(value)};`,
-  "scroll-mr": (value) => `scroll-margin-right:${px(value)};`,
-  "scroll-mb": (value) => `scroll-margin-bottom:${px(value)};`,
-  "scroll-ml": (value) => `scroll-margin-left:${px(value)};`,
-  "scroll-p": (value) => `scroll-padding:${makeSide(value)};`,
-  "scroll-pt": (value) => `scroll-padding-top:${px(value)};`,
-  "scroll-pr": (value) => `scroll-padding-right:${px(value)};`,
-  "scroll-pb": (value) => `scroll-padding-bottom:${px(value)};`,
-  "scroll-pl": (value) => `scroll-padding-left:${px(value)};`,
-  "snap": (value) => `scroll-snap-align:${cssvar(value)};`,
-  "snap-start": () => `scroll-snap-align:start;`,
-  "snap-end": () => `scroll-snap-align:end;`,
-  "snap-center": () => `scroll-snap-align:center;`,
-  "snap-align-none": () => `scroll-snap-align:none;`,
-  "snap-none": () => `scroll-snap-type:none;`,
-  "snap-x": () => `scroll-snap-type:x var(--a-scroll-snap-strictness, mandatory);`,
-  "snap-x-proximity": () => `scroll-snap-type:x proximity;`,
-  "snap-y": () => `scroll-snap-type:y var(--a-scroll-snap-strictness, mandatory);`,
-  "snap-y-proximity": () => `scroll-snap-type:y proximity;`,
-  "snap-both": () => `scroll-snap-type:both var(--a-scroll-snap-strictness, mandatory);`,
-  "snap-both-proximity": () => `scroll-snap-type:both proximity;`,
-  "snap-mandatory": () => `--a-scroll-snap-strictness:mandatory;`,
-  "snap-proximity": () => `--a-scroll-snap-strictness:proximity;`,
-  "snap-normal": () => `scroll-snap-stop:normal;`,
-  "snap-always": () => `scroll-snap-stop:always;`,
-  // @TODO:- TBD
-  "overscroll": (value) => `overscroll-behavior:${value};`,
-  "overscroll-x": (value) => `overscroll-behavior-x:${value};`,
-  "overscroll-y": (value) => `overscroll-behavior-y:${value};`,
-  // @TODO:- TBD
-  "no-bouncing": () => "",
-  "no-overscroll": () => "",
-  // OverFlow + Text
-  "pre": () => `white-space:pre-wrap;`,
-  "pre-wrap": () => `white-space:pre-wrap;`,
-  "pre-line": () => `white-space:pre-line;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
-  "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
-  // line-clamp vs max-lines
-  // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
-  // @NOTE:그냥 둘다 제공한다.
-  "line-clamp": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
-  "max-lines": (value) => `display:-webkit-box;-webkit-line-clamp:${value};-webkit-box-orient:vertical;overflow:hidden;`,
-  "text-indent": (value) => `text-indent:${px(value)};`,
-  // Position
+  "inline-grid": () => "display:inline-grid;",
+  // -- Position Utilities
   "layer": (value = "") => {
     const pos = { top: "0", right: "0", bottom: "0", left: "0" };
     const outsides = [];
@@ -1277,8 +1315,8 @@ var RULES = {
   "fixed": (value) => `position:fixed;${makePositionWithSemi(value)}`,
   "static": () => `position:static;`,
   // Position
-  "x": (value) => `left:${px(value)};`,
-  "y": (value) => `top:${px(value)};`,
+  "x": (value) => makePosition2X(value),
+  "y": (value) => makePosition2Y(value),
   "z": (value) => `z-index:${cssvar(value)};`,
   "top": (value) => `top:${px(value)};`,
   "left": (value) => `left:${px(value)};`,
@@ -1291,9 +1329,9 @@ var RULES = {
   "blind": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
   "sr-only": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
   "gone": () => `position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;white-space:nowrap;overflow:hidden;clip-path:inset(100%);`,
-  "opacity": (value) => `opacity:${cssvar(value)};`,
   "visible": () => `visibility:visible;`,
   "collapse": () => `visibility:collapse;`,
+  "opacity": (value) => `opacity:${cssvar(value)};`,
   // Interactions
   "col-resize": () => `cursor:col-resize;`,
   "crosshair": () => `cursor:crosshair;`,
@@ -1349,16 +1387,18 @@ var RULES = {
   "skewZ": (value) => `transform:skewZ(${makeCommaValues(value)});`,
   // Util
   "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
+  "aspect": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
+  "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
   "gpu": () => `transform:translateZ(0.1px);`,
   // etc
-  "app-region": (value) => `-webkit-app-region:${value};`,
   "content": (value = "''") => `content:${cssvar(value)};`,
-  "clip-path": (value) => `clip-path:${cssvar(value)};-webkit-clip-path:${cssvar(value)};`,
+  "app-region": (value) => `app-region:${value};-webkit-app-region:${value};`,
+  "clip-path": (value) => `clip-path:${makeValues(value)};-webkit-clip-path:${makeValues(value)};`,
+  // table
   "table-fixed": () => `table-layout:fixed;`,
   "table-auto": () => `table-layout:auto;`,
   "table-layout-fixed": () => `table-layout:fixed;`,
   "table-layout-auto": () => `table-layout:auto;`,
-  "aspect-ratio": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
   // Float & Clear
   "float": (value) => `float:${cssvar(value)};`,
   "clear": (value) => `clear:${cssvar(value)};`,

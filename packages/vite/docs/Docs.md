@@ -94,7 +94,7 @@ prefix:property(value)! or property(value)! or property!
 
 ```c(red)``` ```c(#f00)``` ```c(#f00.5)``` ```c(255,0,0)``` ```c(255,0,0,.3)``` ```c(100%,0,0)```
 
-### font-size / line-height / letter-spacing / word-spacing
+### font(size/line-height/letter-spacing/word-spacing)
 
 ```font(20/1.4/-1%)``` ```font(20/1.4)``` ```font(20/-/-1%)``` 
 
@@ -120,13 +120,13 @@ prefix:property(value)! or property(value)! or property!
 
 ### text-align
 
-```text-left``` ```text-center``` ```text-right``` ```text-justify```
+```text(left)``` ```text(center)``` ```text(right)``` ```text(justify)```
+
+```text(center+bottom)``` ```text(pack)```
 
 ### etc
 
 ```lowercase``` ```uppercase``` ```small-caps```
-
-```text-indent```
 
 ```monospace(number)```
 
@@ -144,11 +144,11 @@ prefix:property(value)! or property(value)! or property!
 ```h(30)``` ```h(~30)``` ```h(30~)``` ```h(20~30)```
 
 ### Radius
-```r(10)``` ```r(100%)```
+```r(10)``` ```r(fill)``` ```r(100%)```
 
 ### Fill
 
-```bg(#B75959)``` ```bg(linear-gradient(#000,#fff))```
+```bg(#B75959)``` ```bg(linear-gradient(#000,#fff))``` ```bg(/image.png)```
 
 ```cover``` ```contain```
 

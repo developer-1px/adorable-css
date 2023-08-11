@@ -49,7 +49,7 @@ const generateInstance = async (node, depth) => {
 
 const addClassWidth = (node, addClass:AddClass) => {
   const {parent, layoutGrow, layoutAlign} = node
-  const {layoutMode, primaryAxisAlignItems, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
+  const {layoutMode, primaryAxisSizingMode, counterAxisAlignItems, counterAxisSizingMode, width, height} = node
 
   if (node === figma.currentPage.selection[0]) addClass("w", makeInt(width))
   else if (parent?.layoutMode === "VERTICAL" && layoutAlign === "STRETCH") !everyChildrenHasStretchVbox(node.parent) && addClass("w", "fill")

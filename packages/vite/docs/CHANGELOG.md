@@ -1,6 +1,21 @@
-## 1.3.6-beta.0
-- ✨이제 `w(fill)`, `h(fill)`이 Flexbox에서 제대로 동작하게 됩니다.
-- 🐛invalidate한 CSS 결과물들을 필터링하는 기능이 추가되었습니다.
+## 1.3.9
+- ✨ top/bottom 과 left/right를 이제 x(), y()로 더 간단하고 멋지게 표현할 수 있습니다.
+  - `x(10) = left(10)`
+  - `x(~10) = right(10)`
+  - `x(10~20) = left(10)+right(20)`
+
+- ✨ x(center) 기능이 추가 되었습니다.
+  - `x(center) = left(50%)+translateX(-50%)`
+  - `x(center+50px) = left(50%+50px)+translateX(-50%)`
+ 
+- ✨`r(fill)`이 추가되어 양 옆이 둥근 사각형을 더 직관적으로 만들 수 있게 되었습니다.
+    - `r(fill) = border-radius:9999px;`
+
+- 🐛 w(max-content) width:max-content;가 적용되지 않던 버그를 수정하였습니다.
+
+## 1.3.7
+- ✨ 이제 `w(fill)`, `h(fill)`이 Flexbox에서 제대로 동작하게 됩니다.
+- 🐛 invalidate한 CSS 결과물들을 필터링하는 기능이 추가되었습니다.
 
 ## 1.3.6
 - 🐛`nowrap`, `nowrap...` 에 max-width:100%를 두어 특정 상황에서 글 내용이 넘치는 현상을 수정하였습니다.

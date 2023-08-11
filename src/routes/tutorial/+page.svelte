@@ -19,6 +19,7 @@ import {TURORIAL_9_PSEUDO_ELEMENT} from "src/tutorials/9. Pseudo Element"
 import {onMount} from "svelte"
 import MonacoEditor from "../../screens/MonacoEditor.svelte"
 import {TURORIAL_TEXTBOX} from "../../tutorials/TextBox";
+import {TUTORIAL_LAYOUT_POSITION} from "src/tutorials/Position";
 
 let element:HTMLElement
 let value = TURORIAL_0_Hello
@@ -29,17 +30,18 @@ const tutorials = [
   ["2. Typography", TURORIAL_2_TYPOGRAPHY],
   ["✨3. TextBox(TextAlign)", TURORIAL_TEXTBOX],
   ["4. Box Model", TURORIAL_3_BOX_MODEL],
-  ["5. Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
-  ["6. Overflow", TURORIAL_4_OVERFLOW],
-  ["7. Position", TURORIAL_6_LAYOUT_POSITION],
-  ["8. Visibility", TUTORIAL_7_VISIBILITY],
-  ["9. Hover, Active", TURORIAL_7_PREFIX],
-  ["10. Pseudo Class", TURORIAL_8_PREFIX2],
-  ["11. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
-  ["12. Media Query", TURORIAL_10_MEDIA_QUERY],
-  ["13. Selector", TURORIAL_11_Selector],
-  ["14. Important!", TURORIAL_12_Important],
-  ["15. Grouping +", TURORIAL_14_Grouping],
+  ["5. Overflow", TURORIAL_4_OVERFLOW],
+  ["6. Flexbox", TURORIAL_5_LAYOUT_FLEXBOX],
+  ["✨7. Position", TUTORIAL_LAYOUT_POSITION],
+  ["8. Layer", TURORIAL_6_LAYOUT_POSITION],
+  ["9. Visibility", TUTORIAL_7_VISIBILITY],
+  ["10. Hover, Active", TURORIAL_7_PREFIX],
+  ["11. Pseudo Class", TURORIAL_8_PREFIX2],
+  ["12. Pseudo Element", TURORIAL_9_PSEUDO_ELEMENT],
+  ["13. Media Query", TURORIAL_10_MEDIA_QUERY],
+  ["14. Selector", TURORIAL_11_Selector],
+  ["15. Important!", TURORIAL_12_Important],
+  ["16. Grouping +", TURORIAL_14_Grouping],
   ["계속 작업 중입니다...", ""]
 ]
 

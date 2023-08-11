@@ -9,7 +9,7 @@ export const makeCommaValues = (value:string, project = cssvar) => value.split("
 export const makeSide = (value:string) => makeValues(value, px)
 
 export const makeRatio = (value:string) => {
-  const [w, h] = value.split(":")
+  const [w, h] = value.split(/[:/]/)
   return (+h / +w * 100).toFixed(2) + "%"
 }
 
@@ -24,20 +24,27 @@ export const px = (value:string|number) => {
   if (value === undefined || value === null) throw new Error("px: value is undefined")
   if (value === 0 || value === "0") return 0
 
+  const v = String(value)
+
   // --css-var
-  if (String(value).startsWith("--")) return cssvar("" + value)
+  if (v.startsWith("--")) return cssvar("" + value)
 
   // 1/6
-  const [n, m] = String(value).split("/")
+  const [n, m] = v.split("/")
   if (+n > 0 && +m > 0) return makeNumber(+n / +m * 100) + "%"
 
   // calc
-  if (/.[-+*/]/.test(String(value))) {
-    return "calc(" + String(value).replace(/[-+]/g, (a) => ` ${a} `) + ")"
+  if (/.[-+*/]/.test(v) && /\d/.test(v)) {
+    return "calc(" + v.replace(/[-+]/g, (a) => ` ${a} `) + ")"
   }
 
   // number
   return +value === +value ? value + "px" : value
+}
+
+export const rpx = (value:string|number) => {
+  if (value === "fill") return "9999px"
+  return px(value)
 }
 
 export const percentToEm = (value:string) => {
@@ -108,17 +115,17 @@ export const makeBorder = (value:string) => {
   let hasStyle = false
 
   const values = splitValues(value, value => {
-    if (parseInt(value) > 0) {
+    if (+value > 0) {
       hasWidth = true
-      return value.includes(",") ? makeColor(value) : px(value)
+      return px(value)
     }
 
-    if (borderStyles.includes(value)) {
+    if (borderStyles.includes(String(value))) {
       hasStyle = true
       return value
     }
 
-    return makeColor(value)
+    return makeColor(String(value))
   })
 
   if (!hasWidth) values.unshift("1px")
@@ -228,15 +235,40 @@ export const makePosition1 = (value:string) => {
   .join("")
 }
 
+export const makePosition2X = (x:string) => {
+  if (x.startsWith("center")) {
+    const left = x === "center" ? "50%" : `calc(50% + ${x.slice(7)})`
+    return `left:${left};transform:translateX(-50%);`
+  }
+  const [left, right] = x.split("~")
+  const res = []
+  res.push(left ? `left:${px(left)};` : "")
+  res.push(right ? `right:${px(right)};` : "")
+  return res.join("")
+}
+
+export const makePosition2Y = (y:string) => {
+  if (y.startsWith("center")) {
+    const top = y === "center" ? "50%" : `calc(50% + ${y.slice(7)})`
+    return `top:${top};transform:translateY(-50%);`
+  }
+  const [top, bottom] = y.split("~")
+
+  const res = []
+  res.push(top ? `top:${px(top)};` : "")
+  res.push(bottom ? `bottom:${px(bottom)};` : "")
+  return res.join("")
+}
+
 export const makePosition2 = (value:string) => {
   const [x, y] = value.split(",")
-  const res = []
-  res.push(x.startsWith("~") ? `right:${px(x.slice(1))};` : `left:${px(x)};`)
-  res.push(y.startsWith("~") ? `bottom:${px(y.slice(1))};` : `top:${px(y)};`)
-  return res.join("")
+  return makePosition2X(x) + makePosition2Y(y)
 }
 
 export const makePositionWithSemi = (value?:string) => {
   if (!value) return ""
+  if (value === "pack" || value === "center") {
+    return "left:50%;top:50%;transform:translate(-50%,-50%);"
+  }
   return (value.includes(",") ? makePosition2(value) : makePosition1(value)) + ";"
 }

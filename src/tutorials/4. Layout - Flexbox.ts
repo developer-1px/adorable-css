@@ -118,7 +118,7 @@ vbox
   <h2>hbox(fill)</h2>  
   <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
     <div class="w(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">크기를 지정하면<br/>컨텐츠 크기</div>
+    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) bg(orange) pack">x</div>
     <div class="p(10) bg(orange) pack">(fill)</div>
