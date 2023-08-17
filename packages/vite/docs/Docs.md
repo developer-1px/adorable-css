@@ -163,20 +163,19 @@ prefix:property(value)! or property(value)! or property!
 
 ### Effects
 
-```box-shadow(0/4px/4px/#000.25)```
+```box-shadow(0/4/4/#000.25)```
 
-```box-shadow(inset/0/4px/4px/#000.25)```
+```box-shadow(inset/0/4/4/#000.25)```
 
-```blur(4px)```
+```blur(4)```
 
-```backdrop-blur(4px)```
+```backdrop-blur(4)```
 
 ### Clip content
 
 ```clip``` ```overflow(hidden)```
 
-```nowrap...```
-```line-clamp(3)```
+```nowrap...``` ```line-clamp(3)```
 
 ### Scroll
 
@@ -241,13 +240,12 @@ prefix:property(value)! or property(value)! or property!
 ## Reset CSS
 
 ```css
-* {margin:0;padding:0;font:inherit;color:inherit;}
-*, :after, :before {box-sizing:border-box;flex-shrink:0;}
-:root {-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;cursor:default;line-height:1.5;overflow-wrap:break-word;tab-size:4}
-html, body {height:100%;}
-img, picture, video, canvas, svg {display:block;max-width:100%;}
-button {background:none;border:0;cursor:pointer;}
-a {text-decoration:none;}
-table {border-collapse:collapse;border-spacing:0;}
-ol, ul, menu, dir {list-style:none;}
+*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;flex-shrink:0;}
+:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+html,body{height:100%;}
+img,picture,video,canvas{display:block;max-width:100%;}
+button{background:none;border:0;cursor:pointer;}
+a{text-decoration:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,menu,dir{list-style:none;}
 ```

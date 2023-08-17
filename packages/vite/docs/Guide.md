@@ -71,3 +71,12 @@ import "adorable-css"
 </body>
 </html>
 ```
+
+- 버전을 명시하고 싶다면 다음과 같이 버전을 명시할 수 있습니다.
+- **업데이트에 따라 기존에 사용하던 버전이 변경될 수 있기 때문에 production 환경에서는 버전을 명시하는 것을 추천합니다.**
+
+```html
+  <script src="https://unpkg.com/adorable-css@1.4.3"></script>
+</body>
+</html>
+```

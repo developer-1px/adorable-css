@@ -20,6 +20,7 @@ declare const makeNumber: (num: number) => string;
 declare const cssvar: (value: string | number) => string | number;
 declare const cssString: (value: string | number) => string;
 declare const px: (value: string | number) => string | number;
+declare const deg: (value: string | number) => string | number;
 declare const rpx: (value: string | number) => string | number;
 declare const percentToEm: (value: string) => string | number;
 declare const makeHEX: (value: string) => string;
@@ -42,7 +43,7 @@ declare const makePosition2Y: (y: string) => string;
 declare const makePosition2: (value: string) => string;
 declare const makePositionWithSemi: (value?: string) => string;
 
-declare const reset = "*{margin:0;padding:0;font:inherit;color:inherit;}\n*,:after,:before{box-sizing:border-box;flex-shrink:0;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}\nhtml,body{height:100%;}\nimg,picture,video,canvas{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n*{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}\n";
+declare const reset = "\n*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}\n:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}\nhtml,body{height:100%;}\nimg,picture,video,canvas{display:block;max-width:100%;}\nbutton{background:none;border:0;cursor:pointer;}\na{text-decoration:none;}\ntable{border-collapse:collapse;border-spacing:0;}\nol,ul,menu,dir{list-style:none;}\n*,:after,:before{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}\n*,:after,:before{\n--a-translate-x:0;\n--a-translate-y:0;\n--a-rotate:0;\n--a-skew-x:0;\n--a-skew-y:0;\n--a-scale-x:1;\n--a-scale-y:1;\n--a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));\n--a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));\n}";
 declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
@@ -582,4 +583,4 @@ interface Config {
 }
 declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePosition2X, makePosition2Y, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, rpx, splitValues, tokenize };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, deg, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePosition2X, makePosition2Y, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, rpx, splitValues, tokenize };

@@ -588,6 +588,19 @@ var px = (value) => {
   }
   return +value === +value ? value + "px" : value;
 };
+var deg = (value) => {
+  if (value === void 0 || value === null)
+    throw new Error("deg: value is undefined");
+  if (value === 0 || value === "0")
+    return 0;
+  const v = String(value);
+  if (v.startsWith("--"))
+    return cssvar("" + value);
+  if (/.[-+*/]/.test(v) && /\d/.test(v)) {
+    return "calc(" + v.replace(/[-+]/g, (a) => ` ${a} `) + ")";
+  }
+  return +value === +value ? value + "deg" : value;
+};
 var rpx = (value) => {
   if (value === "fill")
     return "9999px";
@@ -749,8 +762,8 @@ var makeVBoxWithSemi = (value = "") => {
   }
   return [...new Set(result)].join("");
 };
-var makeHBoxFill = () => "&>*{--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}";
-var makeVBoxFill = () => "&>*{--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}";
+var makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}";
+var makeVBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}";
 var makeBoxFill = (value) => {
   const val = value.split(/\s+/);
   if (val.includes("row"))
@@ -814,7 +827,7 @@ var makePosition1 = (value) => {
 var makePosition2X = (x) => {
   if (x.startsWith("center")) {
     const left2 = x === "center" ? "50%" : `calc(50% + ${x.slice(6)})`;
-    return `left:${left2};transform:translateX(-50%);`;
+    return `left:${left2};--a-translate-x:-50%;transform:var(--a-transform);`;
   }
   const [left, right] = x.split("~");
   const res = [];
@@ -825,7 +838,7 @@ var makePosition2X = (x) => {
 var makePosition2Y = (y) => {
   if (y.startsWith("center")) {
     const top2 = y === "center" ? "50%" : `calc(50% + ${y.slice(6)})`;
-    return `top:${top2};transform:translateY(-50%);`;
+    return `top:${top2};--a-translate-y:-50%;transform:var(--a-transform);`;
   }
   const [top, bottom] = y.split("~");
   const res = [];
@@ -847,8 +860,8 @@ var makePositionWithSemi = (value) => {
 };
 
 // src/core/rules.ts
-var reset = `*{margin:0;padding:0;font:inherit;color:inherit;}
-*,:after,:before{box-sizing:border-box;flex-shrink:0;}
+var reset = `
+*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
@@ -856,8 +869,18 @@ button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
 ol,ul,menu,dir{list-style:none;}
-*{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}
-`;
+*,:after,:before{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}
+*,:after,:before{
+--a-translate-x:0;
+--a-translate-y:0;
+--a-rotate:0;
+--a-skew-x:0;
+--a-skew-y:0;
+--a-scale-x:1;
+--a-scale-y:1;
+--a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+}`;
 var RULES = {
   // -- Color
   "c": (value) => `color:${makeColor(value)};`,
@@ -1032,21 +1055,21 @@ var RULES = {
   "br": (value) => `border-right:${makeBorder(value)};`,
   "bb": (value) => `border-bottom:${makeBorder(value)};`,
   "bl": (value) => `border-left:${makeBorder(value)};`,
-  "bw": (value) => `border-width:${px(value)};`,
+  "bw": (value) => `border-width:${makeValues(value, px)};`,
   "bxw": (value) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
   "byw": (value) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
   "btw": (value) => `border-top-width:${px(value)};`,
   "brw": (value) => `border-right-width:${px(value)};`,
   "bbw": (value) => `border-bottom-width:${px(value)};`,
   "blw": (value) => `border-left-width:${px(value)};`,
-  "bs": (value) => `border-style:${cssvar(value)};`,
+  "bs": (value) => `border-style:${makeValues(value)};`,
   "bxs": (value) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
   "bys": (value) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
   "bts": (value) => `border-top-style:${cssvar(value)};`,
   "brs": (value) => `border-right-style:${cssvar(value)};`,
   "bbs": (value) => `border-bottom-style:${cssvar(value)};`,
   "bls": (value) => `border-left-style:${cssvar(value)};`,
-  "bc": (value) => `border-color:${makeColor(value)};`,
+  "bc": (value) => `border-color:${makeValues(value, makeColor)};`,
   "bxc": (value) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
   "byc": (value) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
   "btc": (value) => `border-top-color:${makeColor(value)};`,
@@ -1149,9 +1172,11 @@ var RULES = {
   "no-bouncing": () => "",
   "no-overscroll": () => "",
   // OverFlow + Text
+  "white-space-normal": () => `white-space:normal;`,
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
+  "break-spaces": () => `white-space:break-spaces;`,
   "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
   // line-clamp vs max-lines
@@ -1213,9 +1238,10 @@ var RULES = {
   "justify-items-end": () => `justify-items:end;`,
   "justify-items-center": () => `justify-items:center;`,
   "justify-items-stretch": () => `justify-items:stretch;`,
-  // flex
+  // flex: @deprecated
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value) => `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
+  // flex
   "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "grow-0": () => `flex-grow:0;`,
   "no-grow": () => `flex-grow:0;`,
@@ -1365,26 +1391,40 @@ var RULES = {
   "pointer-events-auto": () => "pointer-events:auto;",
   // 에니메이션:transition(transform=100s/opacity=2s)
   "transition": (value) => `transition:${makeTransition(value)};`,
-  // @TODO:섞을수가 없네? mix transform
-  // @TBD:translate(10,10)+rotateX(180deg)+scale(2) 이런식으로 +기호로 묶자!!
-  "translate": (value) => `transform:translate(${makeCommaValues(value)});`,
-  "translateX": (value) => `transform:translateX(${cssvar(value)});`,
-  "translateY": (value) => `transform:translateY(${cssvar(value)});`,
-  "translateZ": (value) => `transform:translateZ(${cssvar(value)});`,
-  "translate3d": (value) => `transform:translate3d(${makeCommaValues(value)});`,
-  "rotate": (value) => `transform:rotate(${makeCommaValues(value)});`,
-  "rotateX": (value) => `transform:rotateX(${cssvar(value)});`,
-  "rotateY": (value) => `transform:rotateY(${cssvar(value)});`,
-  "rotateZ": (value) => `transform:rotateZ(${cssvar(value)});`,
-  "rotate3d": (value) => `transform:rotateZ(${makeCommaValues(value)});`,
-  "scale": (value) => `transform:scale(${makeCommaValues(value)});`,
-  "scaleX": (value) => `transform:scaleX(${makeCommaValues(value)});`,
-  "scaleY": (value) => `transform:scaleY(${makeCommaValues(value)});`,
-  "scaleZ": (value) => `transform:scaleZ(${makeCommaValues(value)});`,
-  "skew": (value) => `transform:skew(${makeCommaValues(value)});`,
-  "skewX": (value) => `transform:skewX(${makeCommaValues(value)});`,
-  "skewY": (value) => `transform:skewY(${makeCommaValues(value)});`,
-  "skewZ": (value) => `transform:skewZ(${makeCommaValues(value)});`,
+  // transform
+  "translate": (value) => {
+    const [x, y] = makeCommaValues(value, px).split(",");
+    return `--a-transform-translate-x:${x};--a-transform-translate-y:${y};transform:var(--a-transform);`;
+  },
+  "translateX": (value) => `--a-translate-x:${px(value)};transform:var(--a-transform);`,
+  "translateY": (value) => `--a-translate-y:${px(value)};transform:var(--a-transform);`,
+  "rotate": (value) => {
+    const [x, y, z] = makeCommaValues(value, deg).split(",");
+    return `--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
+  },
+  "rotateX": (value) => `--a-rotate-x:${deg(value)};transform:var(--a-transform);`,
+  "rotateY": (value) => `--a-rotate-y:${deg(value)};transform:var(--a-transform);`,
+  "scale": (value) => {
+    let [x, y, z] = makeCommaValues(value).split(",");
+    y = y || x;
+    z = z || x;
+    return `--a-scale-x:${x};--a-scale-y:${y};--a-scale-z:${z};transform:var(--a-transform);`;
+  },
+  "scaleX": (value) => `--a-scale-x:${makeNumber(+value)};transform:var(--a-transform);`,
+  "scaleY": (value) => `--a-scale-y:${makeNumber(+value)};transform:var(--a-transform);`,
+  "skew": (value) => {
+    const [x, y] = makeCommaValues(value, deg).split(",");
+    return `--a-skew-x:${x};--a-skew-y:${y};transform:var(--a-transform);`;
+  },
+  "skewX": (value) => `--a-skew-x:${deg(value)};transform:var(--a-transform);`,
+  "skewY": (value) => `--a-skew-y:${deg(value)};transform:var(--a-transform);`,
+  // @TODO: 3d transform
+  // "translate3d": (value:string) => `--a-translate-x:${px(value)};--a-translate-y:${px(value)};--a-translate-z:${px(value)};transform:var(--a-transform);`,
+  // "rotate3d": (value:string) => `--a-rotate-x:${deg(value)};--a-rotate-y:${deg(value)};--a-rotate-z:${deg(value)};transform:var(--a-transform);`,
+  // "translateZ": (value:string) => `--a-translate-z:${px(value)};transform:var(--a-transform);`,
+  // "rotateZ": (value:string) => `--a-rotate-z:${deg(value)};transform:var(--a-transform);`,
+  // "skewZ": (value:string) => `--a-skew-z:${deg(value)};transform:var(--a-transform);`,
+  // "scaleZ": (value:string) => `--a-scale-z:${makeCommaValues(value)};transform:var(--a-transform);`,
   // Util
   "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "aspect": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,

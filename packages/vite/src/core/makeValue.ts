@@ -201,8 +201,8 @@ export const makeVBoxWithSemi = (value = "") => {
   return [...new Set(result)].join("")
 }
 
-export const makeHBoxFill = () => "&>*{--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}"
-export const makeVBoxFill = () => "&>*{--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}"
+export const makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}"
+export const makeVBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}"
 
 export const makeBoxFill = (value:string) => {
   const val = value.split(/\s+/)
@@ -256,7 +256,7 @@ export const makePosition1 = (value:string) => {
 export const makePosition2X = (x:string) => {
   if (x.startsWith("center")) {
     const left = x === "center" ? "50%" : `calc(50% + ${x.slice(6)})`
-    return `left:${left};transform:translateX(-50%);`
+    return `left:${left};--a-translate-x:-50%;transform:var(--a-transform);`
   }
   const [left, right] = x.split("~")
   const res = []
@@ -268,7 +268,7 @@ export const makePosition2X = (x:string) => {
 export const makePosition2Y = (y:string) => {
   if (y.startsWith("center")) {
     const top = y === "center" ? "50%" : `calc(50% + ${y.slice(6)})`
-    return `top:${top};transform:translateY(-50%);`
+    return `top:${top};--a-translate-y:-50%;transform:var(--a-transform);`
   }
   const [top, bottom] = y.split("~")
 

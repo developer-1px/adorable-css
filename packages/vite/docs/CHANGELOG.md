@@ -1,4 +1,9 @@
-## 1.4.0x
+## 1.4.3
+- ⚡️타 CSS와 호환시(ex mui) 디자인이 틀어지게 되는 `*{flex-shrink:0}` 속성을 기본 Reset에서 제거하였습니다.
+- ⚡️그러면서도 hbox, vbox 등은 여전히 figma의 AutoLayout과 동일하도록 `where:(.hbox>*){flex-shrink:0}`의 속성이 적용될 수 있도록 하였습니다.
+- 🐛 `bc(border-color)`, `bw(border-width)`가 4방향을 다르게 각각 적용이 되지 않던 버그를 수정하였습니다.
+
+## 1.4.0
 - ✨ top/bottom 과 left/right를 이제 x(), y()로 더 간단하고 멋지게 표현할 수 있습니다.
   - `x(10) = left(10)`
   - `x(~10) = right(10)`

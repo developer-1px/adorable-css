@@ -2,7 +2,7 @@ import {PrefixRules, Rules} from "./atomizer"
 import {cssvar, deg, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeNumber, makePosition2X, makePosition2Y, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxFill, makeVBoxWithSemi, percentToEm, px, rpx} from "./makeValue"
 
 export const reset = `
-*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;flex-shrink:0;}
+*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
@@ -20,6 +20,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-scale-x:1;
 --a-scale-y:1;
 --a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+}
 `
 
 export const RULES:Rules = {
@@ -226,7 +228,7 @@ export const RULES:Rules = {
   "bb": (value:string) => `border-bottom:${makeBorder(value)};`,
   "bl": (value:string) => `border-left:${makeBorder(value)};`,
 
-  "bw": (value:string) => `border-width:${px(value)};`,
+  "bw": (value:string) => `border-width:${makeValues(value, px)};`,
   "bxw": (value:string) => `border-left-width:${px(value)};border-right-width:${px(value)};`,
   "byw": (value:string) => `border-top-width:${px(value)};border-bottom-width:${px(value)};`,
   "btw": (value:string) => `border-top-width:${px(value)};`,
@@ -234,7 +236,7 @@ export const RULES:Rules = {
   "bbw": (value:string) => `border-bottom-width:${px(value)};`,
   "blw": (value:string) => `border-left-width:${px(value)};`,
 
-  "bs": (value:string) => `border-style:${cssvar(value)};`,
+  "bs": (value:string) => `border-style:${makeValues(value)};`,
   "bxs": (value:string) => `border-left-style:${cssvar(value)};border-right-style:${cssvar(value)};`,
   "bys": (value:string) => `border-top-style:${cssvar(value)};border-bottom-style:${cssvar(value)};`,
   "bts": (value:string) => `border-top-style:${cssvar(value)};`,
@@ -242,7 +244,7 @@ export const RULES:Rules = {
   "bbs": (value:string) => `border-bottom-style:${cssvar(value)};`,
   "bls": (value:string) => `border-left-style:${cssvar(value)};`,
 
-  "bc": (value:string) => `border-color:${makeColor(value)};`,
+  "bc": (value:string) => `border-color:${makeValues(value, makeColor)};`,
   "bxc": (value:string) => `border-left-color:${makeColor(value)};border-right-color:${makeColor(value)};`,
   "byc": (value:string) => `border-top-color:${makeColor(value)};border-bottom-color:${makeColor(value)};`,
   "btc": (value:string) => `border-top-color:${makeColor(value)};`,
@@ -364,9 +366,11 @@ export const RULES:Rules = {
   "no-overscroll": () => "",
 
   // OverFlow + Text
+  "white-space-normal": () => `white-space:normal;`,
   "pre": () => `white-space:pre-wrap;`,
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
+  "break-spaces": () => `white-space:break-spaces;`,
   "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
 
@@ -440,11 +444,11 @@ export const RULES:Rules = {
   "justify-items-center": () => `justify-items:center;`,
   "justify-items-stretch": () => `justify-items:stretch;`,
 
-
-  // flex
+  // flex: @deprecated
   "flex": (value = "1") => `flex:${makeValues(value)};`,
   "space": (value:string) => `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
 
+  // flex
   "grow": (value = "1") => `flex-grow:${cssvar(value)};`,
   "grow-0": () => `flex-grow:0;`,
   "no-grow": () => `flex-grow:0;`,
@@ -610,31 +614,31 @@ export const RULES:Rules = {
 
   // transform
   "translate": (value:string) => {
-    const [x, y] = makeCommaValues(value, px);
+    const [x, y] = makeCommaValues(value, px).split(",");
     return `--a-transform-translate-x:${x};--a-transform-translate-y:${y};transform:var(--a-transform);`;
   },
   "translateX": (value:string) => `--a-translate-x:${px(value)};transform:var(--a-transform);`,
   "translateY": (value:string) => `--a-translate-y:${px(value)};transform:var(--a-transform);`,
 
   "rotate": (value:string) => {
-    const [x, y, z] = makeCommaValues(value, deg);
+    const [x, y, z] = makeCommaValues(value, deg).split(",");
     return `--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
   },
   "rotateX": (value:string) => `--a-rotate-x:${deg(value)};transform:var(--a-transform);`,
   "rotateY": (value:string) => `--a-rotate-y:${deg(value)};transform:var(--a-transform);`,
 
   "scale": (value:string) => {
-    let [x, y, z] = makeCommaValues(value);
+    let [x, y, z] = makeCommaValues(value).split(",");
     y = y || x;
     z = z || x;
     return `--a-scale-x:${x};--a-scale-y:${y};--a-scale-z:${z};transform:var(--a-transform);`;
   },
 
-  "scaleX": (value:string) => `--a-scale-x:${makeCommaValues(value)};transform:var(--a-transform);`,
-  "scaleY": (value:string) => `--a-scale-y:${makeCommaValues(value)};transform:var(--a-transform);`,
+  "scaleX": (value:string) => `--a-scale-x:${makeNumber(+value)};transform:var(--a-transform);`,
+  "scaleY": (value:string) => `--a-scale-y:${makeNumber(+value)};transform:var(--a-transform);`,
 
   "skew": (value:string) => {
-    const [x, y] = makeCommaValues(value, deg);
+    const [x, y] = makeCommaValues(value, deg).split(",");
     return `--a-skew-x:${x};--a-skew-y:${y};transform:var(--a-transform);`;
   },
   "skewX": (value:string) => `--a-skew-x:${deg(value)};transform:var(--a-transform);`,
