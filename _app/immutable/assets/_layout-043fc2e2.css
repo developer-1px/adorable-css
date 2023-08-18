@@ -18,7 +18,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-scale-y:1;
 --a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
 --a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
-}.\32 00{font-weight:200;}
+}
+.\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
 @media(hover:hover){.\>\>a\:hover\:c\(--primary\) a:hover,.\>\>a\:hover\:c\(--primary\) a.\:hover{color:var(--primary);}}
 .\>\>a\.active\:c\(--primary\) a.active{color:var(--primary);}
@@ -146,6 +147,11 @@ html .active\:bg\(\#000\):active,html .active\:bg\(\#000\).\:active{background-c
 .pointer{cursor:pointer;}
 .transition\(\.4s\){transition:all .4s;}
 .transition\(\.2s\){transition:all .2s;}
+.group:hover .group-hover\:rotate\(-10deg\),html .group.\:hover .group-hover\:rotate\(-10deg\){--a-rotate:-10deg;--a-rotate-x:-10deg;--a-rotate-y:-10deg;--a-rotate-z:-10deg;transform:var(--a-transform);}
+html .group:active .group-active\:rotate\(10deg\),html .group.\:active .group-active\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}
+.group:hover .group-hover\:rotate\(10deg\),html .group.\:hover .group-hover\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}
+html .group:active .group-active\:rotate\(-10deg\),html .group.\:active .group-active\:rotate\(-10deg\){--a-rotate:-10deg;--a-rotate-x:-10deg;--a-rotate-y:-10deg;--a-rotate-z:-10deg;transform:var(--a-transform);}
+html .active\:rotate\(5deg\):active,html .active\:rotate\(5deg\).\:active{--a-rotate:5deg;--a-rotate-x:5deg;--a-rotate-y:5deg;--a-rotate-z:5deg;transform:var(--a-transform);}
 @media(hover:hover){.hover\:scale\(1\.05\):hover,.hover\:scale\(1\.05\).\:hover{--a-scale-x:1.05;--a-scale-y:1.05;--a-scale-z:1.05;transform:var(--a-transform);}}
 .after\:content\(--my-content\)::after{content:var(--my-content);}
 html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
