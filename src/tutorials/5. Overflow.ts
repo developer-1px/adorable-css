@@ -31,15 +31,15 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 
 <h1>Overflow</h1>
 
-<div class="vbox gap(20) bg(#fff)">
+<div class="vbox gap(20)">
   
-  <h2>default (overflow:visible)</h2>
+  <h2>default (=overflow:visible)</h2>
   <div class="w(200) h(100) bg(#eee) b(red)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
-  <div class="space(50)"></div>
+  <div class="h(50)"></div>
 
-  <h2>clip (overflow:hidden)</h2>
+  <h2>clip (=overflow:hidden)</h2>
   <div class="w(200) h(50) bg(#eee) b(red) clip">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
@@ -49,9 +49,9 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 </div>
 
 
-<h1>Overflow with Text</h1>
+<h1 class="mt(50)">Overflow with Text</h1>
 
-<div class="vbox gap(20) bg(#fff)">
+<div class="vbox gap(20)">
 
   <h2>nowrap</h2>
   <div class="w(200) bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
@@ -76,4 +76,8 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
   </div>
 </div>
 
+<style>
+h1 {font-size:20px;font-weight:bold;margin:0 0 10px 0}
+h2 {font-weight:bold}
+</style>
 `.trim()

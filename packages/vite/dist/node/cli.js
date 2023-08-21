@@ -19893,7 +19893,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-scale-y:1;
 --a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
 --a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
-}`;
+}
+`;
 var RULES = {
   // -- Color
   "c": (value) => `color:${makeColor(value)};`,
@@ -20208,7 +20209,11 @@ var RULES = {
   "subbox": () => `display:flex;flex-flow:inherit;align-items:inherit;justify-content:inherit;`,
   "flex-flow:": (value) => `&{flex-flow:${value};}${makeBoxFill(value)}`,
   "flex-direction:": (value) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
-  "gap": (value) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
+  "gap": (value) => {
+    if (value === "auto")
+      return "justify-content:space-between;align-content:space-between;";
+    return `gap:${makeSide(value)};grid-gap:${makeSide(value)};`;
+  },
   // @NOTE:IE,safari<=13
   "hgap": (value) => `&>*+*{margin-left:${px(value)};}`,
   "hgap-reverse": (value) => `&>*+*{margin-right:${px(value)};}`,
@@ -20354,13 +20359,14 @@ var RULES = {
   "fixed": (value) => `position:fixed;${makePositionWithSemi(value)}`,
   "static": () => `position:static;`,
   // Position
-  "x": (value) => makePosition2X(value),
-  "y": (value) => makePosition2Y(value),
-  "z": (value) => `z-index:${cssvar(value)};`,
   "top": (value) => `top:${px(value)};`,
   "left": (value) => `left:${px(value)};`,
   "right": (value) => `right:${px(value)};`,
   "bottom": (value) => `bottom:${px(value)};`,
+  "x": (value) => makePosition2X(value),
+  "y": (value) => makePosition2Y(value),
+  "z": (value) => `z-index:${cssvar(value)};`,
+  "isolate": () => `isolation:isolate;`,
   // Visibility
   "none": () => `display:none;`,
   "hidden": () => `visibility:hidden;`,
@@ -20412,13 +20418,17 @@ var RULES = {
   "translateX": (value) => `--a-translate-x:${px(value)};transform:var(--a-transform);`,
   "translateY": (value) => `--a-translate-y:${px(value)};transform:var(--a-transform);`,
   "rotate": (value) => {
-    const [x, y, z] = makeCommaValues(value, deg).split(",");
-    return `--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
+    let [x, y, z] = makeCommaValues(value, deg).split(",");
+    x = x || x;
+    y = y || x;
+    z = z || x;
+    return `--a-rotate:${x};--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
   },
   "rotateX": (value) => `--a-rotate-x:${deg(value)};transform:var(--a-transform);`,
   "rotateY": (value) => `--a-rotate-y:${deg(value)};transform:var(--a-transform);`,
   "scale": (value) => {
     let [x, y, z] = makeCommaValues(value).split(",");
+    x = x || x;
     y = y || x;
     z = z || x;
     return `--a-scale-x:${x};--a-scale-y:${y};--a-scale-z:${z};transform:var(--a-transform);`;

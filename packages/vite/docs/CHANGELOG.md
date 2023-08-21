@@ -1,3 +1,11 @@
+## 1.4.5
+- ✨ `gap(auto)`가 추가되었습니다.
+- `gap(auto) = space-between` 으로 조금 더 직관적이고 단순한 기입이 가능하도록 수정하였습니다.
+
+## 1.4.4
+- 🐛 `rotate()`가 정상동작하지 않던 현상을 수정하였습니다.
+- ✨ `rotate(90)` 처럼 숫자만 적어도 자동으로 `90deg` unit이 붙도록 개선하였습니다. 
+ 
 ## 1.4.3
 - ⚡️타 CSS와 호환시(ex mui) 디자인이 틀어지게 되는 `*{flex-shrink:0}` 속성을 기본 Reset에서 제거하였습니다.
 - ⚡️그러면서도 hbox, vbox 등은 여전히 figma의 AutoLayout과 동일하도록 `where:(.hbox>*){flex-shrink:0}`의 속성이 적용될 수 있도록 하였습니다.

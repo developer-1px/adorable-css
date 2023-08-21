@@ -13,8 +13,10 @@ gap(value)
 gap(vertical/horizonal)
 : 각 컨텐츠별 간격을 입력할 수 있습니다.
 https://caniuse.com/flexbox-gap
-
 @NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
+
+gap(auto) : space-between
+
 
 
 1-2
@@ -54,19 +56,6 @@ vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로
 space-between space-around / space-evenly
 :space-between은 각 컨텐츠를 같은 간격으로 벌려놓습니다. (NAVBar 같은 곳에서 사용합니다.) 
 
-4
-space / flex
-
-space
-: 커스텀 부분을 지정하여 간격을 띄울때는 margin을 사용하는 것보다 빈 엘리먼트를 만드는것이 더 좋습니다.
-: 실전에서 디자인 가이드에 보통 저 사이 간격을 적어주는 편이기도 하고 컴포넌트나 엘리먼트에 margin을 직접 적용하면 재사용이 힘들어지기 때문입니다.
-
-flex
-: flex는 빈공간을 메워주는 역할을 합니다.
-: 단독으로만 사용해서 좌우를 벌려주는 용도로 가장 많이 사용하고 Auto Grow가 필요한 컨텐츠 영역에 사용하기도 합니다.
-: 숫자를 부여하면 남는 공간을 비율로 나눌 수 있습니다.
-
-
 5
 vbox
 : 컨텐츠를 세로로 배치하고 싶다면 vbox(vertical box)를 사용하세요.
@@ -78,14 +67,23 @@ vbox
 
 <div class="vbox gap(20) bg(#fff) p(10)">
 
-  <h2>hbox + gap</h2>
+  <h2>hbox + gap(20)</h2>
 
-  <div class="hbox gap(10) b(orange) p(10)">
+  <div class="hbox gap(20) p(10) b(orange)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
     <div class="w(48) h(48) bg(orange) pack">b</div>
     <div class="w(48) h(48) bg(orange) pack">o</div>
     <div class="w(48) h(48) bg(orange) pack">x</div>
-  </div>  
+  </div> 
+  
+  <h2>hbox + ✨gap(auto)</h2>
+
+  <div class="hbox gap(auto) p(10) b(orange)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(48) bg(orange) pack">b</div>
+    <div class="w(48) h(48) bg(orange) pack">o</div>
+    <div class="w(48) h(48) bg(orange) pack">x</div>
+  </div> 
 
 
   <h2>hbox(top)</h2>  
@@ -97,15 +95,6 @@ vbox
     <div class="w(48) h(50) bg(orange) pack">(top)</div>
   </div>
   
-  <h2>hbox(bottom)</h2>  
-  <div class="hbox(bottom) gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">b</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) h(24) bg(orange) pack">x</div>
-    <div class="p(10) h(50) bg(orange) pack">(bottom)</div>
-  </div>
-
   <h2>hbox(bottom+right)</h2>  
   <div class="hbox(bottom+right) gap(10) b(orange) p(10)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
@@ -113,24 +102,6 @@ vbox
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) h(24) bg(orange) pack">x</div>
     <div class="p(10) h(50) bg(orange) pack">(bottom+right)</div>
-  </div>
-
-  <h2>hbox(fill)</h2>  
-  <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
-    <div class="w(48) bg(orange) pack">h</div>
-    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) bg(orange) pack">x</div>
-    <div class="p(10) bg(orange) pack">(fill)</div>
-  </div>
-
-  <h2>h(fill) = align-self:stretch</h2>  
-  <div class="hbox gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">b</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) h(24) bg(orange) pack">x</div>
-    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
   </div>
 
   <h2>pack</h2>  
@@ -145,6 +116,37 @@ vbox
       <div>column</div>
     </div>
   </div>
+    
+  <br/>
+    
+  <h2>hbox(fill)</h2>  
+  <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
+    <div class="w(48) bg(orange) pack">h</div>
+    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
+    <div class="p(10) bg(orange) pack">o</div>
+    <div class="w(48) bg(orange) pack">x</div>
+    <div class="p(10) bg(orange) pack">(fill)</div>
+  </div>
+
+  <h2>✨w(fill)</h2>  
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(100) bg(orange) pack">b</div>
+    <div class="w(fill) h(100) bg(orange) pack">w(fill)</div>
+    <div class="w(48) p(10) bg(orange) pack">o</div>
+    <div class="w(48) h(24) bg(orange) pack">x</div>
+  </div>
+
+  <h2>✨h(fill)</h2>  
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(100) bg(orange) pack">b</div>
+    <div class="p(10) bg(orange) pack">o</div>
+    <div class="w(48) h(24) bg(orange) pack">x</div>
+    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
+  </div>
+
+  <br/> 
   
   <h2>space-between / space-around / space-evenly</h2>  
 
@@ -164,17 +166,6 @@ vbox
     <div class="p(10) bg(orange) pack">space</div>
     <div class="p(10) bg(orange) pack">-</div>
     <div class="p(10) bg(orange) pack">evenly</div>
-  </div>
-
-
-  <h2>space / flex</h2>  
-
-  <div class="hbox b(orange) w(400)">
-    <div class="p(10) bg(orange) pack">space(8)</div>
-    <div class="space(8)"></div>
-    <div class="p(10) bg(orange) pack">vs</div>
-    <div class="flex"></div>
-    <div class="p(10) bg(orange)">flex</div>
   </div>
 </div>
 

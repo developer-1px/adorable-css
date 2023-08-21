@@ -394,7 +394,10 @@ export const RULES:Rules = {
   "flex-flow:": (value:string) => `&{flex-flow:${value};}${makeBoxFill(value)}`,
   "flex-direction:": (value:string) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
 
-  "gap": (value:string) => `gap:${makeSide(value)};grid-gap:${makeSide(value)};`,
+  "gap": (value:string) => {
+    if (value === "auto") return "justify-content:space-between;align-content:space-between;"
+    return `gap:${makeSide(value)};grid-gap:${makeSide(value)};`
+  },
 
   // @NOTE:IE,safari<=13
   "hgap": (value:string) => `&>*+*{margin-left:${px(value)};}`,
@@ -556,13 +559,17 @@ export const RULES:Rules = {
   "static": () => `position:static;`,
 
   // Position
-  "x": (value:string) => makePosition2X(value),
-  "y": (value:string) => makePosition2Y(value),
-  "z": (value:string) => `z-index:${cssvar(value)};`,
   "top": (value:string) => `top:${px(value)};`,
   "left": (value:string) => `left:${px(value)};`,
   "right": (value:string) => `right:${px(value)};`,
   "bottom": (value:string) => `bottom:${px(value)};`,
+
+  "x": (value:string) => makePosition2X(value),
+  "y": (value:string) => makePosition2Y(value),
+  "z": (value:string) => `z-index:${cssvar(value)};`,
+
+  "isolate": () => `isolation:isolate;`,
+
 
   // Visibility
   "none": () => `display:none;`,
@@ -621,16 +628,22 @@ export const RULES:Rules = {
   "translateY": (value:string) => `--a-translate-y:${px(value)};transform:var(--a-transform);`,
 
   "rotate": (value:string) => {
-    const [x, y, z] = makeCommaValues(value, deg).split(",");
-    return `--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
+    let [x, y, z] = makeCommaValues(value, deg).split(",");
+    x = x || x
+    y = y || x
+    z = z || x
+
+    return `--a-rotate:${x};--a-rotate-x:${x};--a-rotate-y:${y};--a-rotate-z:${z};transform:var(--a-transform);`;
   },
   "rotateX": (value:string) => `--a-rotate-x:${deg(value)};transform:var(--a-transform);`,
   "rotateY": (value:string) => `--a-rotate-y:${deg(value)};transform:var(--a-transform);`,
 
   "scale": (value:string) => {
     let [x, y, z] = makeCommaValues(value).split(",");
-    y = y || x;
-    z = z || x;
+    x = x || x
+    y = y || x
+    z = z || x
+
     return `--a-scale-x:${x};--a-scale-y:${y};--a-scale-z:${z};transform:var(--a-transform);`;
   },
 
