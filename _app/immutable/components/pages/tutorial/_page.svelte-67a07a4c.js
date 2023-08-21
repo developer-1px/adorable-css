@@ -1,4 +1,4 @@
-import{S as de,i as ce,s as ne,e as f,c as b,b as w,f as p,o as h,h as J,n as Q,M as ve,Q as j,R as be,a as B,u as ge,t as he,g as V,v as ue,m as oe,d as pe,T,j as n,w as me,r as K,U as we,k as xe,x as ye,y as ke,V as _e,z as Se,G as Te}from"../../../chunks/index-bc0b20f1.js";import{r as Re,g as Ie,p as Oe}from"../../../chunks/atomizer-c30831d5.js";function se(e){return(e==null?void 0:e.length)!==void 0?e:Array.from(e)}const le=`
+import{S as de,i as ce,s as ne,e as f,c as b,b as w,f as p,o as h,h as J,n as Q,M as ve,Q as q,R as be,a as B,u as ge,t as he,g as V,v as ue,m as oe,d as pe,T,j as n,w as me,r as K,U as we,k as xe,x as ye,y as ke,V as _e,z as Se,G as Te}from"../../../chunks/index-bc0b20f1.js";import{r as Re,g as Ie,p as Oe}from"../../../chunks/atomizer-f04783ea.js";function se(e){return(e==null?void 0:e.length)!==void 0?e:Array.from(e)}const le=`
 <!--
 ฅ^•ﻌ•^ฅ ♥
 
@@ -28,7 +28,7 @@ class="property(value)" 의 형식의 문법으로 작성해 주시면 됩니다
   </div>
 </div>
 
-`.trim(),Ae=`
+`.trim(),Le=`
 <!--
 
 Colors
@@ -94,7 +94,7 @@ c(--css-var) css-variable
   <div class="bg(--css-var)">bg(--css-var) css-variable</div>
 </div>
 
-`.trim(),Le=`
+`.trim(),Ae=`
 <!--
 Media Query
 https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries 
@@ -458,15 +458,15 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 
 <h1>Overflow</h1>
 
-<div class="vbox gap(20) bg(#fff)">
+<div class="vbox gap(20)">
   
-  <h2>default (overflow:visible)</h2>
+  <h2>default (=overflow:visible)</h2>
   <div class="w(200) h(100) bg(#eee) b(red)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
-  <div class="space(50)"></div>
+  <div class="h(50)"></div>
 
-  <h2>clip (overflow:hidden)</h2>
+  <h2>clip (=overflow:hidden)</h2>
   <div class="w(200) h(50) bg(#eee) b(red) clip">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
@@ -476,9 +476,9 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 </div>
 
 
-<h1>Overflow with Text</h1>
+<h1 class="mt(50)">Overflow with Text</h1>
 
-<div class="vbox gap(20) bg(#fff)">
+<div class="vbox gap(20)">
 
   <h2>nowrap</h2>
   <div class="w(200) bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
@@ -503,6 +503,10 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
   </div>
 </div>
 
+<style>
+h1 {font-size:20px;font-weight:bold;margin:0 0 10px 0}
+h2 {font-weight:bold}
+</style>
 `.trim(),ze=`
 <!--
 Layout - Flexbox
@@ -518,8 +522,10 @@ gap(value)
 gap(vertical/horizonal)
 : 각 컨텐츠별 간격을 입력할 수 있습니다.
 https://caniuse.com/flexbox-gap
-
 @NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
+
+gap(auto) : space-between
+
 
 
 1-2
@@ -559,19 +565,6 @@ vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로
 space-between space-around / space-evenly
 :space-between은 각 컨텐츠를 같은 간격으로 벌려놓습니다. (NAVBar 같은 곳에서 사용합니다.) 
 
-4
-space / flex
-
-space
-: 커스텀 부분을 지정하여 간격을 띄울때는 margin을 사용하는 것보다 빈 엘리먼트를 만드는것이 더 좋습니다.
-: 실전에서 디자인 가이드에 보통 저 사이 간격을 적어주는 편이기도 하고 컴포넌트나 엘리먼트에 margin을 직접 적용하면 재사용이 힘들어지기 때문입니다.
-
-flex
-: flex는 빈공간을 메워주는 역할을 합니다.
-: 단독으로만 사용해서 좌우를 벌려주는 용도로 가장 많이 사용하고 Auto Grow가 필요한 컨텐츠 영역에 사용하기도 합니다.
-: 숫자를 부여하면 남는 공간을 비율로 나눌 수 있습니다.
-
-
 5
 vbox
 : 컨텐츠를 세로로 배치하고 싶다면 vbox(vertical box)를 사용하세요.
@@ -583,14 +576,23 @@ vbox
 
 <div class="vbox gap(20) bg(#fff) p(10)">
 
-  <h2>hbox + gap</h2>
+  <h2>hbox + gap(20)</h2>
 
-  <div class="hbox gap(10) b(orange) p(10)">
+  <div class="hbox gap(20) p(10) b(orange)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
     <div class="w(48) h(48) bg(orange) pack">b</div>
     <div class="w(48) h(48) bg(orange) pack">o</div>
     <div class="w(48) h(48) bg(orange) pack">x</div>
-  </div>  
+  </div> 
+  
+  <h2>hbox + ✨gap(auto)</h2>
+
+  <div class="hbox gap(auto) p(10) b(orange)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(48) bg(orange) pack">b</div>
+    <div class="w(48) h(48) bg(orange) pack">o</div>
+    <div class="w(48) h(48) bg(orange) pack">x</div>
+  </div> 
 
 
   <h2>hbox(top)</h2>  
@@ -602,15 +604,6 @@ vbox
     <div class="w(48) h(50) bg(orange) pack">(top)</div>
   </div>
   
-  <h2>hbox(bottom)</h2>  
-  <div class="hbox(bottom) gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">b</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) h(24) bg(orange) pack">x</div>
-    <div class="p(10) h(50) bg(orange) pack">(bottom)</div>
-  </div>
-
   <h2>hbox(bottom+right)</h2>  
   <div class="hbox(bottom+right) gap(10) b(orange) p(10)">
     <div class="w(48) h(48) bg(orange) pack">h</div>
@@ -618,24 +611,6 @@ vbox
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) h(24) bg(orange) pack">x</div>
     <div class="p(10) h(50) bg(orange) pack">(bottom+right)</div>
-  </div>
-
-  <h2>hbox(fill)</h2>  
-  <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
-    <div class="w(48) bg(orange) pack">h</div>
-    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) bg(orange) pack">x</div>
-    <div class="p(10) bg(orange) pack">(fill)</div>
-  </div>
-
-  <h2>h(fill) = align-self:stretch</h2>  
-  <div class="hbox gap(10) b(orange) p(10)">
-    <div class="w(48) h(48) bg(orange) pack">h</div>
-    <div class="w(48) h(100) bg(orange) pack">b</div>
-    <div class="p(10) bg(orange) pack">o</div>
-    <div class="w(48) h(24) bg(orange) pack">x</div>
-    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
   </div>
 
   <h2>pack</h2>  
@@ -650,6 +625,37 @@ vbox
       <div>column</div>
     </div>
   </div>
+    
+  <br/>
+    
+  <h2>hbox(fill)</h2>  
+  <div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
+    <div class="w(48) bg(orange) pack">h</div>
+    <div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
+    <div class="p(10) bg(orange) pack">o</div>
+    <div class="w(48) bg(orange) pack">x</div>
+    <div class="p(10) bg(orange) pack">(fill)</div>
+  </div>
+
+  <h2>✨w(fill)</h2>  
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(100) bg(orange) pack">b</div>
+    <div class="w(fill) h(100) bg(orange) pack">w(fill)</div>
+    <div class="w(48) p(10) bg(orange) pack">o</div>
+    <div class="w(48) h(24) bg(orange) pack">x</div>
+  </div>
+
+  <h2>✨h(fill)</h2>  
+  <div class="hbox gap(10) b(orange) p(10)">
+    <div class="w(48) h(48) bg(orange) pack">h</div>
+    <div class="w(48) h(100) bg(orange) pack">b</div>
+    <div class="p(10) bg(orange) pack">o</div>
+    <div class="w(48) h(24) bg(orange) pack">x</div>
+    <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
+  </div>
+
+  <br/> 
   
   <h2>space-between / space-around / space-evenly</h2>  
 
@@ -669,17 +675,6 @@ vbox
     <div class="p(10) bg(orange) pack">space</div>
     <div class="p(10) bg(orange) pack">-</div>
     <div class="p(10) bg(orange) pack">evenly</div>
-  </div>
-
-
-  <h2>space / flex</h2>  
-
-  <div class="hbox b(orange) w(400)">
-    <div class="p(10) bg(orange) pack">space(8)</div>
-    <div class="space(8)"></div>
-    <div class="p(10) bg(orange) pack">vs</div>
-    <div class="flex"></div>
-    <div class="p(10) bg(orange)">flex</div>
   </div>
 </div>
 
@@ -1003,12 +998,12 @@ https://developer.mozilla.org/ko/docs/Web/CSS/Pseudo-elements
   </div>
 </div>
 
-`.trim(),Xe="vs",Ge=!0,je=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],qe={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},Ne={base:Xe,inherit:Ge,rules:je,colors:qe};function We(e){let t;return{c(){t=f("div"),this.h()},l(i){t=b(i,"DIV",{class:!0}),w(t).forEach(p),this.h()},h(){h(t,"class","h(100%)")},m(i,r){J(i,t,r),e[3](t)},p:Q,i:Q,o:Q,d(i){i&&p(t),e[3](null)}}}function Qe(e,t,i){let{value:r=""}=t,a=null,s;const _=l=>{s&&s.setValue(l)};ve(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>l};let l=URL.createObjectURL(new Blob([`
+`.trim(),Xe="vs",je=!0,qe=[{background:"FFFFFF",token:""},{foreground:"c41a16",token:"string"},{foreground:"1c00cf",token:"constant.numeric"},{foreground:"aa0d91",token:"keyword"},{foreground:"000000",token:"keyword.operator"},{foreground:"aa0d91",token:"constant.language"},{foreground:"990000",token:"support.class.exception"},{foreground:"000000",token:"entity.name.function"},{fontStyle:"bold underline",token:"entity.name.type"},{fontStyle:"italic",token:"variable.parameter"},{foreground:"888888",token:"comment"},{foreground:"ff0000",token:"invalid"},{background:"e71a1100",token:"invalid.deprecated.trailing-whitespace"},{foreground:"000000",background:"fafafafc",token:"text source"},{foreground:"aa0d91",token:"meta.tag"},{foreground:"aa0d91",token:"declaration.tag"},{foreground:"000000",fontStyle:"bold",token:"support"},{foreground:"aa0d91",token:"storage"},{fontStyle:"bold underline",token:"entity.name.section"},{foreground:"000000",fontStyle:"bold",token:"entity.name.function.frame"},{foreground:"333333",token:"meta.tag.preprocessor.xml"},{foreground:"994500",fontStyle:"italic",token:"entity.other.attribute-name"},{foreground:"881280",token:"entity.name.tag"}],Ge={"editor.foreground":"#000000","editor.background":"#FFFFFF","editor.selectionBackground":"#BAD6FD","editor.lineHighlightBackground":"#FFFFFF","editorCursor.foreground":"#000000","editorWhitespace.foreground":"#B3B3B3F4"},Ne={base:Xe,inherit:je,rules:qe,colors:Ge};function We(e){let t;return{c(){t=f("div"),this.h()},l(i){t=b(i,"DIV",{class:!0}),w(t).forEach(p),this.h()},h(){h(t,"class","h(100%)")},m(i,r){J(i,t,r),e[3](t)},p:Q,i:Q,o:Q,d(i){i&&p(t),e[3](null)}}}function Qe(e,t,i){let{value:r=""}=t,a=null,s;const _=l=>{s&&s.setValue(l)};ve(()=>{require.config({paths:{vs:"https://unpkg.com/monaco-editor@latest/min/vs"}}),window.MonacoEnvironment={getWorkerUrl:()=>l};let l=URL.createObjectURL(new Blob([`
 	self.MonacoEnvironment = {
 		baseUrl: 'https://unpkg.com/monaco-editor@latest/min/'
 	};
 	importScripts('https://unpkg.com/monaco-editor@latest/min/vs/base/worker/workerMain.js');
-`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",Ne),s=monaco.editor.create(a,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(x=>{i(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function c(l){j[l?"unshift":"push"](()=>{a=l,i(0,a)})}return e.$$set=l=>{"value"in l&&i(1,r=l.value)},[a,r,_,c]}class Ke extends de{constructor(t){super(),ce(this,t,Qe,We,ne,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}const Je=`
+`],{type:"text/javascript"}));return require(["vs/editor/editor.main"],function(){monaco.editor.defineTheme("adorableCSS",Ne),s=monaco.editor.create(a,{value:r,language:"html",automaticLayout:!0,scrollBeyondLastLine:!1,readOnly:!1,theme:"adorableCSS",tabSize:2,fontSize:"13px",overviewRulerLanes:0,wordWrap:"on",minimap:{enabled:!1}}),s.onDidChangeModelContent(x=>{i(1,r=s.getValue())}),s.addCommand(monaco.KeyMod.CtrlCmd|monaco.KeyCode.KeyS,function(){s.getAction("editor.action.formatDocument").run()})}),()=>{s&&s.dispose()}});function c(l){q[l?"unshift":"push"](()=>{a=l,i(0,a)})}return e.$$set=l=>{"value"in l&&i(1,r=l.value)},[a,r,_,c]}class Ke extends de{constructor(t){super(),ce(this,t,Qe,We,ne,{value:1,setValue:2})}get setValue(){return this.$$.ctx[2]}}const Je=`
 <!--
 
 TextBox (TextAlign)
@@ -1096,6 +1091,6 @@ z(value) => z-index: value;
   <div class="fixed(~0,0) bg(aqua)">fixed(~0,0)</div>
 </div>
 
-`.trim();function ae(e,t,i){const r=e.slice();return r[14]=t[i][0],r[15]=t[i][1],r[17]=i,r}function re(e){let t,i=e[14]+"",r,a,s;function _(){return e[10](e[14],e[15],e[17])}return{c(){t=f("div"),r=he(i),this.h()},l(c){t=b(c,"DIV",{class:!0});var l=w(t);r=pe(l,i),l.forEach(p),this.h()},h(){h(t,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),T(t,"selected",e[3]===e[17])},m(c,l){J(c,t,l),n(t,r),a||(s=K(t,"click",_),a=!0)},p(c,l){e=c,l&8&&T(t,"selected",e[3]===e[17])},d(c){c&&p(t),a=!1,s()}}}function $e(e){let t,i,r,a,s,_,c,l,x,z,L,y,S,k,H="Result",D,d,C="CSS Output",U,I,O,E,q,A,P,R,N,Z,F=se(e[6]),v=[];for(let o=0;o<F.length;o+=1)v[o]=re(ae(e,F,o));function fe(o){e[11](o)}let $={};return e[1]!==void 0&&($.value=e[1]),x=new Ke({props:$}),j.push(()=>be(x,"value",fe)),e[12](x),{c(){t=f("div"),i=f("div"),r=B(),a=f("div"),s=f("div");for(let o=0;o<v.length;o+=1)v[o].c();_=B(),c=f("div"),l=f("div"),ge(x.$$.fragment),L=B(),y=f("div"),S=f("div"),k=f("button"),k.textContent=H,D=B(),d=f("button"),d.textContent=C,U=B(),I=f("div"),O=f("div"),E=f("iframe"),q=B(),A=f("div"),P=he(e[2]),this.h()},l(o){t=b(o,"DIV",{class:!0});var g=w(t);i=b(g,"DIV",{class:!0}),w(i).forEach(p),r=V(g),a=b(g,"DIV",{class:!0});var m=w(a);s=b(m,"DIV",{class:!0});var u=w(s);for(let W=0;W<v.length;W+=1)v[W].l(u);u.forEach(p),_=V(m),c=b(m,"DIV",{class:!0});var M=w(c);l=b(M,"DIV",{class:!0});var ee=w(l);ue(x.$$.fragment,ee),ee.forEach(p),M.forEach(p),L=V(m),y=b(m,"DIV",{class:!0});var Y=w(y);S=b(Y,"DIV",{class:!0});var X=w(S);k=b(X,"BUTTON",{class:!0,"data-svelte-h":!0}),oe(k)!=="svelte-vq5vpt"&&(k.textContent=H),D=V(X),d=b(X,"BUTTON",{class:!0,"data-svelte-h":!0}),oe(d)!=="svelte-7thca6"&&(d.textContent=C),X.forEach(p),U=V(Y),I=b(Y,"DIV",{class:!0});var G=w(I);O=b(G,"DIV",{class:!0});var te=w(O);E=b(te,"IFRAME",{class:!0,frameborder:!0}),w(E).forEach(p),te.forEach(p),q=V(G),A=b(G,"DIV",{class:!0});var ie=w(A);P=pe(ie,e[2]),ie.forEach(p),G.forEach(p),Y.forEach(p),m.forEach(p),g.forEach(p),this.h()},h(){h(i,"class","h(60)"),h(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),h(l,"class","flex(4) vbox r(10) clip"),h(c,"class","flex(4) vbox p(10)"),h(k,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(k,"selected",e[4]==="Result"),h(d,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(d,"selected",e[4]==="CSS_output"),h(S,"class","hbox bg(#fff) font(12) c(#999)"),h(E,"class","layer w(100%) h(100%) bg(transparent)"),h(E,"frameborder","0"),h(O,"class","layer pack check-board none"),T(O,"none",e[4]!=="Result"),h(A,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),T(A,"none",e[4]!=="CSS_output"),h(I,"class","flex relative"),h(y,"class","flex(3) relative vbox c(#000) p(10) r(10)"),h(a,"class","flex hbox(fill) clip bg(#f9f9f9)"),h(t,"class","layer vbox overscroll(none)")},m(o,g){J(o,t,g),n(t,i),n(t,r),n(t,a),n(a,s);for(let m=0;m<v.length;m+=1)v[m]&&v[m].m(s,null);n(a,_),n(a,c),n(c,l),me(x,l,null),n(a,L),n(a,y),n(y,S),n(S,k),n(S,D),n(S,d),n(y,U),n(y,I),n(I,O),n(O,E),e[13](E),n(I,q),n(I,A),n(A,P),R=!0,N||(Z=[K(k,"click",e[7]),K(d,"click",e[8])],N=!0)},p(o,[g]){if(g&584){F=se(o[6]);let u;for(u=0;u<F.length;u+=1){const M=ae(o,F,u);v[u]?v[u].p(M,g):(v[u]=re(M),v[u].c(),v[u].m(s,null))}for(;u<v.length;u+=1)v[u].d(1);v.length=F.length}const m={};!z&&g&2&&(z=!0,m.value=o[1],we(()=>z=!1)),x.$set(m),(!R||g&16)&&T(k,"selected",o[4]==="Result"),(!R||g&16)&&T(d,"selected",o[4]==="CSS_output"),(!R||g&16)&&T(O,"none",o[4]!=="Result"),(!R||g&4)&&xe(P,o[2]),(!R||g&16)&&T(A,"none",o[4]!=="CSS_output")},i(o){R||(ye(x.$$.fragment,o),R=!0)},o(o){ke(x.$$.fragment,o),R=!1},d(o){o&&p(t),_e(v,o),e[12](null),Se(x),e[13](null),N=!1,Te(Z)}}}function et(e,t,i){let r,a,s=le;const _=[["Hello AdorableCSS!",le],["1. Colors",Ae],["2. Typography",Fe],["✨3. TextBox(TextAlign)",Je],["4. Box Model",Be],["5. Overflow",Ve],["6. Flexbox",ze],["✨7. Position",Ze],["8. Layer",De],["9. Visibility",He],["10. Hover, Active",Me],["11. Pseudo Class",Pe],["12. Pseudo Element",Ye],["13. Media Query",Le],["14. Selector",Ce],["15. Important!",Ue],["16. Grouping +",Ee],["계속 작업 중입니다...",""]];let c=0,l="Result";const x=()=>i(4,l="Result"),z=()=>i(4,l="CSS_output"),L=(d,C,U)=>{i(1,s=C),i(3,c=U),y.setValue(C),location.hash=String(c)};let y;ve(()=>{const d=+location.hash.slice(1);d>0&&(i(3,c=d),L(..._[c],c))});const S=(d,C,U)=>L(d,C,U);function k(d){s=d,i(1,s)}function H(d){j[d?"unshift":"push"](()=>{y=d,i(5,y)})}function D(d){j[d?"unshift":"push"](()=>{a=d,i(0,a),i(2,r),i(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&i(2,r=Re+Ie(Oe(s)).join(`
+`.trim();function ae(e,t,i){const r=e.slice();return r[14]=t[i][0],r[15]=t[i][1],r[17]=i,r}function re(e){let t,i=e[14]+"",r,a,s;function _(){return e[10](e[14],e[15],e[17])}return{c(){t=f("div"),r=he(i),this.h()},l(c){t=b(c,"DIV",{class:!0});var l=w(t);r=pe(l,i),l.forEach(p),this.h()},h(){h(t,"class","c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"),T(t,"selected",e[3]===e[17])},m(c,l){J(c,t,l),n(t,r),a||(s=K(t,"click",_),a=!0)},p(c,l){e=c,l&8&&T(t,"selected",e[3]===e[17])},d(c){c&&p(t),a=!1,s()}}}function $e(e){let t,i,r,a,s,_,c,l,x,z,A,y,S,k,H="Result",D,d,C="CSS Output",U,I,O,E,G,L,P,R,N,Z,F=se(e[6]),v=[];for(let o=0;o<F.length;o+=1)v[o]=re(ae(e,F,o));function fe(o){e[11](o)}let $={};return e[1]!==void 0&&($.value=e[1]),x=new Ke({props:$}),q.push(()=>be(x,"value",fe)),e[12](x),{c(){t=f("div"),i=f("div"),r=B(),a=f("div"),s=f("div");for(let o=0;o<v.length;o+=1)v[o].c();_=B(),c=f("div"),l=f("div"),ge(x.$$.fragment),A=B(),y=f("div"),S=f("div"),k=f("button"),k.textContent=H,D=B(),d=f("button"),d.textContent=C,U=B(),I=f("div"),O=f("div"),E=f("iframe"),G=B(),L=f("div"),P=he(e[2]),this.h()},l(o){t=b(o,"DIV",{class:!0});var g=w(t);i=b(g,"DIV",{class:!0}),w(i).forEach(p),r=V(g),a=b(g,"DIV",{class:!0});var m=w(a);s=b(m,"DIV",{class:!0});var u=w(s);for(let W=0;W<v.length;W+=1)v[W].l(u);u.forEach(p),_=V(m),c=b(m,"DIV",{class:!0});var M=w(c);l=b(M,"DIV",{class:!0});var ee=w(l);ue(x.$$.fragment,ee),ee.forEach(p),M.forEach(p),A=V(m),y=b(m,"DIV",{class:!0});var Y=w(y);S=b(Y,"DIV",{class:!0});var X=w(S);k=b(X,"BUTTON",{class:!0,"data-svelte-h":!0}),oe(k)!=="svelte-vq5vpt"&&(k.textContent=H),D=V(X),d=b(X,"BUTTON",{class:!0,"data-svelte-h":!0}),oe(d)!=="svelte-7thca6"&&(d.textContent=C),X.forEach(p),U=V(Y),I=b(Y,"DIV",{class:!0});var j=w(I);O=b(j,"DIV",{class:!0});var te=w(O);E=b(te,"IFRAME",{class:!0,frameborder:!0}),w(E).forEach(p),te.forEach(p),G=V(j),L=b(j,"DIV",{class:!0});var ie=w(L);P=pe(ie,e[2]),ie.forEach(p),j.forEach(p),Y.forEach(p),m.forEach(p),g.forEach(p),this.h()},h(){h(i,"class","h(60)"),h(s,"class","vbox w(240) monospace(number) p(10) scroll-y"),h(l,"class","flex(4) vbox r(10) clip"),h(c,"class","flex(4) vbox p(10)"),h(k,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(k,"selected",e[4]==="Result"),h(d,"class","p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"),T(d,"selected",e[4]==="CSS_output"),h(S,"class","hbox bg(#fff) font(12) c(#999)"),h(E,"class","layer w(100%) h(100%) bg(transparent)"),h(E,"frameborder","0"),h(O,"class","layer pack check-board none"),T(O,"none",e[4]!=="Result"),h(L,"class","layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"),T(L,"none",e[4]!=="CSS_output"),h(I,"class","flex relative"),h(y,"class","flex(3) relative vbox c(#000) p(10) r(10)"),h(a,"class","flex hbox(fill) clip bg(#f9f9f9)"),h(t,"class","layer vbox overscroll(none)")},m(o,g){J(o,t,g),n(t,i),n(t,r),n(t,a),n(a,s);for(let m=0;m<v.length;m+=1)v[m]&&v[m].m(s,null);n(a,_),n(a,c),n(c,l),me(x,l,null),n(a,A),n(a,y),n(y,S),n(S,k),n(S,D),n(S,d),n(y,U),n(y,I),n(I,O),n(O,E),e[13](E),n(I,G),n(I,L),n(L,P),R=!0,N||(Z=[K(k,"click",e[7]),K(d,"click",e[8])],N=!0)},p(o,[g]){if(g&584){F=se(o[6]);let u;for(u=0;u<F.length;u+=1){const M=ae(o,F,u);v[u]?v[u].p(M,g):(v[u]=re(M),v[u].c(),v[u].m(s,null))}for(;u<v.length;u+=1)v[u].d(1);v.length=F.length}const m={};!z&&g&2&&(z=!0,m.value=o[1],we(()=>z=!1)),x.$set(m),(!R||g&16)&&T(k,"selected",o[4]==="Result"),(!R||g&16)&&T(d,"selected",o[4]==="CSS_output"),(!R||g&16)&&T(O,"none",o[4]!=="Result"),(!R||g&4)&&xe(P,o[2]),(!R||g&16)&&T(L,"none",o[4]!=="CSS_output")},i(o){R||(ye(x.$$.fragment,o),R=!0)},o(o){ke(x.$$.fragment,o),R=!1},d(o){o&&p(t),_e(v,o),e[12](null),Se(x),e[13](null),N=!1,Te(Z)}}}function et(e,t,i){let r,a,s=le;const _=[["Hello AdorableCSS!",le],["1. Colors",Le],["2. Typography",Fe],["✨3. TextBox(align)",Je],["4. Box Model",Be],["5. Overflow",Ve],["✨6. Flexbox",ze],["✨7. Position",Ze],["8. Layer",De],["9. Visibility",He],["10. Hover, Active",Me],["11. Pseudo Class",Pe],["12. Pseudo Element",Ye],["13. Media Query",Ae],["14. Selector",Ce],["15. Important!",Ue],["16. Grouping +",Ee],["계속 작업 중입니다...",""]];let c=0,l="Result";const x=()=>i(4,l="Result"),z=()=>i(4,l="CSS_output"),A=(d,C,U)=>{i(1,s=C),i(3,c=U),y.setValue(C),location.hash=String(c)};let y;ve(()=>{const d=+location.hash.slice(1);d>0&&(i(3,c=d),A(..._[c],c))});const S=(d,C,U)=>A(d,C,U);function k(d){s=d,i(1,s)}function H(d){q[d?"unshift":"push"](()=>{y=d,i(5,y)})}function D(d){q[d?"unshift":"push"](()=>{a=d,i(0,a),i(2,r),i(1,s)})}return e.$$.update=()=>{e.$$.dirty&2&&i(2,r=Re+Ie(Oe(s)).join(`
 `)),e.$$.dirty&7&&a&&i(0,a.contentWindow.document.body.innerHTML=`<style>${r}</style>
-`+s,a)},[a,s,r,c,l,y,_,x,z,L,S,k,H,D]}class ot extends de{constructor(t){super(),ce(this,t,et,$e,ne,{})}}export{ot as default};
+`+s,a)},[a,s,r,c,l,y,_,x,z,A,S,k,H,D]}class ot extends de{constructor(t){super(),ce(this,t,et,$e,ne,{})}}export{ot as default};
