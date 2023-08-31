@@ -20211,7 +20211,7 @@ var RULES = {
   "flex-direction:": (value) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
   "gap": (value) => {
     if (value === "auto")
-      return "justify-content:space-between;align-content:space-between;";
+      return "&{justify-content:space-between;align-content:space-between;}&>:only-child{margin:auto}";
     return `gap:${makeSide(value)};grid-gap:${makeSide(value)};`;
   },
   // @NOTE:IE,safari<=13

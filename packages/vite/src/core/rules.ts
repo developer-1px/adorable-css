@@ -395,7 +395,7 @@ export const RULES:Rules = {
   "flex-direction:": (value:string) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
 
   "gap": (value:string) => {
-    if (value === "auto") return "justify-content:space-between;align-content:space-between;"
+    if (value === "auto") return "&{justify-content:space-between;align-content:space-between;}&>:only-child{margin:auto}"
     return `gap:${makeSide(value)};grid-gap:${makeSide(value)};`
   },
 

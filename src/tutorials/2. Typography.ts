@@ -21,8 +21,9 @@ word-spacing(1.5)
 
 2. font-weight
 
-thin {font-weight:200;}
-light {font-weight:300;}
+thin {font-weight:100;}
+light {font-weight:200;}
+demilight {font-weight:300;}
 regular {font-weight:normal}
 medium {font-weight:500;}
 semibold {font-weight:600;}
@@ -45,9 +46,7 @@ heavy {font-weight:900;}
 italic {font-style:italic}
 overline {text-decoration:overline}
 underline {text-decoration:underline}
-line-through {text-decoration:line-through}
-strike {text-decoration:line-through}
-del {text-decoration:line-through}
+line-through, strike, del {text-decoration:line-through}
 
 sans-serif {font-family:sans-serif}
 serif {font-family:serif}
@@ -79,11 +78,11 @@ capitalize {text-transform:capitalize}
     <div class="font(20/3)">font<br/>(20/3)</div>
   </div>
 
-
   <h1>Font Weight</h1>
 
   <div class="thin">thin</div>
   <div class="light">light</div>
+  <div class="demilight">demilight</div>
   <div class="regular">regular</div>
   <div class="medium">medium</div>
   <div class="semibold">semibold</div>
@@ -126,15 +125,6 @@ capitalize {text-transform:capitalize}
   <div class="lowercase">lowercase</div>
   <div class="uppercase">uppercase</div>
   <div class="capitalize">capitalize</div>
-
-
-  <h1>text-align</h1>
-
-  <div class="text-left">text-left</div>
-  <div class="text-center">text-center</div>
-  <div class="text-right">text-right</div>
-  <div class="text-justify">text-justify</div>
-
 </div>
 
 `.trim()
