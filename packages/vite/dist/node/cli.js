@@ -20201,6 +20201,7 @@ var RULES = {
   // -- Flexbox Layout
   "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
   "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
+  "wrap": (value = "") => `&{display:flex;flex-flow:wrap;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
   "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
   "hpack": () => `&{display:flex;flex-flow:row;align-items:center;justify-content:center;}${makeHBoxFill()}`,
   "vpack": () => `&{display:flex;flex-flow:column;align-items:center;justify-content:center;}${makeVBoxFill()}`,
