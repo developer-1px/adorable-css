@@ -3,6 +3,7 @@
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
+img{text-indent:-9999px;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -75,6 +76,7 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .w\(800\){width:800px;}
 .h\(60\){height:60px;}
 .h\(100\%\){height:100%;}
+.max-h\(60vh\){max-height:60vh;}
 .m\(20\){margin:20px;}
 .m\(10\/0\){margin:10px 0;}
 .\>h1\:m\(20\)>h1{margin:20px;}
