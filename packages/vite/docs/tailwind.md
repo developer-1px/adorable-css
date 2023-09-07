@@ -161,7 +161,7 @@ tailwindCSS를 쓰면서 또 아쉬웠던 부분은 flexbox 및 layout 관련 �
 
 > `items-*` `content-*` `justify-content-*` `justify-*`
 align-items? align-content? justify-content? justify-items?
-flexbox를 다루다보면 정말 헷가리는 속성들! 조금더 쉽게 다룰 수는 없을까?
+flexbox를 다루다보면 정말 헷갈리는 속성들! 조금더 쉽게 다룰 수는 없을까?
 
 이러한 문법은 가장 많이쓰는 디자인 핸드오프 툴인 figma에서 영감을 받아 AutoLayout과 유사한 형태로 작성할 수 있게 하여 간결함과 생산성을 높였습니다.
 
@@ -203,7 +203,7 @@ TailwindCSS를 하다보면 TailwindCSS로 할 수 없는 상황이 나오곤 �
 
 라는 생각으로 만들어진 AdorableCSS는 누구나 쉽게 쓸 수 있도록 만들어졌습니다.
 
-사용헤본 사람은 알겠지만 tailwindCSS는 사용하기 쉽지만 익숙해지기까지는 시간이 필요합니다. 
+사용해 본 사람은 알겠지만 tailwindCSS는 사용하기 쉽지만 익숙해지기까지는 시간이 필요합니다. 
 
 그러나 AdorableCSS는 tailwindCSS와 비슷한 문법을 제공하면서도 더 직관적이고 익숙한 문법을 제공하고 있습니다.
 
