@@ -173,7 +173,6 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     generateBundle(options, bundle:Record<string, { fileName:string, type:string, source:string }>) {
       const adorableCSS = makeStyle()
       for (const chunk of Object.values(bundle)) {
-        if (!chunk.fileName.endsWith(".css")) continue
         if (chunk.type === "asset" && typeof chunk.source === "string") {
           chunk.source = chunk.source.replace(BUILD_PLACEHOLDER, adorableCSS)
         }

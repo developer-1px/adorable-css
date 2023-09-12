@@ -6,6 +6,7 @@ export const reset = `
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
+img{text-indent:-9999px;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -173,6 +174,8 @@ export const RULES:Rules = {
 
     return `width:${px(value)};`
   },
+  "min-w": (value:string) => `min-width:${px(value)};`,
+  "max-w": (value:string) => `max-width:${px(value)};`,
 
   "h": (value:string) => {
     if (value === "hug") return "height:max-content;"
@@ -199,6 +202,8 @@ export const RULES:Rules = {
 
     return `height:${px(value)};`
   },
+  "min-h": (value:string) => `min-height:${px(value)};`,
+  "max-h": (value:string) => `max-height:${px(value)};`,
 
   // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
@@ -371,7 +376,7 @@ export const RULES:Rules = {
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
   "break-spaces": () => `white-space:break-spaces;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap": () => `white-space:nowrap;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
 
   // line-clamp vs max-lines

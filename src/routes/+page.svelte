@@ -1,5 +1,5 @@
 <script lang="ts">
-const slide = "text-center vbox pack p(200/32) max-h(60vh) odd:bg(#f9f9f9) clip"
+const slide = "text-center vbox pack p(200/32) odd:bg(#f9f9f9) clip"
 const h1 = "font(3em/-/-1.5%) bold ~md:font(1.6em)"
 const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
 </script>

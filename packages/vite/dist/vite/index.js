@@ -3742,6 +3742,7 @@ var reset = `
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
+img{text-indent:-9999px;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -3886,6 +3887,8 @@ var RULES = {
     }
     return `width:${px(value)};`;
   },
+  "min-w": (value) => `min-width:${px(value)};`,
+  "max-w": (value) => `max-width:${px(value)};`,
   "h": (value) => {
     if (value === "hug")
       return "height:max-content;";
@@ -3908,6 +3911,8 @@ var RULES = {
     }
     return `height:${px(value)};`;
   },
+  "min-h": (value) => `min-height:${px(value)};`,
+  "max-h": (value) => `max-height:${px(value)};`,
   // BoxModel - Margin
   "m": (value) => `margin:${makeSide(value)};`,
   "mx": (value) => `margin-left:${px(value)};margin-right:${px(value)};`,
@@ -4793,8 +4798,6 @@ var adorableCSS = (config) => {
     generateBundle(options, bundle) {
       const adorableCSS2 = makeStyle();
       for (const chunk of Object.values(bundle)) {
-        if (!chunk.fileName.endsWith(".css"))
-          continue;
         if (chunk.type === "asset" && typeof chunk.source === "string") {
           chunk.source = chunk.source.replace(BUILD_PLACEHOLDER, adorableCSS2);
         }

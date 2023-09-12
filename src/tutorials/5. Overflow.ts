@@ -23,9 +23,9 @@ overscroll-y(value) { overscroll-behavior-y:<value>}
 
 Overflow + Text
 
-nowrap {white-space:nowrap;flex-shrink:0;}
+nowrap {white-space:nowrap;}
 nowrap... {white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1}
-line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-orient:vertical;overflow:hidden }
+line-clamp(value) {display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-orient:vertical;overflow:hidden}
 -->
 
 
@@ -54,7 +54,7 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 <div class="vbox gap(20)">
 
   <h2>nowrap</h2>
-  <div class="w(200) bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
+  <div class="bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
   <h2>nowrap clip</h2>
@@ -70,9 +70,9 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
     <div class="line-clamp(2)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
   </div>
 
-  <h2>line-clamp(3)</h2>
+  <h2>max-lines(3)</h2>
   <div class="w(200) bg(#eee) b(red)">
-    <div class="line-clamp(3)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
+    <div class="max-lines(3)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
   </div>
 </div>
 

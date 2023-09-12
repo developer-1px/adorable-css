@@ -1,3 +1,12 @@
+## 1.4.9
+- `min-w`, `min-h`, `max-w`, `max-h` 기능이 추가되었습니다.
+
+## 1.4.8
+- `wrap`: `display:flex;flex-flow:wrap;` 기능이 추가되었습니다.
+
+## 1.4.7
+- `gap(auto)!`시 `important!`가 적용되지 않던 버그를 수정하였습니다.
+
 ## 1.4.6
 - `gap(auto)`시 엘리먼트가 하나라면 figma에서처럼 가운데 정렬하도록 개선하였습니다.
 
