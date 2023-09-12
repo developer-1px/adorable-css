@@ -1,4 +1,4 @@
-import{S as de,i as ce,s as ne,e as f,c as b,b as w,f as p,o as h,h as J,n as Q,M as ve,Q as G,R as be,a as B,u as ge,t as he,g as V,v as ue,m as oe,d as pe,T,j as n,w as me,r as K,U as we,k as xe,x as ye,y as ke,V as _e,z as Se,G as Te}from"../../../chunks/index-bc0b20f1.js";import{r as Re,g as Ie,p as Oe}from"../../../chunks/atomizer-1eee48ec.js";function se(e){return(e==null?void 0:e.length)!==void 0?e:Array.from(e)}const le=`
+import{S as de,i as ce,s as ne,e as f,c as b,b as w,f as p,o as h,h as J,n as Q,M as ve,Q as G,R as be,a as B,u as ge,t as he,g as V,v as ue,m as oe,d as pe,T,j as n,w as me,r as K,U as we,k as xe,x as ye,y as ke,V as _e,z as Se,G as Te}from"../../../chunks/index-bc0b20f1.js";import{r as Re,g as Ie,p as Oe}from"../../../chunks/atomizer-59956704.js";function se(e){return(e==null?void 0:e.length)!==void 0?e:Array.from(e)}const le=`
 <!--
 ฅ^•ﻌ•^ฅ ♥
 
@@ -440,9 +440,9 @@ overscroll-y(value) { overscroll-behavior-y:<value>}
 
 Overflow + Text
 
-nowrap {white-space:nowrap;flex-shrink:0;}
+nowrap {white-space:nowrap;}
 nowrap... {white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1}
-line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-orient:vertical;overflow:hidden }
+line-clamp(value) {display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-orient:vertical;overflow:hidden}
 -->
 
 
@@ -471,7 +471,7 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
 <div class="vbox gap(20)">
 
   <h2>nowrap</h2>
-  <div class="w(200) bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
+  <div class="bg(#eee) b(red) nowrap">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.
   </div>
 
   <h2>nowrap clip</h2>
@@ -487,9 +487,9 @@ line-clamp(value) { display:-webkit-box;-webkit-line-clamp:<value>;-webkit-box-o
     <div class="line-clamp(2)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
   </div>
 
-  <h2>line-clamp(3)</h2>
+  <h2>max-lines(3)</h2>
   <div class="w(200) bg(#eee) b(red)">
-    <div class="line-clamp(3)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
+    <div class="max-lines(3)">You can use the overflow property when you want to have better control of the layout. The overflow property specifies what happens if content overflows an element's box.</div>
   </div>
 </div>
 
