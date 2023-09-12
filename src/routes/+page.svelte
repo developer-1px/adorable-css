@@ -1,10 +1,10 @@
 <script lang="ts">
-const slide = "text-center vbox pack p(200/32) max-h(60vh) odd:bg(#f9f9f9) clip"
+const slide = "text-center vbox pack p(200/32) odd:bg(#f9f9f9) clip"
 const h1 = "font(3em/-/-1.5%) bold ~md:font(1.6em)"
 const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
 </script>
 
-<div class="{slide} gap(40)">
+<div class="{slide} gap(40) max-h(60vh)">
   <div class="hbox font(80/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
     <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
     <span>^•ﻌ•^</span>
