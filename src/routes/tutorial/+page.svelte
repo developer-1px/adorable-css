@@ -20,6 +20,7 @@ import {onMount} from "svelte"
 import MonacoEditor from "../../screens/MonacoEditor.svelte"
 import {TURORIAL_TEXTBOX} from "../../tutorials/TextBox";
 import {TUTORIAL_LAYOUT_POSITION} from "src/tutorials/Position";
+import {TUROTIAL_DARKMODE} from "src/tutorials/DarkMode"
 
 let element:HTMLElement
 let value = TURORIAL_0_Hello
@@ -42,6 +43,7 @@ const tutorials = [
   ["14. Selector", TURORIAL_11_Selector],
   ["15. Important!", TURORIAL_12_Important],
   ["16. Grouping +", TURORIAL_14_Grouping],
+  ["✨17. DarkMode", TUROTIAL_DARKMODE],
   ["계속 작업 중입니다...", ""]
 ]
 
@@ -76,28 +78,32 @@ onMount(() => {
   <div class="h(60)"/>
 
   <div class="flex hbox(fill) clip bg(#f9f9f9)">
-    <div class="vbox w(240) monospace(number) p(10) scroll-y">
+    <div class="w(200) vbox monospace(number) p(10) scroll-y">
       {#each tutorials as [title, code], index}
-        <div class="c(#000) pointer p(10/20) r(10) hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!" class:selected={currentTutorialIndex === index} on:click={() => 튜토리얼_선택(title, code, index)}>{title}</div>
+        <div class="p(6/8) r(4) font(13) c(#000) pointer hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"
+             class:selected={currentTutorialIndex === index} on:click={() => 튜토리얼_선택(title, code, index)}>{title}</div>
       {/each}
     </div>
 
     <div class="flex(4) vbox p(10)">
-      <div class="flex(4) vbox r(10) clip">
-        <MonacoEditor bind:value bind:this={editor}/>
-      </div>
+      <MonacoEditor bind:value bind:this={editor}/>
     </div>
 
-    <div class="flex(3) relative vbox c(#000) p(10) r(10)">
+    <div class="flex(3) relative vbox c(#000) p(10) r(4)">
       <div class="hbox bg(#fff) font(12) c(#999)">
-        <button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)" class:selected={type === "Result"} on:click={Result}>Result</button>
-        <button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)" class:selected={type === "CSS_output"} on:click={CSS_output}>CSS Output</button>
+        <button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"
+                class:selected={type === "Result"} on:click={Result}>Result
+        </button>
+        <button class="p(8/12) pt(12) bb(4/transparent) .selected:bbc(--primary) .selected:c(#000)"
+                class:selected={type === "CSS_output"} on:click={CSS_output}>CSS Output
+        </button>
       </div>
       <div class="flex relative">
         <div class="layer pack check-board none" class:none={type !== "Result"}>
           <iframe bind:this={element} class="layer w(100%) h(100%) bg(transparent)" frameborder="0"/>
         </div>
-        <div class="layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none" class:none={type !== "CSS_output"}>{css}</div>
+        <div class="layer bg(#f9f9f9) pre monospace font(12) p(10) scroll-y none"
+             class:none={type !== "CSS_output"}>{css}</div>
       </div>
     </div>
   </div>

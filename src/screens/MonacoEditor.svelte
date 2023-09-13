@@ -34,7 +34,7 @@ onMount(() => {
       readOnly: false,
       theme: "adorableCSS",
       tabSize: 2,
-      fontSize: "13px",
+      fontSize: "12px",
       overviewRulerLanes: 0,
       wordWrap: "on",
       minimap: {
@@ -50,6 +50,10 @@ onMount(() => {
       editor.getAction("editor.action.formatDocument").run()
       return
     })
+
+    window.addEventListener("resize", () => {
+      editor.layout()
+    })
   })
 
   return () => {
@@ -59,3 +63,7 @@ onMount(() => {
 </script>
 
 <div bind:this={element} class="h(100%)"/>
+
+<style>
+:global(.monaco-editor) { position: absolute !important; }
+</style>

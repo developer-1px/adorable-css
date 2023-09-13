@@ -3,11 +3,15 @@
 > 불친절한 문서 양해 부탁드려요. 계속해서 업데이트 해나가겠습니다! 😅
 
 ```ts
+import {PrefixRules, Rules} from "./atomizer"
+import {cssvar, deg, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeNumber, makePosition2X, makePosition2Y, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxFill, makeVBoxWithSemi, percentToEm, px, rpx} from "./makeValue"
+
 export const reset = `
 *,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
 :root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 html,body{height:100%;}
 img,picture,video,canvas{display:block;max-width:100%;}
+img{text-indent:-9999px;}
 button{background:none;border:0;cursor:pointer;}
 a{text-decoration:none;}
 table{border-collapse:collapse;border-spacing:0;}
@@ -69,9 +73,8 @@ export const RULES:Rules = {
   "800": () => `font-weight:800;`,
   "900": () => `font-weight:900;`,
 
-  "thin": () => `font-weight:100;`,
-  "light": () => `font-weight:200;`,
-  "demilight": () => `font-weight:300;`,
+  "thin": () => `font-weight:200;`,
+  "light": () => `font-weight:300;`,
   "regular": () => `font-weight:normal;`,
   "medium": () => `font-weight:500;`,
   "semibold": () => `font-weight:600;`,
@@ -176,6 +179,8 @@ export const RULES:Rules = {
 
     return `width:${px(value)};`
   },
+  "min-w": (value:string) => `min-width:${px(value)};`,
+  "max-w": (value:string) => `max-width:${px(value)};`,
 
   "h": (value:string) => {
     if (value === "hug") return "height:max-content;"
@@ -202,6 +207,8 @@ export const RULES:Rules = {
 
     return `height:${px(value)};`
   },
+  "min-h": (value:string) => `min-height:${px(value)};`,
+  "max-h": (value:string) => `max-height:${px(value)};`,
 
   // BoxModel - Margin
   "m": (value:string) => `margin:${makeSide(value)};`,
@@ -374,7 +381,7 @@ export const RULES:Rules = {
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
   "break-spaces": () => `white-space:break-spaces;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap": () => `white-space:nowrap;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
 
   // line-clamp vs max-lines
@@ -387,6 +394,7 @@ export const RULES:Rules = {
   // -- Flexbox Layout
   "hbox": (value = "") => `&{display:flex;flex-flow:row;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
   "vbox": (value = "") => `&{display:flex;flex-flow:column;${makeVBoxWithSemi(value)}}${makeVBoxFill()}`,
+  "wrap": (value = "") => `&{display:flex;flex-flow:wrap;${makeHBoxWithSemi(value)}}${makeHBoxFill()}`,
   "pack": () => `&{display:flex;align-items:center;justify-content:center;}${makeHBoxFill()}`,
   "hpack": () => `&{display:flex;flex-flow:row;align-items:center;justify-content:center;}${makeHBoxFill()}`,
   "vpack": () => `&{display:flex;flex-flow:column;align-items:center;justify-content:center;}${makeVBoxFill()}`,
@@ -398,7 +406,7 @@ export const RULES:Rules = {
   "flex-direction:": (value:string) => `&{flex-direction:${value};}${makeBoxFill(value)}`,
 
   "gap": (value:string) => {
-    if (value === "auto") return "&{justify-content:space-between;align-content:space-between;}&>:only-child{margin:auto}"
+    if (value === "auto") return "&{justify-content:space-between;align-content:space-between;}&>:only-child{margin:auto;}"
     return `gap:${makeSide(value)};grid-gap:${makeSide(value)};`
   },
 
@@ -804,6 +812,7 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   // "touch:":{media:`(hover:none)`,selector:`html &`},
   // "!touch:":{media:`(hover:hover)`,selector:`html &`},
 
+  // @TBD: don't use it!
   "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
   "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},
 
@@ -815,7 +824,7 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   "speech:": {media: `speech`, selector: `html &`},
 
   // dark:@TBD
-  "dark:": {selector: `html.dark &`},
+  "dark:": {selector: `@media(prefers-color-scheme:dark){html &{...}}\nhtml.dark &{...}`},
 }
 
 export const AT_RULE = {
@@ -853,6 +862,4 @@ export const PREFIX_SELECTOR:Record<string, (selector:string) => string> = {
 }
 
 // "~": (selector:string) => `&${selector}`,
-
-
 ```

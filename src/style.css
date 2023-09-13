@@ -1,6 +1,7 @@
 :root {
   font-family:Pretendard, system-ui, sans-serif;
   color:#222;
+  font-size:14px;
   --primary:#fb3958;
   --primary-bg:rgba(251, 57, 88, .02);
 }

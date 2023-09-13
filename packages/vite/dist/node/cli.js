@@ -20196,7 +20196,7 @@ var RULES = {
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
   "break-spaces": () => `white-space:break-spaces;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap": () => `white-space:nowrap;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
   // line-clamp vs max-lines
   // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
@@ -20562,6 +20562,7 @@ var PREFIX_MEDIA_QUERY = {
   "!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
   // "touch:":{media:`(hover:none)`,selector:`html &`},
   // "!touch:":{media:`(hover:hover)`,selector:`html &`},
+  // @TBD: don't use it!
   "touch:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
   "!touch:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "portrait:": { media: `(orientation:portrait)`, selector: `html &` },
@@ -20570,7 +20571,8 @@ var PREFIX_MEDIA_QUERY = {
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
   // dark:@TBD
-  "dark:": { selector: `html.dark &` }
+  "dark:": { selector: `@media(prefers-color-scheme:dark){html &{...}}
+html.dark &{...}` }
 };
 var AT_RULE = {
   "@w": (ident, tokens2) => {
@@ -20804,7 +20806,15 @@ var generateAtomicCss = (rules, prefixRules) => {
         if (!declaration) {
           throw new Error("no declaration");
         }
-        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
+        let rule = selector;
+        if (selector.includes("&")) {
+          rule = selector.replace(/&/g, atom);
+        }
+        if (selector.includes("{...}")) {
+          rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}");
+        } else {
+          rule = rule + "{" + declaration + "}";
+        }
         const finalRule = media ? media + "{" + rule + "}" : rule;
         if (!validateCSS(finalRule)) {
           throw new Error("no validate css!!");
@@ -25680,10 +25690,10 @@ var PathScurryDarwin = class extends PathScurryPosix {
 var Path = process.platform === "win32" ? PathWin32 : PathPosix;
 var PathScurry = process.platform === "win32" ? PathScurryWin32 : process.platform === "darwin" ? PathScurryDarwin : PathScurryPosix;
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/glob.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/glob.js
 var import_url2 = require("url");
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/pattern.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/pattern.js
 var isPatternList = (pl) => pl.length >= 1;
 var isGlobList = (gl) => gl.length >= 1;
 var Pattern = class _Pattern {
@@ -25848,7 +25858,7 @@ var Pattern = class _Pattern {
   }
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/ignore.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/ignore.js
 var defaultPlatform2 = typeof process === "object" && process && typeof process.platform === "string" ? process.platform : "linux";
 var Ignore = class {
   relative;
@@ -25923,7 +25933,7 @@ var Ignore = class {
   }
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/processor.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/processor.js
 var HasWalkedCache = class _HasWalkedCache {
   store;
   constructor(store = /* @__PURE__ */ new Map()) {
@@ -26026,8 +26036,6 @@ var Processor = class _Processor {
       let changed = false;
       while (typeof (p = pattern.pattern()) === "string" && (rest = pattern.rest())) {
         const c = t.resolve(p);
-        if (c.isUnknown() && p !== "..")
-          break;
         t = c;
         pattern = rest;
         changed = true;
@@ -26040,12 +26048,8 @@ var Processor = class _Processor {
         this.hasWalkedCache.storeWalked(t, pattern);
       }
       if (typeof p === "string") {
-        if (!rest) {
-          const ifDir = p === ".." || p === "" || p === ".";
-          this.matches.add(t.resolve(p), absolute, ifDir);
-        } else {
-          this.subwalks.add(t, pattern);
-        }
+        const ifDir = p === ".." || p === "" || p === ".";
+        this.matches.add(t.resolve(p), absolute, ifDir);
         continue;
       } else if (p === GLOBSTAR) {
         if (!t.isSymbolicLink() || this.follow || pattern.checkFollowGlobstar()) {
@@ -26150,7 +26154,7 @@ var Processor = class _Processor {
   }
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/walker.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/walker.js
 var makeIgnore = (ignore, opts) => typeof ignore === "string" ? new Ignore([ignore], opts) : Array.isArray(ignore) ? new Ignore(ignore, opts) : ignore;
 var GlobUtil = class {
   path;
@@ -26454,7 +26458,7 @@ var GlobStream = class extends GlobUtil {
   }
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/glob.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/glob.js
 var defaultPlatform3 = typeof process === "object" && process && typeof process.platform === "string" ? process.platform : "linux";
 var Glob = class {
   absolute;
@@ -26645,7 +26649,7 @@ var Glob = class {
   }
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/has-magic.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/has-magic.js
 var hasMagic = (pattern, options = {}) => {
   if (!Array.isArray(pattern)) {
     pattern = [pattern];
@@ -26657,7 +26661,7 @@ var hasMagic = (pattern, options = {}) => {
   return false;
 };
 
-// ../../node_modules/.pnpm/glob@10.3.3/node_modules/glob/dist/mjs/index.js
+// ../../node_modules/.pnpm/glob@10.3.4/node_modules/glob/dist/mjs/index.js
 function globStreamSync(pattern, options = {}) {
   return new Glob(pattern, options).streamSync();
 }

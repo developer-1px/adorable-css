@@ -4060,7 +4060,7 @@ var RULES = {
   "pre-wrap": () => `white-space:pre-wrap;`,
   "pre-line": () => `white-space:pre-line;`,
   "break-spaces": () => `white-space:break-spaces;`,
-  "nowrap": () => `white-space:nowrap;flex-shrink:0;max-width:100%;`,
+  "nowrap": () => `white-space:nowrap;`,
   "nowrap...": () => `white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;max-width:100%;`,
   // line-clamp vs max-lines
   // @NOTE:일단 기존 프로퍼티에 의거한다는 원칙에따라 line-clamp를 쓴다. 이후 max-lines가 정식 스펙이 되면 deprecated한다.
@@ -4426,6 +4426,7 @@ var PREFIX_MEDIA_QUERY = {
   "!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
   // "touch:":{media:`(hover:none)`,selector:`html &`},
   // "!touch:":{media:`(hover:hover)`,selector:`html &`},
+  // @TBD: don't use it!
   "touch:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
   "!touch:": { media: `(min-device-width:1024px)`, selector: `html &` },
   "portrait:": { media: `(orientation:portrait)`, selector: `html &` },
@@ -4434,7 +4435,8 @@ var PREFIX_MEDIA_QUERY = {
   "screen:": { media: `screen`, selector: `html &` },
   "speech:": { media: `speech`, selector: `html &` },
   // dark:@TBD
-  "dark:": { selector: `html.dark &` }
+  "dark:": { selector: `@media(prefers-color-scheme:dark){html &{...}}
+html.dark &{...}` }
 };
 var AT_RULE = {
   "@w": (ident, tokens2) => {
@@ -4668,7 +4670,15 @@ var generateAtomicCss = (rules, prefixRules) => {
         if (!declaration) {
           throw new Error("no declaration");
         }
-        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}";
+        let rule = selector;
+        if (selector.includes("&")) {
+          rule = selector.replace(/&/g, atom);
+        }
+        if (selector.includes("{...}")) {
+          rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}");
+        } else {
+          rule = rule + "{" + declaration + "}";
+        }
         const finalRule = media ? media + "{" + rule + "}" : rule;
         if (!validateCSS(finalRule)) {
           throw new Error("no validate css!!");

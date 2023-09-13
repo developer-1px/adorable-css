@@ -285,7 +285,18 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
           throw new Error("no declaration")
         }
 
-        const rule = declaration.includes("&") ? declaration.replace(/&/g, selector) : selector + "{" + declaration + "}"
+        let rule = selector
+        if (selector.includes("&")) {
+          rule = selector.replace(/&/g, atom)
+        }
+
+        if (selector.includes("{...}")) {
+          rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}")
+        }
+        else {
+          rule = rule + "{" + declaration + "}"
+        }
+
         const finalRule = media ? media + "{" + rule + "}" : rule
 
         if (!validateCSS(finalRule)) {
@@ -309,10 +320,10 @@ export const createGenerateCss = (rules:Rules = {}, prefixRules:PrefixRules = {}
   prefixRules = {...PREFIX_RULES, ...prefixRules}
 
   return (classList:string[]) => classList
-  .flatMap(generateAtomicCss(rules, prefixRules))
-  .filter(Boolean)
-  .sort(sortByRule)
-  .map(a => a[0])
+    .flatMap(generateAtomicCss(rules, prefixRules))
+    .filter(Boolean)
+    .sort(sortByRule)
+    .map(a => a[0])
 }
 
 export const generateCss = createGenerateCss()

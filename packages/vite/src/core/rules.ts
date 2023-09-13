@@ -807,6 +807,7 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   // "touch:":{media:`(hover:none)`,selector:`html &`},
   // "!touch:":{media:`(hover:hover)`,selector:`html &`},
 
+  // @TBD: don't use it!
   "touch:": {media: `(max-device-width:1023.98px)`, selector: `html &`},
   "!touch:": {media: `(min-device-width:1024px)`, selector: `html &`},
 
@@ -818,7 +819,7 @@ export const PREFIX_MEDIA_QUERY:PrefixRules = {
   "speech:": {media: `speech`, selector: `html &`},
 
   // dark:@TBD
-  "dark:": {selector: `html.dark &`},
+  "dark:": {selector: `@media(prefers-color-scheme:dark){html &{...}}\nhtml.dark &{...}`},
 }
 
 export const AT_RULE = {
