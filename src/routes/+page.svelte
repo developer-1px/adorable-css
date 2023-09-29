@@ -18,7 +18,7 @@ const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
 </div>
 
 <div class="{slide}">
-  <h1 class="{h1}">No more writing own your CSS.</h1>
+  <h1 class="{h1}">No more writing your own CSS.</h1>
   <h2 class="{h2}">We have created almost all the CSS you need. Just write down in your HTML(or JSX).</h2>
   <div class="space(2em)"/>
   <img src="https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif"/>

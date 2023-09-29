@@ -23,7 +23,7 @@ CSS가 어려운 이유는 뭘까요? 그것은 바로 이름짓기 문제입니
 
 또한 ```.nav__title``` ```.nav__title--selected``` 어떤 식으로 구조를 짜야하는지 늘 혼란스러워 합니다.
 
-### No more writing own your CSS!
+### No more writing your own CSS!
 
 그렇다면 아예 CSS를 작성하지 않는 방법은 어떨까요?
 
