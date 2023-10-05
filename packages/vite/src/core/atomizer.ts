@@ -285,16 +285,17 @@ const generateAtomicCss = (rules:Rules, prefixRules:PrefixRules) => {
           throw new Error("no declaration")
         }
 
-        let rule = selector
-        if (selector.includes("&")) {
-          rule = selector.replace(/&/g, atom)
-        }
-
-        if (selector.includes("{...}")) {
-          rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}")
+        let rule = ""
+        if (declaration.includes("&")) {
+          rule = declaration.replace(/[&]/g, selector)
         }
         else {
-          rule = rule + "{" + declaration + "}"
+          if (selector.includes("{...}")) {
+            rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}")
+          }
+          else {
+            rule = selector + "{" + declaration + "}"
+          }
         }
 
         const finalRule = media ? media + "{" + rule + "}" : rule

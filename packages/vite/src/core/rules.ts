@@ -179,7 +179,7 @@ export const RULES:Rules = {
 
   "h": (value:string) => {
     if (value === "hug") return "height:max-content;"
-    if (value === "stretch" || value === "fill") return `flex-grow:var(--h-grow);align-self:var(--h-align)`
+    if (value === "stretch" || value === "fill") return `flex-grow:var(--h-grow);align-self:var(--h-align);flex-shrink:1;max-height:100%;`
 
     if (value.includes("~")) {
       const result = []

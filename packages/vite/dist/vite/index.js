@@ -3893,7 +3893,7 @@ var RULES = {
     if (value === "hug")
       return "height:max-content;";
     if (value === "stretch" || value === "fill")
-      return `flex-grow:var(--h-grow);align-self:var(--h-align)`;
+      return `flex-grow:var(--h-grow);align-self:var(--h-align);flex-shrink:1;max-height:100%;`;
     if (value.includes("~")) {
       const result = [];
       const values = value.split("~");
@@ -4670,14 +4670,15 @@ var generateAtomicCss = (rules, prefixRules) => {
         if (!declaration) {
           throw new Error("no declaration");
         }
-        let rule = selector;
-        if (selector.includes("&")) {
-          rule = selector.replace(/&/g, atom);
-        }
-        if (selector.includes("{...}")) {
-          rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}");
+        let rule = "";
+        if (declaration.includes("&")) {
+          rule = declaration.replace(/[&]/g, selector);
         } else {
-          rule = rule + "{" + declaration + "}";
+          if (selector.includes("{...}")) {
+            rule = selector.replace(new RegExp("{...}", "g"), "{" + declaration + "}");
+          } else {
+            rule = selector + "{" + declaration + "}";
+          }
         }
         const finalRule = media ? media + "{" + rule + "}" : rule;
         if (!validateCSS(finalRule)) {
