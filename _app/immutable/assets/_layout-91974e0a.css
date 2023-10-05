@@ -83,8 +83,8 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .\>h1\:m\(20\)>h1{margin:20px;}
 .mt\(40\){margin-top:40px;}
 .p\(10\/20\){padding:10px 20px;}
-.p\(10\){padding:10px;}
 .p\(20\){padding:20px;}
+.p\(10\){padding:10px;}
 .p\(6\/8\){padding:6px 8px;}
 .p\(8\/12\){padding:8px 12px;}
 .p\(200\/32\){padding:200px 32px;}
