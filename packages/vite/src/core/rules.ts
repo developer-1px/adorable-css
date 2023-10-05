@@ -151,7 +151,7 @@ export const RULES:Rules = {
   "w": (value:string) => {
     if (value === "hug") return "width:max-content;"
     if (value === "stretch" || value === "fill") {
-      return `&{flex-grow:var(--w-grow);flex-shrink:var(--w-shrink);align-self:var(--w-align);max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`
+      return `&{flex-grow:var(--w-grow);flex-shrink:var(--w-shrink);align-self:var(--w-align);max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;flex-shrink:1;align-self:stretch;max-width:100%;max-height:100%;}`
     }
 
     if (value.includes("~")) {
