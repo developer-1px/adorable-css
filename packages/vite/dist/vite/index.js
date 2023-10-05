@@ -3868,7 +3868,7 @@ var RULES = {
     if (value === "hug")
       return "width:max-content;";
     if (value === "stretch" || value === "fill") {
-      return `&{flex-grow:var(--w-grow);align-self:var(--w-align);flex-shrink:1;max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
+      return `&{flex-grow:var(--w-grow);flex-shrink:var(--w-grow);align-self:var(--w-align);max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
     }
     if (value.includes("~")) {
       const result = [];
@@ -3892,8 +3892,9 @@ var RULES = {
   "h": (value) => {
     if (value === "hug")
       return "height:max-content;";
-    if (value === "stretch" || value === "fill")
-      return `flex-grow:var(--h-grow);align-self:var(--h-align);flex-shrink:1;max-height:100%;`;
+    if (value === "stretch" || value === "fill") {
+      return `flex-grow:var(--h-grow);flex-shrink:var(--h-grow);align-self:var(--h-align);max-height:100%;`;
+    }
     if (value.includes("~")) {
       const result = [];
       const values = value.split("~");
