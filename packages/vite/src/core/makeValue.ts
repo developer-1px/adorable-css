@@ -201,8 +201,8 @@ export const makeVBoxWithSemi = (value = "") => {
   return [...new Set(result)].join("")
 }
 
-export const makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}"
-export const makeVBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}"
+export const makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-shrink:1;--w-align:initial;--h-grow:initial;--h-shrink:0;--h-align:stretch;}"
+export const makeVBoxFill = () => ":where(&>*){flex-shrink:0;--h-grow:1;--h-shrink:1;--h-align:initial;--w-grow:initial;--w-shrink:0;--w-align:stretch;}"
 
 export const makeBoxFill = (value:string) => {
   const val = value.split(/\s+/)

@@ -19775,8 +19775,8 @@ var makeVBoxWithSemi = (value = "") => {
   }
   return [...new Set(result)].join("");
 };
-var makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-align:initial;--h-grow:initial;--h-align:stretch;}";
-var makeVBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:initial;--w-align:stretch;--h-grow:1;--h-align:initial;}";
+var makeHBoxFill = () => ":where(&>*){flex-shrink:0;--w-grow:1;--w-shrink:1;--w-align:initial;--h-grow:initial;--h-shrink:0;--h-align:stretch;}";
+var makeVBoxFill = () => ":where(&>*){flex-shrink:0;--h-grow:1;--h-shrink:1;--h-align:initial;--w-grow:initial;--w-shrink:0;--w-align:stretch;}";
 var makeBoxFill = (value) => {
   const val = value.split(/\s+/);
   if (val.includes("row"))
@@ -20004,7 +20004,7 @@ var RULES = {
     if (value === "hug")
       return "width:max-content;";
     if (value === "stretch" || value === "fill") {
-      return `&{flex-grow:var(--w-grow);flex-shrink:var(--w-grow);align-self:var(--w-align);max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
+      return `&{flex-grow:var(--w-grow);flex-shrink:var(--w-shrink);align-self:var(--w-align);max-width:100%}&.h\\(fill\\),&.h\\(stretch\\){flex-grow:1;align-self:stretch;}`;
     }
     if (value.includes("~")) {
       const result = [];
@@ -20029,7 +20029,7 @@ var RULES = {
     if (value === "hug")
       return "height:max-content;";
     if (value === "stretch" || value === "fill") {
-      return `flex-grow:var(--h-grow);flex-shrink:var(--h-grow);align-self:var(--h-align);max-height:100%;`;
+      return `flex-grow:var(--h-grow);flex-shrink:var(--h-shrink);align-self:var(--h-align);max-height:100%;`;
     }
     if (value.includes("~")) {
       const result = [];
