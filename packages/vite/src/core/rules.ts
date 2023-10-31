@@ -28,7 +28,12 @@ ol,ul,menu,dir{list-style:none;}
 export const RULES:Rules = {
 
   // -- Color
-  "c": (value:string) => `color:${makeColor(value)};`,
+  "c": (value:string) => {
+    if (value.startsWith("linear-gradient")) return `background:${value.replace(/\//g, " ")};-webkit-background-clip:text;-webkit-text-fill-color:transparent;`
+    if (value.startsWith("radial-gradient")) return `background:${value.replace(/\//g, " ")};-webkit-background-clip:text;-webkit-text-fill-color:transparent;`
+
+    return `color:${makeColor(value)};`
+  },
   "color": (value:string) => RULES.c(value),
   "caret": (value:string) => `caret-color:${makeColor(value)};`,
   "caret-current": () => `color:currentColor;`,
@@ -293,8 +298,8 @@ export const RULES:Rules = {
     if (value.startsWith("url")) return `background-image:${value};`
     if (/^(http|[./])/.test(value)) return `background-image:url(${value});`
 
-    if (value === "transparent") return `background-color:transparent;`
-    return `background-color:${makeColor(value)};`
+    if (value === "transparent") return `background:transparent;`
+    return `background:${makeColor(value)};`
   },
 
   "bg-image": (value:string) => {

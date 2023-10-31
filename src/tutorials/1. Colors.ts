@@ -24,6 +24,8 @@ c(100,50%,50%,.5) hsla
 
 c(--css-var) css-variable
 
+✨그라데이션
+c(linear-gradient(90deg,#f00,#00f))
 
 @TODO: bg(...), b(...)로도 한번 해보세요.  
 -->
@@ -46,6 +48,8 @@ c(--css-var) css-variable
   <div class="c(100,50%,50%,.5)">c(100,50%,50%,.5) HSLA</div>
 
   <div class="c(--css-var)">c(--css-var) css-variable</div>
+
+  <div class="c(linear-gradient(90deg,#f00,#00f)) bold nowrap">c(linear-gradient(90deg,#f00,#00f))</div>
 
   <div class="bg(red)">bg(red)</div>
 
