@@ -22,7 +22,7 @@ type EntryType = {
 }
 
 const minifier = new CleanCSS()
-const supportedExts = ['svelte', 'tsx', 'jsx', 'vue', 'mdx', 'svx', 'html']
+const supportedExts = ['svelte', 'tsx', 'jsx', 'vue', 'mdx', 'svx', 'html', 'astro']
 
 export function build(root: string | undefined, options: BuildOptions) {
   const context: BuildContext = {
