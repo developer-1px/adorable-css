@@ -50,6 +50,7 @@ function resolveBuildContext(root: string | undefined, options: BuildOptions) {
     'minify': options.minify,
     'verbose': options.verbose,
     'reset': options['reset'],
+    'no-reset': options['no-reset'],
   }
 }
 
@@ -115,7 +116,7 @@ async function parseAtomsFromFile(file: string) {
 function entryToStyle(context: BuildContext, entry: EntryType): string {
   const allAtoms = Object.values(entry).flat()
   const styles = generateCss([...new Set(allAtoms)])
-  const css = ((context['reset'] && styles) || [reset, ...styles]).join('\n')
+  const css = (context['no-reset'] ? styles : [reset, ...styles]).join('\n')
 
   return (context.minify && minifier.minify(css).styles) || css
 }

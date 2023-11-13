@@ -22,7 +22,9 @@ cli
   })
   // --no-reset 옵션이 --reset 옵션을 무시하는 역할이지, flag 역할이 아니었음...
   // 의도대로 동작하긴 하는데, --help 설정에서 default 값 표현이 반대로 되버림
-  .option('--no-reset', 'exclude reset css from output')
+  .option('--no-reset', 'exclude reset css from output', {
+    default: false,
+  })
   .action(build)
 
 cli.help()
