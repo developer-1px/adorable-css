@@ -185,7 +185,7 @@ prefix:property(value)! or property(value)! or property!
 
 ## Layout
 
-### Flexbox
+### Flexbox(Figma's Autolayout)
 
 ```hbox``` ```vbox``` ```pack```
 
@@ -207,13 +207,13 @@ prefix:property(value)! or property(value)! or property!
 
 ```vbox(bottom+left)``` ```vbox(bottom+center)``` ```vbox(bottom+right)```
 
-### Autolayout (direaction, gap, padding)
-
-```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
+### gap, padding
 
 ```gap(10)``` ```gap(10/20)```
 
-```flex``` ```flex(1)``` ```flex(2)```
+```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
+
+
 
 ### Position
 
