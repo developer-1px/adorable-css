@@ -233,7 +233,7 @@ export const makeTextBox = (value = "") => {
 
 export const makeTransition = (value:string) => {
   if (!/\d/.test(value)) return value
-  if (!value.includes("=")) return `all ${value}`
+  if (!value.includes("=")) return makeValues(value)
   return value.split(/[/|]/).map(item => item.replace("=", " ")).join(",")
 }
 

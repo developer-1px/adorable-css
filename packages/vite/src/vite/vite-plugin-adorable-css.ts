@@ -77,7 +77,7 @@ export const adorableCSS = (config?:Partial<Config>):Plugin[] => {
     }
   }
 
-  let timer:NodeJS.Timer
+  let timer:ReturnType<typeof setTimeout>
   const debounceInvalidate = () => {
     clearTimeout(timer)
     timer = setTimeout(invalidate, DEBOUNCE_TIMEOUT)

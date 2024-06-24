@@ -1,3 +1,9 @@
+## 1.6.2
+- ✨ `transition(1s/2s)` 와 같이 `transition`값이 여러개 입력시 문제가 있던 현상을 수정하였습니다..
+
+## 1.6.1
+- ✨ `transform:matrix(1,0,0,1,1,1)` 과 같이 `matrix` 기능이 추가되었습니다.
+
 ## 1.5.8
 - ✨ `c(linear-gradient(90deg,#f00,#00f))` 와 같이 text-color에 그라데이션을 넣을 경우 적용이 되도록 기능을 추가하였습니다. 
 

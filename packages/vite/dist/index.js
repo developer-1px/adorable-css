@@ -809,7 +809,7 @@ var makeTransition = (value) => {
   if (!/\d/.test(value))
     return value;
   if (!value.includes("="))
-    return `all ${value}`;
+    return makeValues(value);
   return value.split(/[/|]/).map((item) => item.replace("=", " ")).join(",");
 };
 var makePosition1 = (value) => {
@@ -879,8 +879,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-skew-y:0;
 --a-scale-x:1;
 --a-scale-y:1;
---a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
---a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform: translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform3d: translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
 }
 `;
 var RULES = {
@@ -1029,14 +1029,18 @@ var RULES = {
       const values = value.split("~");
       if (values.length <= 2) {
         const [min2, max2] = value.split("~");
-        min2 && result.push(`min-height:${px(min2)};`);
-        max2 && result.push(`max-height:${px(max2)};`);
+        if (min2)
+          result.push(`min-height:${px(min2)};`);
+        if (max2)
+          result.push(`max-height:${px(max2)};`);
         return result.join("");
       }
       const [min, height, max] = values;
-      min && result.push(`min-height:${px(min)};`);
+      if (min)
+        result.push(`min-height:${px(min)};`);
       result.push(`height:${px(height)};`);
-      max && result.push(`max-height:${px(max)};`);
+      if (max)
+        result.push(`max-height:${px(max)};`);
       return result.join("");
     }
     return `height:${px(value)};`;
@@ -1441,6 +1445,7 @@ var RULES = {
   },
   "skewX": (value) => `--a-skew-x:${deg(value)};transform:var(--a-transform);`,
   "skewY": (value) => `--a-skew-y:${deg(value)};transform:var(--a-transform);`,
+  "matrix": (value) => `transform:matrix(${value});`,
   // @TODO: 3d transform
   // "translate3d": (value:string) => `--a-translate-x:${px(value)};--a-translate-y:${px(value)};--a-translate-z:${px(value)};transform:var(--a-transform);`,
   // "rotate3d": (value:string) => `--a-rotate-x:${deg(value)};--a-rotate-y:${deg(value)};--a-rotate-z:${deg(value)};transform:var(--a-transform);`,
@@ -1448,6 +1453,7 @@ var RULES = {
   // "rotateZ": (value:string) => `--a-rotate-z:${deg(value)};transform:var(--a-transform);`,
   // "skewZ": (value:string) => `--a-skew-z:${deg(value)};transform:var(--a-transform);`,
   // "scaleZ": (value:string) => `--a-scale-z:${makeCommaValues(value)};transform:var(--a-transform);`,
+  // "matrix3d": (value:string) => `transform:matrix(${value});`,
   // Util
   "ratio": (value) => `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
   "aspect": (value) => `aspect-ratio:${cssvar(value.replace(/:/g, "/"))};`,
