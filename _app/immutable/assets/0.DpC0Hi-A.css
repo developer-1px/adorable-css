@@ -17,8 +17,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-skew-y:0;
 --a-scale-x:1;
 --a-scale-y:1;
---a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
---a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform: translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform3d: translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
 }
 .\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
@@ -149,8 +149,8 @@ html .active\:bg\(\#000\):active,html .active\:bg\(\#000\).\:active{background:#
 .opacity\(0\.7\){opacity:0.7;}
 @media(hover:hover){.hover\:opacity\(1\):hover,.hover\:opacity\(1\).\:hover{opacity:1;}}
 .pointer{cursor:pointer;}
-.transition\(\.4s\){transition:all .4s;}
-.transition\(\.2s\){transition:all .2s;}
+.transition\(\.4s\){transition:.4s;}
+.transition\(\.2s\){transition:.2s;}
 .group:hover .group-hover\:rotate\(-10deg\),html .group.\:hover .group-hover\:rotate\(-10deg\){--a-rotate:-10deg;--a-rotate-x:-10deg;--a-rotate-y:-10deg;--a-rotate-z:-10deg;transform:var(--a-transform);}
 html .group:active .group-active\:rotate\(10deg\),html .group.\:active .group-active\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}
 .group:hover .group-hover\:rotate\(10deg\),html .group.\:hover .group-hover\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}

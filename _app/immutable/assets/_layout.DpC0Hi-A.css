@@ -17,8 +17,8 @@ ol,ul,menu,dir{list-style:none;}
 --a-skew-y:0;
 --a-scale-x:1;
 --a-scale-y:1;
---a-transform:translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
---a-transform3d:translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform: translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+--a-transform3d: translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
 }
 .\32 00{font-weight:200;}
 .\37 00{font-weight:700;}
@@ -35,12 +35,12 @@ ol,ul,menu,dir{list-style:none;}
 .\>\>a\:c\(\#4f80ff\) a{color:#4f80ff;}
 @media only screen and (min-width:320px){html .\@w\(320\~\)\:c\(red\){color:red;}}
 .c\(red\){color:red;}
-.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:blue;}
-.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:#D0D0D0;}
 .c\(\#000\){color:#000;}
 @media(hover:hover){.hover\:c\(--primary\):hover,.hover\:c\(--primary\).\:hover{color:var(--primary);}}
 .c\(\#999\){color:#999;}
 .\.selected\:c\(\#000\).selected,.selected .\.selected\:c\(\#000\){color:#000;}
+.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:blue;}
+.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){color:#D0D0D0;}
 html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:active{color:var(--primary);}
 .font\(20\/-\/-10\%\){font-size:20px;letter-spacing:-0.1em;}
 .font\(3em\/-\/-1\.5\%\){font-size:3em;letter-spacing:-0.015em;}
@@ -57,8 +57,8 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .font\(13\){font-size:13px;}
 .font\(14\/1\.5\/-1\%\){font-size:14px;line-height:1.5;letter-spacing:-0.01em;}
 .font\(100\){font-size:100px;}
-.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){font-size:19px;line-height:42px;}
 .font\(12\){font-size:12px;}
+.c\(blue\)\+font\(19\/42\)\+c\(\#D0D0D0\){font-size:19px;line-height:42px;}
 .word-spacing\(20\){word-spacing:20px;}
 .AppleSD{font-family:"Apple SD Gothic Neo";}
 .monospace{font-family:monospace;font-family:var(--monospace, monospace);}
@@ -71,9 +71,9 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 .block{display:block;}
 .w\(\~800\){max-width:800px;}
 .w\(100\~200\){min-width:100px;max-width:200px;}
-.w\(800\){width:800px;}
 .w\(200\){width:200px;}
 .w\(100\%\){width:100%;}
+.w\(800\){width:800px;}
 .h\(60\){height:60px;}
 .h\(100\%\){height:100%;}
 .max-h\(60vh\){max-height:60vh;}
@@ -94,8 +94,8 @@ html .active\:color\(--primary\):active,html .active\:color\(--primary\).\:activ
 html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:solid 1px rgba(0,0,0,.2);}
 .b\(-\){border:none;}
 .bb\(\#000\.1\){border-bottom:solid 1px rgba(0,0,0,.1);}
-.bb\(\#000\){border-bottom:solid 1px #000;}
 .bb\(4\/transparent\){border-bottom:solid 4px transparent;}
+.bb\(\#000\){border-bottom:solid 1px #000;}
 .\.selected\:bbc\(--primary\).selected,.selected .\.selected\:bbc\(--primary\){border-bottom-color:var(--primary);}
 .outline\(-\){outline:none;}
 .r\(8\){border-radius:8px;}
@@ -149,8 +149,8 @@ html .active\:bg\(\#000\):active,html .active\:bg\(\#000\).\:active{background:#
 .opacity\(0\.7\){opacity:0.7;}
 @media(hover:hover){.hover\:opacity\(1\):hover,.hover\:opacity\(1\).\:hover{opacity:1;}}
 .pointer{cursor:pointer;}
-.transition\(\.4s\){transition:all .4s;}
-.transition\(\.2s\){transition:all .2s;}
+.transition\(\.4s\){transition:.4s;}
+.transition\(\.2s\){transition:.2s;}
 .group:hover .group-hover\:rotate\(-10deg\),html .group.\:hover .group-hover\:rotate\(-10deg\){--a-rotate:-10deg;--a-rotate-x:-10deg;--a-rotate-y:-10deg;--a-rotate-z:-10deg;transform:var(--a-transform);}
 html .group:active .group-active\:rotate\(10deg\),html .group.\:active .group-active\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}
 .group:hover .group-hover\:rotate\(10deg\),html .group.\:hover .group-hover\:rotate\(10deg\){--a-rotate:10deg;--a-rotate-x:10deg;--a-rotate-y:10deg;--a-rotate-z:10deg;transform:var(--a-transform);}
