@@ -13,7 +13,7 @@ npm i -D adorable-css
 2. 그 외에도 css in js 방식으로 사용할 수 있습니다.
 3. CDN을 통해서 설치없이도 간편하게 사용할 수 있습니다.
 
-### Vite (Recommanded)
+### Vite (Recommended)
 - Build-time에서 최종 css를 만들어냅니다. (zero run-time)
 - 최종적으로 만들어진 css를 통해서 런타임 비용을 더 줄일 수 있고 css의 캐싱 기능을 더 활용할 수 있습니다.
 - 단, 빌드시에만 css를 만들어내기 때문에 동적으로 class를 추가하면 바로 적용되지 않습니다.

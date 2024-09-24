@@ -65,7 +65,7 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
 ```
 
 
-### Vite(Recommanded)
+### Vite(Recommended)
 - run-time이 아니라 Build-time에서 최종 css를 만들어냅니다. (zero run-time)
 - 최종적으로 만들어진 css를 통해서 런타임 비용을 더 줄일 수 있고 css의 캐싱 기능을 더 활용할 수 있습니다.
 
