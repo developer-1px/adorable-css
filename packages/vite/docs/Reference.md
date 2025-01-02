@@ -493,6 +493,12 @@ export const RULES:Rules = {
     else if (value) css.push(`grid-template-columns:${value};`)
     return css.join("")
   },
+  "grid-rows": (value) => {
+    const css = ["display:grid;"]
+    if (+value === +value) css.push(`grid-template-rows:repeat(${value},1fr);`)
+    else if (value) css.push(`grid-template-rows:${value};`)
+    return css.join("")
+  },
   "inline-grid": () => "display:inline-grid;",
 
 
