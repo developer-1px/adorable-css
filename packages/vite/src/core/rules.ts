@@ -490,19 +490,19 @@ export const RULES:Rules = {
   "grid": (value) => {
     const css = ["display:grid;"]
     if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
-    else if (value) css.push(`grid-template-columns:${value};`)
+    else if (value) css.push(`grid-template-columns:${makeValues(value)};`)
     return css.join("")
   },
   "grid-cols": (value) => {
     const css = ["display:grid;"]
     if (+value === +value) css.push(`grid-template-columns:repeat(${value},1fr);`)
-    else if (value) css.push(`grid-template-columns:${value};`)
+    else if (value) css.push(`grid-template-columns:${makeValues(value)};`)
     return css.join("")
   },
   "grid-rows": (value) => {
     const css = ["display:grid;"]
     if (+value === +value) css.push(`grid-template-rows:repeat(${value},1fr);`)
-    else if (value) css.push(`grid-template-rows:${value};`)
+    else if (value) css.push(`grid-template-rows:${makeValues(value)};`)
     return css.join("")
   },
   "inline-grid": () => "display:inline-grid;",
