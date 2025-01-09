@@ -18,7 +18,7 @@ const config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-	config.kit.paths = { base: '/wave-css' };
+	config.kit.paths = { base: '' };
 }
 
 export default config;
