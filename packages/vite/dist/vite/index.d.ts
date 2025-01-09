@@ -48,7 +48,7 @@ declare const RULES: Rules;
 declare const PREFIX_PSEUDO_CLASS: PrefixRules;
 declare const PREFIX_MEDIA_QUERY: PrefixRules;
 declare const AT_RULE: {
-    "@w": (ident: string, tokens: Array<{
+    '@w': (ident: string, tokens: Array<{
         type: string;
         value: string;
     }>) => {
@@ -581,6 +581,6 @@ interface Config {
     prefixRules: PrefixRules;
     preLoads: string[];
 }
-declare const adorableCSS: (config?: Partial<Config>) => Plugin[];
+declare const waveCSS: (config?: Partial<Config>) => Plugin[];
 
-export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, adorableCSS, createGenerateCss, cssString, cssvar, deg, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePosition2X, makePosition2Y, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, rpx, splitValues, tokenize };
+export { ALL_PROPERTIES, AT_RULE, PREFIX_MEDIA_QUERY, PREFIX_PSEUDO_CLASS, PREFIX_SELECTOR, PrefixProps, PrefixRules, RULES, Rules, createGenerateCss, cssString, cssvar, deg, generateCss, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeHEX, makeHLS, makeNumber, makePosition1, makePosition2, makePosition2X, makePosition2Y, makePositionWithSemi, makeRGB, makeRatio, makeSide, makeTextBox, makeTransition, makeVBoxFill, makeVBoxWithSemi, makeValues, parseAtoms, percentToEm, px, reset, rpx, splitValues, tokenize, waveCSS };

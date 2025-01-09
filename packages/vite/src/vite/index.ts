@@ -1,1 +1,1 @@
-export * from "./vite-plugin-adorable-css"
+export * from './vite-plugin-wave-css';
