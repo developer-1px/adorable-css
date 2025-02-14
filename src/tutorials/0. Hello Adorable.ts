@@ -15,7 +15,7 @@ class="property(value)" 의 형식의 문법으로 작성해 주시면 됩니다
 여기 코드는 수정이 가능하니 마음껏 테스트 해보세요!
 -->
 
-<div class="vbox pack gap(20) text-center p(50)">
+<div class="vbox pack gap(20) text(center) p(50)">
   <div class="hbox font(100/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
     <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
     <span>^•ﻌ•^</span>

@@ -1,7 +1,9 @@
 <script lang="ts">
 import {base} from "$app/paths"
 import {page} from "$app/stores"
-import "@adorable.css"
+// import "@adorable.css"
+import "./reset.css"
+import 'uno.css'
 import UIVersion from "../screens/UIVersion.svelte"
 import "../style.css"
 
@@ -13,14 +15,14 @@ const useActive = (el) => {
 </script>
 
 <div class="vbox">
-  <div class="relative hbox space-between h(60) gap(20) p(10/20) sticky-top bg(#fff) bb(#000.1) z(999) >>a:hover:c(--primary) >>a.active:c(--primary) scroll-x">
+  <div class="sticky-top hbox space-between h(56) gap(20) p(10/20) bg(#fff) bb(#000.15) z(999) >>a:hover:c(--primary) >>a.active:c(--primary) scroll-x c(#555) 500">
     <a href="{base}/" class="pack font(20/-/-10%) pointer AppleSD">^•ﻌ•^ฅ</a>
 
     <div class="hbox gap(20)">
-      <a href="{base}/background" use:useActive>왜 만들었나요?</a>
-      <a href="{base}/guide" use:useActive>가이드</a>
-      <a href="{base}/docs" use:useActive>문서</a>
-      <a href="{base}/tutorial" use:useActive>✨ 튜토리얼</a>
+      <a href="{base}/background" use:useActive>Why Adorable?</a>
+      <a href="{base}/guide" use:useActive>Guide</a>
+      <a href="{base}/docs" use:useActive>Docs</a>
+      <a href="{base}/tutorial" use:useActive>✨ Tutorial</a>
       <a href="{base}/changelogs" use:useActive>✨ ChangeLog</a>
       <a href="{base}/reference" use:useActive>Reference</a>
       <a target="_blank" href="https://velog.io/@teo/series/AdorableCSS">블로그</a>

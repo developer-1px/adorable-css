@@ -1,11 +1,11 @@
 <script lang="ts">
-const slide = "text-center vbox pack p(200/32) odd:bg(#f9f9f9) clip"
+const slide = "text(center) vbox pack p(200/32) odd:bg(#f9f9f9) clip"
 const h1 = "font(3em/-/-1.5%) bold ~md:font(1.6em)"
 const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
 </script>
 
 <div class="{slide} gap(40) max-h(60vh)">
-  <div class="hbox font(80/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer group">
+  <div class="group hbox font(80/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer">
     <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
     <span>^•ﻌ•^</span>
     <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">ฅ <span class="font(20) c(#ccc) group-hover:c(--primary) vertical-top transition(.4s)">♥</span></span>
@@ -24,7 +24,6 @@ const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
   <img src="https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif"/>
 </div>
 
-
 <div class="{slide}">
   <h1 class="{h1} hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
   <h1 class="{h1}">Naming things is hard.</h1>
@@ -34,17 +33,17 @@ const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
   <h2 class="{h2}">{`<div class="relative p(10/10)">`}</h2>
   <p>그냥 서식 그대로 HTML에 적어보세요. 필요한 CSS는 다 만들어두었습니다.</p>
   <br/>
-  <h2 class="{h2}">{`<div class="font(10) c(#ff0) bold text-center">`}</h2>
+  <h2 class="{h2}">{`<div class="font(10) c(#ff0) bold text(center)">`}</h2>
 </div>
 
 
 <div class="{slide}">
-  <div class="hbox(top+center) flex-wrap gap(60)">
+  <div class="wrap(top+center) gap(60)">
 
     <div class="vbox(center)">
       <h1 class="font(30/-/-1.5%) bold">When just write down in HTML or JSX</h1>
 
-      <code class="pre text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="pre text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`<button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
   hover:bg(#555)
   active:bg(#000)! active:b(#000.2)">
@@ -59,7 +58,7 @@ const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
     <div class="vbox(center)">
       <h1 class="font(30/-/-1.5%) bold">... and auto generate CSS on realtime! (and build-time) 😎</h1>
 
-      <code class="pre text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="pre text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`/* @adorable.css */
 
 * {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
@@ -107,27 +106,27 @@ html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1
   <div class="vbox gap(40) mt(40)">
     <div>
       <h2 class="font(24) 700 m(10/0)">More extensible Syntax</h2>
-      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class="font(14/1.5/-1%)"/>
 <div class="w(100~200)"/>
 <div class="nowrap..."/>
-<div class="line-clamp(3)"/>
+<div class="max-lines(3)"/>
 <div class="hbox(bottom+right)"/>
 <div class="layer(right)"/>
 
-.font(14/1.5/-1%){font-size:14px;line-height:1.5;letter-spacing:-0.01em}
-.w(100~200){min-width:100px;max-width:200px;}
-.hbox(bottom+right){display:flex;flex-flow:row;align-items:flex-end;justify-content:flex-end;}
-.nowrap...{white-space:nowrap;text-overflow:ellipsis;overflow:hidden;flex-shrink:1;}
-.line-clamp(3){display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.layer(right){position:absolute;top:0;right:0;bottom:0}
+.font\\(14\\/1\\.5\\/-1\\%\\){font-size:14px;line-height:1.5;letter-spacing:-0.01em;}
+:where(.hbox\\(bottom\\+right\\)>*){flex-shrink:0;--w-grow:1;--w-shrink:1;--w-align:initial;--h-grow:initial;--h-shrink:0;--h-align:stretch;}
+.hbox\\(bottom\\+right\\){display:flex;flex-flow:row;align-items:flex-end;justify-content:flex-end;}
+.layer\\(right\\){position:absolute;top:0;right:0;bottom:0;}
+.max-lines\\(3\\){display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.w\\(100\\~200\\){min-width:100px;max-width:200px;}
 `}
       </code>
     </div>
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Support Full Pesudo-class/element</h2>
-      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`<a class="hover:underline active:bg(#000)"/>
 <div class="nth-child(3n+1):bg(orange)"/>
 <input class="placeholder:c(#ccc)"/>
@@ -145,7 +144,7 @@ html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{bac
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Selector Support</h2>
-      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class=".selected:bg(#000) .selected:c(#fff)"/>
 <div class=">h1:m(20)"/>
 <input class=">>a:c(#4f80ff)"/>
@@ -161,7 +160,7 @@ html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{bac
 
     <div>
       <h2 class="font(24) 700 m(10/0)">Media Query Support</h2>
-      <code class="block pre font(13) w(~800) text-left bg(#f1f1f1) p(20) r(8) monospace">
+      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
         {`<div class="@w(320~):c(red)">320 > red</div>
 
 .\\.selected\\:c\\(\\#fff\\).selected,.selected .\\.selected\\:c\\(\\#fff\\){color:#fff;}

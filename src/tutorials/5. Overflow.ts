@@ -3,7 +3,7 @@ export const TURORIAL_4_OVERFLOW = `
 Overflow
 - 자주쓰는 기능 속성을 짧게 쓸 수 있도록 편의성 제공
 
-clip { overflow: hidden }
+clip{overflow:hidden;overflow:clip;}
 scroll {overflow:auto;}
 scroll-x {overflow-x:auto;overflow-y:hidden}
 scroll-y {overflow-x:hidden;overflow-y:auto;}

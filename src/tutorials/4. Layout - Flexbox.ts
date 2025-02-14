@@ -24,7 +24,7 @@ gap(auto) : space-between
 
 hbox(top)
 hbox(bottom)
-hbox(fill) = hbox(stretch)  // stretch는 오타가 자주나고 길어서 fill alias를 제공합니다.
+hbox(fill)
 hbox(right)
 hbox(reverse)
 
@@ -169,4 +169,4 @@ vbox
   </div>
 </div>
 
-`.trim();
+`.trim()

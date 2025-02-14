@@ -11,7 +11,7 @@
   max-width:100%;
   margin:auto;
   line-height:1.6;
-  font-size:16px;
+  font-size:15px;
   letter-spacing:-0.01em;
   word-wrap:break-all;
   color:#333;
@@ -54,7 +54,7 @@
 }
 
 .markdown p {
-  margin:1.4em 0;
+  margin:1em 0;
 }
 
 .markdown ul,

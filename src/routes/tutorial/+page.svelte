@@ -1,26 +1,36 @@
 <script lang="ts">
-import {generateCss, parseAtoms} from "packages/vite/src/core/atomizer"
-import {reset} from "packages/vite/src/core/rules"
-import {TURORIAL_0_Hello} from "src/tutorials/0. Hello Adorable"
-import {TURORIAL_1_COLORS} from "src/tutorials/1. Colors"
-import {TURORIAL_10_MEDIA_QUERY} from "src/tutorials/10. Media Query"
-import {TURORIAL_11_Selector} from "src/tutorials/11. Selector"
-import {TURORIAL_12_Important} from "src/tutorials/12. Important"
-import {TURORIAL_14_Grouping} from "src/tutorials/14. Grouping"
-import {TURORIAL_2_TYPOGRAPHY} from "src/tutorials/2. Typography"
-import {TURORIAL_3_BOX_MODEL} from "src/tutorials/3. Box Model"
-import {TURORIAL_4_OVERFLOW} from "../../tutorials/5. Overflow"
-import {TURORIAL_5_LAYOUT_FLEXBOX} from "../../tutorials/4. Layout - Flexbox"
-import {TURORIAL_6_LAYOUT_POSITION} from "src/tutorials/6. Layout - Position"
-import {TURORIAL_7_PREFIX} from "src/tutorials/7. Prefix"
-import {TUTORIAL_7_VISIBILITY} from "src/tutorials/7. Visibility"
-import {TURORIAL_8_PREFIX2} from "src/tutorials/8. Prefix2"
-import {TURORIAL_9_PSEUDO_ELEMENT} from "src/tutorials/9. Pseudo Element"
-import {onMount} from "svelte"
-import MonacoEditor from "../../screens/MonacoEditor.svelte"
-import {TURORIAL_TEXTBOX} from "../../tutorials/TextBox";
-import {TUTORIAL_LAYOUT_POSITION} from "src/tutorials/Position";
-import {TUROTIAL_DARKMODE} from "src/tutorials/DarkMode"
+// import { generateCss, parseAtoms } from 'packages/vite/src/core/atomizer'
+// import { reset } from 'packages/vite/src/core/rules'
+
+import { TURORIAL_0_Hello } from 'src/tutorials/0. Hello Adorable'
+import { TURORIAL_1_COLORS } from 'src/tutorials/1. Colors'
+import { TURORIAL_10_MEDIA_QUERY } from 'src/tutorials/10. Media Query'
+import { TURORIAL_11_Selector } from 'src/tutorials/11. Selector'
+import { TURORIAL_12_Important } from 'src/tutorials/12. Important'
+import { TURORIAL_14_Grouping } from 'src/tutorials/14. Grouping'
+import { TURORIAL_2_TYPOGRAPHY } from 'src/tutorials/2. Typography'
+import { TURORIAL_3_BOX_MODEL } from 'src/tutorials/3. Box Model'
+import { TURORIAL_4_OVERFLOW } from 'src/tutorials/5. Overflow'
+import { TURORIAL_5_LAYOUT_FLEXBOX } from 'src/tutorials/4. Layout - Flexbox'
+import { TURORIAL_6_LAYOUT_POSITION } from 'src/tutorials/6. Layout - Position'
+import { TURORIAL_7_PREFIX } from 'src/tutorials/7. Prefix'
+import { TUTORIAL_7_VISIBILITY } from 'src/tutorials/7. Visibility'
+import { TURORIAL_8_PREFIX2 } from 'src/tutorials/8. Prefix2'
+import { TURORIAL_9_PSEUDO_ELEMENT } from 'src/tutorials/9. Pseudo Element'
+import { onMount } from 'svelte'
+import MonacoEditor from '../../screens/MonacoEditor.svelte'
+import { TURORIAL_TEXTBOX } from 'src/tutorials/TextBox'
+import { TUTORIAL_LAYOUT_POSITION } from 'src/tutorials/Position'
+import { TUROTIAL_DARKMODE } from 'src/tutorials/DarkMode'
+
+import { createGenerator } from 'unocss';
+import { adorableCSS } from 'packages/v2/unocss/adorable-css-uno'
+import { reset } from 'packages/v2/unocss/rules'
+
+// UnoCSS 설정
+const uno = createGenerator({
+  ...adorableCSS()
+});
 
 let element:HTMLElement
 let value = TURORIAL_0_Hello
@@ -48,9 +58,21 @@ const tutorials = [
 ]
 
 let currentTutorialIndex = 0
+let css = 'hello'
 
-$: css = reset + generateCss(parseAtoms(value)).join("\n")
-$: element && (element.contentWindow.document.body.innerHTML = `<style` + `>${css}</` + `style>\n` + value)
+async function generateCSS(value) {
+  const unoo = await uno
+  const res = await unoo.generate(value)
+  css = reset + res.css
+  element && (element.contentWindow.document.body.innerHTML = `<style` + `>${css}</` + `style>\n` + value)
+}
+
+$: generateCSS(value)
+
+// $: uno.generate(value).then((css2) => {
+//   css = reset + css2
+//   element && (element.contentWindow.document.body.innerHTML = `<style` + `>${css}</` + `style>\n` + value)
+// })
 
 let type = "Result"
 const Result = () => type = "Result"
@@ -75,9 +97,9 @@ onMount(() => {
 </script>
 
 <div class="layer vbox overscroll(none)">
-  <div class="h(60)"/>
+  <div class="h(56)"></div>
 
-  <div class="flex hbox(fill) clip bg(#f9f9f9)">
+  <div class="h(fill) hbox(fill) clip bg(#f9f9f9)">
     <div class="w(200) vbox monospace(number) p(10) scroll-y">
       {#each tutorials as [title, code], index}
         <div class="p(6/8) r(4) font(13) c(#000) pointer hover:c(--primary) .selected:bg(--primary) .selected:c(#fff)!"
@@ -98,7 +120,8 @@ onMount(() => {
                 class:selected={type === "CSS_output"} on:click={CSS_output}>CSS Output
         </button>
       </div>
-      <div class="flex relative">
+
+      <div class="h(fill) relative">
         <div class="layer pack check-board none" class:none={type !== "Result"}>
           <iframe bind:this={element} class="layer w(100%) h(100%) bg(transparent)" frameborder="0"/>
         </div>

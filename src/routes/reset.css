@@ -1,0 +1,20 @@
+:where(*,:after,:before){margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
+:where(:root){-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+:where(html,body){height:100%;}
+:where(img,picture,video,canvas){display:block;max-width:100%;}
+:where(img){text-indent:-9999px;}
+:where(button){background:none;border:0;cursor:pointer;}
+:where(a){text-decoration:none;}
+:where(table){border-collapse:collapse;border-spacing:0;}
+:where(ol,ul,menu,dir){list-style:none;}
+:where(*,:after,:before){
+  --a-translate-x:0;
+  --a-translate-y:0;
+  --a-rotate:0;
+  --a-skew-x:0;
+  --a-skew-y:0;
+  --a-scale-x:1;
+  --a-scale-y:1;
+  --a-transform: translateX(var(--a-translate-x)) translateY(var(--a-translate-y)) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+  --a-transform3d: translate3d(var(--a-translate-x),var(--a-translate-y),0) rotate(var(--a-rotate)) skewX(var(--a-skew-x)) skewY(var(--a-skew-y)) scaleX(var(--a-scale-x)) scaleY(var(--a-scale-y));
+}

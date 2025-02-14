@@ -34,12 +34,14 @@ HTML과 CSS와 화면을 왔다갔다하며 새로고침을 할 필요도 없습
 최적화는 걱정마세요! 필요한 CSS는 미리 다 함수로 만들어 두었습니다.
 
 ```html
-<button class="hbox pack bg(#333) c(#fff) r(6) p(8/12)
-               font(14/16/-1%) bold pointer">click me</button>
+<button class="hbox pack bg(#333) p(8/12) r(6) font(14/16/-1%) c(#fff) bold pointer">
+  Click me!
+</button>
 ```
 
-<button class="hbox pack bg(#333) c(#fff) r(6) p(8/12)
-font(14/16/-1%) bold pointer">click me</button>
+<button class="hbox pack bg(#333) p(8/12) r(6) font(14/16/-1%) c(#fff) bold pointer">
+  Click me!
+</button>
 
 ### Portable and Compact
 
@@ -60,7 +62,7 @@ CSS는 빌드타임에 최적화되어 필요한 양만큼만 생성이 됩니�
 
 ---
 
-## Syntax
+## Overview
 
 ```html
 property(value) 
@@ -84,84 +86,125 @@ prefix:property(value)! or property(value)! or property!
   ex) class="active:bg(red)! b(0)! none! fixed!"
 ```
 
-## Basic Properties
-
 ---
 
-## Text
+# Syntax
 
-### Color
+## Font
 
-```c(red)``` ```c(#f00)``` ```c(#f00.5)``` ```c(255,0,0)``` ```c(255,0,0,.3)``` ```c(100%,0,0)```
+### font(size/line-height/letter-spacing/font-weight/font-family)
 
-### font(size/line-height/letter-spacing/word-spacing)
-
-```font(20/1.4/-1%)``` ```font(20/1.4)``` ```font(20/-/-1%)``` 
-
-```font-size(30)```
-```line-height(1.5)```
-```letter-spacing(-1px)```
-
-```word-spacing(-1px)```
+```font(20)``` ```font(20/1.4)``` ```font(20/-/-1%)``` ```font(20/1.5/-1%/600)```
 
 ### font-family
 
-```sans-serif``` ```serif``` ```cursive``` ```monospace```
-
-### font-style
-
-```bold``` ```italic``` ```underline``` ```strike```
+```sans-serif``` ```serif``` ```cursive``` ```fantasy``` ```monospace``` ```system-ui```
 
 ### font-weight
 
 ```100``` ```200``` ```300``` ```400``` ```500``` ```600``` ```700``` ```800``` ```900```
 
-```thin``` ```light``` ```medium``` ```regular``` ```bold``` ```heavy```
+```thin``` ```light``` ```medium``` ```regular``` ```semibold``` ```bold``` ```heavy```
 
-### text-align
+### font-style
+
+```bold``` ```italic``` ```underline``` ```strike```
+
+### Letter case
+
+```uppercase``` ```lowercase``` ```small-caps```
+
+### etc
+
+```line-height(1.5)```
+```letter-spacing(-1px)```
+```word-spacing(-1px)```
+
+---
+
+## Text
+
+### Text Alignment
 
 ```text(left)``` ```text(center)``` ```text(right)``` ```text(justify)```
 
 ```text(center+bottom)``` ```text(pack)```
 
-### etc
+```nowrap```
 
-```lowercase``` ```uppercase``` ```small-caps```
 
-```monospace(number)```
+### Text Truncate
 
-### stroke
-
-```text-shadow()```
+```nowrap...``` ```max-lines(2)```
 	
 ---
 
 ## Box
+
+## Layout
 
 ### Size
 ```w(30)``` ```w(~30)``` ```w(30~)``` ```w(20~30)```
 
 ```h(30)``` ```h(~30)``` ```h(30~)``` ```h(20~30)```
 
-### Radius
+### Direction
+
+```hbox``` ```vbox``` ```wrap``` ```pack```
+
+### Alignment
+
+```hbox(top)``` ```hbox(top+center)``` ```hbox(top+right)```
+
+```hbox(left)``` ```pack``` ```hbox(right)```
+
+```hbox(bottom)``` ```hbox(bottom+center)``` ```hbox(bottom+right)```
+
+### Gap
+
+```gap(10)``` ```gap(10/20)``` ```gap(auto)```
+
+### Padding
+
+```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
+
+---
+
+## Appearance
+
+```r(10)``` ```r(10/20)``` ```r(10/20/30/40)```
+
 ```r(10)``` ```r(fill)``` ```r(100%)```
 
-### Fill
+```opacity(.5)```
+
+```none```
+
+---
+
+## Fill
+
+```c(red)``` ```c(#f00)``` ```c(#f00.5)```
 
 ```bg(#B75959)``` ```bg(linear-gradient(#000,#fff))``` ```bg(/image.png)```
 
 ```cover``` ```contain```
 
-### Stroke
+---
+
+## Stroke
 
 ```b(#000)``` ```b(1/#000)``` ```b(1/solid/#000)```
 
 ```bt(#000)``` ```br()``` ```bb()``` ```bl()```
 
+```o(#000)```
+
 ```outline()```
 ```ring()```
 
-### Effects
+
+## Effects
 
 ```box-shadow(0/4/4/#000.25)```
 
@@ -171,81 +214,32 @@ prefix:property(value)! or property(value)! or property!
 
 ```backdrop-blur(4)```
 
-### Clip content
+---
 
-```clip``` ```overflow(hidden)```
-
-```nowrap...``` ```line-clamp(3)```
-
-### Scroll
+## Scroll
 
 ```scroll``` ```scroll-x``` ```scroll-y```
 
----
 
-## Layout
-
-### Flexbox(Figma's Autolayout)
-
-```hbox``` ```vbox``` ```pack```
-
-### hbox
-
-```hbox(top)``` ```hbox(top+center)``` ```hbox(top+right)```
-
-```hbox(left)``` ```pack``` ```hbox(right)```
-
-```hbox(bottom)``` ```hbox(bottom+center)``` ```hbox(bottom+right)```
-
-```hbox(fill)```
-
-### vbox
-
-```vbox(top)``` ```vbox(top+center)``` ```vbox(top+right)```
-
-```vbox(left)``` ```vbox pack``` ```vbox(right)```
-
-```vbox(bottom+left)``` ```vbox(bottom+center)``` ```vbox(bottom+right)```
-
-### gap, padding
-
-```gap(10)``` ```gap(10/20)```
-
-```p(10)``` ```p(10/20)``` ```p(10/20/30)``` ```p(10/20/30/40)```
-
-
-
-### Position
+## Position
 
 ```static``` ```relative``` ```absolute``` ```fixed``` 
 
 ```sticky``` ```sticky-top``` ```sticky-right``` ```sticky-bottom``` ```sticky-left```
 
+
+## Layout
+
 ```layer()``` ```layer(top)``` ```layer(top+right)```
 
-```top()``` ```right()``` ```bottom()``` ```left()``` ```x()``` ```y()```
+```top()``` ```right()``` ```bottom()``` ```left()``` 
 
-```z()```
+```x()``` ```y()``` ```z()```
 
-### Visibility
+
+## Visibility
 
 ```none```
 ```hidden``` 
 ```visible``` 
 ```blind```
-```opacity(.5)```
-
----
-
-## Reset CSS
-
-```css
-*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;flex-shrink:0;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-html,body{height:100%;}
-img,picture,video,canvas{display:block;max-width:100%;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-```

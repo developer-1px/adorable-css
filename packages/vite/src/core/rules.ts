@@ -2,17 +2,17 @@ import {PrefixRules, Rules} from "./atomizer"
 import {cssvar, deg, makeBorder, makeBoxFill, makeColor, makeCommaValues, makeFont, makeFontFamily, makeHBoxFill, makeHBoxWithSemi, makeNumber, makePosition2X, makePosition2Y, makePositionWithSemi, makeRatio, makeSide, makeTextBox, makeTransition, makeValues, makeVBoxFill, makeVBoxWithSemi, percentToEm, px, rpx} from "./makeValue"
 
 export const reset = `
-*,:after,:before{margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
-:root{-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-html,body{height:100%;}
-img,picture,video,canvas{display:block;max-width:100%;}
-img{text-indent:-9999px;}
-button{background:none;border:0;cursor:pointer;}
-a{text-decoration:none;}
-table{border-collapse:collapse;border-spacing:0;}
-ol,ul,menu,dir{list-style:none;}
-*,:after,:before{--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}
-*,:after,:before{
+:where(*,:after,:before){margin:0;padding:0;font:inherit;color:inherit;box-sizing:border-box;}
+:where(:root){-webkit-tap-highlight-color:transparent;text-size-adjust:100%;-webkit-text-size-adjust:100%;line-height:1.5;overflow-wrap:break-word;word-break:break-word;tab-size:2;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+:where(html,body){height:100%;}
+:where(img,picture,video,canvas){display:block;max-width:100%;}
+:where(img){text-indent:-9999px;}
+:where(button){background:none;border:0;cursor:pointer;}
+:where(a){text-decoration:none;}
+:where(table){border-collapse:collapse;border-spacing:0;}
+:where(ol,ul,menu,dir){list-style:none;}
+:where(*,:after,:before){--w-grow:initial;--w-align:initial;--h-grow:initial;--h-align:initial;}
+:where(*,:after,:before){
 --a-translate-x:0;
 --a-translate-y:0;
 --a-rotate:0;
@@ -36,7 +36,7 @@ export const RULES:Rules = {
   },
   "color": (value:string) => RULES.c(value),
   "caret": (value:string) => `caret-color:${makeColor(value)};`,
-  "caret-current": () => `color:currentColor;`,
+  "caret-current": () => `caret-color:currentColor;`,
 
   // -- Typography
   "font": (value:string) => makeFont(value),

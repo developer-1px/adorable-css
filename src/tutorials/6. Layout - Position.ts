@@ -81,22 +81,22 @@ Extension
   <div class="hbox gap(10)">
     <div class="relative w(100) h(100) b(#ff6347) pack">
       <div class="font(90)">🐳</div>
-      <div class="layer(top+left) pack bg(#ff6347.5) text-center">layer<br/>(top+left)</div>
+      <div class="layer(top+left) pack bg(#ff6347.5) text(center)">layer<br/>(top+left)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
       <div class="font(90)">🐳</div>
-      <div class="layer(top+right) pack bg(#ff6347.5) text-center">layer<br/>(top+right)</div>
+      <div class="layer(top+right) pack bg(#ff6347.5) text(center)">layer<br/>(top+right)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
       <div class="font(90)">🐳</div>
-      <div class="layer(bottom+left) pack bg(#ff6347.5) text-center">layer<br/>(bottom<br/>+left)</div>
+      <div class="layer(bottom+left) pack bg(#ff6347.5) text(center)">layer<br/>(bottom<br/>+left)</div>
     </div>
     
     <div class="relative w(100) h(100) b(#ff6347) pack">
       <div class="font(90)">🐳</div>
-      <div class="layer(bottom+right) pack bg(#ff6347.5) text-center">layer<br/>(bottom<br/>+right)</div>
+      <div class="layer(bottom+right) pack bg(#ff6347.5) text(center)">layer<br/>(bottom<br/>+right)</div>
     </div>
   </div>
 
