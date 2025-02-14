@@ -1,172 +1,193 @@
-# AdorableCSS
-> Rapid On-Demand Atomic CSS framework
-> AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
+# 🚧 AdorableCSS v2.0.0
 
-![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
+> "세상에서 가장 Figma스러운 CSS 프레임워크"
+> A Figma-first CSS framework for seamless design-code synchronization
 
+![](https://camo.githubusercontent.com/a5f979d867a80dd11835504b82d631212aaedc473970360f6287b07146154328/68747470733a2f2f696d616765732e76656c6f672e696f2f696d616765732f74656f2f706f73742f30323832636436612d373533302d343637342d616435362d3263656130623535623737332f254531253834253839254531253835254233254531253834253846254531253835254233254531253834253835254531253835254235254531253836254142254531253834253839254531253835254133254531253836254241253230323032322d30312d313225323025453125383425384225453125383525413925453125383425384325453125383525413525453125383625414225323031322e30362e34302e706e67)
 
-## Try It Online
-- Try it online [here](https://developer-1px.github.io/adorable-css/).
+## What's New in AdorableCSS 2.0
 
-![AdorableCSS](https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif)
+**Figma-First Approach**
+- Direct mapping with Figma Auto Layout
+- Designer-friendly syntax
+- Real-time sync capabilities
 
-#### Don't write your own css. Just write down in HTML.
+## Core Concept
 
-```tsx
-// Button.tsx
+기존에는 CSS의 사고관을 중심으로 Utiliy class방식과 JIT를 중점으로 만들었지만 이제는 tailwindCSS가 대세가 되었습니다. 단순히 문법이 더 좋다는 이유만으로는 채택을 해야할 이유가 부족합니다.
 
-export const Button = () =>
-  <button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
-  hover:bg(#555)
-  active:bg(#000)! active:b(#000.2)">
-    <div>👍</div>
-    <div>Like</div>
-  </button>
+AdorableCSS v2는 이에 대한 차별화와 브랜딩을 css가 아니라 Figma에 두려고 합니다.
+이제 Figma는 디자인을 하기 위한 표준도구로 자리잡았으며 Figma가 정립한 레이아웃과 컴포넌트들을 CSS보다 덜 복잡하지만 충분한 역할을 하고 있습니다.
+
+Figma가 디자인한 내용을 가져오고 또 개발자가 작업한 내용을 Figma에 반영하기 위해서는 figma - tailwindCSS에서는 2개의 언어를 서로 다른 언어를 각기 배워야 합니다.
+
+온전히 Figma의 방식을 그대로 맞추어 디자이너가 작업한 그대로, 개발자가 구현한 그대로 동기화 될 수 있도록 만들고자 기존의 좋은 문법은 계승하고 CSS에 맞춰진 체계없던 문법을 정돈하려고 합니다.
+
+### With UnoCSS
+
+그동안 AdorableCSS가 막혔던 부분은 다앙한 생태계에서 활용하기가 어렵다는 점이었습니다. 핵심 컨셉은 사용하기 편리한 문법과 체계에 있기에 다양한 프레임워크에서 활용할 수 있도록 하고자 Custom Atomic CSS를 만들수 있는 UnoCSS 플러그인 방식으로 만드려고 하고 있습니다. 이제 언제든지 새로운 환경에서 검증받은 방식으로 dev와 production에서 쓸 수 있도록 하려고 합니다.
+
+### no-conflict tailwindCSS
+
+일부 tailwindCSS와는 같은 이름인데 다른 서식을 취하거나 reset등이 겹치면서 함께 혼용하는 경우 문제가 되곤했습니다. tailwindCSS의 대체제나 경쟁자 포지션이 아닌만큼 기존에 이미 사용되고 있는 라이브러리와는 충돌하지 않도록 하려고 합니다.
+
+```
+ex) tailwindCSS
+flex -> display: flex
+
+ex) adorableCSS
+flex -> flex: 1
 ```
 
-#### ... and auto generate css on realtime! 😎
 
-```css
-/* @adorable.css */
+### TBD: VSCODE IDE Plugin, Prettier Plugin...
 
-* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
-.c\(\#fff\){color:#fff;}
-html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
-.bg\(\#333\){background-color:#333;}
-@media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
-.font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
-.bold{font-weight:700;}
-.hbox{display:flex;flex-flow:row;align-items: center;}
-.p\(8\/12\){padding:8px 12px;}
-.pack{display:flex;align-items:center;justify-content:center;}
-.pointer{cursor:pointer;}
-html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1px solid rgba(0,0,0,.2);}
-.b\(\#000\.2\){border:1px solid rgba(0,0,0,.2);}
-.r\(6\){border-radius:6px;}
-.gap\(6\){gap:6px;}
-.layer{position:absolute;top:0;right:0;bottom:0;left:0}
-.transition\(\.2s\){transition:all .2s;}
-```
+실제 개발에서 사용할 수 있도록 개발에서 쓸 수 있는 플러그인이나 lint등을 만들어서 활용할 수 있도록 할 예정입니다.
+
 
 ---
+# Syntax
 
-## Getting Started
-
-### CDN
-- ⛱ vite, webpack, postcss등 다른 복잡한 설정 없이 그냥 script 한줄만 추가하면 adorableCSS를 사용할 수 있습니다.
-- ⚡️ adorableCSS를 간편하게 쓰는 방법! body 맨 아래 `<script src="https://unpkg.com/adorable-css"></script>`만 추가해보세요.
-- 런타임 방식으로 css in js 방식을 통해서 동적으로 style을 생성하여 적용해줍니다.
-- (지금 개발자 도구를 열어서 아무 엘리먼트나 class="bg(red)" 를 한번 추가해보세요.)
-
-```html
-  <script src="https://unpkg.com/adorable-css"></script>
-</body>
-</html>
+```
+selector:prop(value)!
 ```
 
 
-### Vite(Recommanded)
-- run-time이 아니라 Build-time에서 최종 css를 만들어냅니다. (zero run-time)
-- 최종적으로 만들어진 css를 통해서 런타임 비용을 더 줄일 수 있고 css의 캐싱 기능을 더 활용할 수 있습니다.
-
-```sh
-npm i -D adorable-css
-```
-
-```ts
-// vite.config.js
-import {adorableCSS} from "adorable-css/vite" // <-
-
-export default defineConfig({
-  plugins: [adorableCSS(), ...] // <- plugin을 맨 처음에 등록합니다.
-})
-```
-
-```tsx
-// main.tsx
-import "@adorable.css" // <- virtual css를 import 합니다.
-
-import React from "react"
-import ReactDOM from "react-dom"
-import "./index.css"
-import {App} from "./App"
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App/>
-  </React.StrictMode>,
-  document.getElementById("root")
-)
-```
-
-#### React, Svelte, Vue ... Almost Web framework support with Vite.
-
-
-### CLI(beta): Build Time + Watch mode
-[Remix + adorable css example](./examples/adorable-css-remix/)
+## Position
 
 ```
-npm i -D adorable-css
+absolute
+fixed
+
+x(100)
+y(100)
+z(2)
+
+rotate(45)
 ```
 
+## Auto Layout
 ```
-Usage:
-  $ adorable-css [root]
-
-Commands:
-  [root]  build for production
-
-For more info, run any command with the `--help` flag:
-  $ adorable-css --help
-
-Options:
-  -o, --out <dir>  [string] output Directory (default: adorable.css)
-  -w, --watch      [boolean] rebuilds when modules have changed on disk (default: false)
-  -m, --minify     [boolean] minify output css (default: false)
-  -v, --verbose    [boolean] verbose build output (default: false)
-  --no-reset       [boolean] exclude reset css from output (default: true)
+hbox(center) - Figma의 수평 Auto Layout
+vbox(top)    - Figma의 수직 Auto Layout
+gap(16)      - Auto Layout spacing
+p(16)        - Auto Layout padding
 ```
 
-> vite 환경이 아니라면 cdn을 통해서 실시간으로 개발하고 cli로 최종 빌드시 css만 포함하는 방식을 생각하고 있습니다.
-> 다양한 환경에서 조금더 DX를 높이는 방향성을 고민해보겠습니다.
+## Sizing
+```
+400x300      - Fixed Size Both
+
+w(300)       - Fixed width
+w(hug)       - Hug content
+w(fill)      - Fill container
+w(fill/max:200) - with min-widhth
+w(fill/min:200/max:400) - with min-width, max-width
+
+h(...)       - Height variants
+```
+
+## Constraints
+```
+x(100)				- 왼쪽 정렬
+x(center)	        - 중앙 정렬
+x(center+40)	    - 중앙기준에서 40px
+x(,100)				- 오른쪽 정렬
+x(10,100)			- 좌,우 정렬
+x(10%,100%)			- Scale
+
+y(...)	        	- x와 동일
+```
+
+
+## Visual
+```
+r(8)            - Radius
+bg(#000)        - Background
+b(#000)			- Border (TBD)
+o(#000)			- Outline (TBD)
+```
+
+## Appearance
+
+```
+blur(10)			- Blur effect
+box-shadow()		- Shadow effect
+opcacity(.5)		- 
+clip				- Overflow:hidden
+```
+
 
 ---
+## Text
 
-## What is AdorableCSS?
-> Rapid On-Demand Atomic CSS framework
+```
+font(16/1.5/-1%/600)    - Size/LineHeight/LetterSpacing/Weight
 
-골치아픈 css 이름짓기는 이제 그만!
+bold
+italic
+underline
+strike
 
-더 이상 새로운 css를 작성하는 데 힘빼지 마세요. 거의 모든 class를 미리 정의해두었습니다.
+lowercase
+uppercase
 
-class="font(20) c(red)"와 같이 함수형으로 정의된 형식으로 입력해보세요.
+c(#000)  		   	    - Color
 
-모든 수치와 색상을 지원하며, 필요한 만큼의 CSS만 만들어 냅니다.
+text(right)
+text(middle)
+text(bottom+justify)
 
-## Why Use AdorableCSS?
+nowrap nowrap...
+max-lines(3)
+```
 
-**Easy!**
-: 디자인 개발을 위해 이름을 짓는 수고가 사라지며, 한번 외운 이름은 계속 사용할 수 있습니다.
 
-**Write less do more!**
-: 기존 css문법보다 훨씬 더 적은 코드로 더 많은 작업을 할 수 있습니다.
+## Etc (TBD)
 
-**Fast Writing and No switching!**
-: html, jsx에 바로 디자인을 적용할 수 있어 매우 빠른 디자인 개발 속도를 가집니다.
+### Scroll
+```
+scroll                // overflow: auto (양방향)
+scroll(x)             // overflow-x: auto
+scroll(y)             // overflow-y: auto
+scroll(smooth)        // scroll-behavior: smooth
+clip                 // overflow: clip
+```
 
-**Portable!**
-: css 없이 HTML만으로 UI를 만들 수 있어 이동과 리팩토링에서 자유롭습니다.
+### ScrollBar
+```
+scrollbar(none)       // 스크롤바 숨김
+scrollbar(auto)       // 스크롤바 기본
+scrollbar(always)       // 스크롤바 기본
+scrollbar(thin)       // 얇은 스크롤바
+```
 
-**Compact!**
-: 기존 css 방식보다 훨씬 더 적은 라인의 최적화된 css를 생산합니다.
+### Scroll Snap
+```
+hslide                // 가로 슬라이드 (center + mandatory)
+vslide                // 세로 슬라이드 (center + mandatory)
 
-**Great for Auto Design HandOff!**
-: 이름이 필요없기에 figma등의 HandOff에서 변환하기에 최적화된 형태입니다.
+// 정렬
+hslide(start)         // 시작점 정렬
+hslide(end)           // 끝점 정렬
 
-## Handshake
-> figma AdorableCSS plugin [link](https://github.com/developer-1px/adorable-css/tree/master/src%5Bfigma-handshake%5D)
+// 스냅 강도
+hslide(soft)          // 부드러운 스냅 (proximity)
 
-![](https://images.velog.io/images/teo/post/579cdb7b-8819-4902-8f97-06c3400b2021/%E1%84%92%E1%85%AA%E1%84%86%E1%85%A7%E1%86%AB%20%E1%84%80%E1%85%B5%E1%84%85%E1%85%A9%E1%86%A8%202021-09-01%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%203.17.17.mov.gif)
+// 패딩/마진
+hslide(p:20)          // 양쪽 패딩 20px
+hslide(p:20/40)       // 좌우 패딩 20px/40px
+hslide(m:20)          // 양쪽 마진 20px
+hslide(m:20/40)       // 좌우 마진 20px/40px
 
-## Documentation
-For full documentation, visit [here](https://github.com/developer-1px/adorable-css/tree/master/src%5Badorable-css%5D).
+// 복합 사용
+hslide(start/soft/p:20)
+```
+
+
+### TBD (not yet)
+translate rotate scale
+grid
+cursor
+inert
+disabled
