@@ -195,32 +195,42 @@ export const makePosition1 = (value: string) => {
 
 export const makePosition2X = (x: string) => {
   if (x.startsWith('center')) {
-    const left = x === 'center' ? '50%' : `calc(50% + ${x.slice(6)})`
-    return `left:${left};--a-translate-x:-50%;transform:var(--a-transform);`
+    const offset = x.slice(6) || 0
+    return {
+      left: '50%',
+      transform: `translateX(-50%) translateX(${px(offset)})`,
+    }
   }
-  const [left, right] = x.split('~')
-  const res = []
-  res.push(left ? `left:${px(left)};` : '')
-  res.push(right ? `right:${px(right)};` : '')
-  return res.join('')
+
+  const [left, right] = x.split(/\.\.|~/)
+  return {
+    ...(left ? { left: px(left) } : {}),
+    ...(right ? { right: px(right) } : {}),
+  }
 }
 
 export const makePosition2Y = (y: string) => {
   if (y.startsWith('center')) {
-    const top = y === 'center' ? '50%' : `calc(50% + ${y.slice(6)})`
-    return `top:${top};--a-translate-y:-50%;transform:var(--a-transform);`
+    const offset = y.slice(6) || 0
+    return {
+      top: '50%',
+      transform: `translateY(-50%) translateY(${px(offset)})`,
+    }
   }
-  const [top, bottom] = y.split('~')
 
-  const res = []
-  res.push(top ? `top:${px(top)};` : '')
-  res.push(bottom ? `bottom:${px(bottom)};` : '')
-  return res.join('')
+  const [top, bottom] = y.split(/\.\.|~/)
+  return {
+    ...(top ? { top: px(top) } : {}),
+    ...(bottom ? { bottom: px(bottom) } : {}),
+  }
 }
 
 export const makePosition2 = (value: string) => {
   const [x, y] = value.split(',')
-  return makePosition2X(x) + makePosition2Y(y)
+  return {
+    ...makePosition2X(x),
+    ...makePosition2Y(y),
+  }
 }
 
 export const makePositionWithSemi = (value?: string) => {

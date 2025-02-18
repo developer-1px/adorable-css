@@ -27,7 +27,18 @@ Figma가 디자인한 내용을 가져오고 또 개발자가 작업한 내용�
 
 그동안 AdorableCSS가 막혔던 부분은 다앙한 생태계에서 활용하기가 어렵다는 점이었습니다. 핵심 컨셉은 사용하기 편리한 문법과 체계에 있기에 다양한 프레임워크에서 활용할 수 있도록 하고자 Custom Atomic CSS를 만들수 있는 UnoCSS 플러그인 방식으로 만드려고 하고 있습니다. 이제 언제든지 새로운 환경에서 검증받은 방식으로 dev와 production에서 쓸 수 있도록 하려고 합니다.
 
-### no-conflict tailwindCSS
+```js
+// uno.config.ts
+import { defineConfig } from 'unocss';
+import { adorableCSS } from 'adorable-css/v2/uno';
+
+export default defineConfig({
+  presets:[],
+  ...adorableCSS(),
+});
+```
+
+### No Conflict with tailwindCSS (We are Friends)
 
 일부 tailwindCSS와는 같은 이름인데 다른 서식을 취하거나 reset등이 겹치면서 함께 혼용하는 경우 문제가 되곤했습니다. tailwindCSS의 대체제나 경쟁자 포지션이 아닌만큼 기존에 이미 사용되고 있는 라이브러리와는 충돌하지 않도록 하려고 합니다.
 
@@ -52,18 +63,26 @@ flex -> flex: 1
 selector:prop(value)!
 ```
 
-
-## Position
-
+```html
+<button class="148x80 hbox(pack) bg(#222) r(8) font(14) c(#fff)">click</button>
 ```
-absolute
-fixed
 
-x(100)
-y(100)
-z(2)
 
-rotate(45)
+## Basic
+
+```html
+<div class="400x300"/>  <!-- Fixed Size Both -->
+<div class="16:9"/>     <!-- Aspect Ratio -->
+<div class="(50,100)"/> <!-- Absolute Position -->
+```
+
+## Sizing
+```
+w(300)       - Fixed width
+w(hug)       - Hug content
+w(fill)      - Fill container
+
+h(...)       - Height variants
 ```
 
 ## Auto Layout
@@ -74,29 +93,17 @@ gap(16)      - Auto Layout spacing
 p(16)        - Auto Layout padding
 ```
 
-## Sizing
-```
-400x300      - Fixed Size Both
-
-w(300)       - Fixed width
-w(hug)       - Hug content
-w(fill)      - Fill container
-w(fill/max:200) - with min-widhth
-w(fill/min:200/max:400) - with min-width, max-width
-
-h(...)       - Height variants
-```
 
 ## Constraints
 ```
-x(100)				- 왼쪽 정렬
-x(center)	        - 중앙 정렬
-x(center+40)	    - 중앙기준에서 40px
-x(,100)				- 오른쪽 정렬
-x(10,100)			- 좌,우 정렬
-x(10%,100%)			- Scale
+x(100)          - 왼쪽 정렬
+x(center)       - 중앙 정렬
+x(center+40)    - 중앙기준에서 40px
+x(..100)        - 오른쪽 정렬
+x(10..100)      - 좌,우 정렬
+x(10%..10%)     - Scale
 
-y(...)	        	- x와 동일
+y(...)          - x와 동일
 ```
 
 
@@ -104,35 +111,37 @@ y(...)	        	- x와 동일
 ```
 r(8)            - Radius
 bg(#000)        - Background
-b(#000)			- Border (TBD)
-o(#000)			- Outline (TBD)
+b(#000)         - Border
+o(#000)         - Outline (TBD)
+```
+
+## Effect
+```
+blur(10)        - Blur effect
+box-shadow()    - Shadow effect
 ```
 
 ## Appearance
-
 ```
-blur(10)			- Blur effect
-box-shadow()		- Shadow effect
-opcacity(.5)		- 
-clip				- Overflow:hidden
+opcacity(.5)    - opacity
+clip            - overflow:clip
 ```
-
 
 ---
 ## Text
 
 ```
-font(16/1.5/-1%/600)    - Size/LineHeight/LetterSpacing/Weight
+font(16/1.5/-1%/600)
 
 bold
 italic
 underline
 strike
 
+c(#000)
+
 lowercase
 uppercase
-
-c(#000)  		   	    - Color
 
 text(right)
 text(middle)
@@ -185,9 +194,29 @@ hslide(start/soft/p:20)
 ```
 
 
-### TBD (not yet)
-translate rotate scale
-grid
+### Not yet...
+
+### Interaction
+
+```
 cursor
 inert
 disabled
+```
+
+### Transform
+
+```
+translate 
+rotate 
+scale
+```
+
+
+### Layout
+
+```
+grid
+columns
+```
+

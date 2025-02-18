@@ -6,6 +6,7 @@ const LAYOUT_MAP = {
     aligns: {
       top: 'flex-start',
       middle: 'center',
+      pack: 'center',
       bottom: 'flex-end',
       fill: 'stretch',
     },
@@ -16,6 +17,8 @@ const LAYOUT_MAP = {
       'right+reverse': 'flex-start',
       'center': 'center',
       'center+reverse': 'center',
+      'pack': 'center',
+      'pack+reverse': 'center',
     },
     defaultAlign: 'middle',
   },
@@ -23,6 +26,7 @@ const LAYOUT_MAP = {
     aligns: {
       left: 'flex-start',
       center: 'center',
+      pack: 'center',
       right: 'flex-end',
       fill: 'stretch',
     },
@@ -33,6 +37,8 @@ const LAYOUT_MAP = {
       'bottom+reverse': 'flex-start',
       'middle': 'center',
       'middle+reverse': 'center',
+      'pack': 'center',
+      'pack+reverse': 'center',
     },
     defaultAlign: 'fill',
   },
@@ -57,12 +63,7 @@ function* makeBoxAligns(direction: Direction = 'row', value = '') {
   const alignValue = (values.findLast((v) => v in layout.aligns) ||
     layout.defaultAlign) as keyof typeof layout.aligns
 
-  // For wrap, use align-content instead of align-items
-  if (wrap) {
-    yield { 'align-content': layout.aligns[alignValue] }
-  } else {
-    yield { 'align-items': layout.aligns[alignValue] }
-  }
+  yield { 'align-items': layout.aligns[alignValue] }
 
   const justifyKey = values.findLast((v) => v in layout.justify) as
     | keyof typeof layout.justify
