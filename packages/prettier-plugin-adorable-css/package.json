@@ -1,0 +1,20 @@
+{
+  "name": "prettier-plugin-adorable-css",
+  "version": "1.0.0",
+  "description": "adorable css plugin for prettier",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "^3.5.1",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  },
+  "peerDependencies": {
+    "prettier": "^3.5.1"
+  }
+}
