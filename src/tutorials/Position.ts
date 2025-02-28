@@ -41,6 +41,8 @@ z(value) => z-index: value;
 -->
 
 <div class="relative w(400) h(300) b(#ff6347)">
+  <div class="(center,center) bg(yellow)">(center,center)</div>
+
   <div class="absolute bg(yellow)">absolute</div>
   <div class="absolute(20,20) bg(#ff6347.5)">absolute(20,20)</div>
   <div class="absolute x(5) y(100) bg(blue) c(#fff)">absolute x(5) y(100)</div>

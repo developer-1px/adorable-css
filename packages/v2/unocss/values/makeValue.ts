@@ -195,7 +195,7 @@ export const makePosition1 = (value: string) => {
 
 export const makePosition2X = (x: string) => {
   if (x.startsWith('center')) {
-    const offset = x.slice(6) || 0
+    const offset = parseFloat(x.slice(6)) || 0
     return {
       left: '50%',
       transform: `translateX(-50%) translateX(${px(offset)})`,
@@ -211,7 +211,7 @@ export const makePosition2X = (x: string) => {
 
 export const makePosition2Y = (y: string) => {
   if (y.startsWith('center')) {
-    const offset = y.slice(6) || 0
+    const offset = parseFloat(y.slice(6)) || 0
     return {
       top: '50%',
       transform: `translateY(-50%) translateY(${px(offset)})`,
@@ -225,18 +225,18 @@ export const makePosition2Y = (y: string) => {
   }
 }
 
-export const makePosition2 = (value: string) => {
-  const [x, y] = value.split(',')
+export const makePosition2 = (x, y) => {
+  const posX = makePosition2X(x)
+  const posY = makePosition2Y(y)
+
+  let transform = {}
+  if (posX.transform && posY.transform) {
+    transform = { transform: `${posX.transform} ${posY.transform}` }
+  }
+
   return {
     ...makePosition2X(x),
     ...makePosition2Y(y),
+    ...transform,
   }
-}
-
-export const makePositionWithSemi = (value?: string) => {
-  if (!value) return ''
-  if (value === 'pack' || value === 'center') {
-    return 'left:50%;top:50%;transform:translate(-50%,-50%);'
-  }
-  return (value.includes(',') ? makePosition2(value) : makePosition1(value)) + ';'
 }

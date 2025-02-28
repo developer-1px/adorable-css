@@ -1,5 +1,5 @@
 import { symbols } from 'unocss'
-import { cssvar, makeSide, px } from '../values/makeValue'
+import { cssvar, makeSide, px, splitValues } from '../values/makeValue'
 
 const LAYOUT_MAP = {
   row: {
@@ -216,9 +216,16 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
       return
     }
 
+    if (value.includes('auto')) {
+      yield {
+        'justify-content': 'space-between',
+        'align-content': 'space-between',
+      }
+    }
+
     yield {
-      'grid-gap': makeSide(value),
-      'gap': makeSide(value),
+      'grid-gap': makeSide(value.replace(/auto/g, '0')),
+      'gap': makeSide(value.replace(/auto/g, '0')),
     }
   },
 

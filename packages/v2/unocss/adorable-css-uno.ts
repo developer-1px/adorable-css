@@ -1,6 +1,6 @@
 // uno.config.ts
 import { defineConfig } from 'unocss'
-import { makeHEX, makePosition2X, makePosition2Y, px } from './values/makeValue'
+import { makeHEX, makePosition2, px } from './values/makeValue'
 import { PREFIX_SELECTOR, RULES_FOR_UNOCSS } from './rules'
 
 // + 분리 함수
@@ -81,7 +81,7 @@ const VALID_PSEUDO_ELEMENTS = [
 ]
 
 function generateDimensions([, w, h]: string[]) {
-  return { width: `${w}px`, height: `${h}px` }
+  return { width: px(w), height: px(h) }
 }
 
 function generateAspectRatio([, w, h]: string[]) {
@@ -91,8 +91,7 @@ function generateAspectRatio([, w, h]: string[]) {
 function generatePosition([, x, y]: string[]) {
   return {
     position: 'absolute',
-    ...makePosition2X(x),
-    ...makePosition2Y(y),
+    ...makePosition2(x, y),
   }
 }
 
@@ -107,7 +106,7 @@ export const adorableCSS = () =>
       // aspect-ratio: 16:9
       [/^(\d+):(\d+)$/, generateAspectRatio],
 
-      // poosition: (10, 20)
+      // position: (10,20)
       [/^\(([^,)\s]+),([^,)\s]+)\)$/, generatePosition],
 
       [

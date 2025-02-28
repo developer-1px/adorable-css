@@ -6,6 +6,10 @@
   --primary-bg:rgba(251, 57, 88, .02);
 }
 
+.monospace {
+  font-family:monospace;
+}
+
 .markdown {
   width:768px;
   max-width:100%;
