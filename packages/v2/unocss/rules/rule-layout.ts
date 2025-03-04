@@ -82,6 +82,7 @@ function* makeFlexFill(isRow: boolean) {
     [symbols.selector]: (s: string) => `:where(${s}>*)`,
     [symbols.sort]: -1,
     flex: 'none',
+    position: 'relative',
   }
   yield {
     [symbols.selector]: (s: string) => `:where(${s}>.${isRow ? 'w' : 'h'}\\(fill\\))`,

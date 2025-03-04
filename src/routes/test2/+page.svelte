@@ -2,10 +2,14 @@
   import { createToken, Lexer, EmbeddedActionsParser, createSyntaxDiagramsCode } from 'chevrotain'
 
   // 토큰 정의
-  const HexValue = createToken({ name: 'HexValue', pattern: /#[0-9a-fA-F]{3,6}(?:\.\d+)*/ })
-  const Identifier = createToken({ name: 'Identifier', pattern: /[a-zA-Z]\w*/ })
-  const Dimension = createToken({ name: 'Dimension', pattern: /(?:[0-9]+|[0-9]*\.[0-9]+)[%a-z]*/ })
-  const Integer = createToken({ name: 'Integer', pattern: /0|[1-9]\d*/ })
+  const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/ })
+
+  const Size = createToken({ name: '300x200', pattern: /[1-9][0-9]*x[1-9][0-9]*/ })
+  const AspectRatio = createToken({ name: '16:9', pattern: /[1-9][0-9]*:[1-9][0-9]*/ })
+
+  const HexValue = createToken({ name: 'HexValue', pattern: /#[0-9a-fA-F]{3,8}(?:\.\d+)*/ })
+  const Identifier = createToken({ name: 'Identifier', pattern: /[-_.]*[a-zA-Z]+[-_.\w]*/ })
+  const Dimension = createToken({ name: 'Dimension', pattern: /(?:[0-9]*\.[0-9]+|[0-9]+)[%a-z]*/ })
 
   const Plus = createToken({ name: '+', pattern: /\+/ })
   const Minus = createToken({ name: '-', pattern: /-/ })
@@ -13,38 +17,42 @@
 
   const Comma = createToken({ name: ',', pattern: /,/ })
   const Slash = createToken({ name: '/', pattern: /\// })
-  const Semicolon = createToken({ name: ';', pattern: /;/ })
   const Colon = createToken({ name: ':', pattern: /:/ })
 
   const LParen = createToken({ name: '(', pattern: /\(/ })
   const RParen = createToken({ name: ')', pattern: /\)/ })
-  const Equals = createToken({ name: '=', pattern: /=/ })
+
   const Bang = createToken({ name: '!', pattern: /!/ })
 
   const Range = createToken({ name: '..', pattern: /\.\./ })
 
-  const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/ })
+  const Semicolon = createToken({ name: ';', pattern: /;/ })
 
   // 모든 토큰을 배열로 정의
   const allTokens = [
     WhiteSpace, // 공백은 항상 먼저 정의해야 함
+
+    Size,
+    AspectRatio,
+
     HexValue,
     Dimension,
-    Integer,
+    Identifier,
 
-    Semicolon,
+    Range,
     Colon,
     Bang,
     Comma,
+
     LParen,
     RParen,
-    Equals,
+
     Plus,
     Minus,
     Multiply,
     Slash,
-    Identifier,
-    Range,
+
+    Semicolon,
   ]
 
   // 렉서 인스턴스 생성
@@ -100,9 +108,11 @@
 
       $.RULE('Declaration', () => {
         const declaration = $.OR([
-          { ALT: () => $.SUBRULE($.PositionDeclaration) },
           { ALT: () => $.SUBRULE($.PropertyDeclaration) },
           { ALT: () => $.SUBRULE($.VoidPropertyDeclaration) },
+          { ALT: () => $.SUBRULE($.SizeDeclaration) },
+          { ALT: () => $.SUBRULE($.AspectRatioDeclaration) },
+          { ALT: () => $.SUBRULE($.PositionDeclaration) },
         ])
         const important = []
         $.MANY(() => important.push($.CONSUME(Bang)))
@@ -118,16 +128,6 @@
             ]
           }),
         )
-      })
-
-      $.RULE('PositionDeclaration', () => {
-        $.CONSUME(LParen)
-        const x = $.SUBRULE1($.Value)
-        $.CONSUME(Comma)
-        const y = $.SUBRULE2($.Value)
-        $.CONSUME3(RParen)
-
-        return { x, y }
       })
 
       $.RULE('PropertyDeclaration', () => {
@@ -149,14 +149,52 @@
       })
 
       $.RULE('VoidPropertyDeclaration', () => {
-        const prop = $.CONSUME(Identifier)
+        const prop = $.OR([
+          { ALT: () => $.CONSUME(Identifier) }, //
+          { ALT: () => $.CONSUME(Dimension) },
+        ])
         return { [prop.image]: true }
       })
 
+      $.RULE('SizeDeclaration', () => {
+        const size = $.CONSUME(Size)
+        const [w, h] = size.image.split('x').map((v) => parseInt(v))
+
+        return {
+          w: { values: [w] },
+          h: { values: [h] },
+        }
+      })
+
+      $.RULE('AspectRatioDeclaration', () => {
+        const size = $.CONSUME(AspectRatio)
+        const [w, h] = size.image.split(':').map((v) => parseInt(v))
+
+        return {
+          w: { values: [w] },
+          h: { values: [h] },
+        }
+      })
+
+      $.RULE('PositionDeclaration', () => {
+        $.CONSUME(LParen)
+        const x = $.SUBRULE1($.Value)
+        $.CONSUME(Comma)
+        const y = $.SUBRULE2($.Value)
+        $.CONSUME3(RParen)
+
+        return {
+          x: { values: [x] },
+          y: { values: [y] },
+        }
+      })
+
+      //
       $.RULE('Value', () => {
         return $.OR([
           { ALT: () => $.SUBRULE($.RangeValue) },
           { ALT: () => $.SUBRULE($.KeyValue) },
+          { ALT: () => $.SUBRULE($.FunctionValue) },
           { ALT: () => $.SUBRULE($.Expression) },
           { ALT: () => $.SUBRULE($.Atom) },
         ])
@@ -196,6 +234,20 @@
         return { [key.image]: value }
       })
 
+      $.RULE('FunctionValue', () => {
+        const key = $.CONSUME(Identifier)
+        $.CONSUME(LParen)
+        $.MANY_SEP({
+          SEP: Comma,
+          DEF: () => {
+            $.SUBRULE($.Value)
+          },
+        })
+        $.CONSUME(RParen)
+
+        return `${key.image}(value)`
+      })
+
       $.RULE('Expression', () => {
         const expr = []
 
@@ -219,7 +271,6 @@
         const v = $.OR([
           { ALT: () => $.CONSUME(HexValue) },
           { ALT: () => $.CONSUME(Dimension) },
-          { ALT: () => $.CONSUME(Integer) },
           { ALT: () => $.CONSUME(Identifier) },
         ])
 
@@ -241,6 +292,8 @@
     const lexResult = lexer.tokenize(text)
 
     tokens = lexResult.tokens
+
+    console.log(tokens)
 
     // 에러 체크
     if (lexResult.errors.length > 0) {
@@ -265,8 +318,12 @@
   }
 
   // 파싱 실행 함수
-  let inputText =
-    '(..100,200) hover:c(#fff.2)! hbox(top+right) gap(20/auto) p(0/0/0/2) gg(center-50px) w(100%)!! bold+c(#ccc) w(100..300) hslide(start/p:10/mt:20) opacity(.4)'
+  // let inputText =
+  // '(..100,200) hover:c(#fff.2)! hbox(top+right) gap(20/auto) p(0/0/0/2) gg(center-50px) w(100%)!! bold+c(#ccc) 700 w(100..300) hslide(start/p:10/mt:20) opacity(.4)'
+
+  // let inputText = `386x140 vbox(left) gap(10) p(10) r(20) bg(#fff) b(var(--color-primary-main,#117ce9)) bw(2) clip`
+  let inputText = `w(scale) h(hug) (7.75%..9.56%,center+92) font(16/150%) c(#707070) [&_div:hover]:[display:none]`
+
   let parseResult = ''
 
   function runParser() {
@@ -285,13 +342,17 @@
 
   // 컴포넌트 마운트 시 다이어그램 생성
   runParser()
+
+  console.log('tokens', tokens)
 </script>
 
 <main class="layer y(50) hbox(top) clip">
   <div class="w(fill) h(fill) vbox gap(20) monospace">
     <code class="monospace bg(#eee) p(4/10) r(4)">{inputText}</code>
-    <code class="monospace >span:bg(#eee)+p(4)+m(8)+r(4)"
-      >{@html tokens.map((t) => `<span>${t.image}</span>`).join('')}</code
+    <code class="monospace >span:bg(#eee)+p(4)+m(4)+r(4)+inline-block >>i:c(blue)+font(8) font(11)"
+      >{@html tokens
+        .map((t) => `<span>${t.image}<i>:${t.tokenType.name}</i></span>`)
+        .join('')}</code
     >
     <pre class="h(fill) scroll font(10)">{parseResult}</pre>
   </div>
