@@ -45,6 +45,8 @@ export const RULES_DISPLAY_UNOCSS = {
   'clip': function* () {
     yield { overflow: 'hidden' }
     yield { overflow: 'clip', [symbols.sort]: 1 }
+
+    // @NOTE: 이게 왜 필요했었나?? 아...?
     yield {
       [symbols.selector]: (s: string) => `${s}:has(.nowrap\\.\\.\\.)`,
       'flex-shrink': '1',

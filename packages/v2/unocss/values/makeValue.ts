@@ -4,8 +4,7 @@ export const splitValues = (value: string, project = cssvar) => {
 }
 export const makeValues = (value: string, project = cssvar) => splitValues(value, project).join(' ')
 
-export const makeCommaValues = (value: string, project = cssvar) =>
-  value.split(',').map(project).join(',')
+export const makeCommaValues = (value: string, project = cssvar) => value.split(',').map(project).join(',')
 
 export const makeSide = (value: string) => makeValues(value, px)
 
@@ -16,11 +15,9 @@ export const makeRatio = (value: string) => {
 
 export const makeNumber = (num: number) => num.toFixed(2).replace(/^0+|\.00$|0+$/g, '') || '0'
 
-export const cssvar = (value: string | number) =>
-  String(value).startsWith('--') ? `var(${value})` : value
+export const cssvar = (value: string | number) => (String(value).startsWith('--') ? `var(${value})` : value)
 
-export const cssString = (value: string | number) =>
-  String(value).startsWith('--') ? `var(${value})` : `"${value}"`
+export const cssString = (value: string | number) => (String(value).startsWith('--') ? `var(${value})` : `"${value}"`)
 
 // <length> default: px
 export const px = (value: string | number) => {
@@ -90,9 +87,7 @@ export const makeHEX = (value: string) => {
   if (a)
     return (
       'rgba(' +
-      [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)]
-        .map((value) => parseInt(value, 16))
-        .join(',') +
+      [rgb.slice(1, 3), rgb.slice(3, 5), rgb.slice(5, 7)].map((value) => parseInt(value, 16)).join(',') +
       ',.' +
       a +
       ')'
@@ -132,40 +127,34 @@ export const makeColor = (value = 'transparent') => {
 export const makeBorder = (value: string) => {
   if (!value || value === 'none' || value === '0' || value === '-') return 'none'
 
-  const borderStyles = [
-    'none',
-    'hidden',
-    'dotted',
-    'dashed',
-    'solid',
-    'double',
-    'groove',
-    'ridge',
-    'inset',
-    'outset',
-  ]
+  const borderStyles = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset']
 
-  let hasWidth = false
-  let hasStyle = false
+  let widthValue = null
+  let styleValue = null
+  let colorValue = null
 
-  const values = splitValues(value, (value) => {
-    if (+value > 0) {
-      hasWidth = true
-      return px(value)
+  // 입력값 처리 및 각 값 유형 식별
+  splitValues(value, (val) => {
+    if (+val > 0) {
+      widthValue = px(val)
+      return widthValue
     }
 
-    if (borderStyles.includes(String(value))) {
-      hasStyle = true
-      return value
+    if (borderStyles.includes(String(val))) {
+      styleValue = val
+      return val
     }
 
-    return makeColor(String(value))
+    colorValue = makeColor(String(val))
+    return colorValue
   })
 
-  if (!hasWidth) values.unshift('1px')
-  if (!hasStyle) values.unshift('solid')
+  // 기본값 설정
+  if (!widthValue) widthValue = '1px'
+  if (!styleValue) styleValue = 'solid'
 
-  return values.join(' ')
+  // 값을 표준 순서로 반환: width style color
+  return `${widthValue} ${styleValue}${colorValue ? ' ' + colorValue : ''}`
 }
 
 export const makeTransition = (value: string) => {
@@ -195,7 +184,7 @@ export const makePosition1 = (value: string) => {
 
 export const makePosition2X = (x: string) => {
   if (x.startsWith('center')) {
-    const offset = parseFloat(x.slice(6)) || 0
+    const offset = x.slice(6) || 0
     return {
       left: '50%',
       transform: `translateX(-50%) translateX(${px(offset)})`,
@@ -211,7 +200,7 @@ export const makePosition2X = (x: string) => {
 
 export const makePosition2Y = (y: string) => {
   if (y.startsWith('center')) {
-    const offset = parseFloat(y.slice(6)) || 0
+    const offset = y.slice(6) || 0
     return {
       top: '50%',
       transform: `translateY(-50%) translateY(${px(offset)})`,

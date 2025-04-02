@@ -12,11 +12,11 @@ import {
   px,
   rpx,
 } from './values/makeValue'
-import { RULES_FONT_UNOCSS } from 'packages/v2/unocss/rules/rule-font'
-import { RULES_AUTO_LAYOUT_UNOCSS } from 'packages/v2/unocss/rules/rule-layout'
-import { RULES_TEXT_UNOCSS } from 'packages/v2/unocss/rules/rule-text'
-import { RULES_DISPLAY_UNOCSS } from 'packages/v2/unocss/rules/rule-display'
-import { RULES_POSITION_UNOCSS } from 'packages/v2/unocss/rules/rule-position'
+import { RULES_FONT_UNOCSS } from './rules/rule-font'
+import { RULES_AUTO_LAYOUT_UNOCSS } from './rules/rule-layout'
+import { RULES_TEXT_UNOCSS } from './rules/rule-text'
+import { RULES_DISPLAY_UNOCSS } from './rules/rule-display'
+import { RULES_POSITION_UNOCSS } from './rules/rule-position'
 import { symbols } from 'unocss'
 
 export const reset = `
@@ -415,17 +415,11 @@ export const RULES_FOR_UNOCSS = {
   // "matrix3d": (value:string) => `transform:matrix(${value});`,
 
   // Util
-  'ratio': (value: string) =>
-    `&{position:relative;}&:before{content:"";display:block;width:100%;padding-top:${makeRatio(value)};}&>*{position:absolute;top:0;left:0;width:100%;height:100%;}`,
-  'aspect': (value: string) => `aspect-ratio:${cssvar(value.replace(/:/g, '/'))};`,
-  'aspect-ratio': (value: string) => `aspect-ratio:${cssvar(value.replace(/:/g, '/'))};`,
   'gpu': () => `transform:translateZ(0.1px);`,
 
   // etc
-  'content': (value = "''") => `content:${cssvar(value)};`,
   'app-region': (value: string) => `app-region:${value};-webkit-app-region:${value};`,
-  'clip-path': (value: string) =>
-    `clip-path:${makeValues(value)};-webkit-clip-path:${makeValues(value)};`,
+  'clip-path': (value: string) => `clip-path:${makeValues(value)};-webkit-clip-path:${makeValues(value)};`,
 
   // table
   'table-fixed': () => ({ tableLayout: 'fixed' }),
@@ -433,31 +427,19 @@ export const RULES_FOR_UNOCSS = {
   'table-layout-fixed': () => ({ tableLayout: 'fixed' }),
   'table-layout-auto': () => ({ tableLayout: 'auto' }),
 
-  // Float & Clear
-  'float': (value: string) => `float:${cssvar(value)};`,
-  'clear': (value: string) => `clear:${cssvar(value)};`,
-
   // Filter
   'blur': (value: string) => `filter:blur(${px(value)});-webkit-filter:blur(${px(value)});`,
-  'brightness': (value: string) =>
-    `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
-  'contrast': (value: string) =>
-    `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
+  'brightness': (value: string) => `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
+  'contrast': (value: string) => `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
   'drop-shadow': (value: string) =>
     `filter:drop-shadow(${makeValues(value, px)});-webkit-filter:drop-shadow(${makeValues(value, px)});`,
-  'grayscale': (value: string) =>
-    `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
-  'hue-rotate': (value: string) =>
-    `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
-  'invert': (value: string) =>
-    `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
-  'sepia': (value: string) =>
-    `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
-  'saturate': (value: string) =>
-    `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
+  'grayscale': (value: string) => `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
+  'hue-rotate': (value: string) => `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
+  'invert': (value: string) => `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
+  'sepia': (value: string) => `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
+  'saturate': (value: string) => `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
 
-  'backdrop-blur': (value: string) =>
-    `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
+  'backdrop-blur': (value: string) => `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
   'backdrop-brightness': (value: string) =>
     `backdrop-filter:brightness(${cssvar(value)});-webkit-backdrop-filter:brightness(${cssvar(value)});`,
   'backdrop-contrast': (value: string) =>
@@ -503,6 +485,18 @@ export const RULES_FOR_UNOCSS = {
     const dira = (24 - Math.round(dp / 10)) / 100
 
     return `box-shadow:0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`
+  },
+
+  'debug': function* () {
+    yield {
+      'outline': '2px solid #4f80ff',
+      'outline-offset': '-1px',
+    }
+    yield {
+      [symbols.selector]: (s: string) => `${s}>*`,
+      'outline': '1px dashed #4f80ff',
+      'outline-offset': '-1px',
+    }
   },
 }
 

@@ -1,363 +1,133 @@
 <script lang="ts">
-  import { createToken, Lexer, EmbeddedActionsParser, createSyntaxDiagramsCode } from 'chevrotain'
+  import { createSyntaxDiagramsCode } from 'chevrotain'
+  import { parseInput, parser } from 'packages/v2/unocss/parser'
 
-  // 토큰 정의
-  const WhiteSpace = createToken({ name: 'WhiteSpace', pattern: /\s+/ })
-
-  const Size = createToken({ name: '300x200', pattern: /[1-9][0-9]*x[1-9][0-9]*/ })
-  const AspectRatio = createToken({ name: '16:9', pattern: /[1-9][0-9]*:[1-9][0-9]*/ })
-
-  const HexValue = createToken({ name: 'HexValue', pattern: /#[0-9a-fA-F]{3,8}(?:\.\d+)*/ })
-  const Identifier = createToken({ name: 'Identifier', pattern: /[-_.]*[a-zA-Z]+[-_.\w]*/ })
-  const Dimension = createToken({ name: 'Dimension', pattern: /(?:[0-9]*\.[0-9]+|[0-9]+)[%a-z]*/ })
-
-  const Plus = createToken({ name: '+', pattern: /\+/ })
-  const Minus = createToken({ name: '-', pattern: /-/ })
-  const Multiply = createToken({ name: '*', pattern: /\*/ })
-
-  const Comma = createToken({ name: ',', pattern: /,/ })
-  const Slash = createToken({ name: '/', pattern: /\// })
-  const Colon = createToken({ name: ':', pattern: /:/ })
-
-  const LParen = createToken({ name: '(', pattern: /\(/ })
-  const RParen = createToken({ name: ')', pattern: /\)/ })
-
-  const Bang = createToken({ name: '!', pattern: /!/ })
-
-  const Range = createToken({ name: '..', pattern: /\.\./ })
-
-  const Semicolon = createToken({ name: ';', pattern: /;/ })
-
-  // 모든 토큰을 배열로 정의
-  const allTokens = [
-    WhiteSpace, // 공백은 항상 먼저 정의해야 함
-
-    Size,
-    AspectRatio,
-
-    HexValue,
-    Dimension,
-    Identifier,
-
-    Range,
-    Colon,
-    Bang,
-    Comma,
-
-    LParen,
-    RParen,
-
-    Plus,
-    Minus,
-    Multiply,
-    Slash,
-
-    Semicolon,
-  ]
-
-  // 렉서 인스턴스 생성
-  const lexer = new Lexer(allTokens)
-
-  // 파서 클래스 정의
-  class SimpleParser extends EmbeddedActionsParser {
-    constructor() {
-      super(allTokens)
-
-      const $ = this
-
-      // 파서 규칙 정의
-      $.RULE('Program', () => {
-        let stmts = []
-
-        $.MANY_SEP({
-          SEP: WhiteSpace,
-          DEF: () => {
-            stmts.push($.SUBRULE($.Statement))
-          },
-        })
-
-        return stmts
-      })
-
-      $.RULE('Statement', () => {
-        let selector = ''
-        let style = []
-
-        $.MANY(() => {
-          selector = $.SUBRULE($.Selector)
-        })
-        $.MANY_SEP({
-          SEP: Plus,
-          DEF: () => {
-            style.push($.SUBRULE($.Declaration))
-          },
-        })
-
-        return {
-          selector,
-          style,
-        }
-      })
-
-      $.RULE('Selector', () => {
-        const selector = $.CONSUME(Identifier)
-        $.CONSUME(Colon)
-
-        return selector.image
-      })
-
-      $.RULE('Declaration', () => {
-        const declaration = $.OR([
-          { ALT: () => $.SUBRULE($.PropertyDeclaration) },
-          { ALT: () => $.SUBRULE($.VoidPropertyDeclaration) },
-          { ALT: () => $.SUBRULE($.SizeDeclaration) },
-          { ALT: () => $.SUBRULE($.AspectRatioDeclaration) },
-          { ALT: () => $.SUBRULE($.PositionDeclaration) },
-        ])
-        const important = []
-        $.MANY(() => important.push($.CONSUME(Bang)))
-
-        return Object.fromEntries(
-          Object.entries(declaration).map(([key, value]) => {
-            return [
-              key,
-              {
-                ...value,
-                important: important.length,
-              },
-            ]
-          }),
-        )
-      })
-
-      $.RULE('PropertyDeclaration', () => {
-        const prop = $.CONSUME(Identifier)
-        $.CONSUME(LParen)
-
-        const values = []
-        $.MANY_SEP({
-          SEP: Slash,
-          DEF: () => {
-            values.push($.SUBRULE($.Value))
-          },
-        })
-        $.CONSUME(RParen)
-
-        return {
-          [prop.image]: { values: values },
-        }
-      })
-
-      $.RULE('VoidPropertyDeclaration', () => {
-        const prop = $.OR([
-          { ALT: () => $.CONSUME(Identifier) }, //
-          { ALT: () => $.CONSUME(Dimension) },
-        ])
-        return { [prop.image]: true }
-      })
-
-      $.RULE('SizeDeclaration', () => {
-        const size = $.CONSUME(Size)
-        const [w, h] = size.image.split('x').map((v) => parseInt(v))
-
-        return {
-          w: { values: [w] },
-          h: { values: [h] },
-        }
-      })
-
-      $.RULE('AspectRatioDeclaration', () => {
-        const size = $.CONSUME(AspectRatio)
-        const [w, h] = size.image.split(':').map((v) => parseInt(v))
-
-        return {
-          w: { values: [w] },
-          h: { values: [h] },
-        }
-      })
-
-      $.RULE('PositionDeclaration', () => {
-        $.CONSUME(LParen)
-        const x = $.SUBRULE1($.Value)
-        $.CONSUME(Comma)
-        const y = $.SUBRULE2($.Value)
-        $.CONSUME3(RParen)
-
-        return {
-          x: { values: [x] },
-          y: { values: [y] },
-        }
-      })
-
-      //
-      $.RULE('Value', () => {
-        return $.OR([
-          { ALT: () => $.SUBRULE($.RangeValue) },
-          { ALT: () => $.SUBRULE($.KeyValue) },
-          { ALT: () => $.SUBRULE($.FunctionValue) },
-          { ALT: () => $.SUBRULE($.Expression) },
-          { ALT: () => $.SUBRULE($.Atom) },
-        ])
-      })
-
-      $.RULE('RangeValue', () => {
-        return $.OR([
-          {
-            ALT: () => {
-              const min = $.SUBRULE1($.Atom)
-              $.CONSUME1(Range)
-              const max = $.SUBRULE2($.Atom)
-              return { min, max }
-            },
-          },
-          {
-            ALT: () => {
-              const min = $.SUBRULE3($.Atom)
-              $.CONSUME2(Range)
-              return { min }
-            },
-          },
-          {
-            ALT: () => {
-              $.CONSUME3(Range)
-              const max = $.SUBRULE4($.Atom)
-              return { max }
-            },
-          },
-        ])
-      })
-
-      $.RULE('KeyValue', () => {
-        const key = $.CONSUME(Identifier)
-        $.CONSUME(Colon)
-        const value = $.SUBRULE($.Value)
-        return { [key.image]: value }
-      })
-
-      $.RULE('FunctionValue', () => {
-        const key = $.CONSUME(Identifier)
-        $.CONSUME(LParen)
-        $.MANY_SEP({
-          SEP: Comma,
-          DEF: () => {
-            $.SUBRULE($.Value)
-          },
-        })
-        $.CONSUME(RParen)
-
-        return `${key.image}(value)`
-      })
-
-      $.RULE('Expression', () => {
-        const expr = []
-
-        expr.push($.SUBRULE1($.Atom))
-
-        $.AT_LEAST_ONE(() => {
-          expr.push(
-            $.OR([
-              { ALT: () => $.CONSUME(Plus) },
-              { ALT: () => $.CONSUME(Minus) },
-              { ALT: () => $.CONSUME(Multiply) },
-            ]).image,
-          )
-          expr.push($.SUBRULE2($.Atom))
-        })
-
-        return expr.join('')
-      })
-
-      $.RULE('Atom', () => {
-        const v = $.OR([
-          { ALT: () => $.CONSUME(HexValue) },
-          { ALT: () => $.CONSUME(Dimension) },
-          { ALT: () => $.CONSUME(Identifier) },
-        ])
-
-        return v.image
-      })
-
-      // 파서 규칙 초기화
-      $.performSelfAnalysis()
-    }
-  }
-
-  // 파서 인스턴스 생성
-  const parser = new SimpleParser()
   let tokens = []
-
-  // 파싱 함수
-  function parseInput(text) {
-    // 토큰화
-    const lexResult = lexer.tokenize(text)
-
-    tokens = lexResult.tokens
-
-    console.log(tokens)
-
-    // 에러 체크
-    if (lexResult.errors.length > 0) {
-      return `어휘 분석 오류:\n${lexResult.errors.map((err) => JSON.stringify(err)).join('\n')}`
-    }
-
-    // 파서 상태 초기화
-    parser.input = lexResult.tokens
-
-    // 파싱 실행
-    const cst = parser.Program()
-
-    // 에러 체크
-    if (parser.errors.length > 0) {
-      return `구문 분석 오류:\n${parser.errors.map((err) => err.message).join('\n')}`
-    }
-
-    return {
-      cst: cst,
-      lexResult: lexResult,
-    }
-  }
-
-  // 파싱 실행 함수
-  // let inputText =
-  // '(..100,200) hover:c(#fff.2)! hbox(top+right) gap(20/auto) p(0/0/0/2) gg(center-50px) w(100%)!! bold+c(#ccc) 700 w(100..300) hslide(start/p:10/mt:20) opacity(.4)'
-
-  // let inputText = `386x140 vbox(left) gap(10) p(10) r(20) bg(#fff) b(var(--color-primary-main,#117ce9)) bw(2) clip`
-  let inputText = `w(scale) h(hug) (7.75%..9.56%,center+92) font(16/150%) c(#707070) [&_div:hover]:[display:none]`
-
-  let parseResult = ''
+  let parseResult
 
   function runParser() {
-    const result = parseInput(inputText)
-    if (typeof result === 'string') {
-      console.error(result)
-      return
+    try {
+      const result = parseInput(inputText)
+      if (typeof result === 'string') {
+        parseResult = result
+        tokens = []
+      } else {
+        parseResult = JSON.stringify(result.cst, null, 2)
+        tokens = result.tokens
+      }
+    } catch (error: any) {
+      parseResult = `파싱 오류: ${error.message || '알 수 없는 오류'}`
+      console.error('파싱 오류:', error)
+      tokens = []
     }
-
-    console.log(result.cst)
-    parseResult = JSON.stringify(result.cst, null, 2)
   }
 
+  // 테스트 케이스들
+  const testCases = [
+    // 기본 선택자 테스트
+    '#fa3:hover:c(#fff.3)',
+    '&.selected#main:hover',
+    'div.container>p>>span',
+    'a+b~c>d>>e',
+
+    // 범위 테스트
+    'lg..sm:div',
+    '10..20px',
+    'xl..:div',
+    '..md:span',
+
+    // 단순 함수 호출 테스트
+    'transform(rotate/scale/translate)',
+    'color(#fff,#000)',
+    'margin(10px/20px/30px/40px)',
+    'font(100/-/-1%)',
+    'font(10/-/1%)',
+
+    // 복합 함수 인수 테스트
+    'grid(1fr+20px/repeat+2/auto+1fr)',
+    'translate(50%+10px,100%+20px)',
+
+    // 키-값 함수 인수 테스트
+    'slide(duration:300/delay:0/ease:in-out)',
+    'config(x:10/y:20/z:30/scale:1.5)',
+
+    // 혼합 함수 인수 테스트
+    'animation(slide+left/duration:500/delay:0,fade+in/d:300)',
+    'transform(rotate30deg/scale:1.2/translate:10px)',
+    'c(rgba(0,0,0,.2))',
+
+    // 복잡한 조합 테스트
+    'lg..md:&.header.active#main:hover:transform(rotate+30deg/scale:1.2)!',
+    'sm:container>div.item+p:nth-child(2n+1):slide(top+down/d:300)!',
+
+    // 특수 케이스 테스트
+    'calc(100%+20px*2-10px)',
+    'gradient(#fff..#000/angle:45deg/stops:3)',
+    '@media(min:300/max:800):&.responsive:config(cols:2/gap:10)!',
+
+    // 에러 케이스 테스트 (이것들은 실패해야 정상)
+    // '..',  // 범위 값 없음
+    // 'foo(',  // 닫는 괄호 없음
+    // 'a++b',  // 연속된 연산자
+    // 'test)',  // 여는 괄호 없음
+    // ':hover:',  // 값 없는 의사 클래스
+  ]
+
+  // 테스트 입력 초기값 설정
+  let inputText = testCases[0]
+
+  // 테스트 케이스 선택 함수
+  function selectTestCase(index: number) {
+    inputText = testCases[index]
+    runParser()
+  }
+
+  // 파서 규칙 가져오기 (다이어그램용)
   const parserInstance = parser.getSerializedGastProductions()
   const htmlText = createSyntaxDiagramsCode(parserInstance)
 
-  // 컴포넌트 마운트 시 다이어그램 생성
+  // 컴포넌트 마운트 시 파서 실행
   runParser()
-
-  console.log('tokens', tokens)
 </script>
 
-<main class="layer y(50) hbox(top) clip">
+<main class="layer y(56) hbox(top) clip">
   <div class="w(fill) h(fill) vbox gap(20) monospace">
-    <code class="monospace bg(#eee) p(4/10) r(4)">{inputText}</code>
-    <code class="monospace >span:bg(#eee)+p(4)+m(4)+r(4)+inline-block >>i:c(blue)+font(8) font(11)"
-      >{@html tokens
-        .map((t) => `<span>${t.image}<i>:${t.tokenType.name}</i></span>`)
-        .join('')}</code
-    >
-    <pre class="h(fill) scroll font(10)">{parseResult}</pre>
+    <h2>CSS 확장 문법 파서 테스트</h2>
+
+    <div class="vbox gap(10)">
+      <label>테스트 케이스:</label>
+      <div class="hbox wrap gap(5)">
+        {#each testCases as test, i}
+          <button
+            on:click={() => selectTestCase(i)}
+            class="p(4/8) bg(#eee) r(4) {inputText === test ? 'bg(#117ce9) c(white)' : ''}">{test}</button
+          >
+        {/each}
+      </div>
+    </div>
+
+    <div>
+      <label for="input">테스트할 표현식:</label>
+      <input id="input" bind:value={inputText} class="w(100%) p(4) mb(10)" />
+      <button on:click={runParser} class="p(4/10) bg(#117ce9) c(white) r(4)">파싱</button>
+    </div>
+
+    <h3>토큰:</h3>
+    <code class="monospace bg(#eee) p(4/10) r(4)">
+      {@html tokens
+        .map(
+          (t) =>
+            `<span class="bg(#f5f5f5) p(2/4) m(2) inline-block r(2)">${t.image} <i class="c(blue) font(10)">${t.tokenType?.name || '알 수 없음'}</i></span>`,
+        )
+        .join('')}
+    </code>
+
+    <h3>파싱 결과:</h3>
+    <pre class="h(300) scroll font(12) bg(#f5f5f5) p(10) r(4)">{parseResult}</pre>
   </div>
 
   <div class="w(fill) h(fill) scroll">
-    <iframe srcdoc={htmlText} style="width: 100%; height: 5000px; overflow: scroll"></iframe>
+    <h3>문법 다이어그램:</h3>
+    <iframe srcdoc={htmlText} style="width: 100%; height: 600px; border: 1px solid #ccc; border-radius: 4px;"></iframe>
   </div>
 </main>

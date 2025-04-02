@@ -55,22 +55,17 @@ function* makeBoxAligns(direction: Direction = 'row', value = '') {
 
   // Handle flex-flow
   yield {
-    'flex-flow': [hasReverse ? `${baseDirection}-reverse` : baseDirection, wrap]
-      .filter(Boolean)
-      .join(' '),
+    'display': 'flex',
+    'flex-flow': [hasReverse ? `${baseDirection}-reverse` : baseDirection, wrap].filter(Boolean).join(' '),
   }
 
-  const alignValue = (values.findLast((v) => v in layout.aligns) ||
-    layout.defaultAlign) as keyof typeof layout.aligns
+  const alignValue = (values.findLast((v) => v in layout.aligns) || layout.defaultAlign) as keyof typeof layout.aligns
 
   yield { 'align-items': layout.aligns[alignValue] }
 
-  const justifyKey = values.findLast((v) => v in layout.justify) as
-    | keyof typeof layout.justify
-    | undefined
+  const justifyKey = values.findLast((v) => v in layout.justify) as keyof typeof layout.justify | undefined
 
-  const justifyWithReverse =
-    justifyKey && hasReverse ? (`${justifyKey}+reverse` as const) : justifyKey
+  const justifyWithReverse = justifyKey && hasReverse ? (`${justifyKey}+reverse` as const) : justifyKey
 
   if (justifyWithReverse) {
     yield { 'justify-content': layout.justify[justifyWithReverse] }
@@ -179,12 +174,10 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
 
   // -- Flexbox Layout
   'hbox': function* (value = '') {
-    yield { display: 'flex' }
     yield* makeBoxAligns('row', value)
     yield* makeHBoxFill()
   },
   'vbox': function* (value = '') {
-    yield { display: 'flex' }
     yield* makeBoxAligns('column', value)
     yield* makeVBoxFill()
     yield {
@@ -193,12 +186,10 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
     }
   },
   'wrap': function* (value = '') {
-    yield { display: 'flex' }
     yield* makeBoxAligns('row wrap', value)
     yield* makeHBoxFill()
   },
   'pack': function* () {
-    yield { display: 'flex' }
     yield* makeBoxAligns('row', 'center+middle')
     yield* makeHBoxFill()
   },
@@ -259,8 +250,9 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
   }),
 
   // flex: @deprecated
-  'space': (value: string) =>
-    `[class*="hbox"]>&{width:${px(value)};}[class*="vbox"]>&{height:${px(value)};}`,
+  'space': (value: string) => {
+    return { padding: px(value) }
+  },
 
   'order': (value: string) => ({ order: cssvar(value) }),
   'flex': (value: string) => ({ flex: cssvar(value) }),

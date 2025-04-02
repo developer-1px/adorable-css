@@ -1,39 +1,10 @@
 // uno.config.ts
-import { defineConfig } from 'unocss'
-import { makeHEX, makePosition2, px } from './values/makeValue'
-import { PREFIX_SELECTOR, RULES_FOR_UNOCSS } from './rules'
-
-// + 분리 함수
-export function splitByTopLevelPlus(input: string) {
-  const brackets = { '(': ')', '{': '}', '[': ']' }
-
-  const stack: string[] = []
-  const parts: string[] = []
-  let start = 0
-
-  for (let i = 0; i < input.length; i++) {
-    const char = input[i]
-    if (brackets[char]) {
-      stack.push(brackets[char])
-    } //
-    else if (Object.values(brackets).includes(char)) {
-      if (stack.pop() !== char) {
-        return [input]
-      }
-    } //
-    else if (char === '+' && stack.length === 0) {
-      parts.push(input.slice(start, i).trim())
-      start = i + 1
-    }
-  }
-
-  if (stack.length > 0) {
-    return [input]
-  }
-
-  parts.push(input.slice(start).trim())
-  return parts
-}
+import { defineConfig, symbols } from 'unocss'
+import { cssvar, makePosition2, px } from './values/makeValue'
+import { parseInput } from './parser'
+import { makeHEX } from '../../vite/src/core/makeValue'
+import { ALL_PROPERTIES } from './const'
+import { RULES_FOR_UNOCSS } from './rules'
 
 const VALID_PSEUDO_CLASSES = [
   'active',
@@ -95,6 +66,25 @@ function generatePosition([, x, y]: string[]) {
   }
 }
 
+// 스타일 인자 추출 함수
+const extractStyleArgs = (selector) => {
+  if (selector.type === 'function') {
+    return selector.args.map(({ value: atom }) => {
+      console.log('atom', atom)
+      if (atom.type === 'hex') return makeHEX(atom.image)
+      return atom.image
+    })
+  }
+
+  return []
+}
+
+// 스타일 결과를 배열로 변환하는 함수
+function normalizeStyleResult(result: StyleProperties | StyleProperties[]): StyleProperties[] {
+  if (typeof result === 'string') return []
+  return Array.isArray(result) || result[Symbol.iterator] ? [...result] : [result]
+}
+
 // UnoCSS TypeScript
 export const adorableCSS = () =>
   defineConfig({
@@ -110,134 +100,70 @@ export const adorableCSS = () =>
       [/^\(([^,)\s]+),([^,)\s]+)\)$/, generatePosition],
 
       [
-        /^([-a-zA-Z0-9_.]+)(?:\((.*?)\))?$/,
-        ([_, prop, value], unocss) => {
+        /^.+$/,
+        ([inputValue], { rawSelector }) => {
           try {
-            const fn = RULES_FOR_UNOCSS[prop]
-            if (typeof fn !== 'function') return
-            if (fn.length >= 1 && !value) return
+            const parsedInput = parseInput(inputValue)
+            const statements = parsedInput.cst as []
 
-            const def = fn(value, unocss)
-            if (typeof def === 'string') return { [prop]: 'var(--not-implemented)' }
-            return def
-          } catch (e) {}
-        },
-      ],
-    ],
+            console.log(parsedInput)
+            console.log(statements)
 
-    // AdorableCSS Syntax!
-    variants: [
-      // #hexa : #fff.02
-      (matcher) => {
-        const regexHexa = /(#(?:[0-9a-fA-F]{3}){1,2}(?:\.\d+)?)/g
-        const hexaColorMatch = matcher.match(regexHexa)
+            const selectorParts: string[] = []
+            const styleRules = []
 
-        if (hexaColorMatch) {
-          return {
-            matcher,
-            body: (body) => {
-              return body.map(([selector, value]) => [
-                selector,
-                String(value || '').replace(regexHexa, (a) => makeHEX(a)),
-              ])
-            },
+            statements.forEach((selector) => {
+              const simpleSelector = selector.selector
+              const propertyName = simpleSelector.type === 'function' ? simpleSelector.name : simpleSelector.image
+
+              console.log('styleResult', simpleSelector)
+              console.log('styleDeclarations', propertyName)
+
+              const fn =
+                RULES_FOR_UNOCSS[propertyName] ||
+                (ALL_PROPERTIES[propertyName] ? (value) => ({ [propertyName]: cssvar(value) }) : null)
+
+              // selector
+              if (!fn) {
+                if (!selector.combinator) {
+                  let pseudoIdentifier = simpleSelector.type === 'function' ? simpleSelector.name : simpleSelector.image
+                  let selectorText = simpleSelector.image
+                  if (VALID_PSEUDO_CLASSES.includes(pseudoIdentifier)) selectorText = ':' + selectorText
+                  else if (VALID_PSEUDO_ELEMENTS.includes(pseudoIdentifier)) selectorText = '::' + selectorText
+                  selectorParts.push(selectorText)
+                } else {
+                  selectorParts.push(selector.image)
+                }
+              }
+              // property
+              else {
+                const args = extractStyleArgs(simpleSelector)
+                const styleResult = args.length ? fn(args.join('/')) : fn()
+                const styleDeclarations = normalizeStyleResult(styleResult)
+
+                console.log('styleResult', styleResult)
+                console.log('styleDeclarations', styleDeclarations)
+
+                styleRules.push(styleDeclarations)
+              }
+            })
+
+            const cssSelector = selectorParts.join('')
+
+            console.log('cssSelector', cssSelector)
+
+            return [
+              ...styleRules.flat().map((rule) => {
+                const selectorTransformer = rule[symbols.selector] || ((s) => s)
+                return {
+                  ...rule,
+                  [symbols.selector]: (s: string) => selectorTransformer(`${s}${cssSelector}`),
+                }
+              }),
+            ]
+          } catch (error) {
+            // console.error(error)
           }
-        }
-      },
-
-      // prefixPeusdo
-      (matcher) => {
-        const rangeMatch = matcher.match(/^(\d+)\.{2,3}(\d+):(.+)$/)
-        if (rangeMatch) {
-          const [full, min, max, rest] = rangeMatch
-          const isInclusive = full.includes('...')
-          return {
-            matcher: rest,
-            parent: `@media (min-width: ${min}px) and (max-width: ${isInclusive ? max : parseInt(max) - 1}px)`,
-            order: parseInt(min),
-          }
-        }
-      },
-
-      // prefixSelector >, >>
-      // pseudo classes / elements ex) :hover, ::before
-      (matcher) => {
-        const selectors = [] as ((s: string) => string)[]
-
-        let currentMatcher = matcher
-        while (true) {
-          const match = currentMatcher.match(/^([^:]+):(.+)$/)
-          if (!match) break
-
-          const [, pseudo, rest] = match
-          currentMatcher = rest
-
-          const prefix = PREFIX_SELECTOR[pseudo.slice(0, 2)] || PREFIX_SELECTOR[pseudo.slice(0, 1)]
-          if (prefix) {
-            selectors.push((s: string) => prefix(pseudo).replace(/&/g, s))
-          }
-          //
-          else if (VALID_PSEUDO_CLASSES.includes(pseudo)) {
-            selectors.push((s: string) => `${s}:${pseudo}`)
-          }
-          //
-          else if (VALID_PSEUDO_ELEMENTS.includes(pseudo)) {
-            selectors.push((s: string) => `${s}::${pseudo}`)
-          }
-        }
-
-        if (selectors.length > 0) {
-          return {
-            matcher: currentMatcher,
-            selector: (s) => selectors.reduce((acc, fn) => fn(acc), s),
-            order: selectors.length, // variants가 많을수록 높은 order
-          }
-        }
-      },
-
-      // >, >>
-      (matcher) => {
-        const match = matcher.match(/^(>>|>)(.+)$/)
-        if (match) {
-          const [, pseudo, rest] = match
-
-          const pseudoSelector = {
-            '>': (s: string) => `${s}>*`,
-            '>>': (s: string) => `${s} *`,
-          } as Record<string, (s: string) => string>
-
-          return {
-            matcher: rest,
-            selector: pseudoSelector[pseudo],
-            order: 1,
-          }
-        }
-      },
-
-      // important!
-      (matcher) => {
-        const match = matcher.match(/(.*?)(!+)$/)
-        if (match) {
-          const [, rest, important] = match
-          return {
-            matcher: rest,
-            selector: (s) => s + '[class]'.repeat(important.length),
-            body: (body) => {
-              return body.map(([selector, value]) => [selector, value + '!important'])
-            },
-          }
-        }
-      },
-    ],
-
-    // +
-    shortcuts: [
-      [
-        /(\+)/,
-        (match) => {
-          if (!match.input) return undefined
-          const segments = splitByTopLevelPlus(match.input)
-          return segments.length >= 2 ? segments : undefined
         },
       ],
     ],
