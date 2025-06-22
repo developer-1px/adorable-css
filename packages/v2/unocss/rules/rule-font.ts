@@ -28,17 +28,70 @@ export const RULES_FONT_BASIC = {
   // -- Typography
   'font': function* (value: string) {
     if (!value) return
-    const handlers = [
-      (v: string) => ({ 'font-size': px(v) }),
-      (v: string) => ({ 'line-height': +v < 4 ? makeNumber(+v) : px(v) }),
-      (v: string) => ({ 'letter-spacing': px(percentToEm(v)) }),
-      (v: string) => ({ 'font-weight': cssvar(v) }),
-      (v: string) => ({ 'font-family': cssvar(v) }),
-    ]
+    const parts = value.split('/')
+    
+    // Helper function to check if value is font-weight
+    const isFontWeight = (v: string) => {
+      const numWeight = parseInt(v, 10)
+      const isNumericWeight = !isNaN(numWeight) && numWeight >= 100 && numWeight <= 900 && numWeight % 100 === 0
+      const isNamedWeight = ['bold', 'medium', 'light', 'regular', 'thin', 'heavy', 'semibold'].includes(v)
+      return isNumericWeight || isNamedWeight
+    }
 
-    for (const [i, val] of value.split('/').entries()) {
-      if (val === '-') continue
-      yield handlers[i](val)
+    // Check if first part is a font family (non-numeric)
+    if (parts[0] && isNaN(parseFloat(parts[0]))) {
+      // Pattern: font-family/size/line-height/letter-spacing/font-weight
+      if (parts[0] && parts[0] !== '-') yield { 'font-family': cssvar(parts[0]) }
+      if (parts[1] && parts[1] !== '-') yield { 'font-size': px(parts[1]) }
+      if (parts[2] && parts[2] !== '-') yield { 'line-height': +parts[2] < 4 ? makeNumber(+parts[2]) : px(parts[2]) }
+      if (parts[3] && parts[3] !== '-') yield { 'letter-spacing': px(percentToEm(parts[3])) }
+      if (parts[4] && parts[4] !== '-') {
+        const numWeight = parseInt(parts[4], 10)
+        if (!isNaN(numWeight) && numWeight >= 100 && numWeight <= 900 && numWeight % 100 === 0) {
+          yield { 'font-weight': numWeight }
+        } else {
+          yield { 'font-weight': cssvar(parts[4]) }
+        }
+      }
+    } else {
+      // Pattern: size/line-height/letter-spacing/font-weight
+      // But with smart detection for font-weight in 3rd position
+      if (parts[0] && parts[0] !== '-') yield { 'font-size': px(parts[0]) }
+      if (parts[1] && parts[1] !== '-') yield { 'line-height': +parts[1] < 4 ? makeNumber(+parts[1]) : px(parts[1]) }
+      
+      // Smart detection: if 3rd parameter is font-weight, skip letter-spacing
+      if (parts[2] && parts[2] !== '-') {
+        if (isFontWeight(parts[2])) {
+          // 3rd parameter is font-weight
+          const numWeight = parseInt(parts[2], 10)
+          if (!isNaN(numWeight) && numWeight >= 100 && numWeight <= 900 && numWeight % 100 === 0) {
+            yield { 'font-weight': numWeight }
+          } else {
+            yield { 'font-weight': cssvar(parts[2]) }
+          }
+        } else {
+          // 3rd parameter is letter-spacing
+          yield { 'letter-spacing': px(percentToEm(parts[2])) }
+          
+          // Handle font-weight for 4th parameter
+          if (parts[3] && parts[3] !== '-') {
+            const numWeight = parseInt(parts[3], 10)
+            if (!isNaN(numWeight) && numWeight >= 100 && numWeight <= 900 && numWeight % 100 === 0) {
+              yield { 'font-weight': numWeight }
+            } else {
+              yield { 'font-weight': cssvar(parts[3]) }
+            }
+          }
+        }
+      } else if (parts[2] === '-' && parts[3] && parts[3] !== '-') {
+        // 3rd parameter is skipped, check 4th for font-weight
+        const numWeight = parseInt(parts[3], 10)
+        if (!isNaN(numWeight) && numWeight >= 100 && numWeight <= 900 && numWeight % 100 === 0) {
+          yield { 'font-weight': numWeight }
+        } else {
+          yield { 'font-weight': cssvar(parts[3]) }
+        }
+      }
     }
   },
 

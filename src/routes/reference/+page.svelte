@@ -1,138 +1,70 @@
 <script lang="ts">
-// Navigation styles
-const nav = "fixed top(0) w(fill) hbox gap(auto) p(16/40) bg(#fff/.9) backdrop(10) z(100) shadow(sm)"
-const navLogo = "font(24/700) c(#333) hover:c(#667eea) transition(.3s)"
-const navLink = "font(16/500) c(#666) hover:c(#333) transition(.3s) p(8/16)"
+import { generateSimpleCSS } from '../../../packages/v2/unocss/simple-css-generator.ts';
 
-// Page styles
-const container = "w(fill) min-h(screen) bg(#f8f9ff) pt(80)"
-const mainContent = "w(1400) m(auto) p(40)"
-const pageTitle = "font(48/1.2/700) c(#333) mb(16)"
-const pageSubtitle = "font(20/1.5) c(#666) mb(48)"
-
-// Table styles
-const tableCard = "bg(#fff) r(16) shadow(md) overflow(hidden) mb(32)"
-const tableHeader = "hbox gap(auto) p(24) bg(gradient(#667eea/#764ba2)) c(#fff)"
-const sectionTitle = "font(24/600) c(#fff)"
-const sectionIcon = "font(32)"
-const tableBody = "p(0)"
-const tableRow = "hbox gap(0) b(1/#e2e8f0) hover:bg(#f8f9ff) transition(.2s)"
-const classCell = "w(400) p(16/24) font(14/1.5) bg(#2d3748) c(#e2e8f0) font-mono"
-const outputCell = "flex-1 p(16/24) font(14/1.5) c(#4a5568)"
-
-// Search styles
-const searchContainer = "sticky top(80) bg(#f8f9ff) p(16/0) z(50) mb(32)"
-const searchInput = "w(fill) p(12/16) r(8) b(2/#e2e8f0) bg(#fff) font(16) focus:b(#667eea) transition(.3s)"
-
-// Filter styles
-const filterContainer = "hbox gap(16) mb(32) wrap"
-const filterButton = "p(8/16) r(6) bg(#fff) b(1/#e2e8f0) c(#666) font(14/500) hover:bg(#667eea) hover:c(#fff) transition(.3s)"
-const activeFilter = "bg(#667eea) c(#fff)"
-
-// Reference data organized by Figma concepts
+// Reference data organized by Figma concepts with real CSS output
 const referenceData = [
   {
     category: "Auto Layout",
     icon: "📐",
     description: "Figma's Auto Layout system for flexible containers",
     items: [
-      {
-        class: 'hbox',
-        css: 'display: flex; align-items: center;',
-        description: 'Horizontal auto layout'
-      },
-      {
-        class: 'vbox',
-        css: 'display: flex; flex-direction: column;',
-        description: 'Vertical auto layout'
-      },
-      {
-        class: 'pack',
-        css: 'display: flex; align-items: center; justify-content: center;',
-        description: 'Center items in both directions'
-      },
-      {
-        class: 'hbox(center)',
-        css: 'display: flex; align-items: center; justify-content: center;',
-        description: 'Horizontal layout with center alignment'
-      },
-      {
-        class: 'vbox(center)',
-        css: 'display: flex; flex-direction: column; align-items: center;',
-        description: 'Vertical layout with center alignment'
-      },
-      {
-        class: 'gap(16)',
-        css: 'gap: 16px;',
-        description: 'Space between items'
-      },
-      {
-        class: 'gap(16/24)',
-        css: 'gap: 16px 24px;',
-        description: 'Row and column gap'
-      }
+      { class: 'hbox', description: 'Horizontal auto layout (default: center alignment)' },
+      { class: 'vbox', description: 'Vertical auto layout (default: top alignment)' },
+      { class: 'pack', description: 'Center items in both directions' },
+      { class: 'wrap', description: 'Enable wrap for auto layout' },
+      { class: 'hbox(center)', description: 'Horizontal with center+middle alignment' },
+      { class: 'hbox(left+top)', description: 'Horizontal with explicit left+top alignment' },
+      { class: 'hbox(right+bottom)', description: 'Horizontal with right+bottom alignment' },
+      { class: 'vbox(center)', description: 'Vertical with center alignment' },
+      { class: 'wrap(middle)', description: 'Wrap with middle alignment' },
+      { class: 'gap(16)', description: 'Item spacing between flex items' },
+      { class: 'gap(16/24)', description: 'Row gap 16px, column gap 24px (for wrap)' }
     ]
   },
   {
-    category: "Size & Position",
-    icon: "📏",
-    description: "Sizing and positioning like Figma's properties panel",
+    category: "Size & Dimensions",
+    icon: "📏", 
+    description: "Sizing and dimensions like Figma's size properties",
     items: [
-      {
-        class: 'w(300)',
-        css: 'width: 300px;',
-        description: 'Fixed width'
-      },
-      {
-        class: 'w(fill)',
-        css: 'width: 100%;',
-        description: 'Fill container width'
-      },
-      {
-        class: 'w(hug)',
-        css: 'width: fit-content;',
-        description: 'Hug content width'
-      },
-      {
-        class: 'h(200)',
-        css: 'height: 200px;',
-        description: 'Fixed height'
-      },
-      {
-        class: 'h(fill)',
-        css: 'height: 100%;',
-        description: 'Fill container height'
-      },
-      {
-        class: '300x200',
-        css: 'width: 300px; height: 200px;',
-        description: 'Fixed dimensions'
-      },
-      {
-        class: '16:9',
-        css: 'aspect-ratio: 16/9;',
-        description: 'Aspect ratio constraint'
-      },
-      {
-        class: 'absolute',
-        css: 'position: absolute;',
-        description: 'Absolute positioning'
-      },
-      {
-        class: 'relative',
-        css: 'position: relative;',
-        description: 'Relative positioning'
-      },
-      {
-        class: 'top(10)',
-        css: 'top: 10px;',
-        description: 'Top offset'
-      },
-      {
-        class: 'left(20)',
-        css: 'left: 20px;',
-        description: 'Left offset'
-      }
+      { class: '300x200', description: 'Fixed size both dimensions' },
+      { class: 'w(300)', description: 'Fixed width' },
+      { class: 'h(200)', description: 'Fixed height' },
+      { class: 'w(hug)', description: 'Hug contents width (like Figma)' },
+      { class: 'w(fill)', description: 'Fill container width (like Figma)' },
+      { class: 'h(hug)', description: 'Hug contents height' },
+      { class: 'h(fill)', description: 'Fill container height' },
+      { class: 'w(200..)', description: 'Min-width constraint' },
+      { class: 'w(..400)', description: 'Max-width constraint' },
+      { class: 'w(200..400)', description: 'Min and max width constraints' },
+      { class: 'w(fill/300..600)', description: 'Fill with min/max constraints' },
+      { class: '16:9', description: 'Aspect ratio 16:9' },
+      { class: '4:3', description: 'Aspect ratio 4:3' },
+      { class: '1:1', description: 'Square aspect ratio' }
+    ]
+  },
+  {
+    category: "Position & Constraints",
+    icon: "🎯",
+    description: "Positioning and constraints like Figma's constraint system", 
+    items: [
+      { class: 'relative', description: 'Relative positioning' },
+      { class: 'absolute', description: 'Absolute positioning' },
+      { class: 'fixed', description: 'Fixed positioning' },
+      { class: 'sticky', description: 'Sticky positioning' },
+      { class: '(0,0)', description: 'Absolute position left:0, top:0' },
+      { class: '(..0,..0)', description: 'Absolute position right:0, bottom:0' },
+      { class: '(10..10,0)', description: 'Absolute with left+right, top constraints' },
+      { class: '(center,center)', description: 'Absolute center positioning' },
+      { class: 'layer', description: 'Absolute layer covering full parent' },
+      { class: 'layer(top)', description: 'Absolute layer aligned to top' },
+      { class: 'layer(top+left)', description: 'Absolute layer aligned to top-left' },
+      { class: 'top(10)', description: 'Top offset for positioned elements' },
+      { class: 'left(20)', description: 'Left offset for positioned elements' },
+      { class: 'right(30)', description: 'Right offset for positioned elements' },
+      { class: 'bottom(40)', description: 'Bottom offset for positioned elements' },
+      { class: 'z(1)', description: 'Z-index stacking order' },
+      { class: 'z(10)', description: 'Higher z-index' },
+      { class: 'z(top)', description: 'Highest z-index' }
     ]
   },
   {
@@ -140,51 +72,24 @@ const referenceData = [
     icon: "📦",
     description: "Padding and margin like Figma's spacing controls",
     items: [
-      {
-        class: 'p(16)',
-        css: 'padding: 16px;',
-        description: 'Equal padding on all sides'
-      },
-      {
-        class: 'p(16/24)',
-        css: 'padding: 16px 24px;',
-        description: 'Vertical and horizontal padding'
-      },
-      {
-        class: 'p(16/24/32)',
-        css: 'padding: 16px 24px 32px;',
-        description: 'Top, horizontal, bottom padding'
-      },
-      {
-        class: 'p(16/24/32/8)',
-        css: 'padding: 16px 24px 32px 8px;',
-        description: 'All four sides padding'
-      },
-      {
-        class: 'px(20)',
-        css: 'padding-left: 20px; padding-right: 20px;',
-        description: 'Horizontal padding'
-      },
-      {
-        class: 'py(16)',
-        css: 'padding-top: 16px; padding-bottom: 16px;',
-        description: 'Vertical padding'
-      },
-      {
-        class: 'm(16)',
-        css: 'margin: 16px;',
-        description: 'Equal margin on all sides'
-      },
-      {
-        class: 'mx(auto)',
-        css: 'margin-left: auto; margin-right: auto;',
-        description: 'Center horizontally'
-      },
-      {
-        class: 'mt(20)',
-        css: 'margin-top: 20px;',
-        description: 'Top margin'
-      }
+      { class: 'p(16)', description: 'Equal padding on all sides' },
+      { class: 'p(16/24)', description: 'Vertical 16px, horizontal 24px padding' },
+      { class: 'p(16/24/32)', description: 'Top, horizontal, bottom padding' },
+      { class: 'p(16/24/32/8)', description: 'Top, right, bottom, left padding' },
+      { class: 'px(20)', description: 'Horizontal padding only' },
+      { class: 'py(16)', description: 'Vertical padding only' },
+      { class: 'pt(12)', description: 'Top padding only' },
+      { class: 'pr(12)', description: 'Right padding only' },
+      { class: 'pb(12)', description: 'Bottom padding only' },
+      { class: 'pl(12)', description: 'Left padding only' },
+      { class: 'm(16)', description: 'Equal margin on all sides' },
+      { class: 'mx(20)', description: 'Horizontal margin' },
+      { class: 'my(16)', description: 'Vertical margin' },
+      { class: 'mx(auto)', description: 'Center horizontally' },
+      { class: 'mt(20)', description: 'Top margin only' },
+      { class: 'mr(20)', description: 'Right margin only' },
+      { class: 'mb(20)', description: 'Bottom margin only' },
+      { class: 'ml(20)', description: 'Left margin only' }
     ]
   },
   {
@@ -192,46 +97,25 @@ const referenceData = [
     icon: "🎨",
     description: "Colors and backgrounds like Figma's fill properties",
     items: [
-      {
-        class: 'bg(#667eea)',
-        css: 'background: #667eea;',
-        description: 'Solid background color'
-      },
-      {
-        class: 'bg(#000/.5)',
-        css: 'background: rgba(0, 0, 0, 0.5);',
-        description: 'Background with opacity'
-      },
-      {
-        class: 'c(#333)',
-        css: 'color: #333;',
-        description: 'Text color'
-      },
-      {
-        class: 'c(#fff)',
-        css: 'color: #fff;',
-        description: 'White text'
-      },
-      {
-        class: 'gradient(#667eea/#764ba2)',
-        css: 'background: linear-gradient(45deg, #667eea, #764ba2);',
-        description: 'Linear gradient'
-      },
-      {
-        class: 'gradient(#ff0000/#00ff00/90)',
-        css: 'background: linear-gradient(90deg, #ff0000, #00ff00);',
-        description: 'Gradient with custom angle'
-      },
-      {
-        class: 'b(1/#e2e8f0)',
-        css: 'border: 1px solid #e2e8f0;',
-        description: 'Border with color'
-      },
-      {
-        class: 'b(2/#667eea)',
-        css: 'border: 2px solid #667eea;',
-        description: 'Thicker border'
-      }
+      { class: 'bg(#667eea)', description: 'Solid background color' },
+      { class: 'bg(#000/.5)', description: 'Background with opacity' },
+      { class: 'bg(linear-gradient(0deg/#000/#fff))', description: 'Linear gradient background' },
+      { class: 'bg(radial/#000/#fff)', description: 'Radial gradient background' },
+      { class: 'bg(url(image.jpg))', description: 'Background image from URL' },
+      { class: 'bg(./image.jpg)', description: 'Background image from relative path' },
+      { class: 'c(#333)', description: 'Text color' },
+      { class: 'c(#fff)', description: 'White text color' },
+      { class: 'c(#000/.5)', description: 'Text color with opacity' },
+      { class: 'c(linear-gradient(45deg/#ff0000/#00ff00))', description: 'Gradient text color' },
+      { class: 'caret(#667eea)', description: 'Input caret color' },
+      { class: 'b(#e2e8f0)', description: 'Border with default 1px width' },
+      { class: 'b(2/#667eea)', description: 'Border with custom width and color' },
+      { class: 'b(1/#000/dashed)', description: 'Dashed border with width, color, style' },
+      { class: 'bt(2/#667eea)', description: 'Top border only' },
+      { class: 'br(2/#667eea)', description: 'Right border only' },
+      { class: 'bb(2/#667eea)', description: 'Bottom border only' },
+      { class: 'bl(2/#667eea)', description: 'Left border only' },
+      { class: 'o(2/#667eea)', description: 'Outline with width and color' }
     ]
   },
   {
@@ -239,21 +123,11 @@ const referenceData = [
     icon: "🔘",
     description: "Border radius like Figma's corner radius",
     items: [
-      {
-        class: 'r(8)',
-        css: 'border-radius: 8px;',
-        description: 'Equal corner radius'
-      },
-      {
-        class: 'r(50%)',
-        css: 'border-radius: 50%;',
-        description: 'Circle'
-      },
-      {
-        class: 'r(8/16)',
-        css: 'border-radius: 8px 16px;',
-        description: 'Different horizontal/vertical radius'
-      }
+      { class: 'r(8)', description: 'Equal corner radius on all corners' },
+      { class: 'r(8/16)', description: 'Top-bottom 8px, left-right 16px radius' },
+      { class: 'r(8/16/8/16)', description: 'Individual corner radius (TL/TR/BR/BL)' },
+      { class: 'r(50%)', description: 'Perfect circle or oval' },
+      { class: 'r()', description: 'Maximum border radius (pill shape)' }
     ]
   },
   {
@@ -261,46 +135,48 @@ const referenceData = [
     icon: "📝",
     description: "Text properties like Figma's text panel",
     items: [
-      {
-        class: 'font(16)',
-        css: 'font-size: 16px;',
-        description: 'Font size only'
-      },
-      {
-        class: 'font(16/1.5)',
-        css: 'font-size: 16px; line-height: 1.5;',
-        description: 'Font size and line height'
-      },
-      {
-        class: 'font(16/1.5/-1%)',
-        css: 'font-size: 16px; line-height: 1.5; letter-spacing: -0.01em;',
-        description: 'Size, line-height, letter spacing'
-      },
-      {
-        class: 'font(16/1.5/-1%/600)',
-        css: 'font-size: 16px; line-height: 1.5; letter-spacing: -0.01em; font-weight: 600;',
-        description: 'Complete font styling'
-      },
-      {
-        class: 'bold',
-        css: 'font-weight: 700;',
-        description: 'Bold text'
-      },
-      {
-        class: 'italic',
-        css: 'font-style: italic;',
-        description: 'Italic text'
-      },
-      {
-        class: 'text(center)',
-        css: 'text-align: center;',
-        description: 'Center text alignment'
-      },
-      {
-        class: 'text(left)',
-        css: 'text-align: left;',
-        description: 'Left text alignment'
-      }
+      { class: '14', description: 'Font size shorthand' },
+      { class: '16/24', description: 'Font size and line height shorthand' },
+      { class: 'font(16)', description: 'Font size only' },
+      { class: 'font(16/24)', description: 'Font size and line height' },
+      { class: 'font(24) 600', description: 'Font size 24px with separate weight 600' },
+      { class: 'font(16/24/-2%)', description: 'Size, line height, letter spacing' },
+      { class: 'font(16/24/-2%/500)', description: 'Size, line height, letter spacing, weight' },
+      { class: 'font(16/24/-/700)', description: 'Size, line height, skip letter-spacing, weight' },
+      { class: 'font(Inter/16/24/-2%/500)', description: 'Complete font with family' },
+      { class: 'font(28/1.1/800)', description: 'Common pattern: size/line-height/weight' },
+      { class: 'font(24/1.2/600)', description: 'Title with proper weight' },
+      { class: 'font(18/1.6/400)', description: 'Body text with regular weight' },
+      { class: '100', description: 'Numeric font weight: 100 (Thin)' },
+      { class: '200', description: 'Numeric font weight: 200 (Extra Light)' },
+      { class: '300', description: 'Numeric font weight: 300 (Light)' },
+      { class: '400', description: 'Numeric font weight: 400 (Regular)' },
+      { class: '500', description: 'Numeric font weight: 500 (Medium)' },
+      { class: '600', description: 'Numeric font weight: 600 (Semi Bold)' },
+      { class: '700', description: 'Numeric font weight: 700 (Bold)' },
+      { class: '800', description: 'Numeric font weight: 800 (Extra Bold)' },
+      { class: '900', description: 'Numeric font weight: 900 (Black)' },
+      { class: 'bold', description: 'Named font weight: Bold (700)' },
+      { class: 'medium', description: 'Named font weight: Medium (500)' },
+      { class: 'light', description: 'Named font weight: Light (300)' },
+      { class: 'italic', description: 'Italic text style' },
+      { class: 'underline', description: 'Underlined text' },
+      { class: 'strike', description: 'Strikethrough text' },
+      { class: 'uppercase', description: 'Uppercase text' },
+      { class: 'lowercase', description: 'Lowercase text' },
+      { class: 'capitalize', description: 'Capitalize text' },
+      { class: 'text(left)', description: 'Left text alignment' },
+      { class: 'text(center)', description: 'Center text alignment' },
+      { class: 'text(right)', description: 'Right text alignment' },
+      { class: 'text(justify)', description: 'Justify text alignment' },
+      { class: 'text(top)', description: 'Vertical alignment top (in flexbox)' },
+      { class: 'text(middle)', description: 'Vertical alignment middle (in flexbox)' },
+      { class: 'text(bottom)', description: 'Vertical alignment bottom (in flexbox)' },
+      { class: 'nowrap', description: 'Prevent text wrapping' },
+      { class: 'truncate', description: 'Single line text with ellipsis' },
+      { class: 'max-lines(3)', description: 'Multi-line text clamp with ellipsis' },
+      { class: 'break(word)', description: 'Break long words' },
+      { class: 'break(all)', description: 'Break all characters' }
     ]
   },
   {
@@ -308,88 +184,35 @@ const referenceData = [
     icon: "✨",
     description: "Visual effects like Figma's effects panel",
     items: [
-      {
-        class: 'shadow(sm)',
-        css: 'box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);',
-        description: 'Small shadow'
-      },
-      {
-        class: 'shadow(md)',
-        css: 'box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);',
-        description: 'Medium shadow'
-      },
-      {
-        class: 'shadow(lg)',
-        css: 'box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);',
-        description: 'Large shadow'
-      },
-      {
-        class: 'blur(4)',
-        css: 'filter: blur(4px);',
-        description: 'Blur effect'
-      },
-      {
-        class: 'opacity(.5)',
-        css: 'opacity: 0.5;',
-        description: 'Semi-transparent'
-      },
-      {
-        class: 'backdrop(10)',
-        css: 'backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);',
-        description: 'Backdrop blur'
-      }
-    ]
-  },
-  {
-    category: "Transform",
-    icon: "🔄",
-    description: "Transform properties for animations and interactions",
-    items: [
-      {
-        class: 'scale(1.1)',
-        css: 'transform: scale(1.1);',
-        description: 'Scale transformation'
-      },
-      {
-        class: 'rotate(45)',
-        css: 'transform: rotate(45deg);',
-        description: 'Rotation'
-      },
-      {
-        class: 'transition(.3s)',
-        css: 'transition: all 0.3s;',
-        description: 'Smooth transition'
-      }
-    ]
-  },
-  {
-    category: "Interactive States",
-    icon: "👆",
-    description: "Hover, active, and focus states for interactivity",
-    items: [
-      {
-        class: 'hover:bg(#667eea)',
-        css: '.hover\\:bg\\(\\#667eea\\):hover { background: #667eea; }',
-        description: 'Hover background change'
-      },
-      {
-        class: 'hover:scale(1.05)',
-        css: '.hover\\:scale\\(1\\.05\\):hover { transform: scale(1.05); }',
-        description: 'Hover scale effect'
-      },
-      {
-        class: 'active:bg(#5a6fd8)',
-        css: '.active\\:bg\\(\\#5a6fd8\\):active { background: #5a6fd8; }',
-        description: 'Active state styling'
-      },
-      {
-        class: 'focus:b(#667eea)',
-        css: '.focus\\:b\\(\\#667eea\\):focus { border-color: #667eea; }',
-        description: 'Focus state border'
-      }
+      { class: 'shadow(sm)', description: 'Small drop shadow' },
+      { class: 'shadow(md)', description: 'Medium drop shadow' },
+      { class: 'shadow(lg)', description: 'Large drop shadow' },
+      { class: 'shadow(xl)', description: 'Extra large drop shadow' },
+      { class: 'shadow(0/4/16/#000.1)', description: 'Custom shadow: x/y/blur/color' },
+      { class: 'blur(4)', description: 'Element blur effect' },
+      { class: 'blur(layer/4)', description: 'Layer blur effect' },
+      { class: 'blur(bg/4)', description: 'Background blur effect' },
+      { class: 'backdrop(10)', description: 'Backdrop blur filter' },
+      { class: 'opacity(.5)', description: 'Element opacity (50%)' },
+      { class: 'opacity(0)', description: 'Hidden but keep space' },
+      { class: 'brightness(1.2)', description: 'Brightness filter' },
+      { class: 'contrast(1.5)', description: 'Contrast filter' },
+      { class: 'grayscale(1)', description: 'Grayscale filter' },
+      { class: 'hue-rotate(90deg)', description: 'Hue rotation filter' },
+      { class: 'invert(1)', description: 'Invert colors filter' },
+      { class: 'saturate(2)', description: 'Saturation filter' },
+      { class: 'sepia(.5)', description: 'Sepia filter' },
+      { class: 'drop-shadow(0/4/8/rgba(0,0,0,0.1))', description: 'Drop shadow filter' }
     ]
   }
 ];
+
+// Add CSS generation to each item
+referenceData.forEach(section => {
+  section.items.forEach(item => {
+    item.css = generateSimpleCSS(item.class) || 'Not implemented yet';
+  });
+});
 
 let searchTerm = '';
 let activeFilterValue = 'all';
@@ -435,71 +258,69 @@ $: {
 </svelte:head>
 
 <!-- Navigation -->
-<nav class={nav}>
+<nav class="fixed top(0) w(fill) hbox p(16/40) bg(#fff/.9) backdrop(10) z(100) shadow(sm)">
   <div class="hbox gap(32)">
-    <a href="/" class={navLogo}>AdorableCSS v2</a>
+    <a href="/" class="font(24) 700 c(#333) hover:c(#667eea) transition(.3s)">AdorableCSS v2</a>
     <div class="hbox gap(24)">
-      <a href="/" class={navLink}>Home</a>
-      <a href="/reference" class="{navLink} c(#667eea)">Reference</a>
-      <a href="/playground" class={navLink}>Playground</a>
+      <a href="/" class="font(16) 500 c(#666) hover:c(#333) transition(.3s) p(8/16)">Home</a>
+      <a href="/reference" class="font(16) 500 c(#667eea) p(8/16)">Reference</a>
+      <a href="/playground" class="font(16) 500 c(#666) hover:c(#333) transition(.3s) p(8/16)">Playground</a>
     </div>
   </div>
   <div class="hbox gap(16)">
-    <a href="https://github.com/developer-1px/adorable-css" class="hbox(center) gap(8) p(8/16) c(#666) hover:c(#333) transition(.3s)">
+    <a href="https://github.com/developer-1px/adorable-css" class="hbox gap(8) p(8/16) c(#666) hover:c(#333) transition(.3s)">
       <span class="font(20)">⭐</span>
-      <span class="font(14/500)">GitHub</span>
+      <span class="font(14) 500">GitHub</span>
     </a>
   </div>
 </nav>
 
-<div class={container}>
-  <div class={mainContent}>
+<div class="w(fill) min-h(screen) bg(#f8f9ff) pt(80)">
+  <div class="w(1400) mx(auto) p(40)">
     <!-- Page Header -->
-    <div class="vbox gap(16) mb(48)">
-      <h1 class={pageTitle}>CSS Reference</h1>
-      <p class={pageSubtitle}>
+    <div class="vbox gap(16) pb(48)">
+      <h1 class="font(48/58) 700 c(#333)">CSS Reference</h1>
+      <p class="font(20/30) c(#666)">
         Complete reference of AdorableCSS v2 classes organized by Figma design concepts. 
         See the exact CSS output for each class.
       </p>
     </div>
 
     <!-- Search & Filter -->
-    <div class={searchContainer}>
-      <div class="vbox gap(16)">
-        <input 
-          type="text" 
-          placeholder="Search classes... (e.g., hbox, w(300), bg(#fff))"
-          class={searchInput}
-          bind:value={searchTerm}
-        />
-        
-        <div class={filterContainer}>
+    <div class="sticky top(80) bg(#f8f9ff) py(16) z(50) vbox gap(16) pb(32)">
+      <input 
+        type="text" 
+        placeholder="Search classes... (e.g., hbox, w(300), bg(#fff))"
+        class="w(fill) p(12/16) r(8) b(2/#e2e8f0) bg(#fff) font(16) focus:b(#667eea) transition(.3s)"
+        bind:value={searchTerm}
+      />
+      
+      <div class="hbox gap(16) wrap">
+        <button 
+          class="p(8/16) r(6) bg(#fff) b(1/#e2e8f0) c(#666) font(14) 500 hover:bg(#667eea) hover:c(#fff) transition(.3s) {activeFilterValue === 'all' ? 'bg(#667eea) c(#fff)' : ''}"
+          on:click={() => filterByCategory('all')}
+        >
+          All Categories
+        </button>
+        {#each referenceData as section}
           <button 
-            class="{filterButton} {activeFilterValue === 'all' ? activeFilter : ''}"
-            on:click={() => filterByCategory('all')}
+            class="p(8/16) r(6) bg(#fff) b(1/#e2e8f0) c(#666) font(14) 500 hover:bg(#667eea) hover:c(#fff) transition(.3s) {activeFilterValue === section.category ? 'bg(#667eea) c(#fff)' : ''}"
+            on:click={() => filterByCategory(section.category)}
           >
-            All Categories
+            {section.icon} {section.category}
           </button>
-          {#each referenceData as section}
-            <button 
-              class="{filterButton} {activeFilterValue === section.category ? activeFilter : ''}"
-              on:click={() => filterByCategory(section.category)}
-            >
-              {section.icon} {section.category}
-            </button>
-          {/each}
-        </div>
+        {/each}
       </div>
     </div>
 
     <!-- Reference Tables -->
     {#each filteredData as section}
-      <div class={tableCard}>
-        <div class={tableHeader}>
+      <div class="bg(#fff) r(16) shadow(md) overflow(hidden) pb(32)">
+        <div class="hbox p(24) bg(linear-gradient(135deg/#667eea/#764ba2)) c(#fff)">
           <div class="hbox gap(16)">
-            <span class={sectionIcon}>{section.icon}</span>
+            <span class="font(32)">{section.icon}</span>
             <div class="vbox gap(4)">
-              <h2 class={sectionTitle}>{section.category}</h2>
+              <h2 class="font(24) 600 c(#fff)">{section.category}</h2>
               <p class="font(14) c(#fff) opacity(.8)">{section.description}</p>
             </div>
           </div>
@@ -508,9 +329,9 @@ $: {
           </div>
         </div>
         
-        <div class={tableBody}>
+        <div>
           <!-- Table Header -->
-          <div class="hbox gap(0) bg(#f8f9ff) font(14/600) c(#4a5568)">
+          <div class="hbox bg(#f8f9ff) font(14) 600 c(#4a5568)">
             <div class="w(400) p(12/24) b(1/#e2e8f0)">AdorableCSS Class</div>
             <div class="flex-1 p(12/24) b(1/#e2e8f0)">Generated CSS</div>
             <div class="w(250) p(12/24) b(1/#e2e8f0) text(center)">Description</div>
@@ -518,11 +339,11 @@ $: {
           
           <!-- Table Rows -->
           {#each section.items as item}
-            <div class={tableRow}>
-              <div class={classCell}>
+            <div class="hbox b(1/#e2e8f0) hover:bg(#f8f9ff) transition(.2s)">
+              <div class="w(400) p(16/24) font(14/1.5) bg(#2d3748) c(#e2e8f0)">
                 <code class="font(13/1.4)">{item.class}</code>
               </div>
-              <div class={outputCell}>
+              <div class="flex-1 p(16/24) font(14/1.5) c(#4a5568)">
                 <code class="font(12/1.4) c(#059669)">{item.css}</code>
               </div>
               <div class="w(250) p(16/24) font(12/1.4) c(#6b7280)">
@@ -539,13 +360,13 @@ $: {
       <div class="vbox gap(24) pack p(80) text(center)">
         <div class="font(48)">🔍</div>
         <div class="vbox gap(8)">
-          <h3 class="font(24/600) c(#4a5568)">No classes found</h3>
+          <h3 class="font(24) 600 c(#4a5568)">No classes found</h3>
           <p class="font(16) c(#6b7280)">
             Try adjusting your search term or filter selection.
           </p>
         </div>
         <button 
-          class="p(12/24) bg(#667eea) c(#fff) r(8) font(14/600) hover:bg(#5a6fd8) transition(.3s)"
+          class="p(12/24) bg(#667eea) c(#fff) r(8) font(14) 600 hover:bg(#5a6fd8) transition(.3s)"
           on:click={() => { searchTerm = ''; activeFilterValue = 'all'; }}
         >
           Clear all filters
@@ -554,8 +375,8 @@ $: {
     {/if}
 
     <!-- Quick Links -->
-    <div class="vbox gap(32) mt(64) p(40) bg(gradient(#667eea/.05/#764ba2/.05)) r(16) b(1/#667eea/.2)">
-      <h3 class="font(24/600) c(#333)">Quick Navigation</h3>
+    <div class="vbox gap(32) pt(64) p(40) bg(linear-gradient(135deg/#667eea/.05/#764ba2/.05)) r(16) b(1/#667eea/.2)">
+      <h3 class="font(24) 600 c(#333)">Quick Navigation</h3>
       <div class="hbox gap(16) wrap">
         {#each referenceData as section}
           <button 
@@ -563,16 +384,16 @@ $: {
             on:click={() => filterByCategory(section.category)}
           >
             <span class="font(20)">{section.icon}</span>
-            <span class="font(14/500) c(#4a5568)">{section.category}</span>
+            <span class="font(14) 500 c(#4a5568)">{section.category}</span>
           </button>
         {/each}
       </div>
     </div>
 
     <!-- Tips Section -->
-    <div class="vbox gap(24) mt(32) p(32) bg(#fff) r(16) shadow(md)">
-      <h3 class="font(20/600) c(#333)">💡 Pro Tips</h3>
-      <div class="vbox gap(16) font(14/1.6) c(#4a5568)">
+    <div class="vbox gap(24) pt(32) p(32) bg(#fff) r(16) shadow(md)">
+      <h3 class="font(20) 600 c(#333)">💡 Pro Tips</h3>
+      <div class="vbox gap(16) font(14/22) c(#4a5568)">
         <div class="hbox gap(12)">
           <span class="font(16) c(#667eea)">•</span>
           <span>Combine multiple classes: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">hbox gap(16) p(24) bg(#fff) shadow(md)</code></span>
@@ -583,11 +404,19 @@ $: {
         </div>
         <div class="hbox gap(12)">
           <span class="font(16) c(#667eea)">•</span>
-          <span>Opacity in colors: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">bg(#000/.5)</code> = rgba(0,0,0,0.5)</span>
+          <span>Font weight in function: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(28/1.1/800)</code> = size/line-height/weight</span>
         </div>
         <div class="hbox gap(12)">
           <span class="font(16) c(#667eea)">•</span>
-          <span>Interactive states: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">hover:bg(#667eea)</code> for hover effects</span>
+          <span>Skip parameters with dash: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(24/-/700)</code> = skip line-height, set weight</span>
+        </div>
+        <div class="hbox gap(12)">
+          <span class="font(16) c(#667eea)">•</span>
+          <span>Separate font weights: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(24) 600</code> = font-size: 24px + font-weight: 600</span>
+        </div>
+        <div class="hbox gap(12)">
+          <span class="font(16) c(#667eea)">•</span>
+          <span>Opacity in colors: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">bg(#000/.5)</code> = rgba(0,0,0,0.5)</span>
         </div>
       </div>
     </div>

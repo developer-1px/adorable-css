@@ -115,157 +115,157 @@ describe("AdorableCSS v2 UnoCSS Integration", () => {
 			expect(css).toContain("position: fixed")
 		})
 
-		it.skip("should generate x position", async () => {
+		it("should generate x position", async () => {
 			const css = await generate("x(100)")
 			expect(css).toContain("left: 100px")
 		})
 
-		it.skip("should generate y position", async () => {
+		it("should generate y position", async () => {
 			const css = await generate("y(100)")
 			expect(css).toContain("top: 100px")
 		})
 
-		it.skip("should generate z-index", async () => {
+		it("should generate z-index", async () => {
 			const css = await generate("z(2)")
-			expect(css).toContain("z-index: 2")
+			expect(css).toContain("z-index:2")
 		})
 
-		it.skip("should generate transform rotation", async () => {
+		it("should generate transform rotation", async () => {
 			const css = await generate("rotate(45)")
-			expect(css).toContain("transform: rotate(45deg)")
+			expect(css).toContain("--a-rotate:45deg")
 		})
 
-		it.skip("should generate centered position", async () => {
+		it("should generate centered position", async () => {
 			const css = await generate("x(center)")
-			expect(css).toContain("left: 50%")
-			expect(css).toContain("transform: translateX(-50%)")
+			expect(css).toContain("left:50%")
+			expect(css).toContain("transform:translateX(-50%)")
 		})
 
-		it.skip("should generate coordinate positioning", async () => {
+		it("should generate coordinate positioning", async () => {
 			const css = await generate("(0,0)")
-			expect(css).toContain("left: 0px")
-			expect(css).toContain("top: 0px")
+			expect(css).toContain("left:0")
+			expect(css).toContain("top:0")
 		})
 
-		it.skip("should generate right/bottom positioning", async () => {
+		it("should generate right/bottom positioning", async () => {
 			const css = await generate("(..0,..0)")
-			expect(css).toContain("right: 0px")
-			expect(css).toContain("bottom: 0px")
+			expect(css).toContain("right:0")
+			expect(css).toContain("bottom:0")
 		})
 	})
 
 	describe("Visual Properties", () => {
-		it.skip("should generate border radius", async () => {
+		it("should generate border radius", async () => {
 			const css = await generate("r(8)")
-			expect(css).toContain("border-radius: 8px")
+			expect(css).toContain("border-radius:8px")
 		})
 
-		it.skip("should generate background color", async () => {
+		it("should generate background color", async () => {
 			const css = await generate("bg(#000)")
-			expect(css).toContain("background-color: #000")
+			expect(css).toContain("background-color:#000")
 		})
 
-		it.skip("should generate background with opacity", async () => {
+		it("should generate background with opacity", async () => {
 			const css = await generate("bg(#000.5)")
-			expect(css).toContain("background-color: rgba(0, 0, 0, 0.5)")
+			expect(css).toContain("background-color:rgba(0,0,0,0.5)")
 		})
 
-		it.skip("should generate border", async () => {
+		it("should generate border", async () => {
 			const css = await generate("b(#000)")
-			expect(css).toContain("border: 1px solid #000")
+			expect(css).toContain("border:1px solid #000")
 		})
 
-		it.skip("should generate border with width and color", async () => {
+		it("should generate border with width and color", async () => {
 			const css = await generate("b(2/#ff0000)")
-			expect(css).toContain("border: 2px solid #ff0000")
+			expect(css).toContain("border:2px solid #ff0000")
 		})
 
-		it.skip("should generate outline", async () => {
+		it("should generate outline", async () => {
 			const css = await generate("o(#000)")
-			expect(css).toContain("outline: 1px solid #000")
+			expect(css).toContain("outline:1px solid #000")
 		})
 	})
 
 	describe("Typography", () => {
-		it.skip("should generate font size only", async () => {
+		it("should generate font size only", async () => {
 			const css = await generate("font(16)")
-			expect(css).toContain("font-size: 16px")
+			expect(css).toContain("font-size:16px")
 		})
 
-		it.skip("should generate font size and line height", async () => {
+		it("should generate font size and line height", async () => {
 			const css = await generate("font(16/24)")
-			expect(css).toContain("font-size: 16px")
-			expect(css).toContain("line-height: 24px")
+			expect(css).toContain("font-size:16px")
+			expect(css).toContain("line-height:24px")
 		})
 
-		it.skip("should generate complete font properties", async () => {
+		it("should generate complete font properties", async () => {
 			const css = await generate("font(16/1.5/-1%/600)")
-			expect(css).toContain("font-size: 16px")
-			expect(css).toContain("line-height: 1.5")
-			expect(css).toContain("letter-spacing: -1%")
-			expect(css).toContain("font-weight: 600")
+			expect(css).toContain("font-size:16px")
+			expect(css).toContain("line-height:1.5")
+			expect(css).toContain("letter-spacing:-0.01em")
+			expect(css).toContain("font-weight:600")
 		})
 
-		it.skip("should generate font shortcuts", async () => {
+		it("should generate font shortcuts", async () => {
 			const css = await generate("bold")
-			expect(css).toContain("font-weight: 700")
+			expect(css).toContain("font-weight:700")
 		})
 
-		it.skip("should generate italic", async () => {
+		it("should generate italic", async () => {
 			const css = await generate("italic")
-			expect(css).toContain("font-style: italic")
+			expect(css).toContain("font-style:italic")
 		})
 
-		it.skip("should generate underline", async () => {
+		it("should generate underline", async () => {
 			const css = await generate("underline")
-			expect(css).toContain("text-decoration: underline")
+			expect(css).toContain("text-decoration:underline")
 		})
 
-		it.skip("should generate strikethrough", async () => {
+		it("should generate strikethrough", async () => {
 			const css = await generate("strike")
-			expect(css).toContain("text-decoration: line-through")
+			expect(css).toContain("text-decoration:line-through")
 		})
 
-		it.skip("should generate text color", async () => {
+		it("should generate text color", async () => {
 			const css = await generate("c(#000)")
-			expect(css).toContain("color: #000")
+			expect(css).toContain("color:#000")
 		})
 
-		it.skip("should generate text alignment", async () => {
+		it("should generate text alignment", async () => {
 			const css = await generate("text(center)")
-			expect(css).toContain("text-align: center")
+			expect(css).toContain("text-align:center")
 		})
 
-		it.skip("should generate text transform", async () => {
+		it("should generate text transform", async () => {
 			const css = await generate("uppercase")
-			expect(css).toContain("text-transform: uppercase")
+			expect(css).toContain("text-transform:uppercase")
 		})
 
-		it.skip("should generate nowrap", async () => {
+		it("should generate nowrap", async () => {
 			const css = await generate("nowrap")
-			expect(css).toContain("white-space: nowrap")
+			expect(css).toContain("white-space:nowrap")
 		})
 
-		it.skip("should generate line clamp", async () => {
+		it("should generate line clamp", async () => {
 			const css = await generate("max-lines(3)")
-			expect(css).toContain("-webkit-line-clamp: 3")
+			expect(css).toContain("-webkit-line-clamp:3")
 		})
 	})
 
 	describe("Effects", () => {
 		it("should generate blur effect", async () => {
 			const css = await generate("blur(10)")
-			expect(css).toContain("filter: blur(10px)")
+			expect(css).toContain("filter:blur(10px)")
 		})
 
-		it.skip("should generate opacity", async () => {
+		it("should generate opacity", async () => {
 			const css = await generate("opacity(.5)")
-			expect(css).toContain("opacity: 0.5")
+			expect(css).toContain("opacity:0.5")
 		})
 
 		it("should generate overflow clip", async () => {
 			const css = await generate("clip")
-			expect(css).toContain("overflow: hidden")
+			expect(css).toContain("overflow:hidden")
 		})
 
 		it("should generate box shadow", async () => {
@@ -277,34 +277,34 @@ describe("AdorableCSS v2 UnoCSS Integration", () => {
 	describe("Scroll & Overflow", () => {
 		it("should generate scroll overflow", async () => {
 			const css = await generate("scroll")
-			expect(css).toContain("overflow: auto")
+			expect(css).toContain("overflow:auto")
 		})
 
 		it("should generate horizontal scroll", async () => {
 			const css = await generate("scroll(x)")
-			expect(css).toContain("overflow-x: auto")
-			expect(css).toContain("overflow-y: hidden")
+			expect(css).toContain("overflow-x:auto")
+			expect(css).toContain("overflow-y:hidden")
 		})
 
 		it("should generate vertical scroll", async () => {
 			const css = await generate("scroll(y)")
-			expect(css).toContain("overflow-y: auto")
-			expect(css).toContain("overflow-x: hidden")
+			expect(css).toContain("overflow-y:auto")
+			expect(css).toContain("overflow-x:hidden")
 		})
 
 		it("should generate smooth scroll behavior", async () => {
 			const css = await generate("scroll(smooth)")
-			expect(css).toContain("scroll-behavior: smooth")
+			expect(css).toContain("scroll-behavior:smooth")
 		})
 
 		it("should generate scrollbar hiding", async () => {
 			const css = await generate("scrollbar(none)")
-			expect(css).toContain("scrollbar-width: none")
+			expect(css).toContain("scrollbar-width:none")
 		})
 
 		it("should generate thin scrollbar", async () => {
 			const css = await generate("scrollbar(thin)")
-			expect(css).toContain("scrollbar-width: thin")
+			expect(css).toContain("scrollbar-width:thin")
 		})
 	})
 
@@ -337,27 +337,30 @@ describe("AdorableCSS v2 UnoCSS Integration", () => {
 	describe("Transform", () => {
 		it("should generate rotation", async () => {
 			const css = await generate("rotate(45)")
-			expect(css).toContain("transform: rotate(45deg)")
+			expect(css).toContain("--a-rotate:45deg")
 		})
 
 		it("should generate negative rotation", async () => {
 			const css = await generate("rotate(-45)")
-			expect(css).toContain("transform: rotate(-45deg)")
+			expect(css).toContain("--a-rotate:-45deg")
 		})
 
 		it("should generate scale", async () => {
 			const css = await generate("scale(1.5)")
-			expect(css).toContain("transform: scale(1.5)")
+			expect(css).toContain("--a-scale-x:1.5")
+			expect(css).toContain("--a-scale-y:1.5")
 		})
 
 		it("should generate scale with X/Y values", async () => {
 			const css = await generate("scale(1.5/2)")
-			expect(css).toContain("transform: scaleX(1.5) scaleY(2)")
+			expect(css).toContain("--a-scale-x:1.5")
+			expect(css).toContain("--a-scale-y:2")
 		})
 
 		it("should generate translate", async () => {
 			const css = await generate("translate(10/20)")
-			expect(css).toContain("transform: translateX(10px) translateY(20px)")
+			expect(css).toContain("--a-translate-x:10px")
+			expect(css).toContain("--a-translate-y:20px")
 		})
 	})
 
@@ -366,36 +369,36 @@ describe("AdorableCSS v2 UnoCSS Integration", () => {
 			const input = "vbox(fill) w(fill) p(24) r(12) bg(#fff) shadow(md) gap(16)"
 			const css = await generate(input)
 
-			expect(css).toContain("display: flex")
-			expect(css).toContain("flex-direction: column")
-			expect(css).toContain("width: 100%")
-			expect(css).toContain("padding: 24px")
-			expect(css).toContain("border-radius: 12px")
-			expect(css).toContain("background-color: #fff")
-			expect(css).toContain("gap: 16px")
+			expect(css).toContain("display:flex")
+			expect(css).toContain("flex-direction:column")
+			expect(css).toContain("width:100%")
+			expect(css).toContain("padding:24px")
+			expect(css).toContain("border-radius:12px")
+			expect(css).toContain("background-color:#fff")
+			expect(css).toContain("gap:16px")
 		})
 
 		it("should handle Figma card component example", async () => {
 			const input = "hbox(center) w(fill) h(48) r(8) bg(blue) c(#fff)"
 			const css = await generate(input)
 
-			expect(css).toContain("display: flex")
-			expect(css).toContain("justify-content: center")
-			expect(css).toContain("align-items: center")
-			expect(css).toContain("width: 100%")
-			expect(css).toContain("height: 48px")
-			expect(css).toContain("border-radius: 8px")
-			expect(css).toContain("color: #fff")
+			expect(css).toContain("display:flex")
+			expect(css).toContain("justify-content:center")
+			expect(css).toContain("align-items:center")
+			expect(css).toContain("width:100%")
+			expect(css).toContain("height:48px")
+			expect(css).toContain("border-radius:8px")
+			expect(css).toContain("color:#fff")
 		})
 
 		it("should handle navigation layout example", async () => {
 			const input = "hbox() gap(auto) w(fill) h(64) px(32) bg(#fff) shadow(sm)"
 			const css = await generate(input)
 
-			expect(css).toContain("display: flex")
-			expect(css).toContain("width: 100%")
-			expect(css).toContain("height: 64px")
-			expect(css).toContain("background-color: #fff")
+			expect(css).toContain("display:flex")
+			expect(css).toContain("width:100%")
+			expect(css).toContain("height:64px")
+			expect(css).toContain("background-color:#fff")
 		})
 	})
 

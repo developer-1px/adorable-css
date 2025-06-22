@@ -1,4 +1,4 @@
-import { cssvar, deg, makeBorder, makeColor, makeCommaValues, makeNumber, makeRatio, makeSide, makeTransition, makeValues, px, rpx } from "./values/makeValue"
+import { cssvar, deg, makeBorder, makeColor, makeCommaValues, makeNumber, makeRatio, makeSide, makeTransition, makeValues, px, rpx, splitValues, percentToEm } from "./values/makeValue"
 import { RULES_FONT_UNOCSS } from "./rules/rule-font"
 import { RULES_AUTO_LAYOUT_UNOCSS } from "./rules/rule-layout"
 import { RULES_TEXT_UNOCSS } from "./rules/rule-text"
@@ -27,7 +27,27 @@ export const RULES_FOR_UNOCSS = {
 	...RULES_DISPLAY_UNOCSS,
 	...RULES_POSITION_UNOCSS,
 
-	// -- Box
+	"c": (value: string) => {
+		if (value.startsWith("linear-gradient")) return { background: `${value.replace(/\//g, " ")}`, "-webkit-background-clip": "text", "-webkit-text-fill-color": "transparent" }
+		if (value.startsWith("radial-gradient")) return { background: `${value.replace(/\//g, " ")}`, "-webkit-background-clip": "text", "-webkit-text-fill-color": "transparent" }
+		return { color: makeColor(value) }
+	},
+	"color": (value: string) => RULES_FOR_UNOCSS.c(value),
+	"caret": (value: string) => ({ "caret-color": makeColor(value) }),
+
+	// FONT - removed makeFont as it doesn't exist
+	"bold": () => ({ "font-weight": 700 }),
+	"italic": () => ({ "font-style": "italic" }),
+	"underline": () => ({ "text-decoration": "underline" }),
+	"strike": () => ({ "text-decoration": "line-through" }),
+	"uppercase": () => ({ "text-transform": "uppercase" }),
+	"nowrap": () => ({ "white-space": "nowrap" }),
+	"max-lines": (value: string) => ({
+		"overflow": "hidden",
+		"display": "-webkit-box",
+		"-webkit-box-orient": "vertical",
+		"-webkit-line-clamp": value,
+	}),
 
 	// Box-Sizing
 	"border-box": () => ({ "box-sizing": "border-box" }),
@@ -52,147 +72,24 @@ export const RULES_FOR_UNOCSS = {
 	"pl": (value: string) => ({ "padding-left": px(value) }),
 
 	// BoxModel - Border
-	"no-border": () => ({ border: "none", outline: "none" }),
 	"b": (value: string) => ({ border: makeBorder(value) }),
-	"bx": (value: string) => ({
-		"border-left": makeBorder(value),
-		"border-right": makeBorder(value),
-	}),
-	"by": (value: string) => ({
-		"border-top": makeBorder(value),
-		"border-bottom": makeBorder(value),
-	}),
 	"bt": (value: string) => ({ "border-top": makeBorder(value) }),
 	"br": (value: string) => ({ "border-right": makeBorder(value) }),
 	"bb": (value: string) => ({ "border-bottom": makeBorder(value) }),
 	"bl": (value: string) => ({ "border-left": makeBorder(value) }),
-
-	"bw": (value: string) => ({ "border-width": makeValues(value, px) }),
-	"bxw": (value: string) => ({ "border-left-width": px(value), "border-right-width": px(value) }),
-	"byw": (value: string) => ({ "border-top-width": px(value), "border-bottom-width": px(value) }),
-	"btw": (value: string) => ({ "border-top-width": px(value) }),
-	"brw": (value: string) => ({ "border-right-width": px(value) }),
-	"bbw": (value: string) => ({ "border-bottom-width": px(value) }),
-	"blw": (value: string) => ({ "border-left-width": px(value) }),
-
-	"bs": (value: string) => ({ "border-style": makeValues(value) }),
-	"bxs": (value: string) => ({
-		"border-left-style": cssvar(value),
-		"border-right-style": cssvar(value),
-	}),
-	"bys": (value: string) => ({
-		"border-top-style": cssvar(value),
-		"border-bottom-style": cssvar(value),
-	}),
-	"bts": (value: string) => ({ "border-top-style": cssvar(value) }),
-	"brs": (value: string) => ({ "border-right-style": cssvar(value) }),
-	"bbs": (value: string) => ({ "border-bottom-style": cssvar(value) }),
-	"bls": (value: string) => ({ "border-left-style": cssvar(value) }),
-
-	"bc": (value: string) => ({ "border-color": makeValues(value, makeColor) }),
-	"bxc": (value: string) => ({
-		"border-left-color": makeColor(value),
-		"border-right-color": makeColor(value),
-	}),
-	"byc": (value: string) => ({
-		"border-top-color": makeColor(value),
-		"border-bottom-color": makeColor(value),
-	}),
-	"btc": (value: string) => ({ "border-top-color": makeColor(value) }),
-	"brc": (value: string) => ({ "border-right-color": makeColor(value) }),
-	"bbc": (value: string) => ({ "border-bottom-color": makeColor(value) }),
-	"blc": (value: string) => ({ "border-left-color": makeColor(value) }),
-
-	// outline
-	"outline": (value: string) => ({ outline: makeBorder(value) }),
-
-	// @FIXME:
-	// 'guide': (value: string, unocss) => {
-	//   // @FIXME:
-	//   value = value === 'undefined' ? '#4f80ff' : value;
-	//
-	//   const { symbols } = unocss;
-	//   return {
-	//     [symbols.selector]: (s) => `${s},div:has(>.guide),${s} *:hover`,
-	//     outline: makeBorder(value),
-	//   };
-	// },
+	"o": (value: string) => ({ outline: makeBorder(value) }),
 
 	// border-radius
 	"r": (value: string) => ({ "border-radius": makeValues(value, rpx) }),
-
-	"rt": (value: string) => ({
-		"border-top-left-radius": rpx(value),
-		"border-top-right-radius": rpx(value),
-	}),
-	"rr": (value: string) => ({
-		"border-top-right-radius": rpx(value),
-		"border-bottom-right-radius": rpx(value),
-	}),
-	"rb": (value: string) => ({
-		"border-bottom-left-radius": rpx(value),
-		"border-bottom-right-radius": rpx(value),
-	}),
-	"rl": (value: string) => ({
-		"border-top-left-radius": rpx(value),
-		"border-bottom-left-radius": rpx(value),
-	}),
-
-	"rtl": (value: string) => ({ "border-top-left-radius": rpx(value) }),
-	"rtr": (value: string) => ({ "border-top-right-radius": rpx(value) }),
-	"rbr": (value: string) => ({ "border-bottom-right-radius": rpx(value) }),
-	"rbl": (value: string) => ({ "border-bottom-left-radius": rpx(value) }),
-
-	// box-shadow
-	"ring": (value: string) => {
-		const [color, size = 1] = value.split("/")
-		return { "box-shadow": `0 0 0 ${px(size)} ${makeColor(color)}` }
-	},
-
-	"box-shadow": (value: string) => ({
-		"box-shadow": `${makeValues(value, (v) => (Number.isInteger(+v) ? px(v) : cssvar(v)))}`,
-	}),
 
 	// -- Background
 	"bg": (value: string) => {
 		if (value.startsWith("linear-gradient")) return { background: `${value.replace(/\//g, " ")}` }
 		if (value.startsWith("radial-gradient")) return { background: `${value.replace(/\//g, " ")}` }
-
-		// background-image-url
 		if (value.startsWith("url")) return { "background-image": `${value}` }
 		if (/^(http|[./])/.test(value)) return { "background-image": `url(${value})` }
-
-		if (value === "transparent") return { background: "transparent" }
-		return { background: makeColor(value) }
+		return { "background-color": makeColor(value) }
 	},
-
-	"bg-image": (value: string) => {
-		if (value.startsWith("url")) return { "background-image": value }
-		return { "background-image": `url(${value})` }
-	},
-	"background-image": (value: string) => RULES_FOR_UNOCSS["bg-image"](value),
-
-	"bg-position": (value: string) => ({ "background-position": makeValues(value) }),
-
-	// @TODO:background 이미지에 대한 세련된 방법이 필요하다!
-	"bg-repeat-x": () => ({ "background-repeat": "repeat-x" }),
-	"bg-repeat-y": () => ({ "background-repeat": "repeat-y" }),
-	"bg-no-repeat": () => ({ "background-repeat": "no-repeat" }),
-	"bg-fixed": () => ({ "background-attachment": "fixed" }),
-	"bg-scroll": () => ({ "background-attachment": "scroll" }),
-
-	"contain": () => ({
-		"background-size": "contain",
-		"background-position": "center",
-		"background-repeat": "no-repeat",
-		"object-fit": "contain",
-	}),
-	"cover": () => ({
-		"background-size": "cover",
-		"background-position": "center",
-		"background-repeat": "no-repeat",
-		"object-fit": "cover",
-	}),
 
 	// Scroll
 	"scroll": (value?: string) => {
@@ -201,52 +98,44 @@ export const RULES_FOR_UNOCSS = {
 		if (value === "y") return { "overflow-y": "auto", "overflow-x": "hidden" }
 		return { overflow: "auto" }
 	},
+	"scrollbar": (value: string) => {
+		if (value === "none") return { "scrollbar-width": "none", "::-webkit-scrollbar": { display: "none" } }
+		if (value === "thin") return { "scrollbar-width": "thin" }
+		return {}
+	},
 
-	// @TODO
-	"scrollbar": () => `&{overflow:scroll;}&.scroll{overflow:scroll;}&.scroll-x{overflow-x:scroll;}&.scroll-y{overflow-y:scroll;}`,
-	"no-scrollbar": () => `&::-webkit-scrollbar{display:none;}`,
-	"no-scrollbar-x": () => `&::-webkit-scrollbar:horizontal{display:none;}`,
+	// -- Transform
+	"translate": (value: string) => {
+		const [x, y] = splitValues(value)
+		return { "transform": `translateX(${px(x)}) translateY(${px(y || x)})` }
+	},
+	"translateX": (value: string) => ({ "transform": `translateX(${px(value)})` }),
+	"translateY": (value: string) => ({ "transform": `translateY(${px(value)})` }),
 
-	// Scroll Snap
-	"scroll-m": (value: string) => ({ "scroll-margin": makeSide(value) }),
-	"scroll-mt": (value: string) => ({ "scroll-margin-top": px(value) }),
-	"scroll-mr": (value: string) => ({ "scroll-margin-right": px(value) }),
-	"scroll-mb": (value: string) => ({ "scroll-margin-bottom": px(value) }),
-	"scroll-ml": (value: string) => ({ "scroll-margin-left": px(value) }),
+	"rotate": (value: string) => ({ "transform": `rotate(${deg(value)})` }),
 
-	"scroll-p": (value: string) => ({ "scroll-padding": makeSide(value) }),
-	"scroll-pt": (value: string) => ({ "scroll-padding-top": px(value) }),
-	"scroll-pr": (value: string) => ({ "scroll-padding-right": px(value) }),
-	"scroll-pb": (value: string) => ({ "scroll-padding-bottom": px(value) }),
-	"scroll-pl": (value: string) => ({ "scroll-padding-left": px(value) }),
+	"scale": (value: string) => {
+		const [x, y] = splitValues(value)
+		return { "transform": `scale(${x}, ${y || x})` }
+	},
+	"scaleX": (value: string) => ({ "transform": `scaleX(${cssvar(value)})` }),
+	"scaleY": (value: string) => ({ "transform": `scaleY(${cssvar(value)})` }),
 
-	"snap": (value: string) => ({ "scroll-snap-align": cssvar(value) }),
-	"snap-start": () => ({ "scroll-snap-align": "start" }),
-	"snap-end": () => ({ "scroll-snap-align": "end" }),
-	"snap-center": () => ({ "scroll-snap-align": "center" }),
-	"snap-align-none": () => ({ "scroll-snap-align": "none" }),
+	// -- Filter
+	"blur": (value: string) => ({ "filter": `blur(${px(value)})` }),
+	"opacity": (value: string) => ({ opacity: value }),
 
-	"snap-none": () => ({ "scroll-snap-type": "none" }),
-	"snap-x": () => ({ "scroll-snap-type": "x var(--a-scroll-snap-strictness, mandatory)" }),
-	"snap-x-proximity": () => ({ "scroll-snap-type": "x proximity" }),
-	"snap-y": () => ({ "scroll-snap-type": "y var(--a-scroll-snap-strictness, mandatory)" }),
-	"snap-y-proximity": () => ({ "scroll-snap-type": "y proximity" }),
-	"snap-both": () => ({ "scroll-snap-type": "both var(--a-scroll-snap-strictness, mandatory)" }),
-	"snap-both-proximity": () => ({ "scroll-snap-type": "both proximity" }),
-	"snap-mandatory": () => ({ "--a-scroll-snap-strictness": "mandatory" }),
-	"snap-proximity": () => ({ "--a-scroll-snap-strictness": "proximity" }),
+	"clip": () => ({ overflow: "hidden" }),
 
-	"snap-normal": () => ({ "scroll-snap-stop": "normal" }),
-	"snap-always": () => ({ "scroll-snap-stop": "always" }),
-
-	// @TODO:- TBD
-	"overscroll": (value: string) => ({ "overscroll-behavior": value }),
-	"overscroll-x": (value: string) => ({ "overscroll-behavior-x": value }),
-	"overscroll-y": (value: string) => ({ "overscroll-behavior-y": value }),
-
-	// @TODO:- TBD
-	"no-bouncing": () => "",
-	"no-overscroll": () => "",
+	"shadow": (value: string) => {
+		const shadows = {
+			sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+			md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+			lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+			xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
+		}
+		return { "box-shadow": shadows[value] || value }
+	},
 
 	// -- Grid
 	// @TODO:-- GRID TBD
@@ -312,67 +201,16 @@ export const RULES_FOR_UNOCSS = {
 	"transition": (value: string) => ({ transition: makeTransition(value) }),
 
 	// transform
-	"translate": (value: string) => {
-		const [x, y] = makeCommaValues(value, px).split(",")
-		return {
-			"--a-transform-translate-x": x,
-			"--a-transform-translate-y": y,
-			"transform": "var(--a-transform)",
-		}
-	},
-	"translateX": (value: string) => ({
-		"--a-translate-x": px(value),
-		"transform": "var(--a-transform)",
-	}),
-	"translateY": (value: string) => ({
-		"--a-translate-y": px(value),
-		"transform": "var(--a-transform)",
-	}),
-
 	"rotate": (value: string) => {
-		let [x, y, z] = makeCommaValues(value, deg).split(",")
-		x = x || x
-		y = y || x
-		z = z || x
-
-		return {
-			"--a-rotate": x,
-			"--a-rotate-x": x,
-			"--a-rotate-y": y,
-			"--a-rotate-z": z,
-			"transform": "var(--a-transform)",
-		}
+		const [x] = splitValues(value, deg)
+		return { "transform": `rotate(${x})` }
 	},
+
 	"rotateX": (value: string) => ({
 		"--a-rotate-x": deg(value),
-		"transform": "var(--a-transform)",
 	}),
 	"rotateY": (value: string) => ({
-		"--a-rotate-y": deg(value),
-		"transform": "var(--a-transform)",
-	}),
-
-	"scale": (value: string) => {
-		let [x, y, z] = makeCommaValues(value).split(",")
-		x = x || x
-		y = y || x
-		z = z || x
-
-		return {
-			"--a-scale-x": x,
-			"--a-scale-y": y,
-			"--a-scale-z": z,
-			"transform": "var(--a-transform)",
-		}
-	},
-
-	"scaleX": (value: string) => ({
-		"--a-scale-x": makeNumber(+value),
-		"transform": "var(--a-transform)",
-	}),
-	"scaleY": (value: string) => ({
-		"--a-scale-y": makeNumber(+value),
-		"transform": "var(--a-transform)",
+		"transform": `rotateY(${deg(value)})`,
 	}),
 
 	"skew": (value: string) => {
@@ -417,88 +255,31 @@ export const RULES_FOR_UNOCSS = {
 	"table-layout-auto": () => ({ tableLayout: "auto" }),
 
 	// Filter
-	"blur": (value: string) => `filter:blur(${px(value)});-webkit-filter:blur(${px(value)});`,
-	"brightness": (value: string) => `filter:brightness(${cssvar(value)});-webkit-filter:brightness(${cssvar(value)});`,
-	"contrast": (value: string) => `filter:contrast(${cssvar(value)});-webkit-filter:contrast(${cssvar(value)});`,
-	"drop-shadow": (value: string) => `filter:drop-shadow(${makeValues(value, px)});-webkit-filter:drop-shadow(${makeValues(value, px)});`,
-	"grayscale": (value: string) => `filter:grayscale(${cssvar(value)});-webkit-filter:grayscale(${cssvar(value)});`,
-	"hue-rotate": (value: string) => `filter:hue-rotate(${cssvar(value)});-webkit-filter:hue-rotate(${cssvar(value)});`,
-	"invert": (value: string) => `filter:invert(${cssvar(value)});-webkit-filter:invert(${cssvar(value)});`,
-	"sepia": (value: string) => `filter:sepia(${cssvar(value)});-webkit-filter:sepia(${cssvar(value)});`,
-	"saturate": (value: string) => `filter:saturate(${cssvar(value)});-webkit-filter:saturate(${cssvar(value)});`,
+	"brightness": (value: string) => ({ filter: `brightness(${cssvar(value)})` }),
+	"contrast": (value: string) => ({ filter: `contrast(${cssvar(value)})` }),
+	"drop-shadow": (value: string) => ({ filter: `drop-shadow(${makeValues(value, px)})` }),
+	"grayscale": (value: string) => ({ filter: `grayscale(${cssvar(value)})` }),
+	"hue-rotate": (value: string) => ({ filter: `hue-rotate(${cssvar(value)})` }),
+	"invert": (value: string) => ({ filter: `invert(${cssvar(value)})` }),
+	"saturate": (value: string) => ({ filter: `saturate(${cssvar(value)})` }),
+	"sepia": (value: string) => ({ filter: `sepia(${cssvar(value)})` }),
 
-	"backdrop-blur": (value: string) => `backdrop-filter:blur(${px(value)});-webkit-backdrop-filter:blur(${px(value)});`,
-	"backdrop-brightness": (value: string) => `backdrop-filter:brightness(${cssvar(value)});-webkit-backdrop-filter:brightness(${cssvar(value)});`,
-	"backdrop-contrast": (value: string) => `backdrop-filter:contrast(${cssvar(value)});-webkit-backdrop-filter:contrast(${cssvar(value)});`,
-	"backdrop-drop-shadow": (value: string) => `backdrop-filter:drop-shadow(${makeValues(value, px)});-webkit-backdrop-filter:drop-shadow(${makeValues(value, px)});`,
-	"backdrop-grayscale": (value: string) => `backdrop-filter:grayscale(${cssvar(value)});-webkit-backdrop-filter:grayscale(${cssvar(value)});`,
-	"backdrop-hue-rotate": (value: string) => `backdrop-filter:hue-rotate(${cssvar(value)});-webkit-backdrop-filter:hue-rotate(${cssvar(value)});`,
-	"backdrop-invert": (value: string) => `backdrop-filter:invert(${cssvar(value)});-webkit-backdrop-filter:invert(${cssvar(value)});`,
-	"backdrop-sepia": (value: string) => `backdrop-filter:sepia(${cssvar(value)});-webkit-backdrop-filter:sepia(${cssvar(value)});`,
-	"backdrop-saturate": (value: string) => `backdrop-filter:saturate(${cssvar(value)});-webkit-backdrop-filter:saturate(${cssvar(value)});`,
+	"filter": (value: string) => ({ filter: cssvar(value) }),
+	"filter-none": () => ({ filter: "none" }),
 
-	// Additional rules for comprehensive AdorableCSS coverage
-	"o": (value: string) => ({ outline: makeBorder(value) }),
+	// @TODO:
+	// "transform": (value:string) => ({
+	//   'transform': value.replace(/([^=]+)=([^/]+)/g, (_,p,v)=>`${p}(${v})`)
+	// }),
 
-	// Shadow presets
-	"shadow": (value: string) => {
-		const shadows = {
-			sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
-			md: "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-			lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
-			xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)"
-		}
-		return { "box-shadow": shadows[value] || shadows.md }
-	},
+	"transform-origin": (value: string) => ({ "transform-origin": value }),
+	"transform-style": (value: string) => ({ "transform-style": value }),
+	"transform-box": (value: string) => ({ "transform-box": value }),
+	"transform-none": () => ({ transform: "none" }),
 
-	// Scroll utilities - override existing implementation
-	"scrollbar": (value: string) => {
-		if (value === "none") return { "scrollbar-width": "none" }
-		if (value === "thin") return { "scrollbar-width": "thin" }
-		return {}
-	},
-
-	// @TODO:triangle
-	"triangle": (value: string) => {
-		const [direction, size, angle = 0] = value.split("/")
-		const bd = ["top", "right", "bottom", "left", "top", "right", "bottom", "left"]
-		const bdr = bd.slice(bd.indexOf(direction))
-		const height = 0.5
-
-		let css = `width:0;height:0;border:0 solid transparent;`
-		css += "border-" + bdr[1] + "-width:" + Math.round((+size * (-angle + 1)) / 2) + "px;"
-		css += "border-" + bdr[3] + "-width:" + Math.round((+size * (+angle + 1)) / 2) + "px;"
-		css += "border-" + bdr[2] + ":" + Math.round(+size * height) + "px solid black;"
-
-		return css
-	},
-
-	// elevation
-	"elevation": (value: string) => {
-		const dp = +value
-		if (!dp) {
-			return `box-shadow:none;`
-		}
-
-		const blur = dp == 1 ? 3 : dp * 2
-		const amba = (dp + 10 + dp / 9.38) / 100
-		const diry = dp < 10 ? (dp % 2 == 0 ? dp - (dp / 2 - 1) : dp - (dp - 1) / 2) : dp - 4
-		const dira = (24 - Math.round(dp / 10)) / 100
-
-		return `box-shadow:0px ${px(dp)} ${px(blur)} rgba(0,0,0,${amba}),0px ${px(diry)} ${px(blur)} rgba(0,0,0,${dira});`
-	},
-
-	"debug": function* () {
-		yield {
-			"outline": "2px solid #4f80ff",
-			"outline-offset": "-1px",
-		}
-		yield {
-			[symbols.selector]: (s: string) => `${s}>*`,
-			"outline": "1px dashed #4f80ff",
-			"outline-offset": "-1px",
-		}
-	},
+	// perspective
+	"perspective": (value: string) => ({ perspective: px(value) }),
+	"perspective-origin": (value: string) => ({ "perspective-origin": value }),
 }
 
 // Prefix
@@ -565,9 +346,6 @@ export const PREFIX_MEDIA_QUERY: PrefixRules = {
 	"!mobile:": { media: `(min-device-width:768px)`, selector: `html &` },
 	"!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
 
-	// "touch:":{media:`(hover:none)`,selector:`html &`},
-	// "!touch:":{media:`(hover:hover)`,selector:`html &`},
-
 	// Additional v2 utilities
 	"gradient": (value: string) => {
 		const [from, to, angle = "45"] = value.split("/")
@@ -593,57 +371,4 @@ export const PREFIX_MEDIA_QUERY: PrefixRules = {
 	// Screen size utilities
 	"screen": () => ({ width: "100vw", height: "100vh" }),
 	"full": () => ({ width: "100%", height: "100%" }),
-
-	// @TBD: don't use it!
-	"touch:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
-	"!touch:": { media: `(min-device-width:1024px)`, selector: `html &` },
-
-	"portrait:": { media: `(orientation:portrait)`, selector: `html &` },
-	"landscape:": { media: `(orientation:landscape)`, selector: `html &` },
-
-	"print:": { media: `print`, selector: `html &` },
-	"screen:": { media: `screen`, selector: `html &` },
-	"speech:": { media: `speech`, selector: `html &` },
-
-	// dark:@TBD
-	"dark:": { selector: `@media(prefers-color-scheme:dark){html &{...}}\nhtml.dark &{...}` },
 }
-
-export const AT_RULE = {
-	"@w": (ident: string, tokens: Array<{ type: string; value: string }>) => {
-		if (tokens[2]?.value !== "(" || tokens[tokens.length - 1]?.value !== ")") {
-			throw Error("invalid syntax!")
-		}
-
-		const value = tokens
-			.slice(3, -1)
-			.map((t) => t.value)
-			.join("")
-		if (!value.includes("~")) {
-			throw Error("invalid syntax! required '~'.")
-		}
-
-		let [min, max] = value.split("~")
-
-		if (min) min = `(min-width:${px(+min)})`
-		if (max) max = `(max-width:${px(+max - 0.02)})`
-		const rule = [min, max].filter(Boolean).join(" and ")
-
-		return { media: ` only screen and ${rule}`, selector: `html &` }
-	},
-}
-
-// selector
-export const PREFIX_SELECTOR: Record<string, (selector: string) => string> = {
-	">>": (selector: string) => `& ${selector.slice(2)}`,
-	"&:": (selector: string) => `${selector}`,
-	"&.": (selector: string) => `${selector}`,
-	"&[": (selector: string) => `${selector}`,
-	".": (selector: string) => `&${selector},${selector} &`,
-	"[": (selector: string) => `&${selector},${selector} &`,
-	">": (selector: string) => `&${selector}`,
-	"+": (selector: string) => `&${selector}`,
-	"#": (selector: string) => `&${selector}`,
-}
-
-// "~": (selector:string) => `&${selector}`,

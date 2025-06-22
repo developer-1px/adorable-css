@@ -13,7 +13,16 @@
       "Bash(timeout 30s pnpm build 2 >& 1)",
       "Bash(NODE_ENV=production pnpm build --silent 2 >& 1)",
       "Bash(mkdir:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(find:*)",
+      "Bash(npm test:*)",
+      "Bash(mv:*)",
+      "Bash(npx tsx:*)",
+      "Bash(node:*)",
+      "Bash(rm:*)",
+      "Bash(npm run dev:*)",
+      "Bash(pkill:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
