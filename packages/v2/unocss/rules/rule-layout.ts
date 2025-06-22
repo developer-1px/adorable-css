@@ -1,4 +1,3 @@
-import { symbols } from 'unocss'
 import { cssvar, makeSide, px, splitValues } from '../values/makeValue'
 
 const LAYOUT_MAP = {
@@ -73,13 +72,6 @@ function* makeBoxAligns(direction: Direction = 'row', value = '') {
   }
 }
 
-function* makeFlexFill(isRow: boolean) {
-  // Skip complex selector rules for now to fix the immediate issue
-  // These will need to be re-implemented differently
-}
-
-const makeHBoxFill = () => makeFlexFill(true)
-const makeVBoxFill = () => makeFlexFill(false)
 
 export const RULES_AUTO_LAYOUT_UNOCSS = {
   // Box-Model
@@ -90,7 +82,19 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
     }
 
     if (value === 'fill') {
-      yield { 'min-width': '1px', 'max-width': '100%' }
+      // Default fallback: 100% width
+      // In flex contexts, this will be overridden by flex: 1 or align-self: stretch
+      yield { width: '100%' }
+      return
+    }
+
+    // Handle constraints: w(200..), w(..400), w(200..400)
+    if (value.includes('..')) {
+      const [min, max] = value.split('..')
+      yield {
+        ...(min && { 'min-width': px(min) }),
+        ...(max && { 'max-width': px(max) }),
+      }
       return
     }
 
@@ -123,13 +127,23 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
       return
     }
 
-    //
     if (value === 'fill') {
-      yield { 'min-height': '1px', 'max-height': '100%' }
+      // Default fallback: 100% height
+      // In flex contexts, this will be overridden by flex: 1 or align-self: stretch
+      yield { height: '100%' }
       return
     }
 
-    //
+    // Handle constraints: h(200..), h(..400), h(200..400)
+    if (value.includes('..')) {
+      const [min, max] = value.split('..')
+      yield {
+        ...(min && { 'min-height': px(min) }),
+        ...(max && { 'max-height': px(max) }),
+      }
+      return
+    }
+
     if (value.includes('~')) {
       const values = value.split('~')
 
@@ -164,46 +178,38 @@ export const RULES_AUTO_LAYOUT_UNOCSS = {
   // -- Flexbox Layout
   'hbox': function* (value = '') {
     yield* makeBoxAligns('row', value)
-    yield* makeHBoxFill()
   },
   'vbox': function* (value = '') {
     yield* makeBoxAligns('column', value)
-    yield* makeVBoxFill()
-    // Skip complex selector rule for now
   },
   'wrap': function* (value = '') {
     yield* makeBoxAligns('row wrap', value)
-    yield* makeHBoxFill()
   },
-  'pack': function* () {
+  'pack': function* (value = '') {
     yield* makeBoxAligns('row', 'center+middle')
-    yield* makeHBoxFill()
   },
 
   // gap
-  'gap': function* (value: string) {
+  'gap': (value: string) => {
     if (value === 'auto') {
-      yield {
+      return {
         'justify-content': 'space-between',
         'align-content': 'space-between',
       }
-      yield {
-        [symbols.selector]: (s: string) => `${s}>:only-child`,
-        margin: 'auto',
-      }
-      return
     }
 
     if (value.includes('auto')) {
-      yield {
+      return {
         'justify-content': 'space-between',
         'align-content': 'space-between',
+        'grid-gap': makeSide(value.replace(/auto/g, '0')),
+        'gap': makeSide(value.replace(/auto/g, '0')),
       }
     }
 
-    yield {
-      'grid-gap': makeSide(value.replace(/auto/g, '0')),
-      'gap': makeSide(value.replace(/auto/g, '0')),
+    return {
+      'grid-gap': makeSide(value),
+      'gap': makeSide(value),
     }
   },
 

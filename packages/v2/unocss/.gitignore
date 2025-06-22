@@ -1,0 +1,8 @@
+# TypeScript declaration files (소스 코드에서는 제외)
+*.d.ts
+
+# Node modules
+node_modules/
+
+# Coverage
+coverage/

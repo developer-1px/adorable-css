@@ -3,7 +3,7 @@ import { createParser, createTokenizer } from "./core"
 
 const tokenize = createTokenizer([
 	["(ws)", /(\s+)/],
-	["(hexcolor)", /(#[0-9a-fA-F]{3,8}(?:\.\d+)*)/],
+	["(hexcolor)", /(#[0-9a-fA-F]{3,8}(?:\.[0-9]+)*)/],
 	["(dimension)", /((?:[0-9]*\.[0-9]+|[0-9]+)[%a-z]*)/],
 	["(string)", /('(?:[^']|\\')*'|"(?:[^"]|\\")*")/],
 	["(ident)", /(-*[_a-zA-Z\u00A0-\uFFFF][_a-zA-Z0-9\u00A0-\uFFFF-]*)/],
@@ -14,35 +14,58 @@ const tokenize = createTokenizer([
 
 export function parseAdorableCSS(input: string) {
 	const tokens = tokenize(input)
-	console.log(tokens)
 
-	const { options, consume, many, many1, many_sep, many1_sep, optional, end } = createParser(tokens)
+	const { options, consume, many, many1, many_sep, many1_sep, optional, eof } = createParser(tokens)
 
-	function Selector() {
-		const value = []
+	// 화이트스페이스 스킵 헬퍼
+	const skipWs = () => {
+		many(() => consume("(ws)"))
+	}
 
-		optional(() => {
-			const at = optional(() => consume("@"))
-			const selector = SimpleSelector()
-			const important = many(() => consume("!"))
-				.map((v) => v.image)
-				.join("")
+	function SelectorList() {
+		skipWs()
+		const selectors = []
+		
+		// 첫 번째 셀렉터
+		const first = optional(() => SingleSelector())
+		if (first) {
+			selectors.push(first)
+		}
 
-			value.push({
-				type: "selector",
-				combinator: "",
-				selector,
-				important,
-				image: (at ? "@" : "") + selector.image + important,
-			})
+		// 나머지 셀렉터들 (스페이스로 구분)
+		many(() => {
+			skipWs()
+			const selector = optional(() => SingleSelector())
+			if (selector) {
+				selectors.push(selector)
+			}
 		})
 
-		many(() => value.push(CombinatorSelector()))
+		skipWs()
 
 		return {
 			type: "selector",
-			value,
-			image: value.map((v) => v.image).join(""),
+			value: selectors,
+			image: selectors.map((s) => s.image).join(" "),
+		}
+	}
+
+	function SingleSelector() {
+		const at = optional(() => consume("@"))
+		const selector = SimpleSelector()
+		const important = many(() => consume("!"))
+			.map((v) => v.image)
+			.join("")
+
+		const combinator = many(() => CombinatorSelector())
+
+		return {
+			type: "selector",
+			combinator: "",
+			selector,
+			important,
+			combinators: combinator,
+			image: (at ? "@" : "") + selector.image + important + combinator.map(c => c.image).join(""),
 		}
 	}
 
@@ -217,7 +240,6 @@ export function parseAdorableCSS(input: string) {
 	}
 
 	function CSSLiteral() {
-		console.log("CSSLiteral")
 
 		const value = []
 
@@ -261,8 +283,8 @@ export function parseAdorableCSS(input: string) {
 	}
 
 	try {
-		const r = Selector()
-		end(r)
+		const r = SelectorList()
+		eof(r)
 		return r
 	} catch (e) {
 		console.error("파싱 에러:", e)

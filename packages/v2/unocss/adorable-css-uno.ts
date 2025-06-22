@@ -1,7 +1,7 @@
 // uno.config.ts
-import { defineConfig, symbols } from "unocss"
+import { defineConfig } from "unocss"
 import { makePosition2, px } from "./values/makeValue"
-import { parseInput } from "./parser"
+import { parseAdorableCSS } from "./myparser/parseAdorableCSS"
 import { makeHEX, makeColor } from "./values/makeValue"
 import { RULES_FOR_UNOCSS } from "./rules"
 
@@ -65,12 +65,22 @@ function generatePosition([, x, y]: string[]) {
 	}
 }
 
-// 스타일 인자 추출 함수
-const extractStyleArgs = (selector) => {
-	if (selector.type === "function") {
-		return selector.args.map(({ value: atom }) => {
-			if (atom.type === "hex") return makeHEX(atom.image)
-			return atom.image
+// 스타일 인자 추출 함수 (myparser용)
+const extractStyleArgs = (selector: any) => {
+	if (selector.type === "function" && selector.args) {
+		return selector.args.map((arg: any) => {
+			// myparser의 args 구조에 맞게 수정
+			if (arg.type === "expr" && arg.value) {
+				return arg.value.map((v: any) => {
+					if (v.image.startsWith('#')) return makeHEX(v.image)
+					return v.image
+				}).join('')
+			}
+			if (arg.image) {
+				if (arg.image.startsWith('#')) return makeHEX(arg.image)
+				return arg.image
+			}
+			return arg
 		})
 	}
 
@@ -78,9 +88,11 @@ const extractStyleArgs = (selector) => {
 }
 
 // 스타일 결과를 배열로 변환하는 함수
-function normalizeStyleResult(result: StyleProperties | StyleProperties[]): StyleProperties[] {
+function normalizeStyleResult(result: any): StyleProperties[] {
 	if (typeof result === "string") return []
-	return Array.isArray(result) || result[Symbol.iterator] ? [...result] : [result]
+	if (Array.isArray(result)) return result
+	if (result && typeof result[Symbol.iterator] === 'function') return [...result]
+	return result ? [result] : []
 }
 
 // TypeScript interface for style properties
@@ -102,38 +114,28 @@ export const adorableCSS = () =>
 
 			[
 				/^.+$/,
-				([inputValue]) => {
+				([inputValue]: string[], context: any) => {
 					try {
-						const parsedInput = parseInput(inputValue)
-						const statements = parsedInput.cst as []
+						const parsedInput = parseAdorableCSS(inputValue)
+						if (!parsedInput || !parsedInput.value) return undefined
+						
+						const styleRules: StyleProperties[] = []
 
-						console.log("Parsed:", JSON.stringify(parsedInput, null, 2))
-
-						const styleRules = []
-
-						statements.forEach((selector) => {
-							const simpleSelector = selector.selector
-							const propertyName = simpleSelector.type === "function" ? simpleSelector.name : simpleSelector.image
-
-							console.log("Looking for rule:", propertyName)
-							const fn = RULES_FOR_UNOCSS[propertyName]
+						parsedInput.value.forEach((selectorItem: any) => {
+							const selector = selectorItem.selector
+							const propertyName = selector.type === "function" ? selector.name : selector.image
+							const fn = RULES_FOR_UNOCSS[propertyName as keyof typeof RULES_FOR_UNOCSS]
 
 							if (fn) {
-								console.log("Found rule function for:", propertyName)
-								const args = extractStyleArgs(simpleSelector)
+								const args = extractStyleArgs(selector)
 								const styleResult = args.length ? fn(args.join("/")) : fn()
 								const styleDeclarations = normalizeStyleResult(styleResult)
-								console.log("Style result:", styleDeclarations)
 								styleRules.push(...styleDeclarations)
-							} else {
-								console.log("No rule found for:", propertyName)
 							}
 						})
 
-						console.log("Final style rules:", styleRules)
 						return styleRules.length > 0 ? styleRules : undefined
 					} catch (error) {
-						console.error("Error in rule processing:", error)
 						return undefined
 					}
 				},
