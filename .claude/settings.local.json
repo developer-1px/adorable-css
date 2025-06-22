@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(pnpm test:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx tsc:*)",
+      "Bash(cp:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm build)",
+      "Bash(grep:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(timeout 30s pnpm build 2 >& 1)",
+      "Bash(NODE_ENV=production pnpm build --silent 2 >& 1)",
+      "Bash(mkdir:*)",
+      "Bash(touch:*)"
+    ],
+    "deny": []
+  }
+}

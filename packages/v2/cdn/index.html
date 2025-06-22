@@ -8,73 +8,174 @@
 <body>
 
 <!--
+Layout - Flexbox
+AdorableCSS는 flexbox에 기반하여 레이아웃을 아주 쉽게 만들수 있도록 구성하였습니다.
+https://youtu.be/qFvOhBqX1-k
 
-Colors
-: 먼저 글자색을 변경해 봅시다.
-: 색상은 아래와 같이 여러가지 방식을 지원하며 배경색과 테두리색에도 공통으로 적용됩니다. eg) bg(), b()
+1
+hbox
+: 컨텐츠를 가로로 배치하고 싶다면 hbox(horizontal box)를 사용하세요.
+: hbox의 경우 전체 박스를 가운데로 맞춰 정렬하며 자식 엘리먼트의 크기가 지정되지 않을 경우에는 컨텐츠에 맞게 자동으로 늘어납니다.
+
+gap(value)
+gap(vertical/horizonal)
+: 각 컨텐츠별 간격을 입력할 수 있습니다.
+https://caniuse.com/flexbox-gap
+@NOTE: IE<=11,  safari<14.1 을 지원해야 한다면 hgap, hgap-reverse를 사용할 수 있습니다.
+
+gap(auto) : space-between
 
 
-sample)
 
-c(red) 색상이름
+1-2
+배치를 변경해보자)
 
-c(#0080ff) HEX
+hbox(top)
+hbox(bottom)
+hbox(fill)
+hbox(right)
+hbox(reverse)
 
-c(#0080ff.8) HEX + alpha
++로 조립해서 사용할수 있다.
 
-c(255,0,0) rgb
+hbox(top+right)
+hbox(bottom+right)
+hbox(fill+reverse+left)
 
-c(255,0,0,.7) rgba
++ 기호를 사용하여 bottom+right / top+reverse 등 자유롭게 컨텐츠를 배치하세요
 
-c(100,50%,50%) hsl
+1-3 h(fill)
+: fill = fill-parent
+: 개별 항목에 height를 fill로 지정하면 부모 컨텐츠 만큼의 크기를 갖습니다.
 
-c(100,50%,50%,.5) hsla
+1-4 hbox(fill)
+: 모든 자식 컨텐츠의 크기를 부모 컨텐츠와 같이 만들어 줍니다. (단, 자식의 height가 지정이 될 경우에는 지정된 height를 우선합니다.)
 
-c(--css-var) css-variable
 
-✨그라데이션
-c(linear-gradient(90deg,#f00,#00f))
+2
+pack / space-between
+pack은 모든 컨텐츠를 가운데로 배치합니다.
+버튼이나 모달 팝업 등등 여러곳에서 자주 사용합니다. 자식 컨텐츠는 여러개가 있을 경우 같이 가운데에 배치됩니다.
 
-@TODO: bg(...), b(...)로도 한번 해보세요.
+vpack / space-between
+vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로 배치합니다.
+
+3
+space-between space-around / space-evenly
+:space-between은 각 컨텐츠를 같은 간격으로 벌려놓습니다. (NAVBar 같은 곳에서 사용합니다.)
+
+5
+vbox
+: 컨텐츠를 세로로 배치하고 싶다면 vbox(vertical box)를 사용하세요.
+: 사용법은 hbox와 동일 합니다. 단, vbox는 기본값이 fill = stretch 입니다.
 -->
 
-<div class="font(20/200%) bg(#fff) p(20)" style="--css-var: green">
 
-	<div class="c(red) 320x240 bg(orange)">c(red)</div>
+<h1>Box Model</h1>
 
-	<div class="c(#0080ff)">c(#0080ff) HEX</div>
+<div class="vbox gap(20) bg(#fff) p(10)">
 
-	<div class="c(#0080ff.5)">c(#0080ff.5) HEX + alpha</div>
+	<h2>hbox + gap(20)</h2>
 
-	<div class="c(0,255,0)">c(0,255,0) RGB</div>
+	<div class="hbox gap(20) p(10) b(orange)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(48) bg(orange) pack">b</div>
+		<div class="w(48) h(48) bg(orange) pack">o</div>
+		<div class="w(48) h(48) bg(orange) pack">x</div>
+	</div>
 
-	<div class="c(0,255,0,.5)">c(0,255,0,.5) RGBA</div>
+	<h2>hbox + ✨gap(auto)</h2>
 
-	<div class="c(100,50%,50%)">c(100,50%,50%) HSL</div>
+	<div class="hbox gap(auto) p(10) b(orange)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(48) bg(orange) pack">b</div>
+		<div class="w(48) h(48) bg(orange) pack">o</div>
+		<div class="w(48) h(48) bg(orange) pack">x</div>
+	</div>
 
-	<div class="c(100,50%,50%,.5)">c(100,50%,50%,.5) HSLA</div>
 
-	<div class="c(--css-var)">c(--css-var) css-variable</div>
+	<h2>hbox(top)</h2>
+	<div class="hbox(top) gap(10) b(orange) p(10)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(100) bg(orange) pack">b</div>
+		<div class="p(10) bg(orange) pack">o</div>
+		<div class="w(48) h(24) bg(orange) pack">x</div>
+		<div class="w(48) h(50) bg(orange) pack">(top)</div>
+	</div>
 
-	<div class="c(linear-gradient(90deg,#f00,#00f)) bold nowrap">c(linear-gradient(90deg,#f00,#00f))</div>
+	<h2>hbox(bottom+right)</h2>
+	<div class="hbox(bottom+right) gap(10) b(orange) p(10)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(100) bg(orange) pack">b</div>
+		<div class="p(10) bg(orange) pack">o</div>
+		<div class="w(48) h(24) bg(orange) pack">x</div>
+		<div class="p(10) h(50) bg(orange) pack">(bottom+right)</div>
+	</div>
 
-	<div class="bg(red)">bg(red)</div>
+	<h2>pack</h2>
+	<div class="hbox pack b(orange) p(10) h(100)">
+		<div class="p(10) bg(orange) pack">pack</div>
+	</div>
 
-	<div class="bg(#0080ff)">bg(#0080ff) HEX</div>
+	<h2>vpack</h2>
+	<div class="vpack b(orange) p(10) h(100)">
+		<div class="vpack p(10) bg(orange)">
+			<div>vpack</div>
+			<div>column</div>
+		</div>
+	</div>
 
-	<div class="bg(#0080ff.5)">bg(#0080ff.5) HEX + alpha</div>
+	<br/>
 
-	<div class="bg(0,255,0)">bg(0,255,0) RGB</div>
+	<h2>hbox(fill)</h2>
+	<div class="hbox(fill) gap(10) b(orange) p(10) h(200)">
+		<div class="w(48) bg(orange) pack">h</div>
+		<div class="w(72) h(hug) bg(orange) pack">h(hug)크기를 지정하면<br/>컨텐츠 크기</div>
+		<div class="p(10) bg(orange) pack">o</div>
+		<div class="w(48) bg(orange) pack">x</div>
+		<div class="p(10) bg(orange) pack">(fill)</div>
+	</div>
 
-	<div class="bg(0,255,0,.5)">bg(0,255,0,.5) RGBA</div>
+	<h2>✨w(fill)</h2>
+	<div class="hbox gap(10) b(orange) p(10)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(100) bg(orange) pack">b</div>
+		<div class="w(fill) h(100) bg(orange) pack">w(fill)</div>
+		<div class="w(48) p(10) bg(orange) pack">o</div>
+		<div class="w(48) h(24) bg(orange) pack">x</div>
+	</div>
 
-	<div class="bg(100,50%,50%)">bg(100,50%,50%) HSL</div>
+	<h2>✨h(fill)</h2>
+	<div class="hbox gap(10) b(orange) p(10)">
+		<div class="w(48) h(48) bg(orange) pack">h</div>
+		<div class="w(48) h(100) bg(orange) pack">b</div>
+		<div class="p(10) bg(orange) pack">o</div>
+		<div class="w(48) h(24) bg(orange) pack">x</div>
+		<div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
+	</div>
 
-	<div class="bg(100,50%,50%,.5)">bg(100,50%,50%,.5) HSLA</div>
+	<br/>
 
-	<div class="bg(--css-var)">bg(--css-var) css-variable</div>
+	<h2>space-between / space-around / space-evenly</h2>
+
+	<div class="hbox space-between b(orange) w(300)">
+		<div class="p(10) bg(orange) pack">space</div>
+		<div class="p(10) bg(orange) pack">-</div>
+		<div class="p(10) bg(orange) pack">between</div>
+	</div>
+
+	<div class="hbox space-around b(orange) w(300)">
+		<div class="p(10) bg(orange) pack">space</div>
+		<div class="p(10) bg(orange) pack">-</div>
+		<div class="p(10) bg(orange) pack">around</div>
+	</div>
+
+	<div class="hbox space-evenly b(orange) w(300)">
+		<div class="p(10) bg(orange) pack">space</div>
+		<div class="p(10) bg(orange) pack">-</div>
+		<div class="p(10) bg(orange) pack">evenly</div>
+	</div>
 </div>
-
 
 </body>
 </html>

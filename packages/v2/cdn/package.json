@@ -1,20 +1,58 @@
 {
-  "name": "cdn",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "adorable-css-v2",
+  "version": "2.0.0-beta.1",
+  "description": "AdorableCSS v2 - A Figma-first CSS framework for seamless design-code synchronization",
+  "main": "dist/adorable-css-v2.js",
+  "module": "dist/adorable-css-v2.esm.js",
+  "unpkg": "dist/adorable-css-v2.min.js",
+  "jsdelivr": "dist/adorable-css-v2.min.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
-    "dev": "tsup adorable-css@2.js --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsup src/index.ts --watch --format iife --globalName AdorableCSSV2",
+    "build": "npm run build:bundle && npm run build:types",
+    "build:bundle": "tsup src/index.ts --format cjs,esm,iife --globalName AdorableCSSV2 --minify --sourcemap --out-dir dist --target es2015",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist && mv dist/src/index.d.ts dist/index.d.ts && rm -rf dist/src",
+    "prepare": "npm run build",
+    "test": "echo \"No tests specified\" && exit 0"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "css",
+    "figma",
+    "design-system",
+    "atomic-css",
+    "utility-first",
+    "cdn",
+    "browser",
+    "v2"
+  ],
+  "author": "teo.yu",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/developer-1px/adorable-css.git",
+    "directory": "packages/v2/cdn"
+  },
+  "homepage": "https://developer-1px.github.io/adorable-css/",
+  "bugs": {
+    "url": "https://github.com/developer-1px/adorable-css/issues"
+  },
   "dependencies": {
     "tsup": "^8.3.6"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",
     "typescript": "^5.7.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/adorable-css-v2.esm.js",
+      "require": "./dist/adorable-css-v2.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/adorable-css-v2.min.js": "./dist/adorable-css-v2.min.js"
   }
 }

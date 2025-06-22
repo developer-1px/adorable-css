@@ -1,192 +1,363 @@
 <script lang="ts">
-const slide = "text(center) vbox pack p(200/32) odd:bg(#f9f9f9) clip"
-const h1 = "font(3em/-/-1.5%) bold ~md:font(1.6em)"
-const h2 = "font(1.2em/-/-1.5%) c(#555) ~md:font(1.4em)"
+	// Modern hero section with gradient and animations
+	const hero = "screen pack vbox gap(32) gradient(#667eea/#764ba2) text(center) relative overflow(hidden)"
+	const heroTitle = "font(64/1.1/700) c(#fff) opacity(.95) hover:scale(1.02) transition(.3s)"
+	const heroSubtitle = "font(24/1.4) c(#fff) opacity(.8) w(800) m(auto)"
+	const heroButton = "hbox(center) gap(12) p(16/32) bg(#fff) c(#333) r(12) font(18/600) shadow(lg) hover:shadow(xl) hover:scale(1.05) transition(.3s) pointer"
+
+	// Feature cards
+	const featureCard = "vbox gap(24) p(40) bg(#fff) r(16) shadow(md) hover:shadow(xl) hover:scale(1.02) transition(.3s)"
+	const featureIcon = "w(64) h(64) r(16) pack font(32)"
+	const featureTitle = "font(24/1.3/600) c(#333)"
+	const featureDesc = "font(16/1.6) c(#666) opacity(.9)"
+
+	// Code showcase
+	const codeSection = "w(fill) p(80/40) bg(#f8f9ff)"
+	const codeCard = "bg(#fff) r(16) shadow(lg) overflow(hidden)"
+	const codeHeader = "hbox gap(12) p(20/24) bg(#2d3748) c(#fff)"
+	const codeBody = "p(24) font(14/1.6) bg(#1a202c) c(#e2e8f0) overflow(scroll)"
+
+	// Navigation
+	const nav = "fixed top(0) w(fill) hbox gap(auto) p(16/40) bg(#fff.9) backdrop(10) z(100) shadow(sm)"
+	const navLogo = "font(24/700) c(#333) hover:c(#667eea) transition(.3s)"
+	const navLink = "font(16/500) c(#666) hover:c(#333) transition(.3s) p(8/16)"
 </script>
 
-<div class="{slide} gap(40) max-h(60vh)">
-  <div class="group hbox font(80/-/-15%) AppleSD opacity(0.7) hover:scale(1.05) hover:opacity(1) transition(.4s) pointer">
-    <span class="group-hover:rotate(-10deg) group-active:rotate(10deg) transition(.4s)">ฅ</span>
-    <span>^•ﻌ•^</span>
-    <span class="group-hover:rotate(10deg) group-active:rotate(-10deg) transition(.4s)">ฅ <span class="font(20) c(#ccc) group-hover:c(--primary) vertical-top transition(.4s)">♥</span></span>
-  </div>
+<!-- Navigation -->
+<nav class={nav}>
+	<div class="hbox gap(32)">
+		<a href="/" class={navLogo}>AdorableCSS v2</a>
+		<div class="hbox gap(24)">
+			<a href="#features" class={navLink}>Features</a>
+			<a href="#examples" class={navLink}>Examples</a>
+			<a href="#docs" class={navLink}>Docs</a>
+		</div>
+	</div>
+	<div class="hbox gap(16)">
+		<a href="https://github.com/developer-1px/adorable-css" class="hbox(center) gap(8) p(8/16) c(#666) hover:c(#333) transition(.3s)">
+			<span class="font(20)">⭐</span>
+			<span class="font(14/500)">GitHub</span>
+		</a>
+		<button class="hbox(center) p(12/24) bg(#667eea) c(#fff) r(8) font(14/600) hover:bg(#5a6fd8) transition(.3s)"> Get Started </button>
+	</div>
+</nav>
 
-  <div>
-    <h1 class="font(30) 200 c(#666)">AdorableCSS</h1>
-    <p>⚡️ Rapid on-demand atomic css framework</p>
-  </div>
-</div>
+<!-- Hero Section -->
+<section class={hero}>
+	<!-- Animated background elements -->
+	<div class="absolute top(10%) left(10%) w(200) h(200) bg(#fff/.1) r(50%) blur(100) animate-float"></div>
+	<div class="absolute top(60%) right(15%) w(150) h(150) bg(#fff/.1) r(50%) blur(80) animate-float-delay"></div>
 
-<div class="{slide}">
-  <h1 class="{h1}">No more writing your own CSS.</h1>
-  <h2 class="{h2}">We have created almost all the CSS you need. Just write down in your HTML(or JSX).</h2>
-  <div class="space(2em)"/>
-  <img src="https://images.velog.io/images/teo/post/dde8bc56-15d0-4fc0-a15a-f3c204f50494/AdorableCSS.gif"/>
-</div>
+	<div class="vbox gap(32) z(10) mt(80)">
+		<h1 class={heroTitle}>
+			The Future of
+			<span class="gradient(#ffd89b/#19547b) bg-clip-text">CSS</span>
+		</h1>
+		<p class={heroSubtitle}>Write CSS like you design in Figma. No more class names, no more switching between files. Just pure, intuitive styling that works.</p>
 
-<div class="{slide}">
-  <h1 class="{h1} hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">[ •́ ‸ •̀ ]</h1>
-  <h1 class="{h1}">Naming things is hard.</h1>
-  <h2 class="{h2}">{`.inner-wrapper { position:relative; padding: 10px 20px }`}</h2>
-  <p>.inner-wrapper? 서식을 위해 의미없는 이름을 짓기 위해서 고민하지마세요.</p>
-  <br/>
-  <h2 class="{h2}">{`<div class="relative p(10/10)">`}</h2>
-  <p>그냥 서식 그대로 HTML에 적어보세요. 필요한 CSS는 다 만들어두었습니다.</p>
-  <br/>
-  <h2 class="{h2}">{`<div class="font(10) c(#ff0) bold text(center)">`}</h2>
-</div>
+		<div class="hbox gap(24) mt(32)">
+			<button class={heroButton}>
+				<span class="font(20)">🚀</span>
+				<span>Try It Now</span>
+			</button>
+			<button class="hbox(center) gap(12) p(16/32) b(2/#fff) c(#fff) r(12) font(18/600) hover:bg(#fff/.1) transition(.3s) pointer">
+				<span class="font(20)">📖</span>
+				<span>Learn More</span>
+			</button>
+		</div>
 
+		<!-- Live demo preview -->
+		<div class="vbox gap(16) mt(48) w(600) bg(#fff/.1) r(16) p(24) backdrop(10)">
+			<div class="font(14/600) c(#fff) opacity(.8)">Live Example:</div>
+			<div class="bg(#2d3748) r(8) p(16) font(14/1.5) c(#e2e8f0) text(left)">
+				&lt;div class="hbox gap(16) p(24) bg(#667eea) r(12) shadow(lg)"&gt;<br />
+				&nbsp;&nbsp;&lt;span class="font(18/600) c(#fff)"&gt;Hello World&lt;/span&gt;<br />
+				&lt;/div&gt;
+			</div>
+			<div class="hbox gap(16) p(24) bg(#667eea) r(12) shadow(lg)">
+				<span class="font(18/600) c(#fff)">Hello World</span>
+			</div>
+		</div>
+	</div>
+</section>
 
-<div class="{slide}">
-  <div class="wrap(top+center) gap(60)">
+<!-- Features Section -->
+<section id="features" class="w(fill) p(80/40) bg(#fff)">
+	<div class="vbox gap(64) w(1200) m(auto)">
+		<div class="vbox gap(16) text(center)">
+			<h2 class="font(48/1.2/700) c(#333)">Why AdorableCSS v2?</h2>
+			<p class="font(20/1.5) c(#666) w(600) m(auto)">Built for the modern web with Figma-first thinking</p>
+		</div>
 
-    <div class="vbox(center)">
-      <h1 class="font(30/-/-1.5%) bold">When just write down in HTML or JSX</h1>
+		<div class="hbox gap(32) w(fill)">
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#667eea/.1)">
+					<span class="c(#667eea)">🎨</span>
+				</div>
+				<h3 class={featureTitle}>Figma-Native Syntax</h3>
+				<p class={featureDesc}>Use the same Auto Layout concepts from Figma. hbox, vbox, gap, padding - it's all exactly what you'd expect.</p>
+			</div>
 
-      <code class="pre text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`<button class="hbox pack gap(6) bg(#333) c(#fff) b(#000.2) r(6) p(8/12) font(14/16/-1%) bold pointer transition(.2s)
-  hover:bg(#555)
-  active:bg(#000)! active:b(#000.2)">
-    <div>👍</div>
-    <div>Like</div>
-  </button>
-`}
-      </code>
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#48bb78/.1)">
+					<span class="c(#48bb78)">⚡</span>
+				</div>
+				<h3 class={featureTitle}>Zero Configuration</h3>
+				<p class={featureDesc}>No build setup, no config files. Just add the script tag and start styling. Works with any framework or vanilla HTML.</p>
+			</div>
 
-    </div>
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#ed8936/.1)">
+					<span class="c(#ed8936)">🔥</span>
+				</div>
+				<h3 class={featureTitle}>On-Demand Generation</h3>
+				<p class={featureDesc}>CSS is generated only for classes you actually use. Tiny bundle size, maximum performance.</p>
+			</div>
+		</div>
 
-    <div class="vbox(center)">
-      <h1 class="font(30/-/-1.5%) bold">... and auto generate CSS on realtime! (and build-time) 😎</h1>
+		<div class="hbox gap(32) w(fill)">
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#9f7aea/.1)">
+					<span class="c(#9f7aea)">🎯</span>
+				</div>
+				<h3 class={featureTitle}>Intuitive Values</h3>
+				<p class={featureDesc}>w(300), h(200), p(16/24) - values work exactly like you think they should. No memorizing arbitrary class names.</p>
+			</div>
 
-      <code class="pre text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`/* @adorable.css */
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#38b2ac/.1)">
+					<span class="c(#38b2ac)">🚀</span>
+				</div>
+				<h3 class={featureTitle}>Modern Features</h3>
+				<p class={featureDesc}>Built-in support for gradients, shadows, backdrop blur, and all the modern CSS you need.</p>
+			</div>
 
-* {margin:0;padding:0;box-sizing:border-box;font:inherit;color:inherit;flex-shrink:0;}
-.c\(\#fff\){color:#fff;}
-html .active\:bg\(\#000\)\!:active,html .active\:bg\(\#000\)\!.\:active{background-color:#000!important;}
-.bg\(\#333\){background-color:#333;}
-@media (hover:hover){.hover\:bg\(\#555\):hover,.hover\:bg\(\#555\).\:hover{background-color:#555;}}
-.font\(14\/16\/-1\%\){font-size:14px;line-height:16px;letter-spacing:-0.01em}
-.bold{font-weight:700;}
-.hbox{display:flex;flex-flow:row;align-items: center;}
-.p\(8\/12\){padding:8px 12px;}
-.pack{display:flex;align-items:center;justify-content:center;}
-.pointer{cursor:pointer;}
-html .active\:b\(\#000\.2\):active,html .active\:b\(\#000\.2\).\:active{border:1px solid rgba(0,0,0,.2);}
-.b\(\#000\.2\){border:1px solid rgba(0,0,0,.2);}
-.r\(6\){border-radius:6px;}
-.gap\(6\){gap:6px;}
-.layer{position:absolute;top:0;right:0;bottom:0;left:0}
-.transition\(\.2s\){transition:all .2s;}
-`}
-      </code>
-    </div>
-  </div>
-</div>
+			<div class={featureCard}>
+				<div class="{featureIcon} bg(#f56565/.1)">
+					<span class="c(#f56565)">💝</span>
+				</div>
+				<h3 class={featureTitle}>Designer Friendly</h3>
+				<p class={featureDesc}>Perfect for design-to-code handoff. Designers can write the CSS that developers will actually use.</p>
+			</div>
+		</div>
+	</div>
+</section>
 
+<!-- Code Examples Section -->
+<section id="examples" class={codeSection}>
+	<div class="vbox gap(64) w(1200) m(auto)">
+		<div class="vbox gap(16) text(center)">
+			<h2 class="font(48/1.2/700) c(#333)">See the Magic</h2>
+			<p class="font(20/1.5) c(#666)">Write HTML that looks like your design tools</p>
+		</div>
 
-<div class="{slide}">
-  <h1 class="{h1}">⚡️</h1>
-  <h1 class="{h1}">Fast Writing without switching!</h1>
-  <h2 class="{h2}">이제 HTML과 CSS와 화면을 번갈아가면서 개발하지마세요.</h2>
-  <br/>
-  <div class="bg(#f1f1f1) r(8) p(20)">
-    <p>디자인을 만들기 위해 구조를 변경하고 CSS를 수정하고 이름을 수정하고 Selector를 수정하고 다시 HTML을 수정하고...</p>
-    <div class="m(20)">👇</div>
-    <p>HTML, JSX를 수정하면서 실시간으로 변경되는 디자인을 확인하며 작업해보세요!</p>
-  </div>
-</div>
+		<div class="hbox gap(48) w(fill)">
+			<!-- HTML Code -->
+			<div class="{codeCard} w(fill)">
+				<div class={codeHeader}>
+					<div class="w(12) h(12) r(50%) bg(#ff5f56)"></div>
+					<div class="w(12) h(12) r(50%) bg(#ffbd2e)"></div>
+					<div class="w(12) h(12) r(50%) bg(#27ca3f)"></div>
+					<span class="font(14/600) ml(12)">HTML</span>
+				</div>
+				<div class={codeBody}>
+					<pre class="c(#e2e8f0)"><code
+							>&lt;div class="vbox gap(24) p(32) bg(#fff) r(16) shadow(lg)"&gt;
+  &lt;div class="hbox gap(16)"&gt;
+    &lt;img class="w(64) h(64) r(12)" src="avatar.jpg" /&gt;
+    &lt;div class="vbox gap(4)"&gt;
+      &lt;h3 class="font(20/600) c(#333)"&gt;Sarah Chen&lt;/h3&gt;
+      &lt;p class="font(14) c(#666)"&gt;Product Designer&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;p class="font(16/1.5) c(#444)"&gt;
+    "AdorableCSS v2 changed how I think about 
+    styling. It's like Figma for code!"
+  &lt;/p&gt;
+  
+  &lt;div class="hbox gap(8)"&gt;
+    &lt;div class="w(24) h(24) bg(#ffd700) r(50%)"&gt;&lt;/div&gt;
+    &lt;div class="w(24) h(24) bg(#ffd700) r(50%)"&gt;&lt;/div&gt;
+    &lt;div class="w(24) h(24) bg(#ffd700) r(50%)"&gt;&lt;/div&gt;
+    &lt;div class="w(24) h(24) bg(#ffd700) r(50%)"&gt;&lt;/div&gt;
+    &lt;div class="w(24) h(24) bg(#ffd700) r(50%)"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code
+						></pre>
+				</div>
+			</div>
 
+			<!-- Live Result -->
+			<div class="vbox gap(16) w(fill)">
+				<h3 class="font(20/600) c(#333)">Live Result:</h3>
+				<div class="vbox gap(24) p(32) bg(#fff) r(16) shadow(lg)">
+					<div class="hbox gap(16)">
+						<div class="w(64) h(64) r(12) bg(gradient(#667eea/#764ba2)) pack">
+							<span class="font(24) c(#fff)">SC</span>
+						</div>
+						<div class="vbox gap(4)">
+							<h3 class="font(20/600) c(#333)">Sarah Chen</h3>
+							<p class="font(14) c(#666)">Product Designer</p>
+						</div>
+					</div>
 
-<div class="{slide}">
-  <h1 class="{h1} hover:scale(1.05) active:rotate(5deg) active:color(--primary) transition(.4s) pointer">ᕙ(`▿´)ᕗ</h1>
-  <h1 class="{h1}">Write less do more!</h1>
-  <h2 class="{h2}">Isn't it 90s-vibe inline-style? No!</h2>
+					<p class="font(16/1.5) c(#444)">"AdorableCSS v2 changed how I think about styling. It's like Figma for code!"</p>
 
-  <div class="vbox gap(40) mt(40)">
-    <div>
-      <h2 class="font(24) 700 m(10/0)">More extensible Syntax</h2>
-      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`<div class="font(14/1.5/-1%)"/>
-<div class="w(100~200)"/>
-<div class="nowrap..."/>
-<div class="max-lines(3)"/>
-<div class="hbox(bottom+right)"/>
-<div class="layer(right)"/>
+					<div class="hbox gap(8)">
+						<div class="w(24) h(24) bg(#ffd700) r(50%)"></div>
+						<div class="w(24) h(24) bg(#ffd700) r(50%)"></div>
+						<div class="w(24) h(24) bg(#ffd700) r(50%)"></div>
+						<div class="w(24) h(24) bg(#ffd700) r(50%)"></div>
+						<div class="w(24) h(24) bg(#ffd700) r(50%)"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
-.font\\(14\\/1\\.5\\/-1\\%\\){font-size:14px;line-height:1.5;letter-spacing:-0.01em;}
-:where(.hbox\\(bottom\\+right\\)>*){flex-shrink:0;--w-grow:1;--w-shrink:1;--w-align:initial;--h-grow:initial;--h-shrink:0;--h-align:stretch;}
-.hbox\\(bottom\\+right\\){display:flex;flex-flow:row;align-items:flex-end;justify-content:flex-end;}
-.layer\\(right\\){position:absolute;top:0;right:0;bottom:0;}
-.max-lines\\(3\\){display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.w\\(100\\~200\\){min-width:100px;max-width:200px;}
-`}
-      </code>
-    </div>
+<!-- Comparison Section -->
+<section class="w(fill) p(80/40) bg(#fff)">
+	<div class="vbox gap(64) w(1200) m(auto)">
+		<div class="vbox gap(16) text(center)">
+			<h2 class="font(48/1.2/700) c(#333)">v1 → v2 Evolution</h2>
+			<p class="font(20/1.5) c(#666)">Everything you loved, but better</p>
+		</div>
 
-    <div>
-      <h2 class="font(24) 700 m(10/0)">Support Full Pesudo-class/element</h2>
-      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`<a class="hover:underline active:bg(#000)"/>
-<div class="nth-child(3n+1):bg(orange)"/>
-<input class="placeholder:c(#ccc)"/>
-<div class="after:content(--my-content)" style="--my-content: 'hello adorable'"/>
+		<div class="hbox gap(48) w(fill)">
+			<!-- v1 -->
+			<div class="vbox gap(24) w(fill) p(32) bg(#f7fafc) r(16) b(2/#e2e8f0)">
+				<div class="hbox gap(12)">
+					<span class="font(24/700) c(#4a5568)">v1</span>
+					<span class="font(14) c(#718096) bg(#e2e8f0) p(4/8) r(4)">Legacy</span>
+				</div>
+				<div class="vbox gap(16)">
+					<code class="font(14/1.5) c(#4a5568) bg(#edf2f7) p(16) r(8)"> class="hbox pack gap-6 bg-blue-500 p-4 rounded-lg" </code>
+					<div class="vbox gap(8) font(14/1.6) c(#4a5568)">
+						<span>• Dash-separated syntax</span>
+						<span>• Limited color system</span>
+						<span>• Basic layout support</span>
+						<span>• Fewer responsive options</span>
+					</div>
+				</div>
+			</div>
 
-.placeholder\\:c\\(\\#ccc\\)::placeholder{color:#ccc;}
-html .active\\:bg\\(\\#000\\):active,html .active\\:bg\\(\\#000\\).\\:active{background-color:#000;}
-.nth-child\\(3n\\+1\\)\\:bg\\(orange\\):nth-child(3n+1){background-color:orange;}
-@media (hover:hover){.hover\\:underline:hover,.hover\\:underline.\\:hover{text-decoration:underline;}}
-.after\\:content\\(--my-content\\):after{content:'var(--my-content)'}
-`}
-      </code>
-    </div>
+			<!-- v2 -->
+			<div class="vbox gap(24) w(fill) p(32) bg(gradient(#667eea/.05/#764ba2/.05)) r(16) b(2/#667eea)">
+				<div class="hbox gap(12)">
+					<span class="font(24/700) c(#667eea)">v2</span>
+					<span class="font(14) c(#fff) bg(#667eea) p(4/8) r(4)">Current</span>
+				</div>
+				<div class="vbox gap(16)">
+					<code class="font(14/1.5) c(#4338ca) bg(#e0e7ff) p(16) r(8)"> class="vbox p(32) r(12) bg(#fff) shadow(lg)" </code>
+					<div class="vbox gap(8) font(14/1.6) c(#4a5568)">
+						<span>• Function-based, Figma-like syntax</span>
+						<span>• Rich color system with opacity</span>
+						<span>• Advanced layout with constraints</span>
+						<span>• Fully typed and customizable</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
+<!-- Get Started Section -->
+<section class="w(full) p(80/40) bg(#f8f9ff)">
+	<div class="vbox gap(64) w(1200) m(auto) text(center)">
+		<div class="vbox gap(16)">
+			<h2 class="font(48/1.2/700) c(#333)">Get Started in Seconds</h2>
+			<p class="font(20/1.5) c(#666)">No build process required. Just a single script tag.</p>
+		</div>
 
-    <div>
-      <h2 class="font(24) 700 m(10/0)">Selector Support</h2>
-      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`<div class=".selected:bg(#000) .selected:c(#fff)"/>
-<div class=">h1:m(20)"/>
-<input class=">>a:c(#4f80ff)"/>
+		<div class="hbox gap(32) w(fill) text(left)">
+			<div class="vbox gap(16) w(fill) p(32) bg(#fff) r(16) shadow(md)">
+				<h3 class="font(20/600) c(#333)">1. Add the Script</h3>
+				<p class="font(16/1.6) c(#666)">
+					Place the following script tag in the <code class="font(14) bg(#e2e8f0) p(2/6) r(4)">&lt;head&gt;</code> of your HTML file. That's it! AdorableCSS will automatically watch for new classes and
+					generate CSS on the fly.
+				</p>
+				<div class="bg(#1a202c) c(#e2e8f0) p(16) r(8) font(14/1.6) overflow(scroll)">
+					<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/adorable-css@2"&gt;&lt;/script&gt;</code></pre>
+				</div>
+			</div>
+			<div class="vbox gap(16) w(fill) p(32) bg(#fff) r(16) shadow(md)">
+				<h3 class="font(20/600) c(#333)">2. Start Styling</h3>
+				<p class="font(16/1.6) c(#666)">Now you can use AdorableCSS classes directly in your HTML. Here's a simple example to get you started.</p>
+				<div class="bg(#1a202c) c(#e2e8f0) p(16) r(8) font(14/1.6) overflow(scroll)">
+					<pre><code
+							>&lt;div class="pack gap(16) p(24) bg(#667eea) r(12)"&gt;
+  &lt;span class="font(18/600) c(#fff)"&gt;Hello Adorable!&lt;/span&gt;
+&lt;/div&gt;</code
+						></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 
-.\\.selected\\:c\\(\\#fff\\).selected,.selected .\\.selected\\:c\\(\\#fff\\){color:#fff;}
-.\\>\\>a\\:c\\(\\#4f80ff\\)>>a{color:#4f80ff;}
-.\\.selected\\:bg\\(\\#000\\).selected,.selected .\\.selected\\:bg\\(\\#000\\){background-color:#000;}
-.\\>h1\\:m\\(20\\)>h1{margin:20px;}
-`}
-      </code>
-    </div>
+<!-- Footer -->
+<footer class="w(fill) p(60/40) bg(#2d3748) c(#a0aec0)">
+	<div class="hbox gap(auto) w(1200) m(auto)">
+		<div class="vbox gap(16)">
+			<span class="font(20/600) c(#fff)">AdorableCSS v2</span>
+			<span class="font(14)">© 2024. All Rights Reserved.</span>
+		</div>
+		<div class="hbox gap(24)">
+			<a href="https://github.com/developer-1px/adorable-css" class="hover:c(#fff) transition(.3s)">GitHub</a>
+			<a href="#" class="hover:c(#fff) transition(.3s)">Docs</a>
+			<a href="#" class="hover:c(#fff) transition(.3s)">Twitter</a>
+		</div>
+	</div>
+</footer>
 
+<style>
+	/* Additional CSS for animations and gradients not yet in v2 */
+	.animate-float {
+		animation: float 6s ease-in-out infinite;
+	}
 
-    <div>
-      <h2 class="font(24) 700 m(10/0)">Media Query Support</h2>
-      <code class="block pre font(13) w(~800) text(left) bg(#f1f1f1) p(20) r(8) monospace">
-        {`<div class="@w(320~):c(red)">320 > red</div>
+	.animate-float-delay {
+		animation: float 6s ease-in-out infinite 2s;
+	}
 
-.\\.selected\\:c\\(\\#fff\\).selected,.selected .\\.selected\\:c\\(\\#fff\\){color:#fff;}
-.\\>\\>a\\:c\\(\\#4f80ff\\)>>a{color:#4f80ff;}
-.\\.selected\\:bg\\(\\#000\\).selected,.selected .\\.selected\\:bg\\(\\#000\\){background-color:#000;}
-.\\>h1\\:m\\(20\\)>h1{margin:20px;}
-`}
-      </code>
-    </div>
-  </div>
-</div>
+	@keyframes float {
+		0%,
+		100% {
+			transform: translateY(0px) rotate(0deg);
+		}
+		50% {
+			transform: translateY(-20px) rotate(180deg);
+		}
+	}
 
+	.bg-clip-text {
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
 
-<div class="{slide}">
-  <h1 class="{h1}">📦</h1>
-  <h1 class="{h1}">Portable and Compact</h1>
-  <h2 class="{h2}">Are you refactor code? you don't worry about that separated CSS.<br/>We don't write CSS. Just Cut & Paste!</h2>
-</div>
+	/* Smooth scrolling for navigation */
+	html {
+		scroll-behavior: smooth;
+	}
 
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		width: 8px;
+	}
 
-<div class="{slide}">
-  <h1 class="{h1}">No Semantic + No CSS = Great for handoff!</h1>
-  <h1 class="{h1}">🤝</h1>
-  <h2 class="{h2}">디자인 파일의 속성을 서식 그대로 HTML로 옮겨올 수가 있습니다.</h2>
-  <h2 class="{h2}">figma handshake plugin</h2>
+	::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
 
-  <div class="space(2em)"/>
-  <img src="https://camo.githubusercontent.com/eeee35511c7b7979a00fba1b85ba91a2a750807b1c55aa90d2e4317d370147fc/68747470733a2f2f696d616765732e76656c6f672e696f2f696d616765732f74656f2f706f73742f35373963646237622d383831392d343930322d386639372d3036633334303062323032312f254531253834253932254531253835254141254531253834253836254531253835254137254531253836254142253230254531253834253830254531253835254235254531253834253835254531253835254139254531253836254138253230323032312d30392d3031253230254531253834253842254531253835254139254531253834253932254531253835254145253230332e31372e31372e6d6f762e676966"/>
-</div>
+	::-webkit-scrollbar-thumb {
+		background: #667eea;
+		border-radius: 4px;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: #5a6fd8;
+	}
+</style>

@@ -6,6 +6,7 @@
 ## What's New in AdorableCSS 2.0
 
 **Figma-First Approach**
+
 - Direct mapping with Figma Auto Layout
 - Designer-friendly syntax
 - Real-time sync capabilities
@@ -37,19 +38,17 @@ ex) adorableCSS
 flex -> flex: 1
 ```
 
-
 ### TBD: VSCODE IDE Plugin, Prettier Plugin...
 
 실제 개발에서 사용할 수 있도록 개발에서 쓸 수 있는 플러그인이나 lint등을 만들어서 활용할 수 있도록 할 예정입니다.
 
-
 ---
+
 # Syntax
 
 ```
 selector:prop(value)!
 ```
-
 
 ## Position
 
@@ -65,6 +64,7 @@ rotate(45)
 ```
 
 ## Auto Layout
+
 ```
 hbox(center) - Figma의 수평 Auto Layout
 vbox(top)    - Figma의 수직 Auto Layout
@@ -73,37 +73,38 @@ p(16)        - Auto Layout padding
 ```
 
 ## Sizing
+
 ```
 400x300      - Fixed Size Both
 
 w(300)       - Fixed width
 w(hug)       - Hug content
 w(fill)      - Fill container
-w(fill/max:200) - with min-widhth
-w(fill/min:200/max:400) - with min-width, max-width
+w(200..)     - with min-widhth
+w(..400)     - max-width
+w(200..400) - with min-width, max-width
 
 h(...)       - Height variants
 ```
 
 ## Constraints
+
 ```
 x(100)				- 왼쪽 정렬
 x(center)	        - 중앙 정렬
 x(center+40)	    - 중앙기준에서 40px
-x(,100)				- 오른쪽 정렬
-x(10,100)			- 좌,우 정렬
-x(10%,100%)			- Scale
-
-y(...)	        	- x와 동일
+x(..100)				- 오른쪽 정렬
+x(10..100)			- 좌,우 정렬
+x(10%..100%)			- Scale
 ```
 
-
 ## Visual
+
 ```
 r(8)            - Radius
 bg(#000)        - Background
-b(#000)			- Border (TBD)
-o(#000)			- Outline (TBD)
+b(#000)			- Border
+o(#000)			- Outline
 ```
 
 ## Appearance
@@ -111,12 +112,12 @@ o(#000)			- Outline (TBD)
 ```
 blur(10)			- Blur effect
 box-shadow()		- Shadow effect
-opcacity(.5)		- 
+opcacity(.5)		-
 clip				- Overflow:hidden
 ```
 
-
 ---
+
 ## Text
 
 ```
@@ -140,10 +141,10 @@ nowrap nowrap...
 max-lines(3)
 ```
 
-
 ## Etc (TBD)
 
 ### Scroll
+
 ```
 scroll                // overflow: auto (양방향)
 scroll(x)             // overflow-x: auto
@@ -153,6 +154,7 @@ clip                 // overflow: clip
 ```
 
 ### ScrollBar
+
 ```
 scrollbar(none)       // 스크롤바 숨김
 scrollbar(auto)       // 스크롤바 기본
@@ -161,6 +163,7 @@ scrollbar(thin)       // 얇은 스크롤바
 ```
 
 ### Scroll Snap
+
 ```
 hslide                // 가로 슬라이드 (center + mandatory)
 vslide                // 세로 슬라이드 (center + mandatory)
@@ -182,13 +185,12 @@ hslide(m:20/40)       // 좌우 마진 20px/40px
 hslide(start/soft/p:20)
 ```
 
-
 ### TBD (not yet)
+
 translate rotate scale
 grid
 cursor
 inert
 disabled
-
 
 #velog

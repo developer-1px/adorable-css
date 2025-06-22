@@ -1,4 +1,4 @@
-import { px } from '../../../vite/src/core/makeValue'
+import { px } from '../values/makeValue'
 
 export const RULES_TEXT_UNOCSS = {
   // Text Alignment

@@ -1,7 +1,7 @@
 {
   "name": "adorable-css",
-  "version": "1.6.2",
-  "description": "Rapid On-Demand Atomic CSS generator",
+  "version": "2.0.0-beta.1",
+  "description": "AdorableCSS - A Figma-first CSS framework for seamless design-code synchronization",
   "repository": {
     "type": "git",
     "url": "https://github.com/developer-1px/adorable-css"
@@ -26,9 +26,10 @@
     "dev": "npm run build -- --watch src",
     "dev:vite": "npm run build:vite -- --watch src",
     "dev:cli": "npm run build:cli -- --watch src",
-    "build": "rm -rf ./dist && npm run build:vite && npm run build:cli && cp package.json ./dist/package.json",
+    "build": "rm -rf ./dist && npm run build:vite && npm run build:cli && npm run build:v2 && cp package.json ./dist/package.json",
     "build:vite": "tsup ./src/index.ts -d ./dist && tsup ./src/vite/index.ts -d ./dist/vite",
     "build:cli": "tsup ./src/node/cli.ts -d ./dist/node",
+    "build:v2": "mkdir -p ./dist/v2 && cp -r ../v2/cdn/dist/* ./dist/v2/ && cp ../v2/cdn/src/index.ts ./dist/v2/index.ts",
     "deploy": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish",
     "deploy:beta": "npm run build && cp README.md ./dist/README.md && cp -r bin dist && cd dist && npm publish --tag beta"
   },
@@ -48,7 +49,13 @@
       "require": "./vite/index.js",
       "import": "./vite/index.js",
       "types": "./vite/index.d.ts"
-    }
+    },
+    "./v2": {
+      "require": "./v2/index.js",
+      "import": "./v2/index.mjs",
+      "types": "./v2/index.d.ts"
+    },
+    "./v2/cdn": "./v2/adorable-css-v2.min.js"
   },
   "dependencies": {
     "tsup": "^8.3.6"

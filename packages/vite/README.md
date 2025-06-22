@@ -1,5 +1,9 @@
 # AdorableCSS
-> Rapid On-Demand Atomic CSS framework
+
+> A Figma-first CSS framework for seamless design-code synchronization
+
+AdorableCSS brings Figma's design paradigms directly to your code with intuitive, design-friendly syntax. Now with v2 featuring enhanced Figma integration and CDN support!
+
 > AdorableCSS를 만들게 된 배경이 궁금하다면 [여기](https://velog.io/@teo/adorable-css)를 통해 확인해보세요.
 
 ![](https://images.velog.io/images/teo/post/0282cd6a-7530-4674-ad56-2cea0b55b773/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202022-01-12%20%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB%2012.06.40.png)
