@@ -5,7 +5,6 @@ import { generateSimpleCSS } from '../../../packages/v2/unocss/simple-css-genera
 const referenceData = [
   {
     category: "Auto Layout",
-    icon: "📐",
     description: "Figma's Auto Layout system for flexible containers",
     items: [
       { class: 'hbox', description: 'Horizontal auto layout (default: center alignment)' },
@@ -23,7 +22,6 @@ const referenceData = [
   },
   {
     category: "Size & Dimensions",
-    icon: "📏", 
     description: "Sizing and dimensions like Figma's size properties",
     items: [
       { class: '300x200', description: 'Fixed size both dimensions' },
@@ -44,7 +42,6 @@ const referenceData = [
   },
   {
     category: "Position & Constraints",
-    icon: "🎯",
     description: "Positioning and constraints like Figma's constraint system", 
     items: [
       { class: 'relative', description: 'Relative positioning' },
@@ -69,7 +66,6 @@ const referenceData = [
   },
   {
     category: "Spacing",
-    icon: "📦",
     description: "Padding and margin like Figma's spacing controls",
     items: [
       { class: 'p(16)', description: 'Equal padding on all sides' },
@@ -94,7 +90,6 @@ const referenceData = [
   },
   {
     category: "Fill & Stroke",
-    icon: "🎨",
     description: "Colors and backgrounds like Figma's fill properties",
     items: [
       { class: 'bg(#667eea)', description: 'Solid background color' },
@@ -120,7 +115,6 @@ const referenceData = [
   },
   {
     category: "Corner Radius",
-    icon: "🔘",
     description: "Border radius like Figma's corner radius",
     items: [
       { class: 'r(8)', description: 'Equal corner radius on all corners' },
@@ -132,7 +126,6 @@ const referenceData = [
   },
   {
     category: "Typography",
-    icon: "📝",
     description: "Text properties like Figma's text panel",
     items: [
       { class: '14', description: 'Font size shorthand' },
@@ -181,7 +174,6 @@ const referenceData = [
   },
   {
     category: "Effects",
-    icon: "✨",
     description: "Visual effects like Figma's effects panel",
     items: [
       { class: 'shadow(sm)', description: 'Small drop shadow' },
@@ -255,168 +247,144 @@ $: {
 
 <svelte:head>
   <title>Reference - AdorableCSS v2</title>
+  <meta name="description" content="Complete reference documentation for AdorableCSS v2 classes organized by Figma design concepts." />
 </svelte:head>
 
 <!-- Navigation -->
-<nav class="fixed top(0) w(fill) hbox p(16/40) bg(#fff/.9) backdrop(10) z(100) shadow(sm)">
-  <div class="hbox gap(32)">
-    <a href="/" class="font(24) 700 c(#333) hover:c(#667eea) transition(.3s)">AdorableCSS v2</a>
-    <div class="hbox gap(24)">
-      <a href="/" class="font(16) 500 c(#666) hover:c(#333) transition(.3s) p(8/16)">Home</a>
-      <a href="/reference" class="font(16) 500 c(#667eea) p(8/16)">Reference</a>
-      <a href="/playground" class="font(16) 500 c(#666) hover:c(#333) transition(.3s) p(8/16)">Playground</a>
+<nav class="fixed top(0) w(fill) hbox gap(auto) p(16/40) bg(#fff/.95) backdrop(20) z(100) b(bottom/1/#e5e7eb)">
+  <div class="hbox gap(40)">
+    <a href="/" class="font(20) 700 c(#111827) hover:c(#4f46e5) transition(.2s)">AdorableCSS</a>
+    <div class="hbox gap(32)">
+      <a href="/" class="font(15) 500 c(#6b7280) hover:c(#111827) transition(.2s)">Home</a>
+      <a href="/reference" class="font(15) 500 c(#4f46e5)">Reference</a>
     </div>
   </div>
   <div class="hbox gap(16)">
-    <a href="https://github.com/developer-1px/adorable-css" class="hbox gap(8) p(8/16) c(#666) hover:c(#333) transition(.3s)">
-      <span class="font(20)">⭐</span>
+    <a href="https://github.com/developer-1px/adorable-css" class="hbox gap(8) p(8/16) c(#6b7280) hover:c(#111827) transition(.2s)">
+      <span class="font(16)">⭐</span>
       <span class="font(14) 500">GitHub</span>
     </a>
   </div>
 </nav>
 
-<div class="w(fill) min-h(screen) bg(#f8f9ff) pt(80)">
+<div class="w(fill) min-h(screen) bg(#fafafa) pt(72)">
   <div class="w(1400) mx(auto) p(40)">
     <!-- Page Header -->
-    <div class="vbox gap(16) pb(48)">
-      <h1 class="font(48/58) 700 c(#333)">CSS Reference</h1>
-      <p class="font(20/30) c(#666)">
+    <div class="vbox gap(12) pb(40)">
+      <h1 class="font(36/44) 700 c(#111827)">Reference</h1>
+      <p class="font(18/28) c(#6b7280) w(640)">
         Complete reference of AdorableCSS v2 classes organized by Figma design concepts. 
-        See the exact CSS output for each class.
+        Each class shows its exact CSS output for easy understanding.
       </p>
     </div>
 
     <!-- Search & Filter -->
-    <div class="sticky top(80) bg(#f8f9ff) py(16) z(50) vbox gap(16) pb(32)">
+    <div class="sticky top(72) bg(#fafafa) py(20) z(50) vbox gap(20) pb(32)">
       <input 
         type="text" 
         placeholder="Search classes... (e.g., hbox, w(300), bg(#fff))"
-        class="w(fill) p(12/16) r(8) b(2/#e2e8f0) bg(#fff) font(16) focus:b(#667eea) transition(.3s)"
+        class="w(fill) p(12/16) r(8) b(1/#d1d5db) bg(#fff) font(15) focus:b(#4f46e5) focus:ring(0) transition(.2s)"
         bind:value={searchTerm}
       />
       
-      <div class="hbox gap(16) wrap">
+      <div class="hbox gap(12) wrap">
         <button 
-          class="p(8/16) r(6) bg(#fff) b(1/#e2e8f0) c(#666) font(14) 500 hover:bg(#667eea) hover:c(#fff) transition(.3s) {activeFilterValue === 'all' ? 'bg(#667eea) c(#fff)' : ''}"
+          class="p(8/16) r(6) font(14) 500 transition(.2s) {activeFilterValue === 'all' ? 'bg(#4f46e5) c(#fff)' : 'bg(#fff) c(#6b7280) hover:bg(#f3f4f6) b(1/#d1d5db)'}"
           on:click={() => filterByCategory('all')}
         >
           All Categories
         </button>
         {#each referenceData as section}
           <button 
-            class="p(8/16) r(6) bg(#fff) b(1/#e2e8f0) c(#666) font(14) 500 hover:bg(#667eea) hover:c(#fff) transition(.3s) {activeFilterValue === section.category ? 'bg(#667eea) c(#fff)' : ''}"
+            class="p(8/16) r(6) font(14) 500 transition(.2s) {activeFilterValue === section.category ? 'bg(#4f46e5) c(#fff)' : 'bg(#fff) c(#6b7280) hover:bg(#f3f4f6) b(1/#d1d5db)'}"
             on:click={() => filterByCategory(section.category)}
           >
-            {section.icon} {section.category}
+            {section.category}
           </button>
         {/each}
       </div>
     </div>
 
     <!-- Reference Tables -->
-    {#each filteredData as section}
-      <div class="bg(#fff) r(16) shadow(md) overflow(hidden) pb(32)">
-        <div class="hbox p(24) bg(linear-gradient(135deg/#667eea/#764ba2)) c(#fff)">
-          <div class="hbox gap(16)">
-            <span class="font(32)">{section.icon}</span>
+    <div class="vbox gap(32)">
+      {#each filteredData as section}
+        <div class="bg(#fff) r(12) b(1/#e5e7eb) clip">
+          <div class="hbox gap(auto) p(24) bg(#f9fafb) b(bottom/1/#e5e7eb)">
             <div class="vbox gap(4)">
-              <h2 class="font(24) 600 c(#fff)">{section.category}</h2>
-              <p class="font(14) c(#fff) opacity(.8)">{section.description}</p>
+              <h2 class="font(20) 600 c(#111827)">{section.category}</h2>
+              <p class="font(14) c(#6b7280)">{section.description}</p>
+            </div>
+            <div class="font(13) 500 c(#9ca3af)">
+              {section.items.length} classes
             </div>
           </div>
-          <div class="font(14) c(#fff) opacity(.8)">
-            {section.items.length} utilities
-          </div>
-        </div>
-        
-        <div>
+          
           <!-- Table Header -->
-          <div class="hbox bg(#f8f9ff) font(14) 600 c(#4a5568)">
-            <div class="w(400) p(12/24) b(1/#e2e8f0)">AdorableCSS Class</div>
-            <div class="flex-1 p(12/24) b(1/#e2e8f0)">Generated CSS</div>
-            <div class="w(250) p(12/24) b(1/#e2e8f0) text(center)">Description</div>
+          <div class="hbox bg(#f9fafb) font(13) 600 c(#374151) b(bottom/1/#e5e7eb)">
+            <div class="w(320) p(12/20)">Class</div>
+            <div class="w(fill) p(12/20)">Generated CSS</div>
+            <div class="w(280) p(12/20)">Description</div>
           </div>
           
           <!-- Table Rows -->
           {#each section.items as item}
-            <div class="hbox b(1/#e2e8f0) hover:bg(#f8f9ff) transition(.2s)">
-              <div class="w(400) p(16/24) font(14/1.5) bg(#2d3748) c(#e2e8f0)">
-                <code class="font(13/1.4)">{item.class}</code>
+            <div class="hbox b(bottom/1/#f3f4f6) hover:bg(#f9fafb) transition(.1s)">
+              <div class="w(320) p(16/20) vbox gap(4)">
+                <code class="font(13) 600 c(#7c3aed) bg(#faf5ff) p(4/8) r(4) w(fit)">{item.class}</code>
               </div>
-              <div class="flex-1 p(16/24) font(14/1.5) c(#4a5568)">
-                <code class="font(12/1.4) c(#059669)">{item.css}</code>
+              <div class="w(fill) p(16/20)">
+                <code class="font(12/18) c(#059669) bg(#f0fdf4) p(8/12) r(4) block">{item.css}</code>
               </div>
-              <div class="w(250) p(16/24) font(12/1.4) c(#6b7280)">
+              <div class="w(280) p(16/20) font(13/20) c(#6b7280)">
                 {item.description}
               </div>
             </div>
           {/each}
         </div>
-      </div>
-    {/each}
+      {/each}
+    </div>
 
     <!-- No Results -->
     {#if filteredData.length === 0}
-      <div class="vbox gap(24) pack p(80) text(center)">
-        <div class="font(48)">🔍</div>
+      <div class="vbox gap(20) pack p(60) text(center) bg(#fff) r(12) b(1/#e5e7eb)">
         <div class="vbox gap(8)">
-          <h3 class="font(24) 600 c(#4a5568)">No classes found</h3>
-          <p class="font(16) c(#6b7280)">
+          <h3 class="font(18) 600 c(#374151)">No classes found</h3>
+          <p class="font(14) c(#6b7280)">
             Try adjusting your search term or filter selection.
           </p>
         </div>
         <button 
-          class="p(12/24) bg(#667eea) c(#fff) r(8) font(14) 600 hover:bg(#5a6fd8) transition(.3s)"
+          class="p(10/20) bg(#4f46e5) c(#fff) r(6) font(14) 500 hover:bg(#4338ca) transition(.2s)"
           on:click={() => { searchTerm = ''; activeFilterValue = 'all'; }}
         >
-          Clear all filters
+          Clear filters
         </button>
       </div>
     {/if}
 
-    <!-- Quick Links -->
-    <div class="vbox gap(32) pt(64) p(40) bg(linear-gradient(135deg/#667eea/.05/#764ba2/.05)) r(16) b(1/#667eea/.2)">
-      <h3 class="font(24) 600 c(#333)">Quick Navigation</h3>
-      <div class="hbox gap(16) wrap">
-        {#each referenceData as section}
-          <button 
-            class="hbox gap(8) p(8/16) bg(#fff) r(6) shadow(sm) hover:shadow(md) transition(.3s)"
-            on:click={() => filterByCategory(section.category)}
-          >
-            <span class="font(20)">{section.icon}</span>
-            <span class="font(14) 500 c(#4a5568)">{section.category}</span>
-          </button>
-        {/each}
-      </div>
-    </div>
-
-    <!-- Tips Section -->
-    <div class="vbox gap(24) pt(32) p(32) bg(#fff) r(16) shadow(md)">
-      <h3 class="font(20) 600 c(#333)">💡 Pro Tips</h3>
-      <div class="vbox gap(16) font(14/22) c(#4a5568)">
+    <!-- Pro Tips -->
+    <div class="vbox gap(20) p(32) bg(#fff) r(12) b(1/#e5e7eb)">
+      <h3 class="font(18) 600 c(#111827)">Usage Tips</h3>
+      <div class="vbox gap(16) font(14/24) c(#374151)">
         <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Combine multiple classes: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">hbox gap(16) p(24) bg(#fff) shadow(md)</code></span>
+          <span class="w(4) h(4) r(50%) bg(#4f46e5) mt(10)"></span>
+          <span>Combine multiple classes: <code class="p(2/6) bg(#f3f4f6) r(4) font(13)">hbox gap(16) p(24) bg(#fff) shadow(md)</code></span>
         </div>
         <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Use the slash syntax for shorthand: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">p(16/24)</code> = padding: 16px 24px</span>
+          <span class="w(4) h(4) r(50%) bg(#4f46e5) mt(10)"></span>
+          <span>Use slash syntax for multiple values: <code class="p(2/6) bg(#f3f4f6) r(4) font(13)">p(16/24)</code> = padding: 16px 24px</span>
         </div>
         <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Font weight in function: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(28/1.1/800)</code> = size/line-height/weight</span>
+          <span class="w(4) h(4) r(50%) bg(#4f46e5) mt(10)"></span>
+          <span>Font weight in function: <code class="p(2/6) bg(#f3f4f6) r(4) font(13)">font(28/1.1/800)</code> = size/line-height/weight</span>
         </div>
         <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Skip parameters with dash: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(24/-/700)</code> = skip line-height, set weight</span>
+          <span class="w(4) h(4) r(50%) bg(#4f46e5) mt(10)"></span>
+          <span>Separate font weights: <code class="p(2/6) bg(#f3f4f6) r(4) font(13)">font(24) 600</code> = font-size + font-weight</span>
         </div>
         <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Separate font weights: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">font(24) 600</code> = font-size: 24px + font-weight: 600</span>
-        </div>
-        <div class="hbox gap(12)">
-          <span class="font(16) c(#667eea)">•</span>
-          <span>Opacity in colors: <code class="p(2/4) bg(#f1f5f9) r(4) font(13)">bg(#000/.5)</code> = rgba(0,0,0,0.5)</span>
+          <span class="w(4) h(4) r(50%) bg(#4f46e5) mt(10)"></span>
+          <span>Opacity in colors: <code class="p(2/6) bg(#f3f4f6) r(4) font(13)">bg(#000/.5)</code> = rgba(0,0,0,0.5)</span>
         </div>
       </div>
     </div>
@@ -430,5 +398,9 @@ $: {
   
   .wrap {
     flex-wrap: wrap;
+  }
+  
+  input:focus {
+    outline: none;
   }
 </style>
