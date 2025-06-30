@@ -1,5 +1,5 @@
 // 파서 함수
-import { createParser, createTokenizer } from "./core"
+import { createParser, createTokenizer } from "./parser-utils"
 
 const tokenize = createTokenizer([
 	["(ws)", /(\s+)/],
@@ -210,6 +210,7 @@ export function parseAdorableCSS(input: string) {
 				return { ...dimension, image: minus ? `-${dimension.image}` : dimension.image }
 			},
 			() => consume("(hexcolor)"),
+			() => consume("(string)"),
 			() => consume("(ident)"),
 		)
 	}
@@ -287,6 +288,6 @@ export function parseAdorableCSS(input: string) {
 		eof(r)
 		return r
 	} catch (e) {
-		console.error("파싱 에러:", e)
+		throw e
 	}
 }

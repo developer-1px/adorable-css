@@ -280,6 +280,37 @@ export const RULES_FOR_UNOCSS = {
 	// perspective
 	"perspective": (value: string) => ({ perspective: px(value) }),
 	"perspective-origin": (value: string) => ({ "perspective-origin": value }),
+
+	// Additional v2 utilities (moved from PREFIX_MEDIA_QUERY)
+	"gradient": (value: string) => {
+		const [from, to, angle = "45"] = value.split("/")
+		return { background: `linear-gradient(${angle}deg, ${makeColor(from)}, ${makeColor(to)})` }
+	},
+	
+	"backdrop": (value: string) => ({ "backdrop-filter": `blur(${px(value)})`, "-webkit-backdrop-filter": `blur(${px(value)})` }),
+	
+	"aspect": (value: string) => {
+		const [w, h] = value.split("/")
+		return { "aspect-ratio": `${w}/${h}` }
+	},
+	
+	// Position utilities for absolute positioning
+	"top": (value: string) => ({ top: px(value) }),
+	"left": (value: string) => ({ left: px(value) }),
+	"right": (value: string) => ({ right: px(value) }),
+	"bottom": (value: string) => ({ bottom: px(value) }),
+	
+	// Justify content
+	"justify": (value: string) => ({ "justify-content": value }),
+	
+	// Screen size utilities
+	"screen": () => ({ width: "100vw", height: "100vh" }),
+	"full": () => ({ width: "100%", height: "100%" }),
+
+	// Overflow utilities
+	"overflow": (value: string) => ({ overflow: value }),
+	"overflow-x": (value: string) => ({ "overflow-x": value }),
+	"overflow-y": (value: string) => ({ "overflow-y": value }),
 }
 
 // Prefix
@@ -345,30 +376,4 @@ export const PREFIX_MEDIA_QUERY: PrefixRules = {
 	"desktop:": { media: `(min-device-width:1024px)`, selector: `html &` },
 	"!mobile:": { media: `(min-device-width:768px)`, selector: `html &` },
 	"!desktop:": { media: `(max-device-width:1023.98px)`, selector: `html &` },
-
-	// Additional v2 utilities
-	"gradient": (value: string) => {
-		const [from, to, angle = "45"] = value.split("/")
-		return { background: `linear-gradient(${angle}deg, ${makeColor(from)}, ${makeColor(to)})` }
-	},
-	
-	"backdrop": (value: string) => ({ "backdrop-filter": `blur(${px(value)})`, "-webkit-backdrop-filter": `blur(${px(value)})` }),
-	
-	"aspect": (value: string) => {
-		const [w, h] = value.split("/")
-		return { "aspect-ratio": `${w}/${h}` }
-	},
-	
-	// Position utilities for absolute positioning
-	"top": (value: string) => ({ top: px(value) }),
-	"left": (value: string) => ({ left: px(value) }),
-	"right": (value: string) => ({ right: px(value) }),
-	"bottom": (value: string) => ({ bottom: px(value) }),
-	
-	// Justify content
-	"justify": (value: string) => ({ "justify-content": value }),
-	
-	// Screen size utilities
-	"screen": () => ({ width: "100vw", height: "100vh" }),
-	"full": () => ({ width: "100%", height: "100%" }),
 }

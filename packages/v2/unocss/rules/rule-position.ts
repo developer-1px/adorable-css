@@ -3,7 +3,7 @@ import { cssvar, makePosition2X, makePosition2Y, px } from "../values/makeValue"
 export const RULES_POSITION_UNOCSS = {
 	// -- Position Utilities
 	"layer": (value = "") => {
-		const pos: Record<string, string | undefined> = { top: "0", right: "0", bottom: "0", left: "0" }
+		const pos: Record<string, string> = { top: "0", right: "0", bottom: "0", left: "0" }
 		const outsides: string[] = []
 		let outside = false
 
@@ -43,7 +43,7 @@ export const RULES_POSITION_UNOCSS = {
 
 		if (outside) {
 			const revert = (b: string, a: string) => {
-				pos[a] = pos[b] === "0" ? "100%" : `calc(100% + ${px(pos[b]!)})`
+				pos[a] = pos[b] === "0" ? "100%" : `calc(100% + ${px(pos[b])})`
 				pos[b] = undefined
 			}
 
@@ -67,22 +67,22 @@ export const RULES_POSITION_UNOCSS = {
 
 		Object.entries(pos).forEach(([key, value]) => {
 			if (value !== undefined) {
-				styles[key] = String(px(value))
+				styles[key] = px(value)
 			}
 		})
 
 		return styles
 	},
 
-	"absolute": () => ({
+	"absolute": (value = "") => ({
 		position: "absolute",
 		// ...makePosition(value),
 	}),
-	"relative": () => ({
+	"relative": (value = "") => ({
 		position: "relative",
 		// ...makePosition(value),
 	}),
-	"sticky": () => ({
+	"sticky": (value = "") => ({
 		position: "sticky",
 		// ...makePosition(value),
 	}),
@@ -91,7 +91,7 @@ export const RULES_POSITION_UNOCSS = {
 	"sticky-bottom": (value = 0) => ({ position: "sticky", bottom: px(value) }),
 	"sticky-left": (value = 0) => ({ position: "sticky", left: px(value) }),
 
-	"fixed": () => ({
+	"fixed": (value = "") => ({
 		position: "fixed",
 		// ...makePosition(value),
 	}),

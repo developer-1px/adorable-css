@@ -25,7 +25,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:unocss.dev)",
+      "Bash(npm run test:*)"
     ],
     "deny": []
   }

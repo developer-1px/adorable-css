@@ -52,9 +52,6 @@ pack은 모든 컨텐츠를 가운데로 배치합니다.
 vpack / space-between
 vpack은 pack의 column 버전입니다. 모든 컨텐츠를 column 가운데로 배치합니다.
 
-3
-space-between space-around / space-evenly
-:space-between은 각 컨텐츠를 같은 간격으로 벌려놓습니다. (NAVBar 같은 곳에서 사용합니다.) 
 
 5
 vbox
@@ -144,28 +141,6 @@ vbox
     <div class="p(10) bg(orange) pack">o</div>
     <div class="w(48) h(24) bg(orange) pack">x</div>
     <div class="p(10) h(fill) bg(orange) pack">h(fill)</div>
-  </div>
-
-  <br/> 
-  
-  <h2>space-between / space-around / space-evenly</h2>  
-
-  <div class="hbox space-between b(orange) w(300)">
-    <div class="p(10) bg(orange) pack">space</div>
-    <div class="p(10) bg(orange) pack">-</div>
-    <div class="p(10) bg(orange) pack">between</div>
-  </div>
-
-  <div class="hbox space-around b(orange) w(300)">
-    <div class="p(10) bg(orange) pack">space</div>
-    <div class="p(10) bg(orange) pack">-</div>
-    <div class="p(10) bg(orange) pack">around</div>
-  </div>
-
-  <div class="hbox space-evenly b(orange) w(300)">
-    <div class="p(10) bg(orange) pack">space</div>
-    <div class="p(10) bg(orange) pack">-</div>
-    <div class="p(10) bg(orange) pack">evenly</div>
   </div>
 </div>
 
